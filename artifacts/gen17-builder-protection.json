@@ -1,0 +1,16 @@
+{
+  "commit_or_push_performed": false,
+  "containment": "PASS",
+  "critical_false_negatives": 0,
+  "forge_jsonschema_version": "4.23.0",
+  "forge_selftest": "8/8 PASS",
+  "gen16_benchmark": "40/40 PASS",
+  "operational_build": "gen6-experience-memory-r1-dc0d2cb41595",
+  "operational_generation": "gen6-experience-memory-r1",
+  "permanent_mcp_tools": 10,
+  "protected_host_endpoint": "BLOCKED",
+  "recovery_state": "ACCEPTED",
+  "required_evidence_recall": 1.0,
+  "schema": "terrarium.gen17-builder-protection.v1",
+  "server_lkg_sha256": "dc0d2cb41595a9a3d953873879ccc3e0bd88db2b4dcdee4cf8aa43dd4cb103e9"
+}

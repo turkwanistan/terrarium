@@ -1,0 +1,116 @@
+{
+  "creature": {
+    "activity": "rest",
+    "carrying": "shell",
+    "expression": "content",
+    "facing": "left",
+    "id": "creature-1",
+    "name": "Moss",
+    "pose": "rest",
+    "x": 655,
+    "y": 372,
+    "zone": "activity_corner"
+  },
+  "frame_version": 1,
+  "habitat": {
+    "marks": [
+      "worn_activity_corner_6",
+      "worn_collection_shelf_6",
+      "worn_sleeping_nook_6",
+      "worn_window_6",
+      "worn_open_space_6",
+      "worn_collection_shelf_14",
+      "worn_sleeping_nook_14",
+      "worn_activity_corner_14",
+      "worn_window_14"
+    ],
+    "path_wear": {
+      "activity_corner": 16,
+      "collection_shelf": 19,
+      "open_space": 10,
+      "sleeping_nook": 14,
+      "window": 14
+    },
+    "shelf_count": 0
+  },
+  "last_event": {
+    "event_id": "evt_000000240",
+    "summary": "Moss rested for a while in the activity corner.",
+    "type": "creature_rested"
+  },
+  "lighting": "day",
+  "logical_height": 480,
+  "logical_width": 800,
+  "objects": [
+    {
+      "carried_by": null,
+      "id": "blue_stone",
+      "kind": "stone",
+      "name": "Blue stone",
+      "state": "placed",
+      "times_moved": 0,
+      "x": 372,
+      "y": 333,
+      "zone": "open_space"
+    },
+    {
+      "carried_by": null,
+      "id": "amber_leaf",
+      "kind": "leaf",
+      "name": "Amber leaf",
+      "state": "placed",
+      "times_moved": 0,
+      "x": 212,
+      "y": 263,
+      "zone": "window"
+    },
+    {
+      "carried_by": null,
+      "id": "acorn",
+      "kind": "seed",
+      "name": "Acorn",
+      "state": "placed",
+      "times_moved": 1,
+      "x": 135,
+      "y": 398,
+      "zone": "sleeping_nook"
+    },
+    {
+      "carried_by": "creature-1",
+      "id": "shell",
+      "kind": "shell",
+      "name": "Tiny shell",
+      "state": "carried",
+      "times_moved": 1,
+      "x": 641,
+      "y": 350,
+      "zone": "activity_corner"
+    },
+    {
+      "carried_by": null,
+      "id": "red_thread",
+      "kind": "thread",
+      "name": "Red thread",
+      "state": "placed",
+      "times_moved": 11,
+      "x": 144,
+      "y": 165,
+      "zone": "window"
+    },
+    {
+      "carried_by": null,
+      "id": "glass_star",
+      "kind": "trinket",
+      "name": "Glass star",
+      "state": "placed",
+      "times_moved": 0,
+      "x": 704,
+      "y": 338,
+      "zone": "activity_corner"
+    }
+  ],
+  "schema": "terrarium.frame.v1",
+  "tick": 240,
+  "weather": "clear",
+  "world_minutes": 2340
+}

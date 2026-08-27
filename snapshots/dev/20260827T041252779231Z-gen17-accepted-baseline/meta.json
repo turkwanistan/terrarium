@@ -1,0 +1,30 @@
+{
+  "captured_at": "2026-08-27T04:12:52.782586Z",
+  "frame": {
+    "logical_height": 480,
+    "logical_width": 800,
+    "path": "dev/20260827T041252779231Z-gen17-accepted-baseline/frame.json",
+    "sha256": "4d21b09d34ae8a5864a3126291c586a47bcef43897244519e455086bddf8f460",
+    "tick": 240
+  },
+  "git": {
+    "branch": "main",
+    "dirty": true,
+    "head": null
+  },
+  "note": "Accepted Gen17 Phase 0\u20132 visual baseline before normal product iterations.",
+  "schema": "terrarium.dev-snapshot.v1",
+  "snapshot_id": "20260827T041252779231Z-gen17-accepted-baseline",
+  "source": {
+    "mode": "deterministic",
+    "seed": 1701,
+    "steps": 240
+  },
+  "source_hashes": {
+    "engine": "7123bcbc5bcb0353918e8cc7d404f8c431e165acaf1d3c9f9ec6df5f281723d3",
+    "frame_contract": "b239310316fbe0cb4f11eb6e3030a2dce313495263b3a858bcf5e96555d93eb7",
+    "renderer_css": "706070e63996d0ce2a9ccf19f9ed6dc29b91a8134195f3aee992b5e4cfe28268",
+    "renderer_js": "18adb0c79d3dc0f4badf40e9f8c1e794a66d6b63f2b5b7e3159b71a048ce98d8"
+  },
+  "view_url": "/?snapshot=/snapshots/dev/20260827T041252779231Z-gen17-accepted-baseline/frame.json"
+}

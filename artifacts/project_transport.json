@@ -1,0 +1,172 @@
+{
+  "declared_root": "/home/mcp/projects/projects/terrarium",
+  "embedded": {},
+  "files": [
+    {
+      "executable": false,
+      "path": ".gitignore",
+      "sha256": "2ae089166382db2f1c70c5e372647799b1b34130cdcec0b01fccc86491876474",
+      "size": 120
+    },
+    {
+      "executable": false,
+      "path": "README.md",
+      "sha256": "df36093580e0dc30c0a4fb2aa50b7d9286e945de5d4fda6f90c24f7c7aeff579",
+      "size": 2568
+    },
+    {
+      "executable": false,
+      "path": "START_HERE.md",
+      "sha256": "1676a4b0d00fd28b408f8f3df2c3a836177bd751b59aa1a2faa997535afd45c5",
+      "size": 2307
+    },
+    {
+      "executable": false,
+      "path": "STATUS.md",
+      "sha256": "b31b43b2fac54f778cb3a817c6915155ee6fd1ad4ac6b3d95fc71ab2f450104c",
+      "size": 2811
+    },
+    {
+      "executable": false,
+      "path": "display/web/app.js",
+      "sha256": "0c366f462ddecd6f1af49af1a47ac889455f5129f9bbda0e6bedc155e9594a53",
+      "size": 10365
+    },
+    {
+      "executable": false,
+      "path": "display/web/index.html",
+      "sha256": "c6098cdfa29658524c64d9b97d27997bfc610a60b333803eba34366152736c87",
+      "size": 478
+    },
+    {
+      "executable": false,
+      "path": "display/web/style.css",
+      "sha256": "706070e63996d0ce2a9ccf19f9ed6dc29b91a8134195f3aee992b5e4cfe28268",
+      "size": 789
+    },
+    {
+      "executable": false,
+      "path": "evaluations/__init__.py",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0
+    },
+    {
+      "executable": true,
+      "path": "evaluations/evaluate_behavior.py",
+      "sha256": "c97e3bd7c00fb1ae98d9dfac5a0d5e2a680c6570f00bda1d1352105dffe8ae5d",
+      "size": 4212
+    },
+    {
+      "executable": true,
+      "path": "evaluations/evaluate_technical.py",
+      "sha256": "f2e1d34210d35009d33e02b767705dc3c7305d24eaa86a2457fdbc3e6a079d37",
+      "size": 3256
+    },
+    {
+      "executable": false,
+      "path": "evaluations/project_capability_pack.raw.json",
+      "sha256": "663c2fd1981fb1b93d9a9fe4cfbbaabdc748f4f40cc5a1f83b58d9ab8e6a40bd",
+      "size": 8261
+    },
+    {
+      "executable": false,
+      "path": "history/.gitkeep",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0
+    },
+    {
+      "executable": false,
+      "path": "history/GEN17.md",
+      "sha256": "e9dcab6798146f6502d0152199661ff0278269f5a63588b87fa2dcf4cb238bb2",
+      "size": 2432
+    },
+    {
+      "executable": false,
+      "path": "plan.md",
+      "sha256": "a1199f291183d4cddf6a4887d14322b17d525dec83e17320300816cd97ab13de",
+      "size": 2194
+    },
+    {
+      "executable": false,
+      "path": "pyproject.toml",
+      "sha256": "388ac1ddfba8ec1e455bfd4fa3b0d449905ed7abfd5ab5f782d28762f8093838",
+      "size": 426
+    },
+    {
+      "executable": false,
+      "path": "terrarium/__init__.py",
+      "sha256": "193b918305b6be90c4cd817c0d97cf3a1a2296a28056f42751b5295917ed167f",
+      "size": 64
+    },
+    {
+      "executable": false,
+      "path": "terrarium/api/__init__.py",
+      "sha256": "4fe22bad925e6e822bd0802e4e322dc3de882cd7c15d6d50b8d6e09d9fd41e12",
+      "size": 26
+    },
+    {
+      "executable": false,
+      "path": "terrarium/api/server.py",
+      "sha256": "a3fe5958aec1111cacc9fe7b3d864ef643427c3dff83b6463a2e6960cec2abe3",
+      "size": 5011
+    },
+    {
+      "executable": false,
+      "path": "terrarium/engine.py",
+      "sha256": "7123bcbc5bcb0353918e8cc7d404f8c431e165acaf1d3c9f9ec6df5f281723d3",
+      "size": 12574
+    },
+    {
+      "executable": false,
+      "path": "terrarium/events.py",
+      "sha256": "33cb272ba40ab3461c9e0f9f7409a77471d13bab87028ba1a02dd5f304408af3",
+      "size": 3802
+    },
+    {
+      "executable": false,
+      "path": "terrarium/frame.py",
+      "sha256": "b239310316fbe0cb4f11eb6e3030a2dce313495263b3a858bcf5e96555d93eb7",
+      "size": 1647
+    },
+    {
+      "executable": false,
+      "path": "terrarium/models.py",
+      "sha256": "b89bdedce5d43b750c579deafbb848735292086f8754d3fa3de5587757c4211a",
+      "size": 3522
+    },
+    {
+      "executable": false,
+      "path": "terrarium/replay.py",
+      "sha256": "bf27d340b6d141ea0fd76dd32608378ab0c98baa9b7cd878f5f1815effdfb220",
+      "size": 1557
+    },
+    {
+      "executable": false,
+      "path": "terrarium/store.py",
+      "sha256": "66870f4ad4b5f3149291d7c563e9f2fdc2d764e8f3e19125347ad39c8d3807d4",
+      "size": 7809
+    },
+    {
+      "executable": false,
+      "path": "terrarium.md",
+      "sha256": "ab230451169be0634d71caeb303912b487541781ae753a569920d944367c4985",
+      "size": 27710
+    },
+    {
+      "executable": false,
+      "path": "tests/test_evaluators.py",
+      "sha256": "e58af22a9e7271950f628b84b08220b03fc9a2e3753fc9c30b2d96ad9dae0ec4",
+      "size": 299
+    },
+    {
+      "executable": false,
+      "path": "tests/test_world.py",
+      "sha256": "3f51ee492430a39534d311a1e07ba47c665fbcceb3a6c948ecf59889e630bd11",
+      "size": 3537
+    }
+  ],
+  "producer": "gen17.final-control-transport.v1",
+  "project_id": "terrarium",
+  "schema": "gen15.project-transport.v1",
+  "transport_sha256": "307a725fd49083c517eeecf243525e0abf1dd06b4e325f7cde47ff408ff84839"
+}

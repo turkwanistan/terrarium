@@ -1,0 +1,23 @@
+{
+  "analysis_sha256": "9713722b31a22557890b3b86332dc1ae25ddac3bd6e9f5cf145dcd10af9dbef1",
+  "automatic_promotion": false,
+  "classification": {
+    "browser-render-inspection": "AVAILABLE",
+    "deterministic-simulation-replay": "AVAILABLE",
+    "esp32-renderer-toolchain": "UNNECESSARY",
+    "persistent-project-service": "AVAILABLE",
+    "simulation-behavior-auditor": "AVAILABLE",
+    "sqlite-event-ledger-inspection": "AVAILABLE",
+    "subjective-animation-quality-judging": "UNNECESSARY"
+  },
+  "context_reduction": 0.1051151915529287,
+  "critical_false_negatives": 0,
+  "manifest_sha256": "816fa1f89940580e40ab3c70338be2d18d37a2d87431b49adecca9c58ad02d40",
+  "pack_sha256": "2f3b20108768a605fe50ceb714b1f918b0d56e82c2fdf493ec22c61291d2eb92",
+  "required_evidence_recall": 1.0,
+  "schema": "terrarium.gen17-factory-summary.v1",
+  "transport_sha256": "307a725fd49083c517eeecf243525e0abf1dd06b4e325f7cde47ff408ff84839",
+  "twin_edges": 33,
+  "twin_nodes": 31,
+  "twin_sha256": "9630aa201f5343fd6ee7693cfd9ea4dd13373047c4b17798ae5cbcaadd73b099"
+}

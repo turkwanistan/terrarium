@@ -1,0 +1,19 @@
+{
+  "schema": "terrarium.dev-snapshot-index.v1",
+  "snapshots": [
+    {
+      "captured_at": "2026-08-27T04:12:52.782586Z",
+      "frame_path": "/snapshots/dev/20260827T041252779231Z-gen17-accepted-baseline/frame.json",
+      "meta_path": "/snapshots/dev/20260827T041252779231Z-gen17-accepted-baseline/meta.json",
+      "note": "Accepted Gen17 Phase 0\u20132 visual baseline before normal product iterations.",
+      "renderer_sha256": "18adb0c79d3dc0f4badf40e9f8c1e794a66d6b63f2b5b7e3159b71a048ce98d8",
+      "snapshot_id": "20260827T041252779231Z-gen17-accepted-baseline",
+      "source": {
+        "mode": "deterministic",
+        "seed": 1701,
+        "steps": 240
+      },
+      "tick": 240
+    }
+  ]
+}

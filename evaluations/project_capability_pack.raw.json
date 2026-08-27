@@ -1,0 +1,308 @@
+{
+  "capabilities": [
+    {
+      "applicability": [
+        "phase0",
+        "phase1",
+        "phase2"
+      ],
+      "id": "deterministic-simulation-replay",
+      "necessity": "required",
+      "platform_reason": "Gen16 readiness explicitly validates deterministic simulation/replay.",
+      "platform_status": "AVAILABLE",
+      "provider": "platform",
+      "purpose": "Run seeded simulation and prove exact replay.",
+      "task_intents": [
+        "gen17-pilot",
+        "behavior"
+      ],
+      "utility": 1.0
+    },
+    {
+      "applicability": [
+        "phase0",
+        "phase2"
+      ],
+      "id": "sqlite-event-ledger-inspection",
+      "necessity": "required",
+      "platform_reason": "Gen16 readiness explicitly validates SQLite/event-ledger inspection.",
+      "platform_status": "AVAILABLE",
+      "provider": "platform",
+      "purpose": "Inspect persistent SQLite/event-ledger state and growth.",
+      "task_intents": [
+        "gen17-pilot",
+        "behavior"
+      ],
+      "utility": 0.96
+    },
+    {
+      "applicability": [
+        "phase1",
+        "phase2"
+      ],
+      "id": "persistent-project-service",
+      "necessity": "required",
+      "platform_reason": "Managed persistent project services are accepted Gen16 project-building substrate.",
+      "platform_status": "AVAILABLE",
+      "provider": "platform",
+      "purpose": "Keep the world process alive independently of the renderer.",
+      "task_intents": [
+        "gen17-pilot",
+        "renderer"
+      ],
+      "utility": 0.97
+    },
+    {
+      "applicability": [
+        "phase1",
+        "phase2"
+      ],
+      "id": "browser-render-inspection",
+      "necessity": "required",
+      "platform_reason": "Gen16 readiness includes browser/render inspection and visual acceptance evidence.",
+      "platform_status": "AVAILABLE",
+      "provider": "platform",
+      "purpose": "Open, reconnect, and inspect the actual reference renderer through mediated Playwright.",
+      "task_intents": [
+        "gen17-pilot",
+        "renderer"
+      ],
+      "utility": 0.92
+    },
+    {
+      "allow_forge": false,
+      "applicability": [
+        "phase1",
+        "phase2"
+      ],
+      "id": "subjective-animation-quality-judging",
+      "necessity": "specialize",
+      "platform_reason": "Current browser tooling can inspect/screenshoot frames but has no proven automated temporal subjective-quality oracle.",
+      "platform_status": "WEAK_NEEDS_SPECIALIZATION",
+      "provider": "platform",
+      "purpose": "Reliably score animation smoothness, visual warmth, and diorama feel from rendered pixels over time.",
+      "task_intents": [
+        "renderer"
+      ],
+      "utility": 0.72
+    },
+    {
+      "allow_forge": true,
+      "applicability": [
+        "phase1",
+        "phase2",
+        "future persistent simulations"
+      ],
+      "authority_requirements": [
+        "read-only project evaluation artifacts"
+      ],
+      "forge": {
+        "desired_name": "simulation-behavior-auditor-r1"
+      },
+      "id": "simulation-behavior-auditor",
+      "necessity": "required",
+      "provider": "forge",
+      "purpose": "Measure action diversity, repetition, object interaction distribution, impossible carry states, and persistent environmental change from deterministic runs.",
+      "runtime_dependencies": [
+        "Python standard library"
+      ],
+      "task_intents": [
+        "gen17-pilot",
+        "behavior"
+      ],
+      "utility": 0.95
+    },
+    {
+      "applicability": [
+        "hardware fork"
+      ],
+      "id": "esp32-renderer-toolchain",
+      "necessity": "unnecessary",
+      "platform_reason": "Hardware fork is explicitly outside Gen17 initial scope.",
+      "platform_status": "UNNECESSARY",
+      "provider": "platform",
+      "purpose": "Build the eventual embedded display renderer.",
+      "utility": 0.2
+    }
+  ],
+  "classification_policy": {
+    "valuable_utility_min": 0.5
+  },
+  "pack_id": "terrarium-gen17",
+  "project": {
+    "artifact_locations": [
+      "artifacts/",
+      "evaluations/"
+    ],
+    "authority_hierarchy": [
+      "terrarium.md product intent",
+      "project source/tests",
+      "generated evaluation evidence"
+    ],
+    "authority_rules": [
+      {
+        "patterns": [
+          "artifacts/**",
+          "data/**"
+        ],
+        "role": "generated"
+      },
+      {
+        "patterns": [
+          "terrarium.md",
+          "README.md",
+          "START_HERE.md",
+          "STATUS.md",
+          "plan.md",
+          "pyproject.toml",
+          "terrarium/**/*.py",
+          "display/web/**",
+          "evaluations/*.py",
+          "tests/*.py"
+        ],
+        "role": "authoritative"
+      }
+    ],
+    "build_commands": [
+      "python -m py_compile terrarium/*.py terrarium/api/*.py"
+    ],
+    "data_locations": [
+      "data/"
+    ],
+    "embed_patterns": [
+      "README.md",
+      "START_HERE.md",
+      "STATUS.md",
+      "plan.md",
+      "pyproject.toml",
+      "terrarium.md",
+      "terrarium/**/*.py",
+      "display/web/*.html",
+      "display/web/*.js",
+      "display/web/*.css",
+      "evaluations/*.py",
+      "tests/*.py"
+    ],
+    "entrypoints": [
+      "terrarium/api/server.py",
+      "evaluations/evaluate_behavior.py",
+      "evaluations/evaluate_technical.py"
+    ],
+    "external_interfaces": [
+      "HTTP TerrariumFrame API",
+      "browser Canvas renderer"
+    ],
+    "ignore_patterns": [
+      "data/**",
+      "artifacts/**",
+      "**/__pycache__/**",
+      "**/.pytest_cache/**"
+    ],
+    "important_files": [
+      "terrarium.md",
+      "terrarium/models.py",
+      "terrarium/events.py",
+      "terrarium/store.py",
+      "terrarium/engine.py",
+      "terrarium/replay.py",
+      "terrarium/frame.py",
+      "display/web/index.html",
+      "display/web/app.js",
+      "evaluations/evaluate_behavior.py",
+      "evaluations/evaluate_technical.py"
+    ],
+    "project_id": "terrarium",
+    "project_name_aliases": [
+      "terrarium"
+    ],
+    "safety_constraints": [
+      "renderer never owns canonical world state",
+      "no autonomous Forge promotion",
+      "fixed logical 800x480"
+    ],
+    "task_profiles": {
+      "behavior": {
+        "authority": "project",
+        "keywords": [
+          "behavior",
+          "diversity",
+          "repetition",
+          "simulation",
+          "autonomous"
+        ],
+        "optional_patterns": [
+          "tests/**",
+          "terrarium.md"
+        ],
+        "required_paths": [
+          "terrarium/engine.py",
+          "evaluations/evaluate_behavior.py"
+        ]
+      },
+      "gen17-pilot": {
+        "authority": "project",
+        "keywords": [
+          "gen17",
+          "pilot",
+          "phase 0",
+          "phase 1",
+          "phase 2",
+          "terrarium"
+        ],
+        "optional_patterns": [
+          "tests/**",
+          "README.md",
+          "START_HERE.md",
+          "STATUS.md",
+          "plan.md",
+          "display/web/*.css"
+        ],
+        "required_paths": [
+          "terrarium.md",
+          "terrarium/models.py",
+          "terrarium/events.py",
+          "terrarium/store.py",
+          "terrarium/engine.py",
+          "terrarium/replay.py",
+          "terrarium/frame.py",
+          "terrarium/api/server.py",
+          "display/web/index.html",
+          "display/web/app.js",
+          "evaluations/evaluate_behavior.py",
+          "evaluations/evaluate_technical.py"
+        ]
+      },
+      "renderer": {
+        "authority": "project",
+        "keywords": [
+          "renderer",
+          "visual",
+          "browser",
+          "canvas",
+          "diorama"
+        ],
+        "optional_patterns": [
+          "tests/**",
+          "terrarium.md"
+        ],
+        "required_paths": [
+          "terrarium/frame.py",
+          "terrarium/api/server.py",
+          "display/web/index.html",
+          "display/web/app.js",
+          "display/web/style.css"
+        ]
+      }
+    },
+    "tests": [
+      "python -m pytest -q"
+    ]
+  },
+  "provenance": {
+    "creator": "Gen17 Terrarium project pilot",
+    "source": "terrarium.md + accepted Gen16 project readiness + live implementation evidence",
+    "source_generation": "gen17-terrarium-pilot"
+  },
+  "schema": "gen16.project-capability-pack.v1",
+  "version": "r1"
+}

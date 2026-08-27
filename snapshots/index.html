@@ -1,0 +1,15 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <link rel="icon" href="data:,">
+  <title>Terrarium — Development Snapshots</title>
+  <style>
+    :root{color-scheme:dark;font-family:ui-monospace,SFMono-Regular,Consolas,monospace}*{box-sizing:border-box}body{margin:0;background:#17161b;color:#e8dfce;padding:28px}main{max-width:1180px;margin:auto}h1{margin:0 0 8px}.lede{color:#bfb5a4;max-width:850px;line-height:1.5}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(360px,1fr));gap:22px;margin-top:28px}.card{background:#211f25;border:1px solid #38343d;border-radius:12px;overflow:hidden}.card iframe{display:block;width:100%;aspect-ratio:5/3;border:0;background:#17161b}.copy{padding:14px 16px}.copy h2{font-size:14px;margin:0 0 8px}.copy p{font-size:12px;line-height:1.5;margin:6px 0;color:#c9bfaf}.meta{opacity:.68;font-size:11px}.empty{padding:30px;border:1px dashed #4c4652;border-radius:10px;margin-top:24px}
+  </style>
+</head>
+<body><main><h1>Terrarium development snapshots</h1><p class="lede">Milestone frames captured from a fixed deterministic scene. Each frame is rendered through Terrarium's real browser renderer. Git history and the recorded renderer hash preserve the exact implementation that produced each checkpoint.</p><div id="grid" class="grid"></div></main>
+<script>
+(async()=>{const grid=document.getElementById('grid');const r=await fetch('/snapshots/index.json',{cache:'no-store'});const data=await r.json();const items=[...(data.snapshots||[])].reverse();if(!items.length){grid.innerHTML='<div class="empty">No development snapshots yet.</div>';return;}for(const s of items){const card=document.createElement('article');card.className='card';const iframe=document.createElement('iframe');iframe.loading='lazy';iframe.src='/?snapshot='+encodeURIComponent(s.frame_path);iframe.title=s.snapshot_id;const copy=document.createElement('div');copy.className='copy';const h=document.createElement('h2');h.textContent=s.snapshot_id;const p=document.createElement('p');p.textContent=s.note;const m=document.createElement('p');m.className='meta';m.textContent=`tick ${s.tick} · ${s.source.mode} · renderer ${s.renderer_sha256.slice(0,12)}`;copy.append(h,p,m);card.append(iframe,copy);grid.append(card);}})().catch(err=>{document.getElementById('grid').textContent='Snapshot gallery failed: '+err});
+</script></body></html>

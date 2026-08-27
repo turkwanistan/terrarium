@@ -1,0 +1,21 @@
+{
+  "content_hash": "932573954fdf126bd4ec4f4d5a1f79a50b48b994bf374ed0cfa3415120dd093f",
+  "evaluator_hash": "1c9eaed4c4174212f84a7db52d4c5f47e1a106a88461f6880023d4dd7c5f53ae",
+  "forge_evaluation": "3/3 PASS",
+  "mutation": {
+    "accepted_state_unchanged": true,
+    "check_id": "sequence_integrity",
+    "class": "fail_open_change",
+    "classification": "KILLED",
+    "dangerous_kill_rate": 1.0,
+    "dangerous_survivors": 0,
+    "mutation_id": "mu14_767a5cd86e477944b7c14ccd",
+    "physical_isolation_owner_count": 1
+  },
+  "name": "simulation-behavior-auditor-r1",
+  "real_task_attempts": 2,
+  "real_task_successes": 2,
+  "reuse_count": 1,
+  "schema": "terrarium.gen17-capability-evidence.v1",
+  "state": "PROMOTED"
+}

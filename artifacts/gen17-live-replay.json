@@ -1,0 +1,79 @@
+{
+  "creature": {
+    "activity": "sleep",
+    "carrying": "red_thread",
+    "recent_actions": [
+      "rest",
+      "place",
+      "explore",
+      "explore",
+      "carry",
+      "look_outside",
+      "walk",
+      "sleep"
+    ],
+    "zone": "collection_shelf"
+  },
+  "events": 402,
+  "habitat": {
+    "marks": [
+      "worn_activity_corner_6",
+      "worn_collection_shelf_6",
+      "worn_sleeping_nook_6",
+      "worn_window_6",
+      "worn_open_space_6",
+      "worn_collection_shelf_14",
+      "worn_sleeping_nook_14",
+      "worn_activity_corner_14",
+      "worn_window_14",
+      "worn_open_space_14"
+    ],
+    "shelf_count": 0
+  },
+  "objects": [
+    {
+      "id": "blue_stone",
+      "state": "placed",
+      "times_moved": 2,
+      "zone": "activity_corner"
+    },
+    {
+      "id": "amber_leaf",
+      "state": "placed",
+      "times_moved": 1,
+      "zone": "open_space"
+    },
+    {
+      "id": "acorn",
+      "state": "placed",
+      "times_moved": 3,
+      "zone": "activity_corner"
+    },
+    {
+      "id": "shell",
+      "state": "placed",
+      "times_moved": 7,
+      "zone": "sleeping_nook"
+    },
+    {
+      "id": "red_thread",
+      "state": "carried",
+      "times_moved": 11,
+      "zone": "collection_shelf"
+    },
+    {
+      "id": "glass_star",
+      "state": "placed",
+      "times_moved": 0,
+      "zone": "activity_corner"
+    }
+  ],
+  "replay": {
+    "canonical_state_hash": "b3d10eda99f8b3ba580043d4d7c40bd1ce0cde0f9cbc45cde019fb3d1fc21a1b",
+    "event_count": 402,
+    "ok": true,
+    "replayed_state_hash": "b3d10eda99f8b3ba580043d4d7c40bd1ce0cde0f9cbc45cde019fb3d1fc21a1b"
+  },
+  "schema": "terrarium.gen17-live-proof.v1",
+  "tick": 402
+}

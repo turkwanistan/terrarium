@@ -1,0 +1,18 @@
+{
+  "browser_close_reopen": {
+    "after_tick": 63,
+    "before_tick": 36,
+    "world_advanced_without_renderer": true
+  },
+  "final_screenshot_label": "terrarium-gen17-final.png",
+  "logical_renderer": "800x480",
+  "note": "Screenshot captured through mediated browser; temporal subjective-quality oracle remains unproven.",
+  "process_restart": {
+    "post_restart_observed_tick": 87,
+    "pre_restart_tick_at_least": 63,
+    "reset_to_zero": false
+  },
+  "renderer_authoritative": false,
+  "renderer_page_clean_after_restart": true,
+  "schema": "terrarium.gen17-browser-acceptance.v1"
+}
