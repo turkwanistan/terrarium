@@ -1,0 +1,40 @@
+{
+  "art_surface": {
+    "height": 240,
+    "integer_scale": 2,
+    "smoothing": false,
+    "width": 400
+  },
+  "captured_at": "2026-08-27T21:28:49.314524Z",
+  "frame": {
+    "logical_height": 480,
+    "logical_width": 800,
+    "path": "dev/20260827T212849313774Z-pixel-art-overhaul-iteration4/frame.json",
+    "sha256": "aee7d6188523b4f3cf1539d653a8816e2dc87ae10a86d62ddb3d1b1ac9e3df9f",
+    "tick": 698
+  },
+  "git": {
+    "branch": "main",
+    "dirty": true,
+    "head": "96d25c6e37441afaa5dd8631268464a04a33613e"
+  },
+  "note": "Behavioral intent and routine coherence: bounded recent history, purposeful travel, activity chains, longer dwell, direct object delivery, window sessions, and wake/post-place settling.",
+  "preview": {
+    "path": "dev/20260827T212849313774Z-pixel-art-overhaul-iteration4/preview.svg",
+    "sha256": "7dc202cdf1e5cc777300cbd2ad39792551d27ed4bdd16e0df4fe3e31e4626cd5"
+  },
+  "schema": "terrarium.dev-snapshot.v1",
+  "snapshot_id": "20260827T212849313774Z-pixel-art-overhaul-iteration4",
+  "source": {
+    "mode": "deterministic",
+    "seed": 1701,
+    "steps": 698
+  },
+  "source_hashes": {
+    "engine": "06b073e3cfcbb5b515971bcd6a6c7f903d31f2526a9e6d7d970e432dc22f5b58",
+    "frame_contract": "c3625d36eb58f702591d961589cd248fc6b34e0918c8f27ded7f75d9bc4a9805",
+    "renderer_css": "3a24319be5a3e0c963b8e721b637f35aedfdc24b8bef8e779ae934dd09fd62d1",
+    "renderer_js": "96bd0eb952cf40b8b5099b1b7ab47ca376bc46339c01ebd0556ed440f1f8115d"
+  },
+  "view_url": "/?snapshot=/snapshots/dev/20260827T212849313774Z-pixel-art-overhaul-iteration4/frame.json"
+}

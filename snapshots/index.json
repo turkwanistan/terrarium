@@ -165,6 +165,21 @@
         "steps": 698
       },
       "tick": 698
+    },
+    {
+      "captured_at": "2026-08-27T21:28:49.314524Z",
+      "frame_path": "/snapshots/dev/20260827T212849313774Z-pixel-art-overhaul-iteration4/frame.json",
+      "meta_path": "/snapshots/dev/20260827T212849313774Z-pixel-art-overhaul-iteration4/meta.json",
+      "note": "Behavioral intent and routine coherence: bounded recent history, purposeful travel, activity chains, longer dwell, direct object delivery, window sessions, and wake/post-place settling.",
+      "preview_path": "/snapshots/dev/20260827T212849313774Z-pixel-art-overhaul-iteration4/preview.svg",
+      "renderer_sha256": "96bd0eb952cf40b8b5099b1b7ab47ca376bc46339c01ebd0556ed440f1f8115d",
+      "snapshot_id": "20260827T212849313774Z-pixel-art-overhaul-iteration4",
+      "source": {
+        "mode": "deterministic",
+        "seed": 1701,
+        "steps": 698
+      },
+      "tick": 698
     }
   ]
 }

@@ -64,7 +64,8 @@ def test_world_is_autonomous_and_habitat_accumulates(tmp_path):
     assert len(actions)>=8
     assert sum(e['type']=='object_placed' for e in events)>=4
     assert sum(o['times_moved']>0 for o in engine.current_state()['objects'])>=3
-    assert len(engine.current_state()['habitat']['marks'])>=3
+    # Calmer routine-aware behavior intentionally creates path wear more slowly.
+    assert len(engine.current_state()['habitat']['marks'])>=2
     store.close()
 
 
@@ -87,7 +88,8 @@ def test_activity_specific_aftermath_accumulates_deterministically(tmp_path):
     state=engine.current_state(); aftermath=state['habitat']['activity_aftermath']
     assert aftermath['sleep_nook_ticks'] >= 2
     assert aftermath['sleep_nook_bouts'] >= 1
-    assert aftermath['window_watches'] >= 8
+    # A window bout now commits for longer, so bout count is lower while dwell is higher.
+    assert aftermath['window_watches'] >= 4
     assert aftermath['activity_corner_uses'] >= 8
     frame=make_frame(state,last_event=store.last_event())
     assert frame['habitat']['activity_aftermath'] == aftermath
@@ -157,3 +159,32 @@ def test_snapshot_tool_direct_entrypoint(tmp_path):
     spec = importlib.util.spec_from_file_location("snapshot_tool", Path(__file__).resolve().parents[1] / "tools/capture_dev_snapshot.py")
     module = importlib.util.module_from_spec(spec); spec.loader.exec_module(module)
     module.rebuild_snapshot_readme(data)
+
+
+def test_legacy_behavior_context_migrates_without_resetting_possessions():
+    from terrarium.engine import Simulation
+    from terrarium.models import BEHAVIOR_CONTEXT_SCHEMA, initial_state
+
+    state = initial_state(1701, created_at=FIXED)
+    state["rules_version"] = "terrarium-rules-v2-action-pacing"
+    state["creature"].pop("behavior_context", None)
+    state["creature"]["carrying"] = "red_thread"
+    red_thread = next(obj for obj in state["objects"] if obj["id"] == "red_thread")
+    red_thread["state"] = "carried"
+    red_thread["carried_by"] = state["creature"]["id"]
+    red_thread["times_moved"] = 7
+    red_thread["times_inspected"] = 11
+
+    _, _, _, migrated = Simulation().step(state)
+    context = migrated["creature"]["behavior_context"]
+    carried = next(obj for obj in migrated["objects"] if obj["id"] == "red_thread")
+
+    assert migrated["rules_version"] == RULES_VERSION
+    assert context["schema"] == BEHAVIOR_CONTEXT_SCHEMA
+    assert len(context["recent_zones"]) <= 4
+    assert len(context["recent_objects"]) <= 4
+    assert migrated["creature"]["carrying"] == "red_thread"
+    assert carried["state"] == "carried"
+    assert carried["carried_by"] == migrated["creature"]["id"]
+    assert carried["times_moved"] == 7
+    assert carried["times_inspected"] == 11

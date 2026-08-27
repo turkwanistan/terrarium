@@ -1,51 +1,68 @@
 # Terrarium status
 
-Terrarium is normal product development after the accepted Generation 17 pilot. The current checkpoint is **Pixel-Art Overhaul — Iteration 3: Spatial Coherence and Physical Acting**. This is **not Generation 18**.
+Terrarium is normal product development after the accepted Generation 17 pilot. The current checkpoint is **Pixel-Art Overhaul — Iteration 4: Behavioral Intent and Routine Coherence**. This is **not Generation 18**.
 
 ## Current checkpoint
 
-- history: `history/2026-08-27-pixel-art-overhaul-iteration3.md`
-- bounded evidence: `artifacts/pixel-art-overhaul-iteration3.json`
-- accepted snapshot: `20260827T204232352544Z-pixel-art-overhaul-iteration3`
+- history: `history/2026-08-27-pixel-art-overhaul-iteration4.md`
+- bounded evidence: `artifacts/pixel-art-overhaul-iteration4.json`
+- accepted snapshot: `20260827T212849313774Z-pixel-art-overhaul-iteration4`
 - deterministic seed/tick: **1701 / 698**
-- semantic frame SHA256: `fe7ffd8dbefc56144c7af673a810339f136ae6f08db580cf80bc8b819f0996a9`
+- semantic frame SHA256: `aee7d6188523b4f3cf1539d653a8816e2dc87ae10a86d62ddb3d1b1ac9e3df9f`
 - renderer JS SHA256: `96bd0eb952cf40b8b5099b1b7ab47ca376bc46339c01ebd0556ed440f1f8115d`
+- behavior context schema: `terrarium.behavior-context.v1`
+- behavior rules: `terrarium-rules-v3-routine-coherence`
 - spatial schema: `terrarium.spatial.v1`
 
-## What Iteration 3 established
+## What Iteration 4 established
 
-Moss now inhabits an authored physical room rather than moving as a coordinate through illustration. Host-owned world/event authority defines walkable bounds, furniture blockers, deterministic room waypoints, approach anchors, supported sleep geometry, contact points, and the route used for each physical action. The renderer only interpolates the authoritative route.
+Moss no longer chooses each meaningful action as an isolated weighted sample. A deliberately small host-owned routine context now remembers only the last four zones/objects plus one bounded current intent. Arrival, window, object, placement, sleep, and wake states bias the next few decisions toward plausible continuation while preserving deterministic autonomy.
 
-Zone arrivals are now on usable floor: window at the sill-side floor/perch, shelf in front of the accessible collection tray, desk on its open side, and the sleeping nook at its entrance. Sleep always enters the supported bed anchor; wake holds a real wake pose then exits through the bed gate. Object inspect/pickup/place explicitly separate the semantic target, physical approach, and reachable contact point. Existing persisted object history is not silently rewritten; future placements use accessible authored slots.
+Movement is normally the consequence of an intent. Destination selection inhibits immediate zone ping-pong, favors a few authored familiar spots, and commits carried objects to one delivery destination. Inspecting an object strongly favors continuing with that same object; after a completed object session Moss briefly inhibits returning to the same prop when another local choice exists. Arrival, window watching, placement, rest, sleep, and wake have longer readable dwell/recovery commitments.
 
-The renderer follows deterministic route polylines with calm turns and route-segment facing. Carried props transition continuously across turns rather than flipping sides. Small room-art changes clarify physical affordances while preserving the accepted Iteration-2 style.
+Legacy worlds acquire `terrarium.behavior-context.v1` through ordinary deterministic evolution. Existing possession, object movement/inspection counts, event history, and canonical Moss state are not reset or rewritten.
 
 ## Acceptance
 
-- pytest: **26/26 PASS**;
+- pytest: **28/28 PASS**;
 - Python 3.10 grammar guard: **PASS**;
 - JavaScript syntax: **PASS**;
-- technical evaluator: **PASS**;
-- behavior evaluator seed 1701 / 500: **PASS**, **188 decisions + 312 continuations**, 10 action classes, all 6 objects moved;
-- spatial evaluator seed 1701 / 500: **PASS**, **62 routed actions**, **41 multi-segment routes**, **23 carried routes**, **47 targeted interactions**, **0 blocker intersections**, **0 invalid awake endpoints**;
-- exact replay at deterministic tick 698: **PASS**, canonical/replayed hash `5415606c3265ea5bb0166adfcaefba77fe132a324c64d9863dd3bd8347425fdd`;
-- deterministic real-browser repeat: byte-identical SHA256 `607ee52244330be6734cee5e3e706ede57669de70dc8b67c0ee1b6c94a561ea9`;
-- continuity interruption: **0 px**;
-- real RAF: **16.5 ms min / 16.7 ms p50 / 16.8 ms p95 / 16.8 ms max**, zero >34 ms / >50 ms;
-- promoted behavior auditor: sequence integrity true, 10 action classes, 47 object interactions;
-- promoted grid-aware temporal auditor: **6/6 applicable tasks PASS**, zero critical failures and zero grid mismatches;
-- human 800×480 inspection: **accepted**.
+- technical evaluator: **PASS**, including append-only event chain, restart persistence, and exact snapshot+event replay;
+- behavior evaluator seed 1701 / 500: **PASS**, 155 decisions + 345 continuations, 10 action classes, all 6 objects moved;
+- spatial evaluator seed 1701 / 500: **PASS**, 49 routed actions, 33 multi-segment routes, 21 carried routes, 48 targeted interactions, **0 blocker intersections**, **0 invalid awake endpoints**;
+- Iteration-4 coherence evaluator seed 1701 / 2000: **PASS** and deterministic duplicate equality;
+- multi-seed coherence robustness: **1701 / 1702 / 42 / 999 all PASS**;
+- real browser 3-second UAT exposed a coherent unscripted sequence: window watch → linger → inspect amber leaf → carry same leaf → direct shelf delivery → settle/place → sleep;
+- real RAF: **16.5 ms min / 16.7 ms p50 / 16.7 ms p95 / 16.8 ms max**, zero >34 ms / >50 ms;
+- promoted `temporal-render-auditor-r1` on the fresh RAF capture: **PASS**, 0 critical failures;
+- renderer code is byte-identical to Iteration 3, so accepted pixel-grid rendering/acting mechanics remain unchanged.
 
-The promoted straight-vector temporal auditor is deliberately not used as an oracle for multi-turn routes. Those routes are covered by Terrarium's route-aware spatial evaluator plus real-browser telemetry and inspection.
+### Before → after, seed 1701 / 2000 ticks
+
+- decisions/hour: **22.20 → 17.49**;
+- movement decisions/hour: **5.19 → 3.42**;
+- cross-room moves/hour: **2.22 → 1.26**;
+- average zone dwell: **10.20 → 15.04 ticks**;
+- median zone dwell: **10 → 13 ticks**;
+- post-arrival linger: **89.6% → 98.2%**;
+- inspect → same-object carry within two decisions: **18.7% → 83.0%**;
+- window arrival → watch within two decisions: **60.0% → 92.9%**;
+- post-place linger: **87.0% → 100%**;
+- wake → quiet recovery: **39.3% → 100%**;
+- non-delivery immediate movement reversal rate after change: **3.0%**;
+- chosen object delivery completion: **100%**;
+- calm visible timeline share: **69.5% → 74.0%**.
+
+Metrics are diagnostic gates, not personality targets. The retained behavior remains probabilistic and deterministic rather than a scripted routine list.
 
 ## Pixel-art / pacing invariants
 
-`ART_DIRECTION.md` remains visual authority. Internal art stays **400×240**, displayed as exact **2× nearest-neighbor 800×480** with smoothing off. The heartbeat remains **3 real seconds**, world advance **1 minute/heartbeat**, full day ~**72 real minutes**, and behavior commitments continue across heartbeats. The existing behavior RNG rules version remains `terrarium-rules-v2-action-pacing`; spatial geometry is versioned separately.
+`ART_DIRECTION.md` remains visual authority. Internal art stays **400×240**, displayed as exact **2× nearest-neighbor 800×480** with smoothing off. The heartbeat remains **3 real seconds**, world advance **1 minute/heartbeat**, and a full day remains ~**72 real minutes**. Host-side state owns behavior and routes; renderer interpolation remains presentation-only.
 
 ## SBC conclusion
 
-Existing SBC/project-factory infrastructure and promoted behavior/temporal capabilities were sufficient. Spatial correctness is product-specific and is covered inside Terrarium. No capability was forged, no SBC files were modified, and **Gen18 is not warranted**.
+The missing property was Terrarium-specific short-horizon coherence, so it was evaluated inside Terrarium with `terrarium.behavior-coherence-evaluation.v1`. Existing SBC infrastructure and the promoted temporal auditor were sufficient; no Capability Forge work, SBC mutation, MCP growth, or **Gen18** was justified. Unrelated dirty Self-Building Computer state was not touched.
 
 ## Runtime / Git safety
 
-Canonical Moss state remains user-owned and outside Git. Only `data/.gitkeep` may be tracked from runtime storage. Deployment must preserve the existing canonical runtime directory, event chain, seed, object history, and SQLite database.
+Canonical Moss state remains user-owned and outside Git. Only `data/.gitkeep` may be tracked from runtime storage. Deployment must preserve the existing canonical runtime directory, event chain, seed, object history, and SQLite database. A disposable development world is never a substitute for canonical Moss.

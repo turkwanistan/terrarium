@@ -16,6 +16,17 @@ ZONE_ANCHORS: dict[str, dict[str, int]] = {
     "activity_corner": {"x": 554, "y": 372},    # open side of desk
 }
 
+# A deliberately small set of authored places Moss can treat as familiar
+# destinations.  They reuse the compact navigation graph rather than creating
+# a grid of arbitrary nodes.  Behavior may prefer these zones for the named
+# purpose; physical authority remains the ordinary zone anchor.
+FAVORITE_SPOTS: dict[str, dict[str, int | str]] = {
+    "bedside_rest": {"zone": "sleeping_nook", "x": 296, "y": 392, "purpose": "rest"},
+    "window_watch": {"zone": "window", "x": 168, "y": 316, "purpose": "observe"},
+    "rug_rest": {"zone": "open_space", "x": 405, "y": 378, "purpose": "idle"},
+    "activity_settle": {"zone": "activity_corner", "x": 554, "y": 372, "purpose": "settle"},
+}
+
 SLEEP_SUPPORT_ANCHOR = {"x": 222, "y": 394}
 
 # Visual furniture footprints expanded by a small anchor-clearance margin.  The

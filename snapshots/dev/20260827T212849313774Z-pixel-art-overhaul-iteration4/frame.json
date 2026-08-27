@@ -1,0 +1,148 @@
+{
+  "creature": {
+    "activity": "rest",
+    "carrying": null,
+    "expression": "content",
+    "facing": "left",
+    "id": "creature-1",
+    "intent_action": "rest",
+    "intent_ticks_remaining": 0,
+    "name": "Moss",
+    "pose": "rest",
+    "target_object_id": null,
+    "x": 405,
+    "y": 378,
+    "zone": "open_space"
+  },
+  "frame_version": 1,
+  "habitat": {
+    "activity_aftermath": {
+      "activity_corner_uses": 23,
+      "sleep_nook_bouts": 7,
+      "sleep_nook_ticks": 112,
+      "wet_window_watches": 0,
+      "window_watches": 4
+    },
+    "marks": [
+      "worn_collection_shelf_6",
+      "worn_open_space_6",
+      "worn_activity_corner_6",
+      "worn_collection_shelf_14"
+    ],
+    "path_wear": {
+      "activity_corner": 10,
+      "collection_shelf": 17,
+      "open_space": 11,
+      "sleeping_nook": 2,
+      "window": 3
+    },
+    "shelf_count": 3
+  },
+  "last_event": {
+    "action": "rest",
+    "approach_x": null,
+    "approach_y": null,
+    "contact_x": null,
+    "contact_y": null,
+    "decision": false,
+    "event_id": "evt_000000698",
+    "from_zone": "open_space",
+    "intent_action": "rest",
+    "object_id": null,
+    "route": [],
+    "route_length": null,
+    "source_x": null,
+    "source_y": null,
+    "spatial_schema": null,
+    "summary": "Moss stayed settled and rested quietly.",
+    "supported_action": null,
+    "target_x": null,
+    "target_y": null,
+    "to_zone": null,
+    "type": "creature_activity"
+  },
+  "lighting": "dusk",
+  "logical_height": 480,
+  "logical_width": 800,
+  "objects": [
+    {
+      "carried_by": null,
+      "id": "blue_stone",
+      "kind": "stone",
+      "name": "Blue stone",
+      "state": "placed",
+      "times_inspected": 8,
+      "times_moved": 7,
+      "x": 640,
+      "y": 294,
+      "zone": "collection_shelf"
+    },
+    {
+      "carried_by": null,
+      "id": "amber_leaf",
+      "kind": "leaf",
+      "name": "Amber leaf",
+      "state": "placed",
+      "times_inspected": 2,
+      "times_moved": 2,
+      "x": 404,
+      "y": 369,
+      "zone": "open_space"
+    },
+    {
+      "carried_by": null,
+      "id": "acorn",
+      "kind": "seed",
+      "name": "Acorn",
+      "state": "placed",
+      "times_inspected": 4,
+      "times_moved": 3,
+      "x": 680,
+      "y": 294,
+      "zone": "collection_shelf"
+    },
+    {
+      "carried_by": null,
+      "id": "shell",
+      "kind": "shell",
+      "name": "Tiny shell",
+      "state": "placed",
+      "times_inspected": 2,
+      "times_moved": 2,
+      "x": 443,
+      "y": 395,
+      "zone": "open_space"
+    },
+    {
+      "carried_by": null,
+      "id": "red_thread",
+      "kind": "thread",
+      "name": "Red thread",
+      "state": "placed",
+      "times_inspected": 4,
+      "times_moved": 5,
+      "x": 660,
+      "y": 292,
+      "zone": "collection_shelf"
+    },
+    {
+      "carried_by": null,
+      "id": "glass_star",
+      "kind": "trinket",
+      "name": "Glass star",
+      "state": "placed",
+      "times_inspected": 4,
+      "times_moved": 2,
+      "x": 365,
+      "y": 392,
+      "zone": "open_space"
+    }
+  ],
+  "schema": "terrarium.frame.v1",
+  "spatial": {
+    "schema": "terrarium.spatial.v1"
+  },
+  "tick": 698,
+  "weather": "clear",
+  "world_minutes": 1118
+}

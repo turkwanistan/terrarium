@@ -1,0 +1,141 @@
+{
+  "accepted": true,
+  "after_seed1701_steps2000": {
+    "average_zone_dwell_ticks": 15.037594,
+    "calm_visible_timeline_ratio": 0.74,
+    "cross_room_moves_per_hour": 1.26,
+    "decision_events": 583,
+    "decisions_per_hour": 17.49,
+    "direct_object_delivery_rate": 1.0,
+    "inspect_to_same_object_carry_within_two_rate": 0.829787,
+    "median_zone_dwell_ticks": 13,
+    "movement_decisions": 114,
+    "movement_ratio": 0.19554,
+    "moves_per_hour": 3.42,
+    "non_delivery_reversal_rate": 0.030303,
+    "post_arrival_linger_rate": 0.982301,
+    "post_place_linger_rate": 1.0,
+    "post_place_next_object_repeat_rate": 0.066667,
+    "purposeful_movement_rate": 1.0,
+    "wake_recovery_rate": 1.0,
+    "window_session_continuation_rate": 0.928571
+  },
+  "baseline_iter3_seed1701_steps2000": {
+    "average_zone_dwell_ticks": 10.204082,
+    "calm_visible_timeline_ratio": 0.695,
+    "cross_room_moves_per_hour": 2.22,
+    "decision_events": 740,
+    "decisions_per_hour": 22.2,
+    "inspect_to_same_object_carry_within_two_rate": 0.186667,
+    "median_zone_dwell_ticks": 10.0,
+    "movement_decisions": 173,
+    "movement_ratio": 0.233784,
+    "movement_reversals": 34,
+    "moves_per_hour": 5.19,
+    "post_arrival_linger_rate": 0.895954,
+    "post_place_linger_rate": 0.869565,
+    "wake_recovery_rate": 0.392857,
+    "window_arrival_watch_within_two_rate": 0.6
+  },
+  "behavior": {
+    "bounded_recent_objects": 4,
+    "bounded_recent_zones": 4,
+    "context_schema": "terrarium.behavior-context.v1",
+    "legacy_migration_preserves_existing_carry": true,
+    "rules_version": "terrarium-rules-v3-routine-coherence",
+    "single_current_intent": true,
+    "travel_purposes": [
+      "object_delivery",
+      "window_session",
+      "activity_session",
+      "settle_at_familiar_spot"
+    ]
+  },
+  "checkpoint": "Pixel-Art Overhaul \u2014 Iteration 4: Behavioral Intent and Routine Coherence",
+  "robustness": {
+    "all_passed": true,
+    "seeds": [
+      1701,
+      1702,
+      42,
+      999
+    ]
+  },
+  "sbc": {
+    "gen18_warranted": false,
+    "modified": false,
+    "new_capability_forged": false,
+    "reason": "short-horizon routine coherence is Terrarium-specific and existing substrate/evaluation mechanisms were sufficient"
+  },
+  "schema": "terrarium.pixel-art-overhaul-iteration4-evidence.v1",
+  "snapshot": {
+    "id": "20260827T212849313774Z-pixel-art-overhaul-iteration4",
+    "renderer_js_sha256": "96bd0eb952cf40b8b5099b1b7ab47ca376bc46339c01ebd0556ed440f1f8115d",
+    "seed": 1701,
+    "semantic_frame_sha256": "aee7d6188523b4f3cf1539d653a8816e2dc87ae10a86d62ddb3d1b1ac9e3df9f",
+    "tick": 698
+  },
+  "validation": {
+    "behavior_evaluator": true,
+    "coherence_evaluator": true,
+    "javascript_syntax": true,
+    "promoted_behavior_auditor": {
+      "duplicate_forged": false,
+      "executable_materialized_in_current_lab": false,
+      "name": "simulation-behavior-auditor-r1",
+      "promotion_record_present": true
+    },
+    "promoted_temporal_auditor": {
+      "critical_failures": 0,
+      "name": "temporal-render-auditor-r1",
+      "passed": true,
+      "raf_max_interval_ms": 16.8
+    },
+    "pytest": {
+      "count": 28,
+      "passed": true
+    },
+    "python310_grammar": true,
+    "raf": {
+      "frames": 110,
+      "interval_count": 109,
+      "max_ms": 16.8,
+      "min_ms": 16.5,
+      "over_34ms": 0,
+      "over_50ms": 0,
+      "p50_ms": 16.7,
+      "p95_ms": 16.7
+    },
+    "real_browser": {
+      "heartbeat_seconds": 3,
+      "observed_chain": [
+        "window watch",
+        "linger",
+        "inspect amber_leaf",
+        "carry amber_leaf",
+        "direct collection_shelf delivery",
+        "settle",
+        "place",
+        "settle",
+        "sleep"
+      ],
+      "screenshot_captured": "terrarium-iter4-current.png",
+      "viewport": "800x480"
+    },
+    "spatial": {
+      "blocker_intersections": 0,
+      "carried_routes": 21,
+      "invalid_awake_endpoints": 0,
+      "multi_segment_routes": 33,
+      "routed_actions": 49,
+      "targeted_actions": 48
+    },
+    "spatial_evaluator": true,
+    "technical": {
+      "event_chain_valid": true,
+      "restart_preserves_state": true,
+      "snapshot_event_replay_exact": true
+    },
+    "technical_evaluator": true
+  }
+}

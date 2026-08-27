@@ -144,6 +144,20 @@ Choose the next normal Terrarium target from direct UAT. If the remaining object
 
 Evidence: `history/2026-08-27-pixel-art-overhaul-iteration3.md`, `artifacts/pixel-art-overhaul-iteration3.json`, snapshot `20260827T204232352544Z-pixel-art-overhaul-iteration3`.
 
+## Completed normal product checkpoint — Pixel-Art Overhaul, Iteration 4
+
+- added bounded `terrarium.behavior-context.v1` recent-zone/recent-object memory plus one short-horizon intent;
+- made travel a consequence of context and inhibited recent-zone ping-pong rather than merely lowering a global walk probability;
+- established readable arrival, window, object, post-place, sleep, and wake continuations;
+- committed carried objects to one delivery destination and preserved same-object continuity from inspect→pickup→delivery→place;
+- lengthened calm dwell/recovery commitments without changing the 3-second heartbeat or 72-real-minute day;
+- added a Terrarium-specific deterministic coherence evaluator plus multi-seed robustness coverage;
+- preserved `terrarium.spatial.v1`, exact replay/restart, canonical-state migration, pixel rendering, and renderer authority boundaries;
+- passed 28/28 tests and all technical/behavior/spatial/coherence gates, with fresh real-browser RAF temporal audit;
+- no SBC platform change, capability forge, MCP growth, or Gen18 was required.
+
+Evidence: `history/2026-08-27-pixel-art-overhaul-iteration4.md`, `artifacts/pixel-art-overhaul-iteration4.json`, snapshot `20260827T212849313774Z-pixel-art-overhaul-iteration4`.
+
 ## Next product iteration
 
-Choose from direct UAT. Favor refinement of spatial readability, object/surface choreography, and remaining room-depth quirks before expanding scope. Do not add rooms, quests, personality AI, dialogue, or hardware merely because spatial coherence is now established.
+Choose from direct UAT after the canonical runtime is updated. The next likely maturity layer is **longer-lived preference and routine identity**: recurring favorite places/objects/time-of-day tendencies that emerge over days without turning Moss into a needs-bar or scripted RPG agent. Keep that separate from this short-horizon coherence layer, and only pursue it if live observation shows the new local intent model is stable.

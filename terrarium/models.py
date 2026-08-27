@@ -11,7 +11,8 @@ from .spatial import ZONE_ANCHORS
 FRAME_WIDTH = 800
 FRAME_HEIGHT = 480
 STATE_SCHEMA_VERSION = 1
-RULES_VERSION = "terrarium-rules-v2-action-pacing"
+RULES_VERSION = "terrarium-rules-v3-routine-coherence"
+BEHAVIOR_CONTEXT_SCHEMA = "terrarium.behavior-context.v1"
 EVENT_VERSION = 1
 
 ZONES: dict[str, dict[str, int]] = {name: dict(anchor) for name, anchor in ZONE_ANCHORS.items()}
@@ -115,6 +116,12 @@ def initial_state(seed: int, *, created_at: str | None = None) -> dict[str, Any]
             "recent_actions": [],
             "focus_object_id": None,
             "behavior_commitment": {"action": None, "ticks_remaining": 0, "object_id": None},
+            "behavior_context": {
+                "schema": BEHAVIOR_CONTEXT_SCHEMA,
+                "recent_zones": ["sleeping_nook"],
+                "recent_objects": [],
+                "intent": None,
+            },
         },
         "habitat": {
             "lighting": lighting_for(420),

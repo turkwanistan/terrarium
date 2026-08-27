@@ -165,3 +165,10 @@ Pixel-Art Overhaul — Iteration 3 makes physical staging part of the visual law
 Routes may contain a small number of authored intermediate waypoints. Turns should happen at legible room corners without facing chatter. The renderer follows the authoritative route and may not shortcut through furniture. Sleep may overlap bedding only at the explicit supported bed anchor; wake must visibly leave the support through the bed gate before ordinary behavior resumes.
 
 Depth remains pixel-native and authored. Use low perch/tray/top/front planes and foreground lips where needed to explain usable surfaces. Occlusion should follow physical position, not a global draw-last rule. Carried-object attachment must remain visually continuous when Moss changes facing at a route corner.
+## Accepted Iteration 4 behavioral acting conventions
+
+Pixel-Art Overhaul — Iteration 4 makes **behavioral continuity part of acting readability**. The renderer still has no behavioral authority, but authored poses should have enough canonical dwell to read as a session rather than a flicker. Arrival normally earns a planted settle before another trip. Window watching is a viewing bout. Inspect→pickup→carry→place may read as one object-centered chain. Placement includes a brief regard/recovery, and waking includes a supported unfold/recovery before ordinary travel.
+
+Stillness is valid acting. Do not add secondary motion, random ear/tail noise, or extra walking merely to keep the screen busy. A quiet planted Moss who has a readable reason to remain where he is is preferable to visually diverse but purposeless motion. The strongest acting question is now: **does this pose look like a continuation of what Moss just chose to do?**
+
+Favorite spots are authored physical affordances, not renderer inventions. Any future visual differentiation of a favorite spot must be grounded in canonical state/history rather than hidden presentation memory.

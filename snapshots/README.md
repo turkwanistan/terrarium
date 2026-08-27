@@ -2,6 +2,14 @@
 
 Git-friendly visual milestones. The SVG is a lightweight capture-time thumbnail; run Terrarium and open `/snapshots/` for the same stored frame through the real Canvas renderer.
 
+## 20260827T212849313774Z-pixel-art-overhaul-iteration4
+
+Behavioral intent and routine coherence: bounded recent history, purposeful travel, activity chains, longer dwell, direct object delivery, window sessions, and wake/post-place settling.
+
+![20260827T212849313774Z-pixel-art-overhaul-iteration4](dev/20260827T212849313774Z-pixel-art-overhaul-iteration4/preview.svg)
+
+Deterministic tick `698` · renderer `96bd0eb952cf`
+
 ## 20260827T204232352544Z-pixel-art-overhaul-iteration3
 
 Pixel-Art Overhaul — Iteration 3: authoritative walkable geometry, blocker-safe deterministic routes, physical approach/contact staging, supported sleep/wake navigation, route-aware sprite acting, and authored depth affordances while preserving the 400×240 pixel-native art contract.

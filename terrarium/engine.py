@@ -9,7 +9,7 @@ from datetime import datetime, timedelta, timezone
 from typing import Any
 
 from .events import make_event, state_patch
-from .models import PLACEMENT_SLOTS, RULES_VERSION, ZONES, clone_state, lighting_for, weather_for
+from .models import BEHAVIOR_CONTEXT_SCHEMA, PLACEMENT_SLOTS, RULES_VERSION, ZONES, clone_state, lighting_for, weather_for
 from .spatial import (
     SLEEP_SUPPORT_ANCHOR, SPATIAL_SCHEMA, interaction_approach, interaction_contact, route_between,
     route_length, route_payload, zone_anchor,
@@ -28,8 +28,8 @@ class Simulation:
     # advances every three-second heartbeat, but visible intent is allowed to
     # persist long enough to read as acting rather than constant resampling.
     COMMITMENT_TICKS = {
-        "idle": 1, "rest": 2, "walk": 1, "explore": 1, "inspect": 2,
-        "carry": 1, "place": 1, "look_outside": 3, "sleep": 4, "wake": 1,
+        "idle": 2, "rest": 3, "walk": 1, "explore": 1, "inspect": 2,
+        "carry": 1, "place": 2, "look_outside": 5, "sleep": 6, "wake": 2,
     }
 
     """Pure deterministic world transition logic.
@@ -46,6 +46,140 @@ class Simulation:
         material = f"{state['seed']}:{state['rules_version']}:{int(state['tick']) + 1}".encode("utf-8")
         tick_seed = int.from_bytes(hashlib.sha256(material).digest()[:16], "big")
         return random.Random(tick_seed)
+
+    @staticmethod
+    def _behavior_context(creature: dict[str, Any]) -> dict[str, Any]:
+        """Return the small bounded routine context, migrating legacy worlds in-place.
+
+        Canonical event history remains the long-term record.  This hot state only
+        remembers enough recent behavior to make the next choice context-aware.
+        """
+        context = creature.setdefault(
+            "behavior_context",
+            {
+                "schema": BEHAVIOR_CONTEXT_SCHEMA,
+                "recent_zones": [str(creature.get("zone", "open_space"))],
+                "recent_objects": [],
+                "intent": None,
+            },
+        )
+        context["schema"] = BEHAVIOR_CONTEXT_SCHEMA
+        recent_zones = [str(z) for z in context.get("recent_zones", []) if str(z) in ZONES][-4:]
+        if not recent_zones:
+            recent_zones = [str(creature.get("zone", "open_space"))]
+        context["recent_zones"] = recent_zones
+        recent_objects: list[str] = []
+        for value in context.get("recent_objects", []):
+            object_id = str(value) if value else ""
+            if object_id and object_id not in recent_objects:
+                recent_objects.append(object_id)
+        context["recent_objects"] = recent_objects[-4:]
+        intent = context.get("intent")
+        if intent is not None and not isinstance(intent, dict):
+            context["intent"] = None
+        return context
+
+    @staticmethod
+    def _remember_zone(context: dict[str, Any], zone: str) -> None:
+        recent = [str(z) for z in context.get("recent_zones", []) if str(z) in ZONES]
+        context["recent_zones"] = (recent + [str(zone)])[-4:]
+
+    @staticmethod
+    def _remember_object(context: dict[str, Any], object_id: str) -> None:
+        recent = [str(o) for o in context.get("recent_objects", []) if o and str(o) != str(object_id)]
+        context["recent_objects"] = (recent + [str(object_id)])[-4:]
+
+    @staticmethod
+    def _weighted_pick(rng: random.Random, weighted: list[tuple[str, float]]) -> str:
+        total = sum(max(0.0, float(weight)) for _, weight in weighted)
+        if total <= 0.0:
+            return weighted[-1][0]
+        pick = rng.random() * total
+        cursor = 0.0
+        for name, weight in weighted:
+            cursor += max(0.0, float(weight))
+            if pick <= cursor:
+                return name
+        return weighted[-1][0]
+
+    def _choose_object(
+        self,
+        rng: random.Random,
+        nearby: list[dict[str, Any]],
+        context: dict[str, Any],
+        *,
+        preferred_id: str | None = None,
+    ) -> dict[str, Any]:
+        if preferred_id:
+            preferred = next((o for o in nearby if o["id"] == preferred_id and o["state"] == "placed"), None)
+            if preferred is not None:
+                return preferred
+        recent = list(context.get("recent_objects", []))
+        weighted: list[tuple[str, float]] = []
+        by_id = {str(o["id"]): o for o in nearby}
+        last_object_id = recent[-1] if recent else None
+        alternatives_exist = bool(last_object_id) and any(str(o["id"]) != last_object_id for o in nearby)
+        for obj in nearby:
+            object_id = str(obj["id"])
+            # A completed object session gets a short, deterministic "done with
+            # this for now" inhibition whenever another local object exists.
+            if alternatives_exist and object_id == last_object_id:
+                continue
+            weight = 1.0 / (1.0 + 0.12 * int(obj.get("times_inspected", 0)))
+            if object_id in recent[-4:]:
+                weight *= 0.42
+            weighted.append((object_id, max(0.01, weight)))
+        return by_id[self._weighted_pick(rng, weighted)]
+
+    def _choose_destination(
+        self,
+        rng: random.Random,
+        state: dict[str, Any],
+        context: dict[str, Any],
+        *,
+        zone: str,
+        carrying: str | None,
+    ) -> str:
+        """Choose travel as a consequence of context instead of a uniform room hop."""
+        intent = dict(context.get("intent") or {})
+        if carrying:
+            target_zone = str(intent.get("target_zone") or "")
+            if target_zone in ZONES and target_zone != zone:
+                return target_zone
+        recent = list(context.get("recent_zones", []))
+        energy = float(state["creature"]["energy"])
+        curiosity = float(state["creature"]["curiosity"])
+        weather = str(state["habitat"]["weather"])
+        weighted: list[tuple[str, float]] = []
+        for target in ZONES:
+            if target == zone:
+                continue
+            weight = 1.0
+            # The zone immediately before the current one is the clearest
+            # ping-pong signal; older recent zones are only mildly inhibited.
+            if len(recent) >= 2 and target == recent[-2]:
+                weight *= 0.12
+            elif target in recent[-4:]:
+                weight *= 0.48
+
+            if carrying:
+                if target == "collection_shelf":
+                    weight *= 9.0
+                elif target == "open_space":
+                    weight *= 0.72
+                else:
+                    weight *= 0.42
+            else:
+                if target == "open_space":
+                    weight *= 1.30
+                if target == "window":
+                    weight *= 1.18 + (0.32 if weather != "clear" else 0.0)
+                if target == "activity_corner":
+                    weight *= 1.0 + 0.45 * curiosity
+                if target == "sleeping_nook" and energy < 0.48:
+                    weight *= 1.0 + (0.48 - energy) * 4.0
+            weighted.append((target, max(0.01, weight)))
+        return self._weighted_pick(rng, weighted)
 
     @staticmethod
     def _object_in_zone(state: dict[str, Any], zone: str) -> list[dict[str, Any]]:
@@ -114,10 +248,13 @@ class Simulation:
 
         # Locomotion/wake recover into a quiet planted stance. Manipulation and
         # observation hold their readable contact pose for the commitment.
-        visible = "idle" if intent in {"walk", "explore", "wake"} else intent
+        visible = "idle" if intent in {"walk", "explore"} or (intent == "wake" and remaining == 0) else intent
         if visible == "sleep":
             creature["activity"] = "sleep"
             creature["expression"] = "sleepy"
+        elif visible == "wake":
+            creature["activity"] = "wake"
+            creature["expression"] = "content"
         elif visible == "rest":
             creature["activity"] = "rest"
             creature["expression"] = "content"
@@ -165,6 +302,7 @@ class Simulation:
                 details["supported_action"] = "wake_exit"
         summary = {
             "sleep": "Moss remained curled up asleep.",
+            "wake": "Moss stayed near the bed, finishing a slow wake-up stretch.",
             "rest": "Moss stayed settled and rested quietly.",
             "look_outside": "Moss kept watching the world beyond the window.",
             "inspect": "Moss lingered over the object, still studying it.",
@@ -184,6 +322,18 @@ class Simulation:
         creature = state["creature"]
         creature.setdefault("focus_object_id", None)
         creature.setdefault("behavior_commitment", {"action": None, "ticks_remaining": 0, "object_id": None})
+        context = self._behavior_context(creature)
+        if creature.get("carrying") and not context.get("intent"):
+            # Legacy/live worlds may upgrade while Moss is already holding an
+            # object.  Continue that possession through normal state evolution
+            # instead of resetting it or leaving the new routine context empty.
+            legacy_target = "collection_shelf" if creature.get("zone") != "collection_shelf" else "open_space"
+            context["intent"] = {
+                "kind": "object_session",
+                "stage": "carrying",
+                "object_id": creature.get("carrying"),
+                "target_zone": legacy_target,
+            }
         habitat = state["habitat"]
         aftermath = habitat.setdefault(
             "activity_aftermath",
@@ -224,53 +374,91 @@ class Simulation:
         nearby = self._object_in_zone(state, zone)
         carrying = creature.get("carrying")
         lighting = habitat["lighting"]
+        intent = dict(context.get("intent") or {})
+        intent_kind = str(intent.get("kind") or "")
+        intent_stage = str(intent.get("stage") or "")
+        intent_object_id = intent.get("object_id")
 
-        candidates: list[tuple[str, float]] = []
+        weights: dict[str, float] = {}
+
+        def add(action_name: str, weight: float) -> None:
+            weights[action_name] = float(weights.get(action_name, 0.0)) + float(weight)
+
         if creature["activity"] == "sleep":
-            wake_weight = 0.9 if creature["energy"] >= 0.86 or lighting in {"dawn", "day"} else 0.08
-            candidates.extend([("wake", wake_weight), ("sleep", 1.0)])
+            wake_weight = 0.95 if creature["energy"] >= 0.86 or lighting in {"dawn", "day"} else 0.07
+            add("wake", wake_weight)
+            add("sleep", 1.35)
+        elif carrying:
+            # Carrying is itself an intention.  The pickup chooses one bounded
+            # delivery destination; subsequent choices finish that small chain.
+            add("idle", 0.08)
+            add("rest", 0.06)
+            delivery_target = str(intent.get("target_zone") or "")
+            if delivery_target == zone:
+                add("place", 3.30)
+                add("walk", 0.10)
+            else:
+                add("walk", 2.55)
         else:
             if float(creature["energy"]) < 0.26 or (lighting == "night" and float(creature["energy"]) < 0.58):
-                candidates.append(("sleep", 1.5))
-            candidates.extend(
-                [
-                    ("idle", 0.42),
-                    ("rest", 0.58 + (1.0 - float(creature["energy"])) * 0.48),
-                    ("walk", 0.58),
-                    ("explore", 0.42 + float(creature["curiosity"]) * 0.26),
-                ]
-            )
+                add("sleep", 1.65)
+            add("idle", 0.58)
+            add("rest", 0.72 + (1.0 - float(creature["energy"])) * 0.52)
+            add("walk", 0.38)
+            add("explore", 0.30 + float(creature["curiosity"]) * 0.18)
             if zone == "window":
-                candidates.append(("look_outside", 0.92 + (0.24 if habitat["weather"] != "clear" else 0.0)))
-            if nearby and not carrying:
-                candidates.append(("inspect", 0.68 + float(creature["curiosity"]) * 0.22))
-                candidates.append(("carry", 0.30 + float(creature["curiosity"]) * 0.16))
-            if carrying:
-                candidates.append(("place", 1.05 if zone == "collection_shelf" else 0.46))
-                candidates.append(("walk", 0.86))
+                add("look_outside", 0.95 + (0.28 if habitat["weather"] != "clear" else 0.0))
+            if nearby:
+                add("inspect", 0.70 + float(creature["curiosity"]) * 0.22)
+                add("carry", 0.24 + float(creature["curiosity"]) * 0.12)
 
-        # Recent-action suppression is decision-level: continuation ticks do not
-        # pretend to be new choices and therefore cannot game cooldowns.
+        # A tiny routine context shapes only the next few choices.  It is not a
+        # scheduler: weighted autonomy remains, but plausible continuations get
+        # much more weight than unrelated room-crossing.
+        movement_context_penalty = 1.0
+        if intent_kind == "arrival_settle" and intent.get("zone") == zone:
+            add("idle", 1.45)
+            add("rest", 1.20)
+            if zone == "activity_corner" and nearby:
+                add("inspect", 0.75)
+            movement_context_penalty = 0.08
+        elif intent_kind == "window_session" and zone == "window":
+            if intent_stage == "arrived":
+                add("look_outside", 3.20)
+                movement_context_penalty = 0.035
+            else:
+                add("look_outside", 0.85)
+                add("idle", 1.15)
+                add("rest", 0.85)
+                movement_context_penalty = 0.12
+        elif intent_kind == "object_session" and intent_stage == "inspected" and not carrying:
+            preferred = next((o for o in nearby if o["id"] == intent_object_id and o["state"] == "placed"), None)
+            if preferred is not None:
+                add("carry", 3.60)
+                add("inspect", 0.15)
+                movement_context_penalty = 0.045
+        elif intent_kind == "post_place":
+            add("idle", 2.10)
+            add("rest", 1.55)
+            movement_context_penalty = 0.035
+        elif intent_kind == "wake_recovery":
+            add("idle", 2.25)
+            add("rest", 1.75)
+            movement_context_penalty = 0.025
+
         adjusted: list[tuple[str, float]] = []
         movement_recent = sum(1 for a in recent[-3:] if a in {"walk", "explore"})
         manipulation_recent = sum(1 for a in recent[-4:] if a in {"carry", "place"})
-        for action, weight in candidates:
-            repeats = sum(1 for a in recent[-4:] if a == action)
-            penalty = 1.0 if action == "sleep" else 0.46 ** repeats
-            if action in {"walk", "explore"}:
-                penalty *= 0.25 ** movement_recent
-            if action in {"carry", "place"}:
-                penalty *= 0.45 ** manipulation_recent
-            adjusted.append((action, max(0.015, weight * penalty)))
-        total = sum(w for _, w in adjusted)
-        pick = rng.random() * total
-        action = adjusted[-1][0]
-        cursor = 0.0
-        for name, weight in adjusted:
-            cursor += weight
-            if pick <= cursor:
-                action = name
-                break
+        for action_name, weight in weights.items():
+            repeats = sum(1 for a in recent[-4:] if a == action_name)
+            penalty = 1.0 if action_name == "sleep" else 0.52 ** repeats
+            if action_name in {"walk", "explore"}:
+                penalty *= 0.30 ** movement_recent
+                penalty *= movement_context_penalty
+            if action_name in {"carry", "place"}:
+                penalty *= 0.52 ** manipulation_recent
+            adjusted.append((action_name, max(0.008, weight * penalty)))
+        action = self._weighted_pick(rng, adjusted)
 
         details: dict[str, Any] = {
             "from_zone": zone, "lighting": lighting, "weather": habitat["weather"],
@@ -281,10 +469,7 @@ class Simulation:
         focus_object_id = None
 
         if action in {"walk", "explore"}:
-            options = [z for z in ZONES if z != zone]
-            if carrying and "collection_shelf" in options:
-                options.extend(["collection_shelf", "collection_shelf"])
-            target = rng.choice(options)
+            target = self._choose_destination(rng, state, context, zone=zone, carrying=carrying)
             destination = zone_anchor(target)
             self._route_creature(creature, details, destination=destination, destination_zone=target)
             creature["activity"] = "walk"
@@ -295,16 +480,33 @@ class Simulation:
                 mark = f"worn_{target}_{habitat['path_wear'][target]}"
                 if mark not in habitat["marks"]:
                     habitat["marks"].append(mark)
+            self._remember_zone(context, target)
             if carrying:
                 carried = next(o for o in state["objects"] if o["id"] == carrying)
                 carried["zone"] = target
                 carried["x"] = creature["x"] + (-14 if creature["facing"] == "left" else 14)
                 carried["y"] = creature["y"] - 22
-            details["to_zone"] = target
+                prior_intent = dict(context.get("intent") or {})
+                context["intent"] = {
+                    "kind": "object_session",
+                    "stage": "arrived_with_object",
+                    "object_id": carrying,
+                    "target_zone": target,
+                }
+                if prior_intent.get("target_zone") and prior_intent.get("target_zone") != target:
+                    details["intent_target_mismatch"] = True
+                travel_purpose = "object_delivery"
+            elif target == "window":
+                context["intent"] = {"kind": "window_session", "stage": "arrived", "zone": target}
+                travel_purpose = "window_session"
+            else:
+                context["intent"] = {"kind": "arrival_settle", "stage": "arrived", "zone": target}
+                travel_purpose = "activity_session" if target == "activity_corner" else "settle_at_familiar_spot"
+            details.update({"to_zone": target, "travel_purpose": travel_purpose})
             event_type = "creature_moved"
-            summary = f"Moss wandered from {zone.replace('_', ' ')} to {target.replace('_', ' ')}."
+            summary = f"Moss headed from {zone.replace('_', ' ')} to {target.replace('_', ' ')} and settled in."
         elif action == "inspect" and nearby:
-            obj = rng.choice(nearby)
+            obj = self._choose_object(rng, nearby, context, preferred_id=str(intent_object_id) if intent_object_id else None)
             target_x, target_y = int(obj["x"]), int(obj["y"])
             approach = interaction_approach(zone=zone, target_x=target_x, target_y=target_y, current_x=int(creature["x"]), current_y=int(creature["y"]))
             self._route_creature(creature, details, destination=approach, destination_zone=zone)
@@ -317,10 +519,12 @@ class Simulation:
             creature["curiosity"] = max(0.0, float(creature["curiosity"]) - 0.09)
             details.update({"object_id": obj["id"], "target_x": target_x, "target_y": target_y})
             focus_object_id = obj["id"]
+            self._remember_object(context, obj["id"])
+            context["intent"] = {"kind": "object_session", "stage": "inspected", "object_id": obj["id"]}
             event_type = "object_inspected"
             summary = f"Moss stopped to inspect the {obj['name'].lower()}."
         elif action == "carry" and nearby:
-            obj = rng.choice(nearby)
+            obj = self._choose_object(rng, nearby, context, preferred_id=str(intent_object_id) if intent_object_id else None)
             target_x, target_y = int(obj["x"]), int(obj["y"])
             approach = interaction_approach(zone=zone, target_x=target_x, target_y=target_y, current_x=int(creature["x"]), current_y=int(creature["y"]))
             self._route_creature(creature, details, destination=approach, destination_zone=zone)
@@ -336,6 +540,21 @@ class Simulation:
             obj["y"] = int(creature["y"]) - 4
             details.update({"object_id": obj["id"], "target_x": target_x, "target_y": target_y})
             focus_object_id = obj["id"]
+            self._remember_object(context, obj["id"])
+            if zone == "collection_shelf":
+                delivery_target = self._weighted_pick(
+                    rng,
+                    [("open_space", 1.45), ("activity_corner", 1.20), ("window", 0.72)],
+                )
+            else:
+                delivery_target = "collection_shelf"
+            context["intent"] = {
+                "kind": "object_session",
+                "stage": "carrying",
+                "object_id": obj["id"],
+                "target_zone": delivery_target,
+            }
+            details["delivery_target_zone"] = delivery_target
             event_type = "object_picked_up"
             summary = f"Moss picked up the {obj['name'].lower()}."
         elif action == "place" and carrying:
@@ -356,8 +575,10 @@ class Simulation:
             creature["expression"] = "content"
             details.update({"object_id": obj["id"], "to_zone": zone, "x": obj["x"], "y": obj["y"], "target_x": target_x, "target_y": target_y})
             focus_object_id = obj["id"]
+            self._remember_object(context, obj["id"])
+            context["intent"] = {"kind": "post_place", "stage": "settle", "object_id": obj["id"], "zone": zone}
             event_type = "object_placed"
-            summary = f"Moss placed the {obj['name'].lower()} in the {zone.replace('_', ' ')}."
+            summary = f"Moss placed the {obj['name'].lower()} in the {zone.replace('_', ' ')} and regarded it for a moment."
         elif action == "sleep":
             support = (int(SLEEP_SUPPORT_ANCHOR["x"]), int(SLEEP_SUPPORT_ANCHOR["y"]))
             self._route_creature(creature, details, destination=support, destination_zone="sleeping_nook")
@@ -367,17 +588,24 @@ class Simulation:
             aftermath["sleep_nook_ticks"] = int(aftermath["sleep_nook_ticks"]) + 1
             if before["creature"]["activity"] != "sleep":
                 aftermath["sleep_nook_bouts"] = int(aftermath["sleep_nook_bouts"]) + 1
+            context["intent"] = {"kind": "sleep_cycle", "stage": "sleeping", "zone": "sleeping_nook"}
+            self._remember_zone(context, "sleeping_nook")
             event_type = "creature_slept"
             summary = "Moss entered the sleeping nook and curled up on the supported bed spot."
         elif action == "wake":
             creature["activity"] = "wake"
             creature["expression"] = "content"
+            context["intent"] = {"kind": "wake_recovery", "stage": "woke", "zone": "sleeping_nook"}
             event_type = "creature_woke"
-            summary = "Moss woke up and looked around."
+            summary = "Moss woke up, unfolded, and stayed near the bed before moving on."
         elif action == "rest":
             creature["activity"] = "rest"
             creature["expression"] = "content"
             creature["energy"] = min(1.0, float(creature["energy"]) + 0.034)
+            if intent_kind in {"arrival_settle", "post_place", "wake_recovery"}:
+                context["intent"] = None
+            elif intent_kind == "window_session" and intent_stage != "arrived":
+                context["intent"] = None
             event_type = "creature_rested"
             summary = f"Moss rested for a while in the {zone.replace('_', ' ')}."
         elif action == "look_outside":
@@ -390,11 +618,16 @@ class Simulation:
             aftermath["window_watches"] = int(aftermath["window_watches"]) + 1
             if habitat["weather"] in {"rain", "mist"}:
                 aftermath["wet_window_watches"] = int(aftermath["wet_window_watches"]) + 1
+            context["intent"] = {"kind": "window_session", "stage": "watched", "zone": "window"}
             event_type = "window_watched"
             summary = f"Moss watched the {habitat['weather']} outside the window."
         else:
             creature["activity"] = "idle"
             creature["expression"] = "neutral"
+            if intent_kind in {"arrival_settle", "post_place", "wake_recovery"}:
+                context["intent"] = None
+            elif intent_kind == "window_session" and intent_stage != "arrived":
+                context["intent"] = None
             event_type = "creature_idled"
             summary = f"Moss lingered in the {zone.replace('_', ' ')}."
 
@@ -408,6 +641,9 @@ class Simulation:
             "object_id": focus_object_id,
         }
         details["commitment_ticks_remaining"] = creature["behavior_commitment"]["ticks_remaining"]
+        current_intent = context.get("intent") or {}
+        details["routine_intent"] = current_intent.get("kind")
+        details["routine_stage"] = current_intent.get("stage")
         habitat["shelf_count"] = sum(1 for o in state["objects"] if o["zone"] == "collection_shelf" and o["state"] == "placed")
         details["action"] = action
         details["energy_after"] = round(float(creature["energy"]), 6)
