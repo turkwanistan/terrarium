@@ -2,6 +2,14 @@
 
 Git-friendly visual milestones. The SVG is a lightweight capture-time thumbnail; run Terrarium and open `/snapshots/` for the same stored frame through the real Canvas renderer.
 
+## 20260827T125248568567Z-temporal-rendering-intelligence
+
+Deterministic renderer clock, temporal Canvas capture, objective temporal auditing, real RAF probe, and smoother endpoint settling; no simulation/frame-contract/replay changes.
+
+![20260827T125248568567Z-temporal-rendering-intelligence](dev/20260827T125248568567Z-temporal-rendering-intelligence/preview.svg)
+
+Deterministic tick `240` · renderer `6d27df494be5`
+
 ## 20260827T115103702156Z-temporal-aftermath-polish
 
 Accumulated activity aftermath now emerges continuously: window traces respond subtly to weather, bedding compression and creases grow gradually, activity-corner papers/work marks layer in organically, and generic path wear is quieter so specific history remains legible.

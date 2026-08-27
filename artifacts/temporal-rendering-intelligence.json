@@ -1,0 +1,133 @@
+{
+  "canonical_runtime": {
+    "lan_url_verified": false,
+    "reason": "available mediated development service is isolated/non-canonical; canonical user-owned runtime was not touched",
+    "updated": false
+  },
+  "capability": {
+    "content_hash": "5481ecd6e2e46d9b3a502fbabff5a24f27ffed9f925ab0868ed30a3ba13575b1",
+    "evaluation": "6/6 PASS",
+    "evaluator_hash": "86b714f3871132ad3786f94fc81570dd569cb95ee09ced1d064737b5652a3b0c",
+    "name": "temporal-render-auditor-r1",
+    "pip_dependencies": [],
+    "real_tasks": "6/6 PASS",
+    "reuse_count": 5,
+    "state": "PROMOTED"
+  },
+  "capture": {
+    "compact_inputs": {
+      "carried_walk-current.json": "810a2591db852387afb4cd23605d48199515a07ce4a7956873bf49547fa41557",
+      "idle_control-current.json": "bba34c9f9d79abf45c209b3ea2a5766e417481e9ab3c49efd288959b494c271d",
+      "left_walk-current.json": "79decdf75f12c5e4be7e2ca9eeac22a5b49b26dad3c8954494ad83be502effc3",
+      "left_walk-legacy.json": "b1dbe20d733af96d7ff3ae9439611891ad271e3ade33477fc45195716923ba67",
+      "left_walk-terrarium-raf-probe-v1.json": "3f8d890515fab6bfbf8d2db5142b1fc4475d120af0789e3de1bcfad63ccb7294",
+      "rain_control-current.json": "a2f441f2e972e98ab088f5ad96b34122f6a233f1dea8d668cf8697867733d72b",
+      "right_walk-current.json": "76b96cb5a32e3712c0193fd22cf4004d288c89dd6e50ebc6ca8be7293d31203f"
+    },
+    "raster_evidence": "actual Canvas RGBA FNV-1a pixel identity plus regional luminance grids",
+    "scenarios": [
+      "left_walk",
+      "right_walk",
+      "carried_walk",
+      "idle_control",
+      "rain_control"
+    ]
+  },
+  "checkpoint": "Temporal rendering intelligence",
+  "deterministic_clock": {
+    "canvas_size": [
+      800,
+      480
+    ],
+    "production_raf_unchanged": true,
+    "repeat_capture_sha256": "f204f15e6ba50e1126642aca3761795a64954f799d7141c5ff0a1b126d15b410",
+    "same_transition_same_timestamps_equal": true
+  },
+  "endpoint_settling": {
+    "after_quintic_smootherstep": {
+      "endpoint_speed_ratio": 0.023047,
+      "first_speed_px_s": 14.520936,
+      "last_moving_speed_px_s": 14.520936,
+      "peak_speed_px_s": 630.062654
+    },
+    "before_legacy_smoothstep": {
+      "endpoint_speed_ratio": 0.132308,
+      "first_speed_px_s": 69.172839,
+      "last_moving_speed_px_s": 69.172839,
+      "peak_speed_px_s": 522.817949
+    },
+    "change": "renderer interpolation only; simulation/frame/replay unchanged"
+  },
+  "independent_fixtures": {
+    "matrix": {
+      "detached_jumping_carried_object": "FAIL",
+      "frozen_during_semantic_movement": "FAIL",
+      "legacy_endpoint_settling": "FAIL",
+      "long_animation_frame_stall": "FAIL",
+      "normal_rain_idle_animation": "PASS",
+      "random_whole_scene_jitter": "FAIL",
+      "smooth_translation": "PASS",
+      "smoothly_attached_carried_object": "PASS",
+      "teleport_midway": "FAIL",
+      "wrong_facing_movement": "FAIL"
+    },
+    "passed_expected_outcomes": 10,
+    "total": 10
+  },
+  "mutation_test": {
+    "accepted_state_unchanged": true,
+    "attempted": 10,
+    "dangerous_killed": 10,
+    "dangerous_mutants": 10,
+    "dangerous_mutation_kill_rate": 1.0,
+    "engine": "Gen14 Evaluator Mutation Nursery",
+    "invalid_fail_closed": 0,
+    "semantic_digest": "e3742464b3e7a3bd6bd488dd78f4f5c2bc4816ec41ff1e597b8787750f152217",
+    "surviving_dangerous_mutations": []
+  },
+  "raf_probe": {
+    "duration_ms": 1816.6,
+    "frames": 110,
+    "interval_count": 109,
+    "interval_ms": {
+      "max": 16.8,
+      "min": 16.5,
+      "over_34ms": 0,
+      "over_50ms": 0,
+      "p50": 16.7,
+      "p95": 16.7
+    }
+  },
+  "real_task_outcomes": {
+    "carried_walk": "PASS",
+    "idle_control": "PASS",
+    "left_walk": "PASS",
+    "legacy_left_walk": "FAIL endpoint_settling",
+    "rain_control": "PASS",
+    "real_raf": "PASS",
+    "right_walk": "PASS"
+  },
+  "regression": {
+    "behavior_distribution_unchanged": true,
+    "behavior_entropy_bits": 3.151553,
+    "behavior_evaluator": "PASS",
+    "exact_replay": "PASS",
+    "javascript_syntax": "PASS",
+    "pytest": "17/17 PASS",
+    "python_3_10_ast_compat": "22 files PASS",
+    "technical_evaluator": "PASS"
+  },
+  "sbc": {
+    "gen18_warranted": false,
+    "permanent_mcp_tool_growth": false,
+    "substrate_deficiency_found": false
+  },
+  "schema": "terrarium.temporal-rendering-intelligence.v1",
+  "snapshot": {
+    "frame_sha256": "12624190b1759215a62d4ffa3af70aa5ac759940f32b7c8362301e0fb043334e",
+    "renderer_sha256": "6d27df494be51bb7d8baa7c8683cbbd39893c1355eaf3785e194a860097e8578",
+    "seed": 1701,
+    "snapshot_id": "20260827T125248568567Z-temporal-rendering-intelligence",
+    "tick": 240
+  }
+}

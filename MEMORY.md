@@ -55,3 +55,11 @@ For checkpoint `2026-08-27-activity-aftermath`, the promoted `simulation-behavio
 For checkpoint `2026-08-27-temporal-aftermath-polish`, the promoted `simulation-behavior-auditor-r1` capability was resolved at content hash `932573954fdf126bd4ec4f4d5a1f79a50b48b994bf374ed0cfa3415120dd093f` with evaluator hash `1c9eaed4c4174212f84a7db52d4c5f47e1a106a88461f6880023d4dd7c5f53ae` and reused as a renderer-only behavior regression. The current deterministic 180-event stream SHA256 `fa438bef63e3aa56b353638b27b42248c06682347d4b8684cca3fc2874df5b11` matched the held-out audit vector exactly; Forge run `cap_20260827T115050Z_933e3d93` passed with all 10 action classes, entropy `3.174454`, 42 object interactions, and sequence integrity.
 
 No new capability was forged because the iteration exposed no reusable capability gap. Existing procedural memories remain `CANDIDATE`/non-authoritative; no activation or promotion gate was weakened.
+
+## Post-Gen17 temporal-rendering intelligence
+
+For checkpoint `2026-08-27-temporal-rendering-intelligence`, Terrarium exposed a genuine reusable objective temporal-rendering gap. The accepted Forge path produced and explicitly promoted `temporal-render-auditor-r1`, content hash `5481ecd6e2e46d9b3a502fbabff5a24f27ffed9f925ab0868ed30a3ba13575b1`, evaluator hash `86b714f3871132ad3786f94fc81570dd569cb95ee09ced1d064737b5652a3b0c`.
+
+The capability passed 6/6 independent Forge evaluation cases and 6/6 genuine Terrarium pre-promotion tasks (left/right walk, carried movement, idle control, rain control, and real RAF pacing). Gen14 Evaluator Mutation Nursery killed 10/10 dangerous mutants with zero survivors and accepted state unchanged. The capability uses only the Python standard library; no permanent MCP growth or SBC substrate change was required.
+
+Objective temporal correctness is now authoritative through the promoted capability, but subjective warmth/charm/artistic quality remains outside its scope. Do not reinterpret pixel/trajectory metrics as an aesthetic oracle. Repository/source/live evidence remains higher authority than procedural memory, and existing candidate procedural memories remain non-authoritative unless their existing activation gates pass.

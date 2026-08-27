@@ -3,7 +3,19 @@
   const canvas = document.getElementById('terrarium');
   const ctx = canvas.getContext('2d', { alpha: false });
   const debug = document.getElementById('debug');
-  const snapshotPath = new URLSearchParams(window.location.search).get('snapshot');
+  const params = new URLSearchParams(window.location.search);
+  const snapshotPath = params.get('snapshot');
+  const temporalScenario = params.get('temporal');
+  const temporalSequence = params.get('sequence') === '1';
+  const temporalRafProbe = params.get('rafProbe') === '1';
+  const temporalTimestamp = Number(params.get('t') || 0);
+  const temporalDuration = Math.max(250, Math.min(5000, Number(params.get('duration') || 1800)));
+  const temporalEasing = params.get('easing') === 'legacy' ? 'legacy' : 'current';
+  const telemetryNode = document.createElement('pre');
+  telemetryNode.id = 'temporal-telemetry';
+  telemetryNode.setAttribute('aria-label', 'Terrarium temporal telemetry');
+  telemetryNode.style.cssText = 'position:fixed;left:-10000px;top:0;width:1px;height:1px;overflow:hidden;white-space:pre-wrap';
+  document.body.appendChild(telemetryNode);
   if (canvas.width !== 800 || canvas.height !== 480) throw new Error('Terrarium logical viewport must be exactly 800x480');
   ctx.imageSmoothingEnabled = false;
 
@@ -19,6 +31,8 @@
   function mix(a, b, t) { return a + (b - a) * t; }
   function clamp01(v) { return Math.max(0, Math.min(1, v)); }
   function smooth01(v) { const t=clamp01(v); return t*t*(3-2*t); }
+  function smoother01(v) { const t=clamp01(v); return t*t*t*(t*(t*6-15)+10); }
+  function transitionEase(v) { return temporalEasing === 'legacy' ? smooth01(v) : smoother01(v); }
   function emergence(value, start, span) { return smooth01((value-start)/Math.max(.001,span)); }
   function historyValue(f, key, now) {
     const target=Number(f.habitat.activity_aftermath?.[key] || 0);
@@ -236,15 +250,41 @@
     ctx.restore();
   }
 
-  function drawCreature(f, now) {
+  function creatureRenderState(f, now) {
     const c = f.creature;
-    const elapsed = Math.min(1, (now - fetchedAt) / 1500);
-    const ease = elapsed * elapsed * (3 - 2 * elapsed);
+    const elapsed = clamp01((now - fetchedAt) / 1500);
+    const ease = transitionEase(elapsed);
     const old = previous?.creature || c;
     const x = mix(old.x, c.x, ease), baseY = mix(old.y, c.y, ease);
-    const moving = Math.abs(old.x-c.x)+Math.abs(old.y-c.y) > 2 && elapsed < 1;
+    const semanticDistance = Math.hypot(c.x-old.x, c.y-old.y);
+    const moving = semanticDistance > 2 && elapsed < 1;
     const bob = c.pose === 'sleep' ? Math.sin(now*.002)*1.2 : moving ? Math.abs(Math.sin(now*.013))*5 : Math.sin(now*.004)*1.8;
     const y = baseY - bob;
+    return {
+      requested_timestamp_ms: now,
+      source_tick: previous?.tick ?? f.tick,
+      target_tick: f.tick,
+      semantic_x: c.x, semantic_y: c.y,
+      source_x: old.x, source_y: old.y,
+      rendered_x: Number(x.toFixed(6)), rendered_y: Number(y.toFixed(6)),
+      rendered_base_y: Number(baseY.toFixed(6)),
+      interpolation_progress: Number(elapsed.toFixed(6)),
+      interpolation_ease: Number(ease.toFixed(9)),
+      semantic_distance: Number(semanticDistance.toFixed(6)),
+      moving, facing: c.facing, pose: c.pose, activity: c.activity,
+      carrying: c.carrying,
+      carried_rendered_x: c.carrying ? Number(x.toFixed(6)) : null,
+      carried_rendered_y: c.carrying ? Number(y.toFixed(6)) : null,
+      carried_relative_x: c.carrying ? 0 : null,
+      carried_relative_y: c.carrying ? 0 : null,
+      ambient_classes: [f.weather === 'rain' ? 'rain' : f.weather === 'mist' ? 'mist' : null, 'dust', c.pose === 'sleep' ? 'breathing' : moving ? 'walk-bob' : 'idle-bob'].filter(Boolean),
+    };
+  }
+
+  function drawCreature(f, now) {
+    const c = f.creature;
+    const rs = creatureRenderState(f, now);
+    const x = rs.rendered_x, y = rs.rendered_y, moving = rs.moving;
     const flip = c.facing === 'left' ? -1 : 1;
     ctx.save(); ctx.translate(x,y); ctx.scale(flip,1);
 
@@ -266,21 +306,59 @@
     if (c.carrying) { const obj=f.objects.find(o=>o.id===c.carrying); if(obj){ ctx.scale(flip,1); drawObject({...obj,state:'placed',x:0,y:0}); } }
     if (c.pose === 'sleep') { ctx.fillStyle='rgba(238,226,196,.72)';ctx.font='bold 14px monospace';ctx.fillText('z',28,-42);ctx.font='bold 10px monospace';ctx.fillText('z',40,-54); }
     ctx.restore();
+    return rs;
   }
 
-  function render(now) {
+  function render(now, scheduleNext = true) {
     if (!frame) {
       ctx.fillStyle='#25242b';ctx.fillRect(0,0,800,480);
-      requestAnimationFrame(render); return;
+      if (scheduleNext) requestAnimationFrame(render); return null;
     }
     drawBackground(frame, now);
     for (const o of frame.objects) drawObject(o);
-    drawCreature(frame, now);
+    const renderState = drawCreature(frame, now);
     if (debugVisible) {
       debug.hidden=false;
       debug.textContent = JSON.stringify({mode:snapshotPath?'snapshot':'live', connected, tick:frame.tick, lighting:frame.lighting, weather:frame.weather, creature:frame.creature, shelf_count:frame.habitat.shelf_count, marks:frame.habitat.marks, last_event:frame.last_event, poll_error:lastPollError}, null, 2);
     } else debug.hidden=true;
-    requestAnimationFrame(render);
+    if (scheduleNext) requestAnimationFrame(render);
+    return renderState;
+  }
+
+  async function rasterTelemetry() {
+    const image = ctx.getImageData(0,0,800,480);
+    let h=2166136261;
+    for (let i=0;i<image.data.length;i+=4) {
+      h^=image.data[i]; h=Math.imul(h,16777619);
+      h^=image.data[i+1]; h=Math.imul(h,16777619);
+      h^=image.data[i+2]; h=Math.imul(h,16777619);
+      h^=image.data[i+3]; h=Math.imul(h,16777619);
+    }
+    const pixelHash=`fnv1a32:${(h>>>0).toString(16).padStart(8,'0')}`;
+    const gridW=20, gridH=12, cellW=40, cellH=40, grid=[];
+    for(let gy=0;gy<gridH;gy++) {
+      for(let gx=0;gx<gridW;gx++) {
+        let total=0,count=0;
+        for(let y=gy*cellH;y<(gy+1)*cellH;y+=4) for(let x=gx*cellW;x<(gx+1)*cellW;x+=4) {
+          const i=(y*800+x)*4; total += image.data[i]*.2126 + image.data[i+1]*.7152 + image.data[i+2]*.0722; count++;
+        }
+        grid.push(Number((total/count).toFixed(3)));
+      }
+    }
+    return {width:800,height:480,pixel_hash:pixelHash,luma_grid_width:gridW,luma_grid_height:gridH,luma_grid:grid};
+  }
+
+  function publishTemporal(payload) {
+    window.__terrariumTemporalResult = payload;
+    telemetryNode.textContent = JSON.stringify(payload);
+    document.title = `Terrarium Temporal ${payload.status || 'ready'}`;
+    fetch('/api/dev/temporal-evidence', {method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)}).catch(()=>{});
+  }
+
+  async function captureTemporalSample(timestamp) {
+    const state = render(timestamp, false);
+    const raster = await rasterTelemetry();
+    return {...state, raster};
   }
 
   async function poll() {
@@ -307,7 +385,53 @@
     } catch (err) { connected=false; lastPollError=String(err); }
   }
 
+  async function loadTemporalScenario() {
+    try {
+      const response = await fetch('/api/dev/temporal-fixtures', {cache:'no-store'});
+      if (!response.ok) throw new Error(`HTTP ${response.status}`);
+      const pack = await response.json();
+      const scenario = pack.scenarios?.[temporalScenario];
+      if (!scenario) throw new Error(`unknown temporal scenario: ${temporalScenario}`);
+      previous=scenario.source; frame=scenario.target; fetchedAt=0; connected=true; lastPollError=null;
+      if (frame.logical_width !== 800 || frame.logical_height !== 480 || previous.logical_width !== 800 || previous.logical_height !== 480) throw new Error('temporal fixture frame contract mismatch');
+      if (temporalRafProbe) {
+        const intervals=[]; let last=null; let start=null; let frames=0;
+        await new Promise(resolve => {
+          function probe(ts) {
+            if (start === null) start=ts;
+            if (last !== null) intervals.push(ts-last);
+            last=ts; frames++;
+            render(ts-start,false);
+            if (ts-start >= temporalDuration) resolve(); else requestAnimationFrame(probe);
+          }
+          requestAnimationFrame(probe);
+        });
+        const sorted=[...intervals].sort((a,b)=>a-b);
+        const pct=p=>sorted.length ? sorted[Math.min(sorted.length-1,Math.floor((sorted.length-1)*p))] : 0;
+        publishTemporal({
+          schema:'terrarium.raf-probe.v1',status:'ready',scenario:temporalScenario,frames,
+          duration_ms:Number((last-start).toFixed(3)),interval_count:intervals.length,
+          interval_ms:{min:Number((sorted[0]||0).toFixed(3)),p50:Number(pct(.5).toFixed(3)),p95:Number(pct(.95).toFixed(3)),max:Number((sorted.at(-1)||0).toFixed(3)),over_34ms:intervals.filter(v=>v>34).length,over_50ms:intervals.filter(v=>v>50).length},
+          intervals_ms:intervals.map(v=>Number(v.toFixed(3)))
+        });
+        return;
+      }
+      if (temporalSequence) {
+        const timestamps=pack.recommended_timestamps_ms || [0,250,500,750,1000,1250,1500];
+        const samples=[];
+        for (const t of timestamps) samples.push(await captureTemporalSample(Number(t)));
+        publishTemporal({schema:'terrarium.temporal-capture.v1',status:'ready',scenario:temporalScenario,easing:temporalEasing,source_tick:scenario.source_tick,target_tick:scenario.target_tick,semantic_event:scenario.semantic_event,samples});
+        return;
+      }
+      const sample=await captureTemporalSample(temporalTimestamp);
+      publishTemporal({schema:'terrarium.temporal-keyframe.v1',status:'ready',scenario:temporalScenario,easing:temporalEasing,source_tick:scenario.source_tick,target_tick:scenario.target_tick,semantic_event:scenario.semantic_event,sample});
+    } catch (err) {
+      connected=false; lastPollError=String(err); publishTemporal({schema:'terrarium.temporal-error.v1',status:'error',error:String(err)});
+    }
+  }
+
   document.addEventListener('keydown', ev => { if (ev.key.toLowerCase()==='d') debugVisible=!debugVisible; });
-  if (snapshotPath) loadSnapshot(); else { poll(); setInterval(poll, 700); }
-  requestAnimationFrame(render);
+  if (temporalScenario) loadTemporalScenario();
+  else if (snapshotPath) { loadSnapshot(); requestAnimationFrame(render); }
+  else { poll(); setInterval(poll, 700); requestAnimationFrame(render); }
 })();

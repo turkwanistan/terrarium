@@ -1,0 +1,34 @@
+{
+  "captured_at": "2026-08-27T12:52:48.569308Z",
+  "frame": {
+    "logical_height": 480,
+    "logical_width": 800,
+    "path": "dev/20260827T125248568567Z-temporal-rendering-intelligence/frame.json",
+    "sha256": "12624190b1759215a62d4ffa3af70aa5ac759940f32b7c8362301e0fb043334e",
+    "tick": 240
+  },
+  "git": {
+    "branch": "main",
+    "dirty": true,
+    "head": "48f2d839cf84bf2789ad18a69fdd908cf46135ba"
+  },
+  "note": "Deterministic renderer clock, temporal Canvas capture, objective temporal auditing, real RAF probe, and smoother endpoint settling; no simulation/frame-contract/replay changes.",
+  "preview": {
+    "path": "dev/20260827T125248568567Z-temporal-rendering-intelligence/preview.svg",
+    "sha256": "b5c07cbfcfbed6d07f6e7877866e33cf2d51882bd7b924eea08c8ef706df4f71"
+  },
+  "schema": "terrarium.dev-snapshot.v1",
+  "snapshot_id": "20260827T125248568567Z-temporal-rendering-intelligence",
+  "source": {
+    "mode": "deterministic",
+    "seed": 1701,
+    "steps": 240
+  },
+  "source_hashes": {
+    "engine": "c56a8761bcf0c25b319ab1d1a6df714fb44f9d692ae06c2c91b6d75edb597a96",
+    "frame_contract": "fe4401664e4b09b4ff8171b1bd73c9cbd0b3fff4091672ba732c69b01c27a956",
+    "renderer_css": "706070e63996d0ce2a9ccf19f9ed6dc29b91a8134195f3aee992b5e4cfe28268",
+    "renderer_js": "6d27df494be51bb7d8baa7c8683cbbd39893c1355eaf3785e194a860097e8578"
+  },
+  "view_url": "/?snapshot=/snapshots/dev/20260827T125248568567Z-temporal-rendering-intelligence/frame.json"
+}

@@ -60,6 +60,21 @@
         "steps": 240
       },
       "tick": 240
+    },
+    {
+      "captured_at": "2026-08-27T12:52:48.569308Z",
+      "frame_path": "/snapshots/dev/20260827T125248568567Z-temporal-rendering-intelligence/frame.json",
+      "meta_path": "/snapshots/dev/20260827T125248568567Z-temporal-rendering-intelligence/meta.json",
+      "note": "Deterministic renderer clock, temporal Canvas capture, objective temporal auditing, real RAF probe, and smoother endpoint settling; no simulation/frame-contract/replay changes.",
+      "preview_path": "/snapshots/dev/20260827T125248568567Z-temporal-rendering-intelligence/preview.svg",
+      "renderer_sha256": "6d27df494be51bb7d8baa7c8683cbbd39893c1355eaf3785e194a860097e8578",
+      "snapshot_id": "20260827T125248568567Z-temporal-rendering-intelligence",
+      "source": {
+        "mode": "deterministic",
+        "seed": 1701,
+        "steps": 240
+      },
+      "tick": 240
     }
   ]
 }

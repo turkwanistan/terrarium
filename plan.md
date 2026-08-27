@@ -60,19 +60,33 @@ Evidence: `history/2026-08-27-activity-aftermath.md`, `artifacts/activity-afterm
 
 Evidence: `history/2026-08-27-temporal-aftermath-polish.md`, `artifacts/temporal-aftermath-polish.json`, snapshot `20260827T115103702156Z-temporal-aftermath-polish`.
 
+## Completed normal product checkpoint — Temporal rendering intelligence
+
+- production renderer continues to use ordinary `requestAnimationFrame`; development mode can render the same Canvas implementation at exact supplied timestamps;
+- deterministic source→target frame fixtures cover left/right movement, carried movement, idle control, and rain control;
+- machine-readable temporal telemetry records semantic/rendered trajectory, interpolation, facing, pose/activity, carried-object attachment, ambient classes, and compact raster evidence from the actual 800×480 Canvas;
+- real RAF pacing is measured separately from manual-clock correctness;
+- promoted reusable `temporal-render-auditor-r1` objectively detects teleports, frozen semantic movement, reversals, facing mismatch, whole-scene jitter, carried-object detachment, semantic→visual causality failure, endpoint settling, and RAF stalls;
+- independent fixture outcomes were 10/10 correct; Gen14 mutation testing killed 10/10 dangerous mutants with zero survivors;
+- genuine Terrarium left/right/carry/idle/rain/RAF tasks passed;
+- measured endpoint behavior justified one renderer-only change from cubic smoothstep to quintic smootherstep, reducing sampled endpoint speed from 13.2308% to 2.3047% of peak on the canonical left-walk capture;
+- no production CV/video dependency, permanent MCP growth, world-model change, or SBC Gen18 substrate work was required.
+
+Evidence: `history/2026-08-27-temporal-rendering-intelligence.md`, `artifacts/temporal-rendering-intelligence.json`, compact evidence under `artifacts/temporal-audit-inputs/`, snapshot `20260827T125248568567Z-temporal-rendering-intelligence`.
+
 ## Evaluation loop
 
-Keep the development loop: implement → deterministic accelerated run → technical/behavior evaluation → live browser inspection → identify weakness → bounded change → replay/regression.
+Keep the development loop: implement → deterministic accelerated run → technical/behavior evaluation → deterministic temporal capture where relevant → independent RAF probe where relevant → live browser inspection → identify weakness → bounded change → replay/regression.
 
-Primary invariants/metrics: replay equality; event-chain integrity; restart equality; Python 3.10 syntax compatibility; action diversity/entropy; non-sleep repetition; object pickups/placements/inspections; moved-object count; persistent habitat marks; renderer authority/synchronization; event storage growth; and direct visual comparison against the accepted deterministic snapshot timeline.
+Primary invariants/metrics: replay equality; event-chain integrity; restart equality; Python 3.10 syntax compatibility; action diversity/entropy; non-sleep repetition; object pickups/placements/inspections; moved-object count; persistent habitat marks; renderer authority/synchronization; deterministic temporal-capture equality; subject trajectory/facing/attachment/causality; independent real-RAF pacing; event storage growth; and direct visual comparison against the accepted deterministic snapshot timeline.
 
 Use project-factory / Experiment Capsule / counterfactual / Forge capabilities only when a real engineering uncertainty or reusable capability gap justifies them. Do not create Self-Building Computer generations merely because Terrarium advances.
 
 ## Next product iteration
 
-Highest-value target: make **present activity and accumulated aftermath feel causally connected**. While Moss sleeps, watches the window, or uses the activity corner, the already-existing traces should respond subtly to the current action/environment without moving authority into the renderer or adding new mechanics.
+Highest-value target: make **present activity and accumulated aftermath feel causally connected**. While Moss sleeps, watches the window, or uses the activity corner, the already-existing traces should respond subtly to the current action/environment without moving authority into the renderer or adding new mechanics. Use the promoted temporal auditor to prove timing/attachment/stability correctness while keeping subjective warmth/charm as human visual judgment.
 
-Automated subjective/temporal visual-quality judging remains a known weak area. Treat it honestly; do not call a static metric a warmth/smoothness oracle.
+Objective temporal correctness is now covered. Automated subjective artistic-quality judging remains intentionally out of scope; do not reinterpret temporal metrics as a warmth/charm oracle.
 
 ## Later
 

@@ -113,6 +113,31 @@
       "utility": 0.95
     },
     {
+      "allow_forge": true,
+      "applicability": [
+        "renderer",
+        "future animated projects"
+      ],
+      "authority_requirements": [
+        "read-only bounded temporal renderer evidence"
+      ],
+      "forge": {
+        "desired_name": "temporal-render-auditor-r1"
+      },
+      "id": "temporal-render-auditor",
+      "necessity": "required",
+      "provider": "forge",
+      "purpose": "Objectively measure rendered temporal correctness: trajectory, jumps, frozen motion, facing, attachment, whole-scene jitter, frame stalls, endpoint settling, and semantic-to-visible causality without judging artistic taste.",
+      "runtime_dependencies": [
+        "Python standard library"
+      ],
+      "task_intents": [
+        "renderer",
+        "temporal-rendering"
+      ],
+      "utility": 0.97
+    },
+    {
       "applicability": [
         "hardware fork"
       ],
@@ -128,8 +153,8 @@
   "classification_policy": {
     "valuable_utility_min": 0.5
   },
-  "pack_id": "terrarium-gen17",
-  "pack_sha256": "2f3b20108768a605fe50ceb714b1f918b0d56e82c2fdf493ec22c61291d2eb92",
+  "pack_id": "terrarium-post-gen17-temporal-r2",
+  "pack_sha256": "31b1d11650205a20191d7277620e26f8a1776e4fdafce641b8de2b0dc71e16ee",
   "project": {
     "artifact_locations": [
       "artifacts/",
@@ -182,7 +207,9 @@
       "display/web/*.js",
       "display/web/*.css",
       "evaluations/*.py",
-      "tests/*.py"
+      "tests/*.py",
+      "tools/build_temporal_fixture_pack.py",
+      "tools/compact_temporal_evidence.py"
     ],
     "entrypoints": [
       "terrarium/api/server.py",
@@ -210,7 +237,9 @@
       "display/web/index.html",
       "display/web/app.js",
       "evaluations/evaluate_behavior.py",
-      "evaluations/evaluate_technical.py"
+      "evaluations/evaluate_technical.py",
+      "tools/build_temporal_fixture_pack.py",
+      "tools/compact_temporal_evidence.py"
     ],
     "project_id": "terrarium",
     "project_name_aliases": [
@@ -293,6 +322,30 @@
           "display/web/app.js",
           "display/web/style.css"
         ]
+      },
+      "temporal-rendering": {
+        "authority": "project",
+        "keywords": [
+          "temporal",
+          "animation",
+          "motion",
+          "interpolation",
+          "renderer",
+          "frame pacing",
+          "jitter",
+          "teleport"
+        ],
+        "optional_patterns": [
+          "tests/**",
+          "artifacts/temporal-*.json",
+          "terrarium.md"
+        ],
+        "required_paths": [
+          "terrarium/api/server.py",
+          "display/web/app.js",
+          "tools/build_temporal_fixture_pack.py",
+          "tools/compact_temporal_evidence.py"
+        ]
       }
     },
     "tests": [
@@ -300,10 +353,10 @@
     ]
   },
   "provenance": {
-    "creator": "Gen17 Terrarium project pilot",
-    "source": "terrarium.md + accepted Gen16 project readiness + live implementation evidence",
-    "source_generation": "gen17-terrarium-pilot"
+    "creator": "Terrarium post-Gen17 temporal rendering intelligence iteration",
+    "source": "current Terrarium implementation + accepted Gen16 project factory + measured browser temporal evidence",
+    "source_generation": "post-gen17-temporal-rendering-intelligence"
   },
   "schema": "gen16.project-capability-pack.v1",
-  "version": "r1"
+  "version": "r2"
 }

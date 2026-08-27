@@ -1,117 +1,83 @@
 # Terrarium Status
 
-Checkpoint: **POST-GEN17 PRODUCT CHECKPOINT — TEMPORAL AFTERMATH POLISH**.
+Checkpoint: **POST-GEN17 PRODUCT CHECKPOINT — TEMPORAL RENDERING INTELLIGENCE**.
 
 This is normal Terrarium development after the accepted Generation 17 pilot. It is **not Generation 18**.
 
 ## Current product state
 
-The room already records what Moss has been doing through persistent `habitat.activity_aftermath`; the latest checkpoint improves how that history becomes visible. Existing window traces, activity-corner clutter, and sleeping-nook wear now emerge progressively instead of appearing in discrete renderer count buckets. The renderer also gives those persistent traces restrained weather/ambient response while remaining disposable and non-authoritative.
+Terrarium can now objectively prove rendered temporal correctness in addition to deterministic world state, exact replay, behavior, and static visual evidence. The production Canvas renderer still runs on ordinary `requestAnimationFrame`; development temporal mode can drive the same 800×480 drawing path at exact supplied timestamps and record machine-readable motion plus raster evidence.
 
-Meaningful snapshot: `20260827T115103702156Z-temporal-aftermath-polish` (seed 1701, tick 240). Evidence: `artifacts/temporal-aftermath-polish.json` and `history/2026-08-27-temporal-aftermath-polish.md`.
+Meaningful snapshot: `20260827T125248568567Z-temporal-rendering-intelligence` (seed 1701, tick 240). Evidence: `artifacts/temporal-rendering-intelligence.json` and `history/2026-08-27-temporal-rendering-intelligence.md`.
 
-Inherited Gen17 guarantees remain intact:
+Inherited Gen17 guarantees remain intact: host-owned canonical creature/world state; deterministic simulation; append-only/hash-chained history; immutable snapshots + exact replay; disposable renderer; fixed hardware-neutral 800×480 `TerrariumFrame`; persistent objects/habitat wear/aftermath; canonical living state outside Git.
 
-- fixed hardware-neutral logical renderer: **800×480**;
-- persistent canonical creature/world state outside the renderer;
-- deterministic seeded simulation and exact snapshot + subsequent-event replay;
-- append-only/hash-chained event history;
-- process/browser restart persistence;
-- autonomous idle/walk/explore/rest/sleep/wake/look-outside/inspect/carry/place behavior;
-- multiple habitat zones, persistent objects, persistent habitat wear, and persistent activity aftermath;
-- canonical living state is user-owned outside Git; renderer is disposable/non-authoritative.
+## Temporal rendering capability
 
-Latest visible improvement:
+The renderer now exposes reusable render-state calculation separately from RAF scheduling. Development-only fixture mode can render a real semantic source→target transition at exact timestamps and records:
 
-- activity-aftermath changes interpolate over **1.8 seconds** between authoritative frame updates;
-- **26 authored layers** now emerge progressively: 5 window smudges, 5 wet-window streaks, 4 bedding creases, 5 activity-corner papers, and 7 work marks;
-- stable hash-derived micro-variation gives traces/papers organic placement without `Math.random` or renderer-owned state;
-- rain/mist/clear conditions alter how already-persistent window history reads;
-- bedding compression, pillow shift, and creases grow continuously from actual sleep history;
-- generic path-wear routes are slightly quieter so activity-specific aftermath has clearer visual priority.
+- requested/render timestamp and source/target semantic tick;
+- semantic/source/rendered Moss position and interpolation progress/ease;
+- facing, pose/activity, carrying state, and carried-object rendered attachment;
+- expected ambient-motion classes;
+- actual 800×480 Canvas pixel identity plus regional luminance grids.
 
-Meaningful development snapshot:
+Repeated deterministic `left_walk` capture is byte-identical: SHA256 `f204f15e6ba50e1126642aca3761795a64954f799d7141c5ff0a1b126d15b410` on both runs.
 
-- `20260827T115103702156Z-temporal-aftermath-polish`
+Separate real RAF evidence: 110 frames / 1816.6 ms; p50 16.7 ms; p95 16.7 ms; max 16.8 ms; zero gaps >34 ms or >50 ms.
+
+## Bounded renderer improvement
+
+Measured temporal evidence justified one presentation-only change: Moss translation now uses quintic smootherstep rather than cubic smoothstep. Full deterministic left-walk endpoint sampled speed fell from 13.2308% of peak to 2.3047% of peak, giving gentler departure/arrival settling. The simulation clock, semantic frame, behavior RNG, world authority, and replay did not change. Legacy easing is development-comparison only.
+
+## Objective reusable auditor
+
+Promoted `temporal-render-auditor-r1`:
+
+- content hash `5481ecd6e2e46d9b3a502fbabff5a24f27ffed9f925ab0868ed30a3ba13575b1`
+- evaluator hash `86b714f3871132ad3786f94fc81570dd569cb95ee09ced1d064737b5652a3b0c`
+- Forge evaluation: **6/6 PASS**
+- genuine Terrarium pre-promotion tasks: **6/6 PASS**, reuse count 5
+- dependencies: **none beyond Python standard library**
+
+Independent outcome fixtures: **10/10 correct**, covering smooth motion, teleport, frozen motion, whole-scene jitter, facing mismatch, RAF stall, ambient rain/idle motion, attached/detached carried objects, and legacy endpoint settling.
+
+Gen14 Evaluator Mutation Nursery: **10/10 dangerous mutants KILLED**, kill rate **1.0**, dangerous survivors **0**, invalid runs **0**, accepted state unchanged. Detection-power semantic digest `e3742464b3e7a3bd6bd488dd78f4f5c2bc4816ec41ff1e597b8787750f152217`.
+
+Genuine renderer reuse: current left walk PASS; right walk PASS; carried walk PASS; idle control PASS; rain control PASS; real RAF PASS. Legacy left walk correctly FAILS `endpoint_settling`.
+
+## Regression
+
+- pytest: **17/17 PASS**
+- JavaScript syntax: **PASS**
+- Python 3.10 AST syntax compatibility: **PASS** across 22 project Python files
+- technical evaluator: **PASS**
+- exact replay: **PASS**
+- behavior evaluator seed 1701 / 500: **PASS**
+- action entropy: **3.151553 bits**, unchanged
+- action distribution/object interaction metrics: unchanged
+
+## Snapshot identity
+
+- snapshot `20260827T125248568567Z-temporal-rendering-intelligence`
 - deterministic seed **1701**, tick **240**
 - frame SHA256 `12624190b1759215a62d4ffa3af70aa5ac759940f32b7c8362301e0fb043334e`
-- renderer SHA256 `9e727e04145c5a084555970d0a8bb7c269a6ba27c6b51db46e0324103f55fbd3`
+- renderer SHA256 `6d27df494be51bb7d8baa7c8683cbbd39893c1355eaf3785e194a860097e8578`
 
-The frame SHA is intentionally identical to the previous activity-aftermath checkpoint; this iteration changes presentation, not canonical world outcome.
+The semantic frame hash is intentionally unchanged from Temporal aftermath polish because this checkpoint changes testability and renderer interpolation, not canonical world outcome.
 
-## Evidence
+## SBC conclusion
 
-Current checkpoint regression:
+No reusable SBC substrate deficiency was found. Existing mediated browser capture, bounded project evidence transport, Gen16 capability packs, Capability Forge, isolated Lab execution, Gen13 nested isolation, and Gen14 mutation testing were sufficient. Permanent Optiplex_Lab MCP surface remains 10 tools. Frozen Optiplex_MCP was not modified. **No Gen18 proposal is warranted.**
 
-- pytest: **14/14 PASS**;
-- JavaScript syntax check: **PASS**;
-- Python 3.10 syntax compatibility: **PASS**;
-- technical evaluator: **PASS** — exact replay, event-chain integrity, append-only SQLite enforcement, restart equality, fixed 800×480 frame;
-- behavior evaluator seed 1701 / 500 steps: **PASS** — accepted action distribution unchanged, entropy **3.151553 bits**, 28 placements, 28 pickups, 58 inspections, all 6 objects moved, 10 persistent habitat marks.
-
-Temporal-aftermath evidence (`artifacts/temporal-aftermath-polish.json`):
-
-- previous renderer SHA256 `9083851633567c9e520020b252b61c23ecd5f85ca68609da9b780af848ebac0c` → current `9e727e04145c5a084555970d0a8bb7c269a6ba27c6b51db46e0324103f55fbd3`;
-- previous and current seed-1701/tick-240 semantic frame SHA256 are both `12624190b1759215a62d4ffa3af70aa5ac759940f32b7c8362301e0fb043334e`;
-- same-horizon semantic frame equality: **true**;
-- seven old activity-specific discrete stage-rule tokens detected before, **zero** remaining after;
-- renderer `Math.random`: **absent**;
-- stable deterministic micro-variation and weather-conditioned persistent-window rendering: **present**.
-
-Earlier spatial/activity evidence remains valid in `artifacts/visual-storytelling-comparison.json`, `artifacts/visual-storytelling-counterfactual.json`, and `artifacts/activity-aftermath-comparison.json`.
-
-## Browser inspection
-
-The actual Canvas renderer was inspected at 800×480 through the mediated browser:
-
-- accepted tick-240 aftermath scene before the change;
-- updated tick-240 scene with the exact same semantic frame;
-- deterministic tick-720 accelerated scene with all three aftermath classes present: 14 sleeping-nook sleep ticks across 4 bouts, 30 window watches, and 67 activity-corner uses;
-- temporary rain + wet-window renderer counterfactual, viewed twice 1.2 seconds apart to exercise the ambient weather-bound trace animation;
-- final milestone snapshot opened through the real Canvas renderer.
-
-Temporary inspection frames were removed before snapshot capture. Automated evidence does **not** claim to measure subjective warmth, charm, or beauty; perceptual judgment came from renderer inspection.
-
-## Self-Building Computer / capability evidence
-
-No new reusable capability gap was needed for this checkpoint.
-
-Existing promoted capability:
-
-- `simulation-behavior-auditor-r1`
-- content hash `932573954fdf126bd4ec4f4d5a1f79a50b48b994bf374ed0cfa3415120dd093f`
-- evaluator hash `1c9eaed4c4174212f84a7db52d4c5f47e1a106a88461f6880023d4dd7c5f53ae`
-
-Post-change regression reuse: **PASS** via Forge run `cap_20260827T115050Z_933e3d93`. The current deterministic 180-event audit input SHA256 `fa438bef63e3aa56b353638b27b42248c06682347d4b8684cca3fc2874df5b11` matched the held-out vector exactly; result: 10 action classes, entropy **3.174454**, 42 object interactions, `sequence_ok=true`.
-
-Candidate procedural memories remain non-authoritative. No applicability, evaluation, or promotion gate was weakened. Operational Lab remains `gen6-experience-memory-r1-dc0d2cb41595`; permanent MCP surface remains 10. Frozen Optiplex_MCP was not modified.
-
-## Inherited Gen17 runtime proof
-
-- browser close/reopen advanced authoritative tick/event **36 → 63** while the renderer was closed;
-- process restart resumed persisted state and reached tick/event **87** rather than resetting;
-- stopped final live proof reached **402 events/ticks** with exact replay hash `b3d10eda99f8b3ba580043d4d7c40bd1ce0cde0f9cbc45cde019fb3d1fc21a1b`;
-- compact event redesign reduced the observed 100-event JSONL footprint from ~889 KB to ~124 KB while preserving replay.
+The existing promoted `simulation-behavior-auditor-r1` remains authoritative for simulation behavior. Candidate procedural memories remain non-authoritative unless their existing activation gates are met.
 
 ## Highest-value next product improvement
 
-Make **present activity and accumulated aftermath feel causally connected in the renderer**. When Moss is currently sleeping, watching the window, or using the activity corner, let the already-existing traces respond subtly to that action/environment. Keep it renderer-only unless evidence reveals a real world-model gap; do not add dashboards, dialogue, learned routines, hardware work, or broad mechanics yet.
+Use the new temporal proof system to make **present activity and accumulated aftermath feel causally connected**: subtle sleeping-nook, window, and activity-corner reactions while Moss is actually using those spaces, with explicit temporal checks preventing jitter/teleports/incorrect attachment. Do not claim those objective checks measure warmth or charm.
 
-## Development / runtime policy
+## Canonical runtime / remote
 
-- milestone snapshots: `snapshots/dev/`; standard comparison scene seed 1701 / step 240;
-- local gallery: `/snapshots/`; renderer/source hashes pin historical identity;
-- canonical trusted-LAN launch: `scripts/run_lan.sh`;
-- runtime state defaults to `${XDG_STATE_HOME:-$HOME/.local/state}/terrarium/live` and must remain outside Git;
-- repo-local `data/*` is ignored except `.gitkeep` and is development/legacy-only;
-- normal development creates one tested commit/push attempt per meaningful checkpoint.
+The canonical user-owned Moss runtime remains outside the available mediated development boundary and was not touched. The isolated development renderer was verified, but no canonical LAN URL is claimed.
 
-## Canonical runtime deployment status
-
-The repository source is updated, but the actual host-owned Moss runtime could not be safely inspected or restarted from the available mediated boundary: the canonical user-owned runtime directory is outside the project workspace, while the browser development service is isolated and non-canonical. No replacement world was created and canonical runtime state was not touched. A LAN URL is therefore not claimed until the real host runtime can be verified.
-
-## Remote
-
-- `origin`: `git@github.com:turkwanistan/terrarium.git`
-- `main` tracks `origin/main`
-- mediated push uses project-scoped credentials and must not be bypassed by copying secrets into the repo.
+`origin` remains `git@github.com:turkwanistan/terrarium.git`; `main` tracks `origin/main`. Mediated push must use project-scoped credentials and must not bypass the credential boundary.

@@ -1,0 +1,11 @@
+{
+  "classification_at_refresh": "MISSING_VALUABLE",
+  "desired_name": "temporal-render-auditor-r1",
+  "forge_gap_hash": "0e447bb3e0d5756e0ca10a9f4565556860bd9e421eaff82ee07356120bbffe1f",
+  "pack_sha256": "31b1d11650205a20191d7277620e26f8a1776e4fdafce641b8de2b0dc71e16ee",
+  "reason": "Accepted platform could capture browser visuals but had no reusable objective temporal-motion auditor; Forge gap search found no matching capability before candidate creation.",
+  "schema": "terrarium.temporal-capability-gap.v1",
+  "subjective_animation_quality_remains": "WEAK_NEEDS_SPECIALIZATION",
+  "subjective_oracle_conflated": false,
+  "utility": 0.97
+}

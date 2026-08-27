@@ -23,9 +23,11 @@ SNAPSHOT_ROOT = PROJECT_ROOT / "snapshots"
 class TerrariumServer(ThreadingHTTPServer):
     daemon_threads = True
 
-    def __init__(self, address, handler, engine: WorldEngine):
+    def __init__(self, address, handler, engine: WorldEngine, *, dev_temporal_fixtures: Path | None = None, dev_temporal_output_dir: Path | None = None):
         super().__init__(address, handler)
         self.engine = engine
+        self.dev_temporal_fixtures = dev_temporal_fixtures
+        self.dev_temporal_output_dir = dev_temporal_output_dir
 
 
 class Handler(BaseHTTPRequestHandler):
@@ -62,6 +64,35 @@ class Handler(BaseHTTPRequestHandler):
         self.end_headers()
         self.wfile.write(raw)
 
+    def do_POST(self) -> None:
+        parsed = urlparse(self.path)
+        if parsed.path != "/api/dev/temporal-evidence" or self.server.dev_temporal_output_dir is None:
+            self._json({"error": "development temporal evidence sink is disabled"}, 404)
+            return
+        try:
+            length = int(self.headers.get("Content-Length", "0"))
+        except ValueError:
+            self._json({"error": "invalid content length"}, 400)
+            return
+        if length <= 0 or length > 2_000_000:
+            self._json({"error": "temporal evidence payload must be 1..2000000 bytes"}, 413)
+            return
+        try:
+            payload = json.loads(self.rfile.read(length).decode("utf-8"))
+        except (UnicodeDecodeError, json.JSONDecodeError):
+            self._json({"error": "invalid JSON evidence payload"}, 400)
+            return
+        scenario = str(payload.get("scenario", "capture"))
+        mode = str(payload.get("easing", payload.get("schema", "evidence")))
+        safe = lambda text: "".join(ch if ch.isalnum() or ch in "-_" else "-" for ch in text)[:80] or "evidence"
+        output_dir = self.server.dev_temporal_output_dir
+        output_dir.mkdir(parents=True, exist_ok=True)
+        output_path = output_dir / f"{safe(scenario)}-{safe(mode)}.json"
+        temp = output_path.with_suffix(output_path.suffix + ".tmp")
+        temp.write_text(json.dumps(payload, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+        temp.replace(output_path)
+        self._json({"ok": True, "path": str(output_path)})
+
     def do_GET(self) -> None:
         parsed = urlparse(self.path)
         if parsed.path == "/api/health":
@@ -89,6 +120,18 @@ class Handler(BaseHTTPRequestHandler):
                 }
             )
             return
+        if parsed.path == "/api/dev/temporal-fixtures":
+            fixture_path = self.server.dev_temporal_fixtures
+            if fixture_path is None:
+                self._json({"error": "development temporal fixtures are disabled"}, 404)
+                return
+            try:
+                payload = json.loads(fixture_path.read_text(encoding="utf-8"))
+            except (OSError, json.JSONDecodeError) as exc:
+                self._json({"error": f"unable to load temporal fixtures: {exc}"}, 500)
+                return
+            self._json(payload)
+            return
         if parsed.path == "/api/step":
             self._json({"error": "world-authoritative mutation is not exposed over GET"}, 405)
             return
@@ -108,6 +151,16 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--tick-seconds", type=float, default=3.0)
     parser.add_argument("--minutes-per-tick", type=int, default=8)
     parser.add_argument("--snapshot-every", type=int, default=20)
+    parser.add_argument(
+        "--dev-temporal-fixtures",
+        default=None,
+        help="Development-only JSON fixture pack exposed at /api/dev/temporal-fixtures.",
+    )
+    parser.add_argument(
+        "--dev-temporal-output-dir",
+        default=None,
+        help="Development-only bounded browser evidence sink directory.",
+    )
     return parser
 
 
@@ -121,7 +174,15 @@ def main() -> int:
         snapshot_every=args.snapshot_every,
     )
     engine.start(tick_seconds=args.tick_seconds)
-    server = TerrariumServer((args.host, args.port), Handler, engine)
+    fixture_path = Path(args.dev_temporal_fixtures).resolve() if args.dev_temporal_fixtures else None
+    output_dir = Path(args.dev_temporal_output_dir).resolve() if args.dev_temporal_output_dir else None
+    server = TerrariumServer(
+        (args.host, args.port),
+        Handler,
+        engine,
+        dev_temporal_fixtures=fixture_path,
+        dev_temporal_output_dir=output_dir,
+    )
     stopping = threading.Event()
 
     def stop(*_):
