@@ -29,7 +29,9 @@ class Simulation:
         self.minutes_per_tick = int(minutes_per_tick)
 
     def _rng(self, state: dict[str, Any]) -> random.Random:
-        material = f"{state["seed"]}:{state["rules_version"]}:{int(state["tick"]) + 1}".encode("utf-8")
+        # Keep host compatibility with Python 3.10. Python 3.12 accepts
+        # same-quote expressions inside f-strings (PEP 701); 3.10 does not.
+        material = f"{state['seed']}:{state['rules_version']}:{int(state['tick']) + 1}".encode("utf-8")
         tick_seed = int.from_bytes(hashlib.sha256(material).digest()[:16], "big")
         return random.Random(tick_seed)
 

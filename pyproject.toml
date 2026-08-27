@@ -6,7 +6,7 @@ build-backend = "setuptools.build_meta"
 name = "terrarium"
 version = "0.1.0"
 description = "A persistent artificial creature living in a small hardware-neutral world."
-requires-python = ">=3.11"
+requires-python = ">=3.10"
 
 [project.optional-dependencies]
 dev = ["pytest>=8"]
