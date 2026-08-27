@@ -39,3 +39,9 @@ No commit or push has been performed.
 - target remote: `git@github.com:turkwanistan/terrarium.git`
 - procedural memory policy: `MEMORY.md`; Gen17 behavior-auditor memory is intentionally CANDIDATE pending held-out/reuse evidence
 - normal development should create one tested commit/push per meaningful checkpoint, with a snapshot when user-visible behavior/visuals change
+
+## Repository bootstrap status
+- local root commit: `c4b5377` (`Establish Terrarium Gen17 baseline and progressive snapshots`)
+- `origin`: `git@github.com:turkwanistan/terrarium.git`
+- first mediated push attempt: **blocked because project-specific Git push credentials are not yet provisioned for this new repository**
+- do not copy credentials into the repo or bypass the mediated push boundary; create/authorize the GitHub repository once, then use normal checkpoint pushes

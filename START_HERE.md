@@ -26,3 +26,6 @@ A project-driven Lab defect was also found: Capability Forge required JSON Schem
 ## Highest-value next work
 
 Improve the feeling that activity happened while the viewer was away: strengthen visual storytelling of persistent object movement/accumulation and temporal animation quality, then add stronger browser/temporal visual acceptance evidence. Do not jump to learned preferences, conversation, or hardware merely for breadth.
+
+## Git / remote safety
+The local repository has real checkpoint history and `origin` points to `git@github.com:turkwanistan/terrarium.git`. The first mediated push was blocked because credentials were not provisioned for this new project. Do not embed tokens, keys, or copied SSH credentials. Once the GitHub repository/project authorization exists, use the mediated project push path at each meaningful tested checkpoint.
