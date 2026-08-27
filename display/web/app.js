@@ -89,11 +89,41 @@
     } else if (f.weather === 'mist') {
       ctx.fillStyle = 'rgba(224,224,210,.18)'; ctx.fillRect(65,118,203,46); ctx.fillRect(65,172,203,20);
     }
+    const activityHistory = f.habitat.activity_aftermath || {};
+    const windowWatches = Number(activityHistory.window_watches || 0);
+    const wetWatches = Number(activityHistory.wet_window_watches || 0);
+    if (windowWatches > 0) {
+      ctx.fillStyle = `rgba(226,216,196,${Math.min(.18,.035+windowWatches*.006)})`;
+      for (let i=0;i<Math.min(5,1+Math.floor(windowWatches/4));i++){
+        ctx.beginPath(); ctx.ellipse(102+i*28,190-(i%2)*6,8,4,-.2,0,Math.PI*2); ctx.fill();
+      }
+      ctx.fillStyle = `rgba(59,45,38,${Math.min(.20,.035+windowWatches*.007)})`;
+      ctx.fillRect(80,215,155,3+Math.min(4,Math.floor(windowWatches/7)));
+    }
+    if (wetWatches > 0) {
+      ctx.strokeStyle = `rgba(225,232,224,${Math.min(.25,.06+wetWatches*.018)})`; ctx.lineWidth=2;
+      for (let i=0;i<Math.min(5,wetWatches);i++){ const x=95+i*31; ctx.beginPath(); ctx.moveTo(x,151); ctx.quadraticCurveTo(x+4,166,x-1,181); ctx.stroke(); }
+    }
 
-    // Sleeping nook.
+    // Sleeping nook. Repeated sleep leaves a compressed nest, shifted pillow,
+    // and crease lines derived only from persistent activity history.
+    const aftermath = f.habitat.activity_aftermath || {};
+    const sleepTicks = Number(aftermath.sleep_nook_ticks || 0);
+    const sleepBouts = Number(aftermath.sleep_nook_bouts || 0);
     rounded(52, 353, 210, 74, 8, '#463a34');
     rounded(62, 362, 188, 53, 8, '#a28c70');
-    rounded(70, 367, 72, 29, 9, '#d0b992');
+    if (sleepTicks > 0) {
+      ctx.fillStyle = `rgba(76,58,48,${Math.min(.26,.055+sleepTicks*.009)})`;
+      ctx.beginPath(); ctx.ellipse(164,389,45+Math.min(18,sleepBouts*3),16+Math.min(8,sleepTicks*.18),-.08,0,Math.PI*2); ctx.fill();
+    }
+    const pillowShift = Math.min(13, sleepBouts * 2);
+    rounded(70+pillowShift, 367+Math.min(4,sleepBouts), 72, 29, 9, '#d0b992');
+    if (sleepTicks >= 3) {
+      ctx.strokeStyle = `rgba(93,72,57,${Math.min(.34,.10+sleepTicks*.008)})`; ctx.lineWidth=2;
+      for (let i=0;i<Math.min(4,1+Math.floor(sleepTicks/7));i++){
+        ctx.beginPath(); ctx.moveTo(129+i*21,374+i*4); ctx.quadraticCurveTo(145+i*18,386,132+i*22,402); ctx.stroke();
+      }
+    }
     ctx.fillStyle = '#6e6358'; ctx.fillRect(45, 426, 224, 8);
 
     // Rug / open living space.
@@ -106,9 +136,18 @@
     for (const y of [118,169,220]) ctx.fillRect(603,y,141,10);
     ctx.fillStyle = 'rgba(15,10,8,.18)'; ctx.fillRect(611,87,125,31); ctx.fillRect(611,128,125,41); ctx.fillRect(611,179,125,41);
 
-    // Activity corner: low table, plant, scattered paper marks.
+    // Activity corner: repeated quiet use leaves progressively rearranged
+    // papers and tiny work marks instead of generic decorative clutter.
+    const cornerUses = Number((f.habitat.activity_aftermath || {}).activity_corner_uses || 0);
     ctx.fillStyle = '#4b352c'; ctx.fillRect(590, 351, 145, 12); ctx.fillRect(604, 363, 9, 48); ctx.fillRect(712,363,9,48);
-    ctx.fillStyle = '#b99263'; ctx.fillRect(625, 366, 42, 25); ctx.fillStyle = '#d7c797'; ctx.fillRect(632,370,34,18);
+    ctx.save(); ctx.translate(648,379); ctx.rotate(Math.min(.16,cornerUses*.006));
+    ctx.fillStyle = '#b99263'; ctx.fillRect(-23,-13,46,27); ctx.fillStyle = '#d7c797'; ctx.fillRect(-17,-9,35,18); ctx.restore();
+    if (cornerUses >= 2) {
+      const papers=Math.min(4,1+Math.floor(cornerUses/6));
+      for(let i=0;i<papers;i++){ ctx.save();ctx.translate(609+i*24,337-(i%2)*5);ctx.rotate((i-1.5)*.07);ctx.fillStyle='rgba(218,201,158,.88)';ctx.fillRect(-10,-5,22,11);ctx.restore(); }
+      ctx.strokeStyle=`rgba(75,54,43,${Math.min(.55,.18+cornerUses*.014)})`;ctx.lineWidth=1.4;
+      for(let i=0;i<Math.min(6,2+Math.floor(cornerUses/4));i++){ctx.beginPath();ctx.moveTo(615+i*17,343);ctx.lineTo(624+i*17,340+(i%3));ctx.stroke();}
+    }
     ctx.fillStyle = '#70513e'; ctx.fillRect(748, 339, 28, 36); ctx.fillStyle = '#5f7555';
     for (let i=0;i<5;i++){ ctx.beginPath(); ctx.ellipse(762 + (i-2)*7, 331 - Math.abs(i-2)*7, 9, 17, (i-2)*.35, 0, Math.PI*2); ctx.fill(); }
 

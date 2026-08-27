@@ -45,3 +45,7 @@ During the `2026-08-27-lived-in-staging` product checkpoint, the authoritative p
 That successful real reuse was recorded as procedural episode `ep_091c8bfcdd8027f0ba2c`. Re-distillation produced memory object `3eaa33c60f47c1d4c2255ae518fdb573f111f10e8f389f045dcf050c39a1eed8`, but the held-out activation check remained fail-closed: the recorded episode's environment omitted the required `input_schema_hash` precondition, so applicability rejected it and the new memory remains `CANDIDATE`.
 
 Do not reinterpret the successful capability run as an ACTIVE memory promotion. Do not weaken or delete the input-schema precondition to make the distiller pass. The episode is useful evidence, while repository/source/live state and the promoted Forge capability remain the authority.
+
+## Post-Gen17 activity-aftermath reuse
+
+For checkpoint `2026-08-27-activity-aftermath`, the promoted `simulation-behavior-auditor-r1` capability was reused on a fresh 180-event post-change stream and passed with all 10 action classes, entropy `3.174454`, 42 object interactions, and sequence integrity (`cap_20260827T054348Z_b67454cd`). Procedural-memory retrieval still returned `NO_MEMORY`; candidate memories remain non-authoritative. No gate was weakened and no new reusable SBC capability gap was justified.

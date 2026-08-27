@@ -16,7 +16,7 @@ from terrarium.frame import make_frame
 from terrarium.models import PLACEMENT_SLOTS
 from terrarium.store import WorldStore
 
-DEFAULT_BASELINE = ROOT / "snapshots" / "dev" / "20260827T041252779231Z-gen17-accepted-baseline" / "frame.json"
+DEFAULT_BASELINE = ROOT / "snapshots" / "dev" / "20260827T050435058386Z-lived-in-staging" / "frame.json"
 
 
 def deterministic_frame(seed: int, steps: int) -> dict:
@@ -40,6 +40,7 @@ def metrics(frame: dict) -> dict:
     ]
     moved = [obj for obj in frame.get("objects", []) if int(obj.get("times_moved", 0)) > 0]
     settled = [obj for obj in placed if int(obj.get("times_moved", 0)) >= 2]
+    aftermath = frame.get("habitat", {}).get("activity_aftermath") or {}
     return {
         "tick": int(frame["tick"]),
         "placed_objects": len(placed),
@@ -52,6 +53,14 @@ def metrics(frame: dict) -> dict:
         "visible_route_count": sum(int(value) >= 5 for value in wear.values() if value is not None),
         "strong_route_count": sum(int(value) >= 25 for value in wear.values() if value is not None),
         "persistent_mark_count": len(frame.get("habitat", {}).get("marks") or []),
+        "activity_aftermath": {
+            key: int(aftermath.get(key, 0))
+            for key in ("sleep_nook_ticks", "sleep_nook_bouts", "window_watches", "wet_window_watches", "activity_corner_uses")
+        },
+        "recognizable_activity_cues": sum(
+            int(aftermath.get(key, 0)) > 0
+            for key in ("sleep_nook_ticks", "window_watches", "activity_corner_uses")
+        ),
     }
 
 
@@ -68,15 +77,24 @@ def main() -> int:
         baseline_path = ROOT / baseline_path
     baseline = json.loads(baseline_path.read_text(encoding="utf-8"))
     fresh = deterministic_frame(args.seed, 0)
+    same_horizon = deterministic_frame(args.seed, int(baseline["tick"]))
     improved = deterministic_frame(args.seed, args.improved_steps)
+    baseline_legacy = dict(baseline)
+    baseline_legacy["habitat"] = dict(baseline["habitat"])
+    same_legacy = dict(same_horizon)
+    same_legacy["habitat"] = dict(same_horizon["habitat"])
+    baseline_legacy["habitat"].pop("activity_aftermath", None)
+    same_legacy["habitat"].pop("activity_aftermath", None)
 
     result = {
-        "schema": "terrarium.visual-storytelling-comparison.v1",
-        "note": "Objective diorama cues only; this does not claim to be a subjective visual-quality oracle.",
+        "schema": "terrarium.activity-aftermath-comparison.v1",
+        "note": "Objective activity-aftermath cues only; this does not claim to be a subjective visual-quality oracle.",
         "seed": args.seed,
         "baseline_frame": str(baseline_path.relative_to(ROOT)),
         "fresh": metrics(fresh),
-        "gen17_baseline": metrics(baseline),
+        "previous_checkpoint": metrics(baseline),
+        "same_horizon_improved": metrics(same_horizon),
+        "same_horizon_legacy_frame_equal": baseline_legacy == same_legacy,
         "improved_accelerated_life": metrics(improved),
     }
     text = json.dumps(result, indent=2, sort_keys=True) + "\n"

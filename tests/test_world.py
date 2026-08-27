@@ -80,6 +80,23 @@ def test_autonomous_object_placements_use_authored_habitat_slots(tmp_path):
     store.close()
 
 
+
+def test_activity_specific_aftermath_accumulates_without_changing_action_stream(tmp_path):
+    store,engine=engine_at(tmp_path)
+    events=engine.run_steps(500)
+    state=engine.current_state(); aftermath=state['habitat']['activity_aftermath']
+    assert aftermath['sleep_nook_ticks'] >= 2
+    assert aftermath['sleep_nook_bouts'] >= 1
+    assert aftermath['window_watches'] >= 8
+    assert aftermath['activity_corner_uses'] >= 8
+    frame=make_frame(state,last_event=store.last_event())
+    assert frame['habitat']['activity_aftermath'] == aftermath
+    assert [e['details']['action'] for e in events][:20] == [
+        'inspect','explore','explore','look_outside','rest','inspect','inspect','walk','explore','idle',
+        'rest','inspect','rest','walk','inspect','explore','idle','rest','explore','inspect'
+    ]
+    store.close()
+
 def test_frame_contract_is_exact_and_renderer_not_canonical(tmp_path):
     store,engine=engine_at(tmp_path); engine.run_steps(3)
     frame=make_frame(engine.current_state(),last_event=store.last_event())

@@ -9,6 +9,7 @@ FRAME_SCHEMA = "terrarium.frame.v1"
 
 def make_frame(state: dict[str, Any], *, last_event: dict[str, Any] | None = None) -> dict[str, Any]:
     creature = state["creature"]
+    aftermath = state["habitat"].get("activity_aftermath") or {}
     return {
         "schema": FRAME_SCHEMA,
         "frame_version": 1,
@@ -38,6 +39,10 @@ def make_frame(state: dict[str, Any], *, last_event: dict[str, Any] | None = Non
             "shelf_count": state["habitat"]["shelf_count"],
             "path_wear": state["habitat"]["path_wear"],
             "marks": list(state["habitat"]["marks"]),
+            "activity_aftermath": {
+                key: int(aftermath.get(key, 0))
+                for key in ("sleep_nook_ticks", "sleep_nook_bouts", "window_watches", "wet_window_watches", "activity_corner_uses")
+            },
         },
         "last_event": None
         if not last_event

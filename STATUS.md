@@ -1,10 +1,14 @@
 # Terrarium Status
 
-Checkpoint: **POST-GEN17 PRODUCT CHECKPOINT — LIVED-IN STAGING**.
+Checkpoint: **POST-GEN17 PRODUCT CHECKPOINT — ACTIVITY AFTERMATH**.
 
 This is normal Terrarium development after the accepted Generation 17 pilot. It is **not Generation 18**.
 
 ## Current product state
+
+Latest checkpoint: repeated existing activities now leave deterministic physical aftermath. Window-watching leaves pane/sill traces, activity-corner use rearranges papers/work marks, and accumulated sleeping-nook sleep rumples the nest. These cues are derived from persistent `habitat.activity_aftermath`; the renderer remains disposable and non-authoritative.
+
+Meaningful snapshot: `20260827T054359565518Z-activity-aftermath` (seed 1701, tick 240). Comparison/evidence: `artifacts/activity-aftermath-comparison.json` and `history/2026-08-27-activity-aftermath.md`.
 
 Inherited Gen17 guarantees remain intact:
 
@@ -33,12 +37,13 @@ Meaningful development snapshot:
 
 ## Evidence
 
-Latest checkpoint regression before commit:
+Current checkpoint regression:
 
-- pytest: **13/13 PASS**;
+- pytest: **14/14 PASS**;
+- Python 3.10 syntax compatibility: **PASS**;
 - technical evaluator: **PASS** — exact replay, event-chain integrity, append-only SQLite enforcement, restart equality, fixed 800×480 frame;
-- behavior evaluator seed 1701 / 500 steps: **PASS** — 10 action classes, entropy **3.151553 bits**, 28 placements, 28 pickups, 58 inspections, all 6 objects moved, 10 persistent habitat marks;
-- behavior distribution remained identical to the accepted Gen17 reference run.
+- behavior evaluator seed 1701 / 500 steps: **PASS** — the accepted 10-action distribution is unchanged, entropy **3.151553 bits**, 28 placements, 28 pickups, 58 inspections, all 6 objects moved, 10 persistent habitat marks;
+- activity-aftermath comparison: previous tick 240 has 0 recognizable activity classes, same-horizon improved tick 240 has 2, accelerated tick 720 has all 3; legacy frame equality after removing the new aftermath field is **true**.
 
 Visual-storytelling comparison (`artifacts/visual-storytelling-comparison.json`):
 
@@ -89,9 +94,7 @@ Operational Lab remains `gen6-experience-memory-r1-dc0d2cb41595`; permanent MCP 
 
 ## Highest-value next product improvement
 
-Make existing activities leave **distinct physical aftermath**: rumpled/settled sleeping-nook state from repeated sleep, subtle window/sill traces from repeated watching, and accumulated work/paper traces from activity-corner use. The next checkpoint should make an observer infer *what Moss has been doing*, not simply that the room has traffic.
-
-Hardware, learned preferences/routines, conversation, and broader mechanics remain later work unless this visual-storytelling direction exposes a concrete prerequisite.
+Strengthen the **temporal readability and subtle animation of the existing physical aftermath** so transitions feel natural when history crosses thresholds, while preserving the no-dashboard diorama. Prefer renderer polish/evidence over adding new mechanics.
 
 ## Development / runtime policy
 

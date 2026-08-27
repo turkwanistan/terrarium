@@ -1,0 +1,34 @@
+{
+  "captured_at": "2026-08-27T05:43:59.566173Z",
+  "frame": {
+    "logical_height": 480,
+    "logical_width": 800,
+    "path": "dev/20260827T054359565518Z-activity-aftermath/frame.json",
+    "sha256": "12624190b1759215a62d4ffa3af70aa5ac759940f32b7c8362301e0fb043334e",
+    "tick": 240
+  },
+  "git": {
+    "branch": "main",
+    "dirty": true,
+    "head": "17722c0c10d18ae08d68d30648d462790643a534"
+  },
+  "note": "Repeated window-watching now leaves sill/smudge traces, activity-corner use rearranges papers and work marks, and longer-lived scenes develop a rumpled sleeping nook from actual accumulated activity history.",
+  "preview": {
+    "path": "dev/20260827T054359565518Z-activity-aftermath/preview.svg",
+    "sha256": "8a104eb1fc17ff07d27db315fe1bdeee7f3add4e8c1e59a3f1fb825200e46122"
+  },
+  "schema": "terrarium.dev-snapshot.v1",
+  "snapshot_id": "20260827T054359565518Z-activity-aftermath",
+  "source": {
+    "mode": "deterministic",
+    "seed": 1701,
+    "steps": 240
+  },
+  "source_hashes": {
+    "engine": "c56a8761bcf0c25b319ab1d1a6df714fb44f9d692ae06c2c91b6d75edb597a96",
+    "frame_contract": "fe4401664e4b09b4ff8171b1bd73c9cbd0b3fff4091672ba732c69b01c27a956",
+    "renderer_css": "706070e63996d0ce2a9ccf19f9ed6dc29b91a8134195f3aee992b5e4cfe28268",
+    "renderer_js": "9083851633567c9e520020b252b61c23ecd5f85ca68609da9b780af848ebac0c"
+  },
+  "view_url": "/?snapshot=/snapshots/dev/20260827T054359565518Z-activity-aftermath/frame.json"
+}

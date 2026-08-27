@@ -2,6 +2,14 @@
 
 Git-friendly visual milestones. The SVG is a lightweight capture-time thumbnail; run Terrarium and open `/snapshots/` for the same stored frame through the real Canvas renderer.
 
+## 20260827T054359565518Z-activity-aftermath
+
+Repeated window-watching now leaves sill/smudge traces, activity-corner use rearranges papers and work marks, and longer-lived scenes develop a rumpled sleeping nook from actual accumulated activity history.
+
+![20260827T054359565518Z-activity-aftermath](dev/20260827T054359565518Z-activity-aftermath/preview.svg)
+
+Deterministic tick `240` · renderer `908385163356`
+
 ## 20260827T050435058386Z-lived-in-staging
 
 Persistent travel now reads as worn routes, while autonomous object placements settle into distinct habitat-aware positions instead of random or overlapping coordinates.

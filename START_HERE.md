@@ -6,9 +6,9 @@ This repository is the authoritative Terrarium project created during the accept
 
 Gen17 Phase 0–2 remains the accepted architectural/runtime baseline: deterministic persistent host-owned world state, exact replay, disposable 800×480 renderer, autonomous behavior, persistent objects, and habitat wear.
 
-The latest normal product checkpoint is **Lived-in staging** (`history/2026-08-27-lived-in-staging.md`). It makes accumulated history easier to read without dashboards: autonomous object placements use authored habitat-aware staging positions, repeated travel renders as worn routes, and frequently moved possessions leave subtle settled-use cues. The canonical runtime architecture and authority boundaries are unchanged.
+The latest normal product checkpoint is **Activity aftermath** (`history/2026-08-27-activity-aftermath.md`). Repeated window-watching, activity-corner use, and sleeping-nook sleep now leave distinct deterministic physical consequences, while canonical runtime architecture and authority boundaries remain unchanged.
 
-Meaningful snapshot: `snapshots/dev/20260827T050435058386Z-lived-in-staging`.
+Meaningful snapshot: `snapshots/dev/20260827T054359565518Z-activity-aftermath`.
 
 ## Fresh-session procedure
 
@@ -35,7 +35,7 @@ Operational Optiplex_Lab remains accepted Gen6 with permanent MCP surface 10. Fr
 
 ## Highest-value next work
 
-Make **specific existing activities leave distinct physical aftermath** in the diorama: sleeping should gradually alter the nook, repeated window-watching should leave subtle window/sill traces, and repeated activity-corner use should accumulate small work/paper marks. Prefer communicating *what Moss has been doing* over adding new mechanics, preferences, conversation, or hardware breadth.
+Polish **temporal readability of the new activity aftermath**: keep the cues physical and history-derived, but make threshold transitions and subtle animation feel natural without adding dashboards or unrelated mechanics.
 
 ## Git / remote safety
 

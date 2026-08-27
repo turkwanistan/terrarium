@@ -84,6 +84,22 @@ def preview_svg(frame: dict) -> str:
         '<rect x="595" y="61" width="157" height="17" fill="#4c372d"/><rect x="603" y="78" width="8" height="158" fill="#4c372d"/><rect x="736" y="78" width="8" height="158" fill="#4c372d"/>',
         '<rect x="590" y="351" width="145" height="12" fill="#4b352c"/><rect x="604" y="363" width="9" height="48" fill="#4b352c"/><rect x="712" y="363" width="9" height="48" fill="#4b352c"/>',
     ]
+    aftermath = frame.get("habitat", {}).get("activity_aftermath") or {}
+    sleep_ticks = int(aftermath.get("sleep_nook_ticks", 0))
+    sleep_bouts = int(aftermath.get("sleep_nook_bouts", 0))
+    window_watches = int(aftermath.get("window_watches", 0))
+    corner_uses = int(aftermath.get("activity_corner_uses", 0))
+    if sleep_ticks > 0:
+        parts.append(f'<ellipse cx="164" cy="389" rx="{45+min(18,sleep_bouts*3)}" ry="{16+min(8,sleep_ticks*.18):.1f}" fill="#4c3a30" opacity="{min(.26,.055+sleep_ticks*.009):.3f}"/>')
+        parts.append(f'<rect x="{70+min(13,sleep_bouts*2)}" y="{367+min(4,sleep_bouts)}" width="72" height="29" rx="9" fill="#d0b992"/>')
+    if window_watches > 0:
+        for i in range(min(5,1+window_watches//4)):
+            parts.append(f'<ellipse cx="{102+i*28}" cy="{190-(i%2)*6}" rx="8" ry="4" fill="#e2d8c4" opacity="{min(.18,.035+window_watches*.006):.3f}"/>')
+        parts.append(f'<rect x="80" y="215" width="155" height="{3+min(4,window_watches//7)}" fill="#3b2d26" opacity="{min(.20,.035+window_watches*.007):.3f}"/>')
+    if corner_uses >= 2:
+        for i in range(min(4,1+corner_uses//6)):
+            parts.append(f'<rect x="{599+i*24}" y="{332-(i%2)*5}" width="22" height="11" fill="#dac99e" opacity=".88"/>')
+
     route_paths = {
         "sleeping_nook": "M 405 421 Q 274 408 154 427",
         "window": "M 405 421 Q 286 337 182 306",

@@ -123,6 +123,13 @@ def initial_state(seed: int, *, created_at: str | None = None) -> dict[str, Any]
             "shelf_count": 0,
             "path_wear": {name: 0 for name in ZONES},
             "marks": [],
+            "activity_aftermath": {
+                "sleep_nook_ticks": 0,
+                "sleep_nook_bouts": 0,
+                "window_watches": 0,
+                "wet_window_watches": 0,
+                "activity_corner_uses": 0,
+            },
         },
         "objects": objects,
     }

@@ -67,6 +67,18 @@ class Simulation:
         rng = self._rng(before)
         creature = state["creature"]
         habitat = state["habitat"]
+        aftermath = habitat.setdefault(
+            "activity_aftermath",
+            {
+                "sleep_nook_ticks": 0,
+                "sleep_nook_bouts": 0,
+                "window_watches": 0,
+                "wet_window_watches": 0,
+                "activity_corner_uses": 0,
+            },
+        )
+        for key in ("sleep_nook_ticks", "sleep_nook_bouts", "window_watches", "wet_window_watches", "activity_corner_uses"):
+            aftermath.setdefault(key, 0)
         state["tick"] = int(state["tick"]) + 1
         state["world_minutes"] = int(state["world_minutes"]) + self.minutes_per_tick
         habitat["lighting"] = lighting_for(int(state["world_minutes"]))
@@ -197,6 +209,10 @@ class Simulation:
                 creature["y"] = ZONES["sleeping_nook"]["y"]
             creature["activity"] = "sleep"
             creature["expression"] = "sleepy"
+            if creature["zone"] == "sleeping_nook":
+                aftermath["sleep_nook_ticks"] = int(aftermath["sleep_nook_ticks"]) + 1
+                if before["creature"]["activity"] != "sleep":
+                    aftermath["sleep_nook_bouts"] = int(aftermath["sleep_nook_bouts"]) + 1
             event_type = "creature_slept"
             summary = f"Moss fell asleep in the {creature['zone'].replace('_', ' ')}."
         elif action == "wake":
@@ -214,6 +230,9 @@ class Simulation:
             creature["activity"] = "look_outside"
             creature["expression"] = "content" if habitat["weather"] == "rain" else "curious"
             creature["curiosity"] = max(0.0, float(creature["curiosity"]) - 0.055)
+            aftermath["window_watches"] = int(aftermath["window_watches"]) + 1
+            if habitat["weather"] in {"rain", "mist"}:
+                aftermath["wet_window_watches"] = int(aftermath["wet_window_watches"]) + 1
             event_type = "window_watched"
             summary = f"Moss watched the {habitat['weather']} outside the window."
         else:
@@ -222,6 +241,8 @@ class Simulation:
             event_type = "creature_idled"
             summary = f"Moss lingered in the {zone.replace('_', ' ')}."
 
+        if zone == "activity_corner" and action in {"idle", "rest", "inspect", "carry", "place"}:
+            aftermath["activity_corner_uses"] = int(aftermath["activity_corner_uses"]) + 1
         creature["recent_actions"] = (recent + [action])[-8:]
         habitat["shelf_count"] = sum(1 for o in state["objects"] if o["zone"] == "collection_shelf" and o["state"] == "placed")
         details["action"] = action

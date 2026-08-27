@@ -1,0 +1,91 @@
+{
+  "baseline_frame": "snapshots/dev/20260827T050435058386Z-lived-in-staging/frame.json",
+  "fresh": {
+    "activity_aftermath": {
+      "activity_corner_uses": 0,
+      "sleep_nook_bouts": 0,
+      "sleep_nook_ticks": 0,
+      "wet_window_watches": 0,
+      "window_watches": 0
+    },
+    "intentional_anchor_objects": 0,
+    "intentional_anchor_ratio": 0.0,
+    "objects_moved": 0,
+    "persistent_mark_count": 0,
+    "placed_objects": 6,
+    "recognizable_activity_cues": 0,
+    "settled_objects_with_scuff_cue": 0,
+    "strong_route_count": 0,
+    "tick": 0,
+    "total_object_moves": 0,
+    "total_path_wear": 0,
+    "visible_route_count": 0
+  },
+  "improved_accelerated_life": {
+    "activity_aftermath": {
+      "activity_corner_uses": 67,
+      "sleep_nook_bouts": 4,
+      "sleep_nook_ticks": 14,
+      "wet_window_watches": 0,
+      "window_watches": 30
+    },
+    "intentional_anchor_objects": 6,
+    "intentional_anchor_ratio": 1.0,
+    "objects_moved": 6,
+    "persistent_mark_count": 10,
+    "placed_objects": 6,
+    "recognizable_activity_cues": 3,
+    "settled_objects_with_scuff_cue": 6,
+    "strong_route_count": 5,
+    "tick": 720,
+    "total_object_moves": 38,
+    "total_path_wear": 226,
+    "visible_route_count": 5
+  },
+  "note": "Objective activity-aftermath cues only; this does not claim to be a subjective visual-quality oracle.",
+  "previous_checkpoint": {
+    "activity_aftermath": {
+      "activity_corner_uses": 0,
+      "sleep_nook_bouts": 0,
+      "sleep_nook_ticks": 0,
+      "wet_window_watches": 0,
+      "window_watches": 0
+    },
+    "intentional_anchor_objects": 2,
+    "intentional_anchor_ratio": 0.4,
+    "objects_moved": 3,
+    "persistent_mark_count": 9,
+    "placed_objects": 5,
+    "recognizable_activity_cues": 0,
+    "settled_objects_with_scuff_cue": 1,
+    "strong_route_count": 0,
+    "tick": 240,
+    "total_object_moves": 13,
+    "total_path_wear": 73,
+    "visible_route_count": 5
+  },
+  "same_horizon_improved": {
+    "activity_aftermath": {
+      "activity_corner_uses": 17,
+      "sleep_nook_bouts": 0,
+      "sleep_nook_ticks": 0,
+      "wet_window_watches": 0,
+      "window_watches": 11
+    },
+    "intentional_anchor_objects": 2,
+    "intentional_anchor_ratio": 0.4,
+    "objects_moved": 3,
+    "persistent_mark_count": 9,
+    "placed_objects": 5,
+    "recognizable_activity_cues": 2,
+    "settled_objects_with_scuff_cue": 1,
+    "strong_route_count": 0,
+    "tick": 240,
+    "total_object_moves": 13,
+    "total_path_wear": 73,
+    "visible_route_count": 5
+  },
+  "same_horizon_legacy_frame_equal": true,
+  "schema": "terrarium.activity-aftermath-comparison.v1",
+  "seed": 1701
+}

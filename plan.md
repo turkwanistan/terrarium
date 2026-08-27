@@ -38,6 +38,16 @@ The first post-Gen17 product iteration strengthened accumulated-life legibility 
 
 Evidence: `history/2026-08-27-lived-in-staging.md`, `artifacts/visual-storytelling-comparison.json`, `artifacts/visual-storytelling-counterfactual.json`, and snapshot `20260827T050435058386Z-lived-in-staging`.
 
+## Completed normal product checkpoint — Activity aftermath
+
+- persistent history-derived counters for sleeping-nook sleep, window-watching, and activity-corner use;
+- rumpled/compressed sleeping nook from actual sleep history;
+- pane/sill traces from repeated window watching;
+- progressively rearranged papers/work marks from activity-corner use;
+- same-horizon counterfactual proves legacy frame outcome is unchanged except the new aftermath payload.
+
+Evidence: `history/2026-08-27-activity-aftermath.md`, `artifacts/activity-aftermath-comparison.json`, snapshot `20260827T054359565518Z-activity-aftermath`.
+
 ## Evaluation loop
 
 Keep the development loop: implement → deterministic accelerated run → technical/behavior evaluation → live browser inspection → identify weakness → bounded change → replay/regression.
@@ -48,16 +58,7 @@ Use project-factory / Experiment Capsule / counterfactual / Forge capabilities o
 
 ## Next product iteration
 
-Highest-value target: make **specific existing activities leave distinct physical aftermath** in the normal diorama.
-
-Examples worth testing, without automatically implementing all of them:
-
-- repeated sleep/rest gradually rumples or settles the sleeping nook;
-- repeated window-watching leaves subtle sill/condensation/weather traces;
-- repeated activity-corner use adds small paper/work marks;
-- repeated inspection/handling can make a possession look deliberately staged or frequently handled.
-
-Prefer one or two high-perceptual-value consequences over a broad new mechanics layer. The screen should help an observer infer *what Moss has been doing while they were away* without opening debug data or an activity feed.
+Highest-value target: improve **temporal readability and subtle animation of the existing physical aftermath**. History thresholds should emerge naturally rather than pop abruptly, while remaining deterministic, physical, and dashboard-free. Evaluate the actual renderer before adding any new mechanics.
 
 Automated subjective/temporal visual-quality judging remains a known weak area. Treat it honestly; do not call a static metric a warmth/smoothness oracle.
 

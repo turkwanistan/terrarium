@@ -10,13 +10,13 @@
   },
   "metrics": {
     "events": 80,
-    "frame_payload_bytes": 1686,
-    "jsonl_bytes": 103619,
+    "frame_payload_bytes": 1829,
+    "jsonl_bytes": 104132,
     "replay": {
-      "canonical_state_hash": "f7f93cccbd9d88b33b1c25869ff6f040e6470018aa6e489a610cb93cae33667c",
+      "canonical_state_hash": "d0c3a1c0b26d2b217b2e2ebf2cff85530a115ec9df8e97687d6e9dd4e58cfe5d",
       "event_count": 80,
       "ok": true,
-      "replayed_state_hash": "f7f93cccbd9d88b33b1c25869ff6f040e6470018aa6e489a610cb93cae33667c"
+      "replayed_state_hash": "d0c3a1c0b26d2b217b2e2ebf2cff85530a115ec9df8e97687d6e9dd4e58cfe5d"
     },
     "sqlite_bytes": 217088
   },
