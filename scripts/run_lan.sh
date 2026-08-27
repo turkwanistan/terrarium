@@ -2,7 +2,6 @@
 set -euo pipefail
 cd "$(dirname "$0")/.."
 
-port="${TERRARIUM_PORT:-8080}"
 ip="$(hostname -I 2>/dev/null | awk '{print $1}')"
 python_bin="$(command -v python3 || command -v python || true)"
 if [[ -z "$python_bin" ]]; then
@@ -20,42 +19,83 @@ if [[ ! -f "$data_dir/terrarium.sqlite3" && -f "$legacy_root/terrarium.sqlite3" 
 fi
 mkdir -p "$data_dir"
 
-local_url="http://127.0.0.1:${port}"
-lan_url="http://${ip}:${port}"
-
-# A running Terrarium is a valid singleton: don't try to start a second world.
-if frame="$(curl -fsS --max-time 1 "$local_url/api/frame" 2>/dev/null)"; then
-  if printf '%s' "$frame" | grep -q '"schema":"terrarium.frame.v1"'; then
-    echo "Terrarium is already running on port ${port}; reusing the existing world process."
-    echo "Local: ${local_url}/"
-    if [[ -n "$ip" ]]; then
-      echo "From another PC on this LAN: ${lan_url}/"
-      echo "Snapshot gallery: ${lan_url}/snapshots/"
-    fi
-    exit 0
+is_terrarium() {
+  local p="$1"
+  local frame
+  if frame="$(curl -fsS --max-time 0.75 "http://127.0.0.1:${p}/api/frame" 2>/dev/null)"; then
+    printf '%s' "$frame" | grep -q '"schema":"terrarium.frame.v1"'
+  else
+    return 1
   fi
-fi
+}
 
-# If anything else owns the port, fail before opening SQLite or starting the world.
-if "$python_bin" - "$port" <<'PY'
+is_occupied() {
+  "$python_bin" - "$1" <<'PY'
 import socket, sys
 port=int(sys.argv[1])
-s=socket.socket(); s.settimeout(0.5)
+s=socket.socket(); s.settimeout(0.35)
 try:
     occupied=s.connect_ex(("127.0.0.1", port)) == 0
 finally:
     s.close()
 raise SystemExit(0 if occupied else 1)
 PY
-then
-  echo "Port ${port} is already in use by a non-Terrarium process." >&2
-  echo "Identify it with:  sudo ss -ltnp 'sport = :${port}'" >&2
-  echo "Or start Terrarium on another port, e.g.: TERRARIUM_PORT=8081 ./scripts/run_lan.sh" >&2
-  exit 98
+}
+
+explicit_port="${TERRARIUM_PORT:-}"
+if [[ -n "$explicit_port" ]]; then
+  port="$explicit_port"
+  if is_terrarium "$port"; then
+    echo "Terrarium is already running on port ${port}; reusing the existing world process."
+  elif is_occupied "$port"; then
+    echo "Port ${port} is already in use by a non-Terrarium process." >&2
+    echo "Identify it with:  sudo ss -ltnp 'sport = :${port}'" >&2
+    echo "Or omit TERRARIUM_PORT and Terrarium will choose a free port automatically." >&2
+    exit 98
+  else
+    port_state="free"
+  fi
+else
+  # Prefer a stable Terrarium-specific range instead of common service ports 8080/8081.
+  port=""
+  for candidate in $(seq 8765 8799); do
+    if is_terrarium "$candidate"; then
+      port="$candidate"
+      echo "Terrarium is already running on port ${candidate}; reusing the existing world process."
+      break
+    fi
+  done
+  if [[ -z "$port" ]]; then
+    for candidate in $(seq 8765 8799); do
+      if ! is_occupied "$candidate"; then
+        port="$candidate"
+        port_state="free"
+        break
+      fi
+    done
+  fi
+  if [[ -z "$port" ]]; then
+    echo "No free Terrarium LAN port found in 8765-8799." >&2
+    echo "Set one explicitly, e.g. TERRARIUM_PORT=9000 ./scripts/run_lan.sh" >&2
+    exit 98
+  fi
+fi
+
+local_url="http://127.0.0.1:${port}"
+lan_url="http://${ip}:${port}"
+
+if is_terrarium "$port"; then
+  echo "Local: ${local_url}/"
+  if [[ -n "$ip" ]]; then
+    echo "From another PC on this LAN: ${lan_url}/"
+    echo "Snapshot gallery: ${lan_url}/snapshots/"
+  fi
+  exit 0
 fi
 
 echo "Starting Terrarium on the trusted LAN. The browser/API are read-only, but there is no authentication yet."
 echo "Runtime state: ${data_dir}"
+echo "Selected port: ${port}"
 echo "Local: ${local_url}/"
 if [[ -n "$ip" ]]; then
   echo "From another PC on this LAN: ${lan_url}/"
