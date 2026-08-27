@@ -14,6 +14,7 @@ if str(PROJECT_ROOT) not in sys.path:
 from terrarium.engine import Simulation
 from terrarium.frame import make_frame
 from terrarium.models import initial_state, lighting_for
+from terrarium.spatial import route_between, route_length, route_payload, zone_anchor
 
 SCHEMA = "terrarium.temporal-fixtures.v1"
 CREATED_AT = "2026-01-01T00:00:00Z"
@@ -25,8 +26,8 @@ def _walk_scenarios(seed: int = 1701) -> dict[str, dict[str, Any]]:
     found: dict[str, dict[str, Any]] = {}
     required = {
         "arrive_settle", "left_walk", "right_walk", "carried_walk", "idle_control",
-        "sleep_transition", "waking", "window_transition", "activity_corner_transition",
-        "inspect_object", "object_pickup", "object_placement",
+        "sleep_transition", "waking", "wake_exit", "window_transition", "activity_corner_transition",
+        "activity_corner_approach", "shelf_approach", "inspect_object", "object_pickup", "object_placement",
     }
     for _ in range(1200):
         before = state
@@ -48,6 +49,12 @@ def _walk_scenarios(seed: int = 1701) -> dict[str, dict[str, Any]]:
             found["sleep_transition"] = _scenario("sleep_transition", before, state, details, "sleeping-nook contact and curl/settle transition")
         if details.get("action") == "wake" and "waking" not in found:
             found["waking"] = _scenario("waking", before, state, details, "deliberate wake/recovery from sleep")
+        if details.get("intent_action") == "wake" and details.get("decision") is False and details.get("route") and "wake_exit" not in found:
+            found["wake_exit"] = _scenario("wake_exit", before, state, details, "wake recovery exits the supported bed through the authored open-side gate")
+        if new["activity"] == "walk" and details.get("to_zone") == "activity_corner" and "activity_corner_approach" not in found:
+            found["activity_corner_approach"] = _scenario("activity_corner_approach", before, state, details, "approach the desk from its open left side")
+        if new["activity"] == "walk" and details.get("to_zone") == "collection_shelf" and "shelf_approach" not in found:
+            found["shelf_approach"] = _scenario("shelf_approach", before, state, details, "approach the low collection tray from the open left/front side")
         if new["activity"] == "look_outside" and new["zone"] == "window" and "window_transition" not in found:
             found["window_transition"] = _scenario("window_transition", before, state, details, "window-use settle and observation transition")
         if new["zone"] == "activity_corner" and new["activity"] in {"inspect", "carry", "place"} and "activity_corner_transition" not in found:
@@ -172,13 +179,18 @@ def _continuity_probe(seed: int = 1701) -> dict[str, Any]:
     middle = deepcopy(state)
     middle["tick"] = 1
     middle["world_minutes"] += 1
-    middle["creature"].update({"zone": "activity_corner", "x": 655, "y": 372, "facing": "right", "activity": "walk"})
+    activity = zone_anchor("activity_corner")
+    window = zone_anchor("window")
+    source_point = (int(source["creature"]["x"]), int(source["creature"]["y"]))
+    first_route = route_between(source_point, "sleeping_nook", activity, "activity_corner")
+    middle["creature"].update({"zone": "activity_corner", "x": activity[0], "y": activity[1], "facing": "right", "activity": "walk"})
     followup = deepcopy(middle)
     followup["tick"] = 2
     followup["world_minutes"] += 1
-    followup["creature"].update({"zone": "window", "x": 168, "y": 277, "facing": "left", "activity": "walk"})
-    first = {"action": "walk", "intent_action": "walk", "decision": True, "from_zone": "sleeping_nook", "to_zone": "activity_corner"}
-    second = {"action": "walk", "intent_action": "walk", "decision": True, "from_zone": "activity_corner", "to_zone": "window"}
+    second_route = route_between(activity, "activity_corner", window, "window")
+    followup["creature"].update({"zone": "window", "x": window[0], "y": window[1], "facing": "left", "activity": "walk"})
+    first = {"action": "walk", "intent_action": "walk", "decision": True, "from_zone": "sleeping_nook", "to_zone": "activity_corner", "source_x": source_point[0], "source_y": source_point[1], "approach_x": activity[0], "approach_y": activity[1], "route": route_payload(source_point, first_route), "route_length": round(route_length(source_point, first_route), 6), "spatial_schema": "terrarium.spatial.v1"}
+    second = {"action": "walk", "intent_action": "walk", "decision": True, "from_zone": "activity_corner", "to_zone": "window", "source_x": activity[0], "source_y": activity[1], "approach_x": window[0], "approach_y": window[1], "route": route_payload(activity, second_route), "route_length": round(route_length(activity, second_route), 6), "spatial_schema": "terrarium.spatial.v1"}
     return {
         "id": "continuity_probe",
         "seed": seed,
@@ -202,7 +214,8 @@ def build() -> dict[str, Any]:
     hero_reel = [
         "left_walk", "right_walk", "arrive_settle", "idle_control", "window_transition",
         "rain_window", "inspect_object", "object_pickup", "carried_walk", "object_placement",
-        "sleep_transition", "waking", "activity_corner_transition", "populated_room",
+        "sleep_transition", "waking", "wake_exit", "activity_corner_approach", "activity_corner_transition",
+        "shelf_approach", "populated_room",
         "dawn_light_transition", "dusk_light_transition", "rain_control",
     ]
     return {

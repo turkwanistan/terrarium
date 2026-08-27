@@ -126,3 +126,24 @@ Evidence: `history/2026-08-27-pixel-art-overhaul-iteration2.md`, `artifacts/pixe
 ## Next product iteration
 
 Choose the next normal Terrarium target from direct UAT. If the remaining objection is visual craft, continue art refinement within the accepted pixel contract. If Moss still enters furniture, traverses implausible surfaces, or chooses inappropriate rest/sleep locations, make that a separate **spatial navigation and habitat-affordance** iteration with explicit semantic evaluation rather than disguising behavior changes as renderer polish.
+
+## Completed normal product checkpoint — Pixel-Art Overhaul, Iteration 3
+
+- introduced `terrarium.spatial.v1` with authored walkable bounds, major furniture blockers, route nodes, zone approaches, contact points, and supported sleep geometry;
+- replaced arbitrary straight interpolation with deterministic blocker-safe authoritative route polylines;
+- separated semantic object/zone targets from physical approach and contact positions;
+- made sleep always use the supported bed anchor and made wake explicitly exit through the bed gate;
+- moved shelf, desk, and window zone anchors onto believable usable floor while preserving persisted object history;
+- updated future placement slots to accessible tray/work-surface locations;
+- made the pixel renderer interpolate authoritative multi-segment routes and face route segments without increasing behavior-decision frequency;
+- fixed carried-object attachment continuity across route turns;
+- added small art affordances (window perch, collection tray, foreground lips) without replacing the Iteration-2 art direction;
+- added Terrarium-specific deterministic spatial evaluation rather than forging a general navigation auditor;
+- passed 26/26 tests, technical/behavior/spatial evaluators, exact replay, promoted behavior audit, applicable grid temporal audits, continuity, RAF, deterministic repeat, and real 800×480 inspection;
+- no SBC platform changes, Capability Forge work, or Gen18 were required.
+
+Evidence: `history/2026-08-27-pixel-art-overhaul-iteration3.md`, `artifacts/pixel-art-overhaul-iteration3.json`, snapshot `20260827T204232352544Z-pixel-art-overhaul-iteration3`.
+
+## Next product iteration
+
+Choose from direct UAT. Favor refinement of spatial readability, object/surface choreography, and remaining room-depth quirks before expanding scope. Do not add rooms, quests, personality AI, dialogue, or hardware merely because spatial coherence is now established.

@@ -2,9 +2,25 @@
   "continuity_probe": {
     "first_event": {
       "action": "walk",
+      "approach_x": 554,
+      "approach_y": 372,
       "decision": true,
       "from_zone": "sleeping_nook",
       "intent_action": "walk",
+      "route": [
+        {
+          "x": 405,
+          "y": 378
+        },
+        {
+          "x": 554,
+          "y": 372
+        }
+      ],
+      "route_length": 259.016161,
+      "source_x": 296,
+      "source_y": 392,
+      "spatial_schema": "terrarium.spatial.v1",
       "to_zone": "activity_corner"
     },
     "followup": {
@@ -20,7 +36,7 @@
         "pose": "walk",
         "target_object_id": null,
         "x": 168,
-        "y": 277,
+        "y": 316,
         "zone": "window"
       },
       "frame_version": 1,
@@ -44,12 +60,35 @@
       },
       "last_event": {
         "action": "walk",
+        "approach_x": 168,
+        "approach_y": 316,
+        "contact_x": null,
+        "contact_y": null,
         "decision": true,
         "event_id": "fixture-continuity-followup",
         "from_zone": "activity_corner",
         "intent_action": "walk",
         "object_id": null,
+        "route": [
+          {
+            "x": 405,
+            "y": 378
+          },
+          {
+            "x": 300,
+            "y": 324
+          },
+          {
+            "x": 168,
+            "y": 316
+          }
+        ],
+        "route_length": 399.43497,
+        "source_x": 554,
+        "source_y": 372,
+        "spatial_schema": "terrarium.spatial.v1",
         "summary": "Synthetic interrupted follow-up movement.",
+        "supported_action": null,
         "target_x": null,
         "target_y": null,
         "to_zone": "window",
@@ -133,6 +172,9 @@
         }
       ],
       "schema": "terrarium.frame.v1",
+      "spatial": {
+        "schema": "terrarium.spatial.v1"
+      },
       "tick": 2,
       "weather": "clear",
       "world_minutes": 422
@@ -151,7 +193,7 @@
         "name": "Moss",
         "pose": "walk",
         "target_object_id": null,
-        "x": 655,
+        "x": 554,
         "y": 372,
         "zone": "activity_corner"
       },
@@ -176,12 +218,31 @@
       },
       "last_event": {
         "action": "walk",
+        "approach_x": 554,
+        "approach_y": 372,
+        "contact_x": null,
+        "contact_y": null,
         "decision": true,
         "event_id": "fixture-continuity-middle",
         "from_zone": "sleeping_nook",
         "intent_action": "walk",
         "object_id": null,
+        "route": [
+          {
+            "x": 405,
+            "y": 378
+          },
+          {
+            "x": 554,
+            "y": 372
+          }
+        ],
+        "route_length": 259.016161,
+        "source_x": 296,
+        "source_y": 392,
+        "spatial_schema": "terrarium.spatial.v1",
         "summary": "Synthetic first canonical movement.",
+        "supported_action": null,
         "target_x": null,
         "target_y": null,
         "to_zone": "activity_corner",
@@ -265,6 +326,9 @@
         }
       ],
       "schema": "terrarium.frame.v1",
+      "spatial": {
+        "schema": "terrarium.spatial.v1"
+      },
       "tick": 1,
       "weather": "clear",
       "world_minutes": 421
@@ -272,9 +336,29 @@
     "purpose": "measure renderer discontinuity when a canonical movement update interrupts an in-flight visual transition",
     "second_event": {
       "action": "walk",
+      "approach_x": 168,
+      "approach_y": 316,
       "decision": true,
       "from_zone": "activity_corner",
       "intent_action": "walk",
+      "route": [
+        {
+          "x": 405,
+          "y": 378
+        },
+        {
+          "x": 300,
+          "y": 324
+        },
+        {
+          "x": 168,
+          "y": 316
+        }
+      ],
+      "route_length": 399.43497,
+      "source_x": 554,
+      "source_y": 372,
+      "spatial_schema": "terrarium.spatial.v1",
       "to_zone": "window"
     },
     "seed": 1701,
@@ -290,8 +374,8 @@
         "name": "Moss",
         "pose": "idle",
         "target_object_id": null,
-        "x": 118,
-        "y": 372,
+        "x": 296,
+        "y": 392,
         "zone": "sleeping_nook"
       },
       "frame_version": 1,
@@ -392,6 +476,9 @@
         }
       ],
       "schema": "terrarium.frame.v1",
+      "spatial": {
+        "schema": "terrarium.spatial.v1"
+      },
       "tick": 0,
       "weather": "clear",
       "world_minutes": 420
@@ -410,7 +497,10 @@
     "object_placement",
     "sleep_transition",
     "waking",
+    "wake_exit",
+    "activity_corner_approach",
     "activity_corner_transition",
+    "shelf_approach",
     "populated_room",
     "dawn_light_transition",
     "dusk_light_transition",
@@ -430,6 +520,292 @@
     2600
   ],
   "scenarios": {
+    "activity_corner_approach": {
+      "id": "activity_corner_approach",
+      "purpose": "approach the desk from its open left side",
+      "seed": 1701,
+      "semantic_event": {
+        "action": "explore",
+        "from_zone": "open_space",
+        "object_id": null,
+        "to_zone": "activity_corner"
+      },
+      "source": {
+        "creature": {
+          "activity": "inspect",
+          "carrying": null,
+          "expression": "curious",
+          "facing": "right",
+          "id": "creature-1",
+          "intent_action": "inspect",
+          "intent_ticks_remaining": 0,
+          "name": "Moss",
+          "pose": "inspect",
+          "target_object_id": "blue_stone",
+          "x": 372,
+          "y": 375,
+          "zone": "open_space"
+        },
+        "frame_version": 1,
+        "habitat": {
+          "activity_aftermath": {
+            "activity_corner_uses": 0,
+            "sleep_nook_bouts": 0,
+            "sleep_nook_ticks": 0,
+            "wet_window_watches": 0,
+            "window_watches": 0
+          },
+          "marks": [],
+          "path_wear": {
+            "activity_corner": 0,
+            "collection_shelf": 0,
+            "open_space": 1,
+            "sleeping_nook": 0,
+            "window": 0
+          },
+          "shelf_count": 0
+        },
+        "last_event": null,
+        "lighting": "dawn",
+        "logical_height": 480,
+        "logical_width": 800,
+        "objects": [
+          {
+            "carried_by": null,
+            "id": "blue_stone",
+            "kind": "stone",
+            "name": "Blue stone",
+            "state": "placed",
+            "times_inspected": 2,
+            "times_moved": 0,
+            "x": 372,
+            "y": 333,
+            "zone": "open_space"
+          },
+          {
+            "carried_by": null,
+            "id": "amber_leaf",
+            "kind": "leaf",
+            "name": "Amber leaf",
+            "state": "placed",
+            "times_inspected": 0,
+            "times_moved": 0,
+            "x": 212,
+            "y": 263,
+            "zone": "window"
+          },
+          {
+            "carried_by": null,
+            "id": "acorn",
+            "kind": "seed",
+            "name": "Acorn",
+            "state": "placed",
+            "times_inspected": 0,
+            "times_moved": 0,
+            "x": 612,
+            "y": 360,
+            "zone": "activity_corner"
+          },
+          {
+            "carried_by": null,
+            "id": "shell",
+            "kind": "shell",
+            "name": "Tiny shell",
+            "state": "placed",
+            "times_inspected": 0,
+            "times_moved": 0,
+            "x": 460,
+            "y": 352,
+            "zone": "open_space"
+          },
+          {
+            "carried_by": null,
+            "id": "red_thread",
+            "kind": "thread",
+            "name": "Red thread",
+            "state": "placed",
+            "times_inspected": 0,
+            "times_moved": 0,
+            "x": 150,
+            "y": 392,
+            "zone": "sleeping_nook"
+          },
+          {
+            "carried_by": null,
+            "id": "glass_star",
+            "kind": "trinket",
+            "name": "Glass star",
+            "state": "placed",
+            "times_inspected": 0,
+            "times_moved": 0,
+            "x": 704,
+            "y": 338,
+            "zone": "activity_corner"
+          }
+        ],
+        "schema": "terrarium.frame.v1",
+        "spatial": {
+          "schema": "terrarium.spatial.v1"
+        },
+        "tick": 16,
+        "weather": "clear",
+        "world_minutes": 436
+      },
+      "source_tick": 16,
+      "target": {
+        "creature": {
+          "activity": "walk",
+          "carrying": null,
+          "expression": "curious",
+          "facing": "right",
+          "id": "creature-1",
+          "intent_action": "explore",
+          "intent_ticks_remaining": 1,
+          "name": "Moss",
+          "pose": "walk",
+          "target_object_id": null,
+          "x": 554,
+          "y": 372,
+          "zone": "activity_corner"
+        },
+        "frame_version": 1,
+        "habitat": {
+          "activity_aftermath": {
+            "activity_corner_uses": 0,
+            "sleep_nook_bouts": 0,
+            "sleep_nook_ticks": 0,
+            "wet_window_watches": 0,
+            "window_watches": 0
+          },
+          "marks": [],
+          "path_wear": {
+            "activity_corner": 1,
+            "collection_shelf": 0,
+            "open_space": 1,
+            "sleeping_nook": 0,
+            "window": 0
+          },
+          "shelf_count": 0
+        },
+        "last_event": {
+          "action": "explore",
+          "approach_x": 554,
+          "approach_y": 372,
+          "contact_x": null,
+          "contact_y": null,
+          "decision": true,
+          "event_id": "fixture-activity_corner_approach",
+          "from_zone": "open_space",
+          "intent_action": "explore",
+          "object_id": null,
+          "route": [
+            {
+              "x": 405,
+              "y": 378
+            },
+            {
+              "x": 554,
+              "y": 372
+            }
+          ],
+          "route_length": 182.256839,
+          "source_x": 372,
+          "source_y": 375,
+          "spatial_schema": "terrarium.spatial.v1",
+          "summary": "approach the desk from its open left side",
+          "supported_action": null,
+          "target_x": null,
+          "target_y": null,
+          "to_zone": "activity_corner",
+          "type": "fixture"
+        },
+        "lighting": "dawn",
+        "logical_height": 480,
+        "logical_width": 800,
+        "objects": [
+          {
+            "carried_by": null,
+            "id": "blue_stone",
+            "kind": "stone",
+            "name": "Blue stone",
+            "state": "placed",
+            "times_inspected": 2,
+            "times_moved": 0,
+            "x": 372,
+            "y": 333,
+            "zone": "open_space"
+          },
+          {
+            "carried_by": null,
+            "id": "amber_leaf",
+            "kind": "leaf",
+            "name": "Amber leaf",
+            "state": "placed",
+            "times_inspected": 0,
+            "times_moved": 0,
+            "x": 212,
+            "y": 263,
+            "zone": "window"
+          },
+          {
+            "carried_by": null,
+            "id": "acorn",
+            "kind": "seed",
+            "name": "Acorn",
+            "state": "placed",
+            "times_inspected": 0,
+            "times_moved": 0,
+            "x": 612,
+            "y": 360,
+            "zone": "activity_corner"
+          },
+          {
+            "carried_by": null,
+            "id": "shell",
+            "kind": "shell",
+            "name": "Tiny shell",
+            "state": "placed",
+            "times_inspected": 0,
+            "times_moved": 0,
+            "x": 460,
+            "y": 352,
+            "zone": "open_space"
+          },
+          {
+            "carried_by": null,
+            "id": "red_thread",
+            "kind": "thread",
+            "name": "Red thread",
+            "state": "placed",
+            "times_inspected": 0,
+            "times_moved": 0,
+            "x": 150,
+            "y": 392,
+            "zone": "sleeping_nook"
+          },
+          {
+            "carried_by": null,
+            "id": "glass_star",
+            "kind": "trinket",
+            "name": "Glass star",
+            "state": "placed",
+            "times_inspected": 0,
+            "times_moved": 0,
+            "x": 704,
+            "y": 338,
+            "zone": "activity_corner"
+          }
+        ],
+        "schema": "terrarium.frame.v1",
+        "spatial": {
+          "schema": "terrarium.spatial.v1"
+        },
+        "tick": 17,
+        "weather": "clear",
+        "world_minutes": 437
+      },
+      "target_tick": 17
+    },
     "activity_corner_transition": {
       "id": "activity_corner_transition",
       "purpose": "activity-corner surface interaction transition",
@@ -452,7 +828,7 @@
           "name": "Moss",
           "pose": "idle",
           "target_object_id": null,
-          "x": 655,
+          "x": 554,
           "y": 372,
           "zone": "activity_corner"
         },
@@ -554,6 +930,9 @@
           }
         ],
         "schema": "terrarium.frame.v1",
+        "spatial": {
+          "schema": "terrarium.spatial.v1"
+        },
         "tick": 20,
         "weather": "clear",
         "world_minutes": 440
@@ -571,7 +950,7 @@
           "name": "Moss",
           "pose": "carry",
           "target_object_id": "glass_star",
-          "x": 670,
+          "x": 554,
           "y": 372,
           "zone": "activity_corner"
         },
@@ -596,12 +975,22 @@
         },
         "last_event": {
           "action": "carry",
+          "approach_x": 554,
+          "approach_y": 372,
+          "contact_x": 584,
+          "contact_y": 344,
           "decision": true,
           "event_id": "fixture-activity_corner_transition",
           "from_zone": "activity_corner",
           "intent_action": "carry",
           "object_id": "glass_star",
+          "route": [],
+          "route_length": 0.0,
+          "source_x": 554,
+          "source_y": 372,
+          "spatial_schema": "terrarium.spatial.v1",
           "summary": "activity-corner surface interaction transition",
+          "supported_action": null,
           "target_x": 704,
           "target_y": 338,
           "to_zone": null,
@@ -679,12 +1068,15 @@
             "state": "carried",
             "times_inspected": 0,
             "times_moved": 0,
-            "x": 692,
+            "x": 576,
             "y": 368,
             "zone": "activity_corner"
           }
         ],
         "schema": "terrarium.frame.v1",
+        "spatial": {
+          "schema": "terrarium.spatial.v1"
+        },
         "tick": 21,
         "weather": "clear",
         "world_minutes": 441
@@ -713,8 +1105,8 @@
           "name": "Moss",
           "pose": "idle",
           "target_object_id": null,
-          "x": 118,
-          "y": 372,
+          "x": 296,
+          "y": 392,
           "zone": "sleeping_nook"
         },
         "frame_version": 1,
@@ -815,6 +1207,9 @@
           }
         ],
         "schema": "terrarium.frame.v1",
+        "spatial": {
+          "schema": "terrarium.spatial.v1"
+        },
         "tick": 2,
         "weather": "clear",
         "world_minutes": 422
@@ -833,7 +1228,7 @@
           "pose": "walk",
           "target_object_id": null,
           "x": 405,
-          "y": 294,
+          "y": 378,
           "zone": "open_space"
         },
         "frame_version": 1,
@@ -857,12 +1252,27 @@
         },
         "last_event": {
           "action": "walk",
+          "approach_x": 405,
+          "approach_y": 378,
+          "contact_x": null,
+          "contact_y": null,
           "decision": true,
           "event_id": "fixture-arrive_settle",
           "from_zone": "sleeping_nook",
           "intent_action": "walk",
           "object_id": null,
+          "route": [
+            {
+              "x": 405,
+              "y": 378
+            }
+          ],
+          "route_length": 109.895405,
+          "source_x": 296,
+          "source_y": 392,
+          "spatial_schema": "terrarium.spatial.v1",
           "summary": "full semantic movement through endpoint settling",
+          "supported_action": null,
           "target_x": null,
           "target_y": null,
           "to_zone": "open_space",
@@ -946,6 +1356,9 @@
           }
         ],
         "schema": "terrarium.frame.v1",
+        "spatial": {
+          "schema": "terrarium.spatial.v1"
+        },
         "tick": 3,
         "weather": "clear",
         "world_minutes": 423
@@ -974,8 +1387,8 @@
           "name": "Moss",
           "pose": "rest",
           "target_object_id": null,
-          "x": 406,
-          "y": 294,
+          "x": 418,
+          "y": 333,
           "zone": "open_space"
         },
         "frame_version": 1,
@@ -1010,8 +1423,8 @@
             "state": "carried",
             "times_inspected": 2,
             "times_moved": 0,
-            "x": 384,
-            "y": 290,
+            "x": 396,
+            "y": 329,
             "zone": "open_space"
           },
           {
@@ -1070,12 +1483,15 @@
             "state": "placed",
             "times_inspected": 1,
             "times_moved": 1,
-            "x": 748,
-            "y": 397,
+            "x": 638,
+            "y": 354,
             "zone": "activity_corner"
           }
         ],
         "schema": "terrarium.frame.v1",
+        "spatial": {
+          "schema": "terrarium.spatial.v1"
+        },
         "tick": 47,
         "weather": "clear",
         "world_minutes": 467
@@ -1093,8 +1509,8 @@
           "name": "Moss",
           "pose": "walk",
           "target_object_id": null,
-          "x": 682,
-          "y": 150,
+          "x": 554,
+          "y": 312,
           "zone": "collection_shelf"
         },
         "frame_version": 1,
@@ -1118,12 +1534,35 @@
         },
         "last_event": {
           "action": "explore",
+          "approach_x": 554,
+          "approach_y": 312,
+          "contact_x": null,
+          "contact_y": null,
           "decision": true,
           "event_id": "fixture-carried_walk",
           "from_zone": "open_space",
           "intent_action": "explore",
           "object_id": null,
+          "route": [
+            {
+              "x": 405,
+              "y": 378
+            },
+            {
+              "x": 554,
+              "y": 326
+            },
+            {
+              "x": 554,
+              "y": 312
+            }
+          ],
+          "route_length": 218.653334,
+          "source_x": 418,
+          "source_y": 333,
+          "spatial_schema": "terrarium.spatial.v1",
           "summary": "semantic movement while carrying",
+          "supported_action": null,
           "target_x": null,
           "target_y": null,
           "to_zone": "collection_shelf",
@@ -1141,8 +1580,8 @@
             "state": "carried",
             "times_inspected": 2,
             "times_moved": 0,
-            "x": 696,
-            "y": 128,
+            "x": 568,
+            "y": 290,
             "zone": "collection_shelf"
           },
           {
@@ -1201,12 +1640,15 @@
             "state": "placed",
             "times_inspected": 1,
             "times_moved": 1,
-            "x": 748,
-            "y": 397,
+            "x": 638,
+            "y": 354,
             "zone": "activity_corner"
           }
         ],
         "schema": "terrarium.frame.v1",
+        "spatial": {
+          "schema": "terrarium.spatial.v1"
+        },
         "tick": 48,
         "weather": "clear",
         "world_minutes": 468
@@ -1235,8 +1677,8 @@
           "name": "Moss",
           "pose": "idle",
           "target_object_id": null,
-          "x": 118,
-          "y": 372,
+          "x": 296,
+          "y": 392,
           "zone": "sleeping_nook"
         },
         "frame_version": 1,
@@ -1337,6 +1779,9 @@
           }
         ],
         "schema": "terrarium.frame.v1",
+        "spatial": {
+          "schema": "terrarium.spatial.v1"
+        },
         "tick": 0,
         "weather": "clear",
         "world_minutes": 330
@@ -1354,8 +1799,8 @@
           "name": "Moss",
           "pose": "idle",
           "target_object_id": null,
-          "x": 118,
-          "y": 372,
+          "x": 296,
+          "y": 392,
           "zone": "sleeping_nook"
         },
         "frame_version": 1,
@@ -1379,12 +1824,22 @@
         },
         "last_event": {
           "action": "environment_transition",
+          "approach_x": null,
+          "approach_y": null,
+          "contact_x": null,
+          "contact_y": null,
           "decision": false,
           "event_id": "fixture-dawn_light_transition",
           "from_zone": "sleeping_nook",
           "intent_action": "environment_transition",
           "object_id": null,
+          "route": [],
+          "route_length": null,
+          "source_x": null,
+          "source_y": null,
+          "spatial_schema": null,
           "summary": "gradual night-to-dawn environmental lighting transition",
+          "supported_action": null,
           "target_x": null,
           "target_y": null,
           "to_zone": "sleeping_nook",
@@ -1468,6 +1923,9 @@
           }
         ],
         "schema": "terrarium.frame.v1",
+        "spatial": {
+          "schema": "terrarium.spatial.v1"
+        },
         "tick": 1,
         "weather": "clear",
         "world_minutes": 390
@@ -1496,8 +1954,8 @@
           "name": "Moss",
           "pose": "idle",
           "target_object_id": null,
-          "x": 118,
-          "y": 372,
+          "x": 296,
+          "y": 392,
           "zone": "sleeping_nook"
         },
         "frame_version": 1,
@@ -1598,6 +2056,9 @@
           }
         ],
         "schema": "terrarium.frame.v1",
+        "spatial": {
+          "schema": "terrarium.spatial.v1"
+        },
         "tick": 0,
         "weather": "clear",
         "world_minutes": 1140
@@ -1615,8 +2076,8 @@
           "name": "Moss",
           "pose": "idle",
           "target_object_id": null,
-          "x": 118,
-          "y": 372,
+          "x": 296,
+          "y": 392,
           "zone": "sleeping_nook"
         },
         "frame_version": 1,
@@ -1640,12 +2101,22 @@
         },
         "last_event": {
           "action": "environment_transition",
+          "approach_x": null,
+          "approach_y": null,
+          "contact_x": null,
+          "contact_y": null,
           "decision": false,
           "event_id": "fixture-dusk_light_transition",
           "from_zone": "sleeping_nook",
           "intent_action": "environment_transition",
           "object_id": null,
+          "route": [],
+          "route_length": null,
+          "source_x": null,
+          "source_y": null,
+          "spatial_schema": null,
           "summary": "gradual dusk-to-night environmental lighting transition",
+          "supported_action": null,
           "target_x": null,
           "target_y": null,
           "to_zone": "sleeping_nook",
@@ -1729,6 +2200,9 @@
           }
         ],
         "schema": "terrarium.frame.v1",
+        "spatial": {
+          "schema": "terrarium.spatial.v1"
+        },
         "tick": 1,
         "weather": "clear",
         "world_minutes": 1200
@@ -1757,8 +2231,8 @@
           "name": "Moss",
           "pose": "idle",
           "target_object_id": null,
-          "x": 118,
-          "y": 372,
+          "x": 296,
+          "y": 392,
           "zone": "sleeping_nook"
         },
         "frame_version": 1,
@@ -1859,6 +2333,9 @@
           }
         ],
         "schema": "terrarium.frame.v1",
+        "spatial": {
+          "schema": "terrarium.spatial.v1"
+        },
         "tick": 0,
         "weather": "clear",
         "world_minutes": 420
@@ -1876,8 +2353,8 @@
           "name": "Moss",
           "pose": "idle",
           "target_object_id": null,
-          "x": 118,
-          "y": 372,
+          "x": 296,
+          "y": 392,
           "zone": "sleeping_nook"
         },
         "frame_version": 1,
@@ -1901,12 +2378,22 @@
         },
         "last_event": {
           "action": "idle",
+          "approach_x": null,
+          "approach_y": null,
+          "contact_x": null,
+          "contact_y": null,
           "decision": true,
           "event_id": "fixture-idle_control",
           "from_zone": "sleeping_nook",
           "intent_action": "idle",
           "object_id": null,
+          "route": [],
+          "route_length": null,
+          "source_x": null,
+          "source_y": null,
+          "spatial_schema": null,
           "summary": "quiet no-translation control with restrained idle motion",
+          "supported_action": null,
           "target_x": null,
           "target_y": null,
           "to_zone": null,
@@ -1990,6 +2477,9 @@
           }
         ],
         "schema": "terrarium.frame.v1",
+        "spatial": {
+          "schema": "terrarium.spatial.v1"
+        },
         "tick": 1,
         "weather": "clear",
         "world_minutes": 421
@@ -2019,7 +2509,7 @@
           "pose": "rest",
           "target_object_id": null,
           "x": 405,
-          "y": 294,
+          "y": 378,
           "zone": "open_space"
         },
         "frame_version": 1,
@@ -2120,6 +2610,9 @@
           }
         ],
         "schema": "terrarium.frame.v1",
+        "spatial": {
+          "schema": "terrarium.spatial.v1"
+        },
         "tick": 7,
         "weather": "clear",
         "world_minutes": 427
@@ -2130,15 +2623,15 @@
           "activity": "inspect",
           "carrying": null,
           "expression": "curious",
-          "facing": "left",
+          "facing": "right",
           "id": "creature-1",
           "intent_action": "inspect",
           "intent_ticks_remaining": 2,
           "name": "Moss",
           "pose": "inspect",
           "target_object_id": "blue_stone",
-          "x": 405,
-          "y": 294,
+          "x": 372,
+          "y": 375,
           "zone": "open_space"
         },
         "frame_version": 1,
@@ -2162,12 +2655,27 @@
         },
         "last_event": {
           "action": "inspect",
+          "approach_x": 372,
+          "approach_y": 375,
+          "contact_x": 372,
+          "contact_y": 333,
           "decision": true,
           "event_id": "fixture-inspect_object",
           "from_zone": "open_space",
           "intent_action": "inspect",
           "object_id": "blue_stone",
+          "route": [
+            {
+              "x": 372,
+              "y": 375
+            }
+          ],
+          "route_length": 33.136083,
+          "source_x": 405,
+          "source_y": 378,
+          "spatial_schema": "terrarium.spatial.v1",
           "summary": "targeted object inspection with face/lean/contact staging",
+          "supported_action": null,
           "target_x": 372,
           "target_y": 333,
           "to_zone": null,
@@ -2251,6 +2759,9 @@
           }
         ],
         "schema": "terrarium.frame.v1",
+        "spatial": {
+          "schema": "terrarium.spatial.v1"
+        },
         "tick": 8,
         "weather": "clear",
         "world_minutes": 428
@@ -2279,7 +2790,7 @@
           "name": "Moss",
           "pose": "idle",
           "target_object_id": null,
-          "x": 714,
+          "x": 554,
           "y": 372,
           "zone": "activity_corner"
         },
@@ -2375,12 +2886,15 @@
             "state": "placed",
             "times_inspected": 1,
             "times_moved": 1,
-            "x": 748,
-            "y": 397,
+            "x": 638,
+            "y": 354,
             "zone": "activity_corner"
           }
         ],
         "schema": "terrarium.frame.v1",
+        "spatial": {
+          "schema": "terrarium.spatial.v1"
+        },
         "tick": 32,
         "weather": "clear",
         "world_minutes": 452
@@ -2399,7 +2913,7 @@
           "pose": "walk",
           "target_object_id": null,
           "x": 168,
-          "y": 277,
+          "y": 316,
           "zone": "window"
         },
         "frame_version": 1,
@@ -2423,12 +2937,35 @@
         },
         "last_event": {
           "action": "walk",
+          "approach_x": 168,
+          "approach_y": 316,
+          "contact_x": null,
+          "contact_y": null,
           "decision": true,
           "event_id": "fixture-left_walk",
           "from_zone": "activity_corner",
           "intent_action": "walk",
           "object_id": null,
+          "route": [
+            {
+              "x": 405,
+              "y": 378
+            },
+            {
+              "x": 300,
+              "y": 324
+            },
+            {
+              "x": 168,
+              "y": 316
+            }
+          ],
+          "route_length": 399.43497,
+          "source_x": 554,
+          "source_y": 372,
+          "spatial_schema": "terrarium.spatial.v1",
           "summary": "semantic leftward walk",
+          "supported_action": null,
           "target_x": null,
           "target_y": null,
           "to_zone": "window",
@@ -2506,12 +3043,15 @@
             "state": "placed",
             "times_inspected": 1,
             "times_moved": 1,
-            "x": 748,
-            "y": 397,
+            "x": 638,
+            "y": 354,
             "zone": "activity_corner"
           }
         ],
         "schema": "terrarium.frame.v1",
+        "spatial": {
+          "schema": "terrarium.spatial.v1"
+        },
         "tick": 33,
         "weather": "clear",
         "world_minutes": 453
@@ -2540,7 +3080,7 @@
           "name": "Moss",
           "pose": "idle",
           "target_object_id": null,
-          "x": 655,
+          "x": 554,
           "y": 372,
           "zone": "activity_corner"
         },
@@ -2642,6 +3182,9 @@
           }
         ],
         "schema": "terrarium.frame.v1",
+        "spatial": {
+          "schema": "terrarium.spatial.v1"
+        },
         "tick": 20,
         "weather": "clear",
         "world_minutes": 440
@@ -2659,7 +3202,7 @@
           "name": "Moss",
           "pose": "carry",
           "target_object_id": "glass_star",
-          "x": 670,
+          "x": 554,
           "y": 372,
           "zone": "activity_corner"
         },
@@ -2684,12 +3227,22 @@
         },
         "last_event": {
           "action": "carry",
+          "approach_x": 554,
+          "approach_y": 372,
+          "contact_x": 584,
+          "contact_y": 344,
           "decision": true,
           "event_id": "fixture-object_pickup",
           "from_zone": "activity_corner",
           "intent_action": "carry",
           "object_id": "glass_star",
+          "route": [],
+          "route_length": 0.0,
+          "source_x": 554,
+          "source_y": 372,
+          "spatial_schema": "terrarium.spatial.v1",
           "summary": "object reach/contact/attachment transition",
+          "supported_action": null,
           "target_x": 704,
           "target_y": 338,
           "to_zone": null,
@@ -2767,12 +3320,15 @@
             "state": "carried",
             "times_inspected": 0,
             "times_moved": 0,
-            "x": 692,
+            "x": 576,
             "y": 368,
             "zone": "activity_corner"
           }
         ],
         "schema": "terrarium.frame.v1",
+        "spatial": {
+          "schema": "terrarium.spatial.v1"
+        },
         "tick": 21,
         "weather": "clear",
         "world_minutes": 441
@@ -2801,7 +3357,7 @@
           "name": "Moss",
           "pose": "rest",
           "target_object_id": null,
-          "x": 670,
+          "x": 554,
           "y": 372,
           "zone": "activity_corner"
         },
@@ -2897,12 +3453,15 @@
             "state": "carried",
             "times_inspected": 0,
             "times_moved": 0,
-            "x": 692,
+            "x": 576,
             "y": 368,
             "zone": "activity_corner"
           }
         ],
         "schema": "terrarium.frame.v1",
+        "spatial": {
+          "schema": "terrarium.spatial.v1"
+        },
         "tick": 25,
         "weather": "clear",
         "world_minutes": 445
@@ -2920,7 +3479,7 @@
           "name": "Moss",
           "pose": "place",
           "target_object_id": "glass_star",
-          "x": 714,
+          "x": 554,
           "y": 372,
           "zone": "activity_corner"
         },
@@ -2945,14 +3504,24 @@
         },
         "last_event": {
           "action": "place",
+          "approach_x": 554,
+          "approach_y": 372,
+          "contact_x": 584,
+          "contact_y": 344,
           "decision": true,
           "event_id": "fixture-object_placement",
           "from_zone": "activity_corner",
           "intent_action": "place",
           "object_id": "glass_star",
+          "route": [],
+          "route_length": 0.0,
+          "source_x": 554,
+          "source_y": 372,
+          "spatial_schema": "terrarium.spatial.v1",
           "summary": "carried object lowers and settles into its canonical authored placement",
-          "target_x": 748,
-          "target_y": 397,
+          "supported_action": null,
+          "target_x": 638,
+          "target_y": 354,
           "to_zone": "activity_corner",
           "type": "fixture"
         },
@@ -3028,12 +3597,15 @@
             "state": "placed",
             "times_inspected": 0,
             "times_moved": 1,
-            "x": 748,
-            "y": 397,
+            "x": 638,
+            "y": 354,
             "zone": "activity_corner"
           }
         ],
         "schema": "terrarium.frame.v1",
+        "spatial": {
+          "schema": "terrarium.spatial.v1"
+        },
         "tick": 26,
         "weather": "clear",
         "world_minutes": 446
@@ -3046,8 +3618,8 @@
       "seed": 1701,
       "semantic_event": {
         "action": "lived_in_control",
-        "from_zone": "activity_corner",
-        "to_zone": "activity_corner"
+        "from_zone": "open_space",
+        "to_zone": "open_space"
       },
       "source": {
         "creature": {
@@ -3060,42 +3632,52 @@
           "intent_ticks_remaining": 1,
           "name": "Moss",
           "pose": "inspect",
-          "target_object_id": "glass_star",
-          "x": 714,
-          "y": 372,
-          "zone": "activity_corner"
+          "target_object_id": "acorn",
+          "x": 404,
+          "y": 411,
+          "zone": "open_space"
         },
         "frame_version": 1,
         "habitat": {
           "activity_aftermath": {
-            "activity_corner_uses": 13,
-            "sleep_nook_bouts": 1,
-            "sleep_nook_ticks": 5,
+            "activity_corner_uses": 11,
+            "sleep_nook_bouts": 3,
+            "sleep_nook_ticks": 35,
             "wet_window_watches": 0,
-            "window_watches": 5
+            "window_watches": 8
           },
           "marks": [
-            "worn_activity_corner_6"
+            "worn_window_6"
           ],
           "path_wear": {
-            "activity_corner": 6,
+            "activity_corner": 3,
             "collection_shelf": 4,
-            "open_space": 2,
-            "sleeping_nook": 3,
-            "window": 5
+            "open_space": 4,
+            "sleeping_nook": 0,
+            "window": 7
           },
-          "shelf_count": 0
+          "shelf_count": 1
         },
         "last_event": {
           "action": "inspect",
+          "approach_x": null,
+          "approach_y": null,
+          "contact_x": 404,
+          "contact_y": 369,
           "decision": false,
           "event_id": "fixture-populated-room",
-          "from_zone": "activity_corner",
+          "from_zone": "open_space",
           "intent_action": "inspect",
-          "object_id": "glass_star",
+          "object_id": "acorn",
+          "route": [],
+          "route_length": null,
+          "source_x": null,
+          "source_y": null,
+          "spatial_schema": null,
           "summary": "Deterministic lived-in room control.",
-          "target_x": 748,
-          "target_y": 397,
+          "supported_action": null,
+          "target_x": 404,
+          "target_y": 369,
           "to_zone": null,
           "type": "fixture"
         },
@@ -3109,11 +3691,11 @@
             "kind": "stone",
             "name": "Blue stone",
             "state": "placed",
-            "times_inspected": 4,
-            "times_moved": 1,
-            "x": 86,
-            "y": 268,
-            "zone": "window"
+            "times_inspected": 3,
+            "times_moved": 2,
+            "x": 700,
+            "y": 292,
+            "zone": "collection_shelf"
           },
           {
             "carried_by": null,
@@ -3121,7 +3703,7 @@
             "kind": "leaf",
             "name": "Amber leaf",
             "state": "placed",
-            "times_inspected": 2,
+            "times_inspected": 3,
             "times_moved": 0,
             "x": 212,
             "y": 263,
@@ -3133,11 +3715,11 @@
             "kind": "seed",
             "name": "Acorn",
             "state": "placed",
-            "times_inspected": 0,
+            "times_inspected": 2,
             "times_moved": 1,
-            "x": 252,
-            "y": 281,
-            "zone": "window"
+            "x": 404,
+            "y": 369,
+            "zone": "open_space"
           },
           {
             "carried_by": null,
@@ -3145,7 +3727,7 @@
             "kind": "shell",
             "name": "Tiny shell",
             "state": "placed",
-            "times_inspected": 1,
+            "times_inspected": 2,
             "times_moved": 0,
             "x": 460,
             "y": 352,
@@ -3157,10 +3739,10 @@
             "kind": "thread",
             "name": "Red thread",
             "state": "placed",
-            "times_inspected": 2,
-            "times_moved": 1,
-            "x": 181,
-            "y": 400,
+            "times_inspected": 1,
+            "times_moved": 0,
+            "x": 150,
+            "y": 392,
             "zone": "sleeping_nook"
           },
           {
@@ -3169,14 +3751,17 @@
             "kind": "trinket",
             "name": "Glass star",
             "state": "placed",
-            "times_inspected": 3,
+            "times_inspected": 1,
             "times_moved": 1,
-            "x": 748,
-            "y": 397,
+            "x": 638,
+            "y": 354,
             "zone": "activity_corner"
           }
         ],
         "schema": "terrarium.frame.v1",
+        "spatial": {
+          "schema": "terrarium.spatial.v1"
+        },
         "tick": 240,
         "weather": "clear",
         "world_minutes": 660
@@ -3193,42 +3778,52 @@
           "intent_ticks_remaining": 1,
           "name": "Moss",
           "pose": "inspect",
-          "target_object_id": "glass_star",
-          "x": 714,
-          "y": 372,
-          "zone": "activity_corner"
+          "target_object_id": "acorn",
+          "x": 404,
+          "y": 411,
+          "zone": "open_space"
         },
         "frame_version": 1,
         "habitat": {
           "activity_aftermath": {
-            "activity_corner_uses": 13,
-            "sleep_nook_bouts": 1,
-            "sleep_nook_ticks": 5,
+            "activity_corner_uses": 11,
+            "sleep_nook_bouts": 3,
+            "sleep_nook_ticks": 35,
             "wet_window_watches": 0,
-            "window_watches": 5
+            "window_watches": 8
           },
           "marks": [
-            "worn_activity_corner_6"
+            "worn_window_6"
           ],
           "path_wear": {
-            "activity_corner": 6,
+            "activity_corner": 3,
             "collection_shelf": 4,
-            "open_space": 2,
-            "sleeping_nook": 3,
-            "window": 5
+            "open_space": 4,
+            "sleeping_nook": 0,
+            "window": 7
           },
-          "shelf_count": 0
+          "shelf_count": 1
         },
         "last_event": {
           "action": "inspect",
+          "approach_x": null,
+          "approach_y": null,
+          "contact_x": 404,
+          "contact_y": 369,
           "decision": false,
           "event_id": "fixture-populated-room",
-          "from_zone": "activity_corner",
+          "from_zone": "open_space",
           "intent_action": "inspect",
-          "object_id": "glass_star",
+          "object_id": "acorn",
+          "route": [],
+          "route_length": null,
+          "source_x": null,
+          "source_y": null,
+          "spatial_schema": null,
           "summary": "Deterministic lived-in room control.",
-          "target_x": 748,
-          "target_y": 397,
+          "supported_action": null,
+          "target_x": 404,
+          "target_y": 369,
           "to_zone": null,
           "type": "fixture"
         },
@@ -3242,11 +3837,11 @@
             "kind": "stone",
             "name": "Blue stone",
             "state": "placed",
-            "times_inspected": 4,
-            "times_moved": 1,
-            "x": 86,
-            "y": 268,
-            "zone": "window"
+            "times_inspected": 3,
+            "times_moved": 2,
+            "x": 700,
+            "y": 292,
+            "zone": "collection_shelf"
           },
           {
             "carried_by": null,
@@ -3254,7 +3849,7 @@
             "kind": "leaf",
             "name": "Amber leaf",
             "state": "placed",
-            "times_inspected": 2,
+            "times_inspected": 3,
             "times_moved": 0,
             "x": 212,
             "y": 263,
@@ -3266,11 +3861,11 @@
             "kind": "seed",
             "name": "Acorn",
             "state": "placed",
-            "times_inspected": 0,
+            "times_inspected": 2,
             "times_moved": 1,
-            "x": 252,
-            "y": 281,
-            "zone": "window"
+            "x": 404,
+            "y": 369,
+            "zone": "open_space"
           },
           {
             "carried_by": null,
@@ -3278,7 +3873,7 @@
             "kind": "shell",
             "name": "Tiny shell",
             "state": "placed",
-            "times_inspected": 1,
+            "times_inspected": 2,
             "times_moved": 0,
             "x": 460,
             "y": 352,
@@ -3290,10 +3885,10 @@
             "kind": "thread",
             "name": "Red thread",
             "state": "placed",
-            "times_inspected": 2,
-            "times_moved": 1,
-            "x": 181,
-            "y": 400,
+            "times_inspected": 1,
+            "times_moved": 0,
+            "x": 150,
+            "y": 392,
             "zone": "sleeping_nook"
           },
           {
@@ -3302,14 +3897,17 @@
             "kind": "trinket",
             "name": "Glass star",
             "state": "placed",
-            "times_inspected": 3,
+            "times_inspected": 1,
             "times_moved": 1,
-            "x": 748,
-            "y": 397,
+            "x": 638,
+            "y": 354,
             "zone": "activity_corner"
           }
         ],
         "schema": "terrarium.frame.v1",
+        "spatial": {
+          "schema": "terrarium.spatial.v1"
+        },
         "tick": 240,
         "weather": "clear",
         "world_minutes": 660
@@ -3337,8 +3935,8 @@
           "name": "Moss",
           "pose": "idle",
           "target_object_id": null,
-          "x": 118,
-          "y": 372,
+          "x": 296,
+          "y": 392,
           "zone": "sleeping_nook"
         },
         "frame_version": 1,
@@ -3439,6 +4037,9 @@
           }
         ],
         "schema": "terrarium.frame.v1",
+        "spatial": {
+          "schema": "terrarium.spatial.v1"
+        },
         "tick": 0,
         "weather": "rain",
         "world_minutes": 420
@@ -3456,8 +4057,8 @@
           "name": "Moss",
           "pose": "idle",
           "target_object_id": null,
-          "x": 118,
-          "y": 372,
+          "x": 296,
+          "y": 392,
           "zone": "sleeping_nook"
         },
         "frame_version": 1,
@@ -3558,6 +4159,9 @@
           }
         ],
         "schema": "terrarium.frame.v1",
+        "spatial": {
+          "schema": "terrarium.spatial.v1"
+        },
         "tick": 0,
         "weather": "rain",
         "world_minutes": 420
@@ -3576,38 +4180,38 @@
       },
       "source": {
         "creature": {
-          "activity": "carry",
-          "carrying": "red_thread",
+          "activity": "idle",
+          "carrying": null,
           "expression": "content",
           "facing": "left",
           "id": "creature-1",
-          "intent_action": "carry",
+          "intent_action": "walk",
           "intent_ticks_remaining": 0,
           "name": "Moss",
-          "pose": "carry",
-          "target_object_id": "red_thread",
-          "x": 120,
-          "y": 277,
+          "pose": "idle",
+          "target_object_id": null,
+          "x": 168,
+          "y": 316,
           "zone": "window"
         },
         "frame_version": 1,
         "habitat": {
           "activity_aftermath": {
             "activity_corner_uses": 9,
-            "sleep_nook_bouts": 1,
-            "sleep_nook_ticks": 5,
+            "sleep_nook_bouts": 3,
+            "sleep_nook_ticks": 25,
             "wet_window_watches": 0,
             "window_watches": 3
           },
           "marks": [],
           "path_wear": {
             "activity_corner": 4,
-            "collection_shelf": 4,
-            "open_space": 4,
-            "sleeping_nook": 4,
+            "collection_shelf": 3,
+            "open_space": 3,
+            "sleeping_nook": 3,
             "window": 4
           },
-          "shelf_count": 1
+          "shelf_count": 2
         },
         "last_event": null,
         "lighting": "day",
@@ -3620,7 +4224,7 @@
             "kind": "stone",
             "name": "Blue stone",
             "state": "placed",
-            "times_inspected": 1,
+            "times_inspected": 0,
             "times_moved": 1,
             "x": 482,
             "y": 367,
@@ -3634,8 +4238,8 @@
             "state": "placed",
             "times_inspected": 4,
             "times_moved": 2,
-            "x": 664,
-            "y": 104,
+            "x": 660,
+            "y": 292,
             "zone": "collection_shelf"
           },
           {
@@ -3644,7 +4248,7 @@
             "kind": "seed",
             "name": "Acorn",
             "state": "placed",
-            "times_inspected": 2,
+            "times_inspected": 4,
             "times_moved": 0,
             "x": 612,
             "y": 360,
@@ -3656,23 +4260,23 @@
             "kind": "shell",
             "name": "Tiny shell",
             "state": "placed",
-            "times_inspected": 1,
+            "times_inspected": 0,
             "times_moved": 0,
             "x": 460,
             "y": 352,
             "zone": "open_space"
           },
           {
-            "carried_by": "creature-1",
+            "carried_by": null,
             "id": "red_thread",
             "kind": "thread",
             "name": "Red thread",
-            "state": "carried",
-            "times_inspected": 4,
-            "times_moved": 3,
-            "x": 98,
-            "y": 273,
-            "zone": "window"
+            "state": "placed",
+            "times_inspected": 2,
+            "times_moved": 1,
+            "x": 640,
+            "y": 294,
+            "zone": "collection_shelf"
           },
           {
             "carried_by": null,
@@ -3680,23 +4284,26 @@
             "kind": "trinket",
             "name": "Glass star",
             "state": "placed",
-            "times_inspected": 3,
-            "times_moved": 0,
-            "x": 704,
-            "y": 338,
-            "zone": "activity_corner"
+            "times_inspected": 2,
+            "times_moved": 2,
+            "x": 190,
+            "y": 278,
+            "zone": "window"
           }
         ],
         "schema": "terrarium.frame.v1",
-        "tick": 227,
+        "spatial": {
+          "schema": "terrarium.spatial.v1"
+        },
+        "tick": 192,
         "weather": "rain",
-        "world_minutes": 647
+        "world_minutes": 612
       },
-      "source_tick": 227,
+      "source_tick": 192,
       "target": {
         "creature": {
           "activity": "look_outside",
-          "carrying": "red_thread",
+          "carrying": null,
           "expression": "content",
           "facing": "left",
           "id": "creature-1",
@@ -3705,37 +4312,47 @@
           "name": "Moss",
           "pose": "look_outside",
           "target_object_id": null,
-          "x": 120,
-          "y": 277,
+          "x": 168,
+          "y": 316,
           "zone": "window"
         },
         "frame_version": 1,
         "habitat": {
           "activity_aftermath": {
             "activity_corner_uses": 9,
-            "sleep_nook_bouts": 1,
-            "sleep_nook_ticks": 5,
+            "sleep_nook_bouts": 3,
+            "sleep_nook_ticks": 25,
             "wet_window_watches": 1,
             "window_watches": 4
           },
           "marks": [],
           "path_wear": {
             "activity_corner": 4,
-            "collection_shelf": 4,
-            "open_space": 4,
-            "sleeping_nook": 4,
+            "collection_shelf": 3,
+            "open_space": 3,
+            "sleeping_nook": 3,
             "window": 4
           },
-          "shelf_count": 1
+          "shelf_count": 2
         },
         "last_event": {
           "action": "look_outside",
+          "approach_x": 168,
+          "approach_y": 316,
+          "contact_x": null,
+          "contact_y": null,
           "decision": true,
           "event_id": "fixture-rain_window",
           "from_zone": "window",
           "intent_action": "look_outside",
           "object_id": null,
+          "route": [],
+          "route_length": 0.0,
+          "source_x": 168,
+          "source_y": 316,
+          "spatial_schema": "terrarium.spatial.v1",
           "summary": "Moss calmly watches rain from the sill-side contact point",
+          "supported_action": "window_watch",
           "target_x": null,
           "target_y": null,
           "to_zone": null,
@@ -3751,7 +4368,7 @@
             "kind": "stone",
             "name": "Blue stone",
             "state": "placed",
-            "times_inspected": 1,
+            "times_inspected": 0,
             "times_moved": 1,
             "x": 482,
             "y": 367,
@@ -3765,8 +4382,8 @@
             "state": "placed",
             "times_inspected": 4,
             "times_moved": 2,
-            "x": 664,
-            "y": 104,
+            "x": 660,
+            "y": 292,
             "zone": "collection_shelf"
           },
           {
@@ -3775,7 +4392,7 @@
             "kind": "seed",
             "name": "Acorn",
             "state": "placed",
-            "times_inspected": 2,
+            "times_inspected": 4,
             "times_moved": 0,
             "x": 612,
             "y": 360,
@@ -3787,23 +4404,23 @@
             "kind": "shell",
             "name": "Tiny shell",
             "state": "placed",
-            "times_inspected": 1,
+            "times_inspected": 0,
             "times_moved": 0,
             "x": 460,
             "y": 352,
             "zone": "open_space"
           },
           {
-            "carried_by": "creature-1",
+            "carried_by": null,
             "id": "red_thread",
             "kind": "thread",
             "name": "Red thread",
-            "state": "carried",
-            "times_inspected": 4,
-            "times_moved": 3,
-            "x": 98,
-            "y": 273,
-            "zone": "window"
+            "state": "placed",
+            "times_inspected": 2,
+            "times_moved": 1,
+            "x": 640,
+            "y": 294,
+            "zone": "collection_shelf"
           },
           {
             "carried_by": null,
@@ -3811,19 +4428,22 @@
             "kind": "trinket",
             "name": "Glass star",
             "state": "placed",
-            "times_inspected": 3,
-            "times_moved": 0,
-            "x": 704,
-            "y": 338,
-            "zone": "activity_corner"
+            "times_inspected": 2,
+            "times_moved": 2,
+            "x": 190,
+            "y": 278,
+            "zone": "window"
           }
         ],
         "schema": "terrarium.frame.v1",
-        "tick": 228,
+        "spatial": {
+          "schema": "terrarium.spatial.v1"
+        },
+        "tick": 193,
         "weather": "rain",
-        "world_minutes": 648
+        "world_minutes": 613
       },
-      "target_tick": 228
+      "target_tick": 193
     },
     "right_walk": {
       "id": "right_walk",
@@ -3847,8 +4467,8 @@
           "name": "Moss",
           "pose": "idle",
           "target_object_id": null,
-          "x": 118,
-          "y": 372,
+          "x": 296,
+          "y": 392,
           "zone": "sleeping_nook"
         },
         "frame_version": 1,
@@ -3949,6 +4569,9 @@
           }
         ],
         "schema": "terrarium.frame.v1",
+        "spatial": {
+          "schema": "terrarium.spatial.v1"
+        },
         "tick": 2,
         "weather": "clear",
         "world_minutes": 422
@@ -3967,7 +4590,7 @@
           "pose": "walk",
           "target_object_id": null,
           "x": 405,
-          "y": 294,
+          "y": 378,
           "zone": "open_space"
         },
         "frame_version": 1,
@@ -3991,12 +4614,27 @@
         },
         "last_event": {
           "action": "walk",
+          "approach_x": 405,
+          "approach_y": 378,
+          "contact_x": null,
+          "contact_y": null,
           "decision": true,
           "event_id": "fixture-right_walk",
           "from_zone": "sleeping_nook",
           "intent_action": "walk",
           "object_id": null,
+          "route": [
+            {
+              "x": 405,
+              "y": 378
+            }
+          ],
+          "route_length": 109.895405,
+          "source_x": 296,
+          "source_y": 392,
+          "spatial_schema": "terrarium.spatial.v1",
           "summary": "semantic rightward walk",
+          "supported_action": null,
           "target_x": null,
           "target_y": null,
           "to_zone": "open_space",
@@ -4080,11 +4718,304 @@
           }
         ],
         "schema": "terrarium.frame.v1",
+        "spatial": {
+          "schema": "terrarium.spatial.v1"
+        },
         "tick": 3,
         "weather": "clear",
         "world_minutes": 423
       },
       "target_tick": 3
+    },
+    "shelf_approach": {
+      "id": "shelf_approach",
+      "purpose": "approach the low collection tray from the open left/front side",
+      "seed": 1701,
+      "semantic_event": {
+        "action": "explore",
+        "from_zone": "open_space",
+        "object_id": null,
+        "to_zone": "collection_shelf"
+      },
+      "source": {
+        "creature": {
+          "activity": "rest",
+          "carrying": "blue_stone",
+          "expression": "content",
+          "facing": "left",
+          "id": "creature-1",
+          "intent_action": "rest",
+          "intent_ticks_remaining": 0,
+          "name": "Moss",
+          "pose": "rest",
+          "target_object_id": null,
+          "x": 418,
+          "y": 333,
+          "zone": "open_space"
+        },
+        "frame_version": 1,
+        "habitat": {
+          "activity_aftermath": {
+            "activity_corner_uses": 6,
+            "sleep_nook_bouts": 0,
+            "sleep_nook_ticks": 0,
+            "wet_window_watches": 0,
+            "window_watches": 0
+          },
+          "marks": [],
+          "path_wear": {
+            "activity_corner": 1,
+            "collection_shelf": 0,
+            "open_space": 2,
+            "sleeping_nook": 0,
+            "window": 1
+          },
+          "shelf_count": 0
+        },
+        "last_event": null,
+        "lighting": "dawn",
+        "logical_height": 480,
+        "logical_width": 800,
+        "objects": [
+          {
+            "carried_by": "creature-1",
+            "id": "blue_stone",
+            "kind": "stone",
+            "name": "Blue stone",
+            "state": "carried",
+            "times_inspected": 2,
+            "times_moved": 0,
+            "x": 396,
+            "y": 329,
+            "zone": "open_space"
+          },
+          {
+            "carried_by": null,
+            "id": "amber_leaf",
+            "kind": "leaf",
+            "name": "Amber leaf",
+            "state": "placed",
+            "times_inspected": 0,
+            "times_moved": 0,
+            "x": 212,
+            "y": 263,
+            "zone": "window"
+          },
+          {
+            "carried_by": null,
+            "id": "acorn",
+            "kind": "seed",
+            "name": "Acorn",
+            "state": "placed",
+            "times_inspected": 0,
+            "times_moved": 0,
+            "x": 612,
+            "y": 360,
+            "zone": "activity_corner"
+          },
+          {
+            "carried_by": null,
+            "id": "shell",
+            "kind": "shell",
+            "name": "Tiny shell",
+            "state": "placed",
+            "times_inspected": 1,
+            "times_moved": 0,
+            "x": 460,
+            "y": 352,
+            "zone": "open_space"
+          },
+          {
+            "carried_by": null,
+            "id": "red_thread",
+            "kind": "thread",
+            "name": "Red thread",
+            "state": "placed",
+            "times_inspected": 0,
+            "times_moved": 0,
+            "x": 150,
+            "y": 392,
+            "zone": "sleeping_nook"
+          },
+          {
+            "carried_by": null,
+            "id": "glass_star",
+            "kind": "trinket",
+            "name": "Glass star",
+            "state": "placed",
+            "times_inspected": 1,
+            "times_moved": 1,
+            "x": 638,
+            "y": 354,
+            "zone": "activity_corner"
+          }
+        ],
+        "schema": "terrarium.frame.v1",
+        "spatial": {
+          "schema": "terrarium.spatial.v1"
+        },
+        "tick": 47,
+        "weather": "clear",
+        "world_minutes": 467
+      },
+      "source_tick": 47,
+      "target": {
+        "creature": {
+          "activity": "walk",
+          "carrying": "blue_stone",
+          "expression": "curious",
+          "facing": "right",
+          "id": "creature-1",
+          "intent_action": "explore",
+          "intent_ticks_remaining": 1,
+          "name": "Moss",
+          "pose": "walk",
+          "target_object_id": null,
+          "x": 554,
+          "y": 312,
+          "zone": "collection_shelf"
+        },
+        "frame_version": 1,
+        "habitat": {
+          "activity_aftermath": {
+            "activity_corner_uses": 6,
+            "sleep_nook_bouts": 0,
+            "sleep_nook_ticks": 0,
+            "wet_window_watches": 0,
+            "window_watches": 0
+          },
+          "marks": [],
+          "path_wear": {
+            "activity_corner": 1,
+            "collection_shelf": 1,
+            "open_space": 2,
+            "sleeping_nook": 0,
+            "window": 1
+          },
+          "shelf_count": 0
+        },
+        "last_event": {
+          "action": "explore",
+          "approach_x": 554,
+          "approach_y": 312,
+          "contact_x": null,
+          "contact_y": null,
+          "decision": true,
+          "event_id": "fixture-shelf_approach",
+          "from_zone": "open_space",
+          "intent_action": "explore",
+          "object_id": null,
+          "route": [
+            {
+              "x": 405,
+              "y": 378
+            },
+            {
+              "x": 554,
+              "y": 326
+            },
+            {
+              "x": 554,
+              "y": 312
+            }
+          ],
+          "route_length": 218.653334,
+          "source_x": 418,
+          "source_y": 333,
+          "spatial_schema": "terrarium.spatial.v1",
+          "summary": "approach the low collection tray from the open left/front side",
+          "supported_action": null,
+          "target_x": null,
+          "target_y": null,
+          "to_zone": "collection_shelf",
+          "type": "fixture"
+        },
+        "lighting": "dawn",
+        "logical_height": 480,
+        "logical_width": 800,
+        "objects": [
+          {
+            "carried_by": "creature-1",
+            "id": "blue_stone",
+            "kind": "stone",
+            "name": "Blue stone",
+            "state": "carried",
+            "times_inspected": 2,
+            "times_moved": 0,
+            "x": 568,
+            "y": 290,
+            "zone": "collection_shelf"
+          },
+          {
+            "carried_by": null,
+            "id": "amber_leaf",
+            "kind": "leaf",
+            "name": "Amber leaf",
+            "state": "placed",
+            "times_inspected": 0,
+            "times_moved": 0,
+            "x": 212,
+            "y": 263,
+            "zone": "window"
+          },
+          {
+            "carried_by": null,
+            "id": "acorn",
+            "kind": "seed",
+            "name": "Acorn",
+            "state": "placed",
+            "times_inspected": 0,
+            "times_moved": 0,
+            "x": 612,
+            "y": 360,
+            "zone": "activity_corner"
+          },
+          {
+            "carried_by": null,
+            "id": "shell",
+            "kind": "shell",
+            "name": "Tiny shell",
+            "state": "placed",
+            "times_inspected": 1,
+            "times_moved": 0,
+            "x": 460,
+            "y": 352,
+            "zone": "open_space"
+          },
+          {
+            "carried_by": null,
+            "id": "red_thread",
+            "kind": "thread",
+            "name": "Red thread",
+            "state": "placed",
+            "times_inspected": 0,
+            "times_moved": 0,
+            "x": 150,
+            "y": 392,
+            "zone": "sleeping_nook"
+          },
+          {
+            "carried_by": null,
+            "id": "glass_star",
+            "kind": "trinket",
+            "name": "Glass star",
+            "state": "placed",
+            "times_inspected": 1,
+            "times_moved": 1,
+            "x": 638,
+            "y": 354,
+            "zone": "activity_corner"
+          }
+        ],
+        "schema": "terrarium.frame.v1",
+        "spatial": {
+          "schema": "terrarium.spatial.v1"
+        },
+        "tick": 48,
+        "weather": "clear",
+        "world_minutes": 468
+      },
+      "target_tick": 48
     },
     "sleep_transition": {
       "id": "sleep_transition",
@@ -4108,8 +5039,8 @@
           "name": "Moss",
           "pose": "rest",
           "target_object_id": null,
-          "x": 178,
-          "y": 277,
+          "x": 168,
+          "y": 316,
           "zone": "window"
         },
         "frame_version": 1,
@@ -4204,12 +5135,15 @@
             "state": "placed",
             "times_inspected": 1,
             "times_moved": 1,
-            "x": 748,
-            "y": 397,
+            "x": 638,
+            "y": 354,
             "zone": "activity_corner"
           }
         ],
         "schema": "terrarium.frame.v1",
+        "spatial": {
+          "schema": "terrarium.spatial.v1"
+        },
         "tick": 72,
         "weather": "clear",
         "world_minutes": 492
@@ -4227,8 +5161,8 @@
           "name": "Moss",
           "pose": "sleep",
           "target_object_id": null,
-          "x": 118,
-          "y": 372,
+          "x": 222,
+          "y": 394,
           "zone": "sleeping_nook"
         },
         "frame_version": 1,
@@ -4252,12 +5186,39 @@
         },
         "last_event": {
           "action": "sleep",
+          "approach_x": 222,
+          "approach_y": 394,
+          "contact_x": null,
+          "contact_y": null,
           "decision": true,
           "event_id": "fixture-sleep_transition",
           "from_zone": "window",
           "intent_action": "sleep",
           "object_id": null,
+          "route": [
+            {
+              "x": 300,
+              "y": 324
+            },
+            {
+              "x": 405,
+              "y": 378
+            },
+            {
+              "x": 296,
+              "y": 392
+            },
+            {
+              "x": 222,
+              "y": 394
+            }
+          ],
+          "route_length": 434.236641,
+          "source_x": 168,
+          "source_y": 316,
+          "spatial_schema": "terrarium.spatial.v1",
           "summary": "sleeping-nook contact and curl/settle transition",
+          "supported_action": "sleep",
           "target_x": null,
           "target_y": null,
           "to_zone": "sleeping_nook",
@@ -4335,42 +5296,45 @@
             "state": "placed",
             "times_inspected": 1,
             "times_moved": 1,
-            "x": 748,
-            "y": 397,
+            "x": 638,
+            "y": 354,
             "zone": "activity_corner"
           }
         ],
         "schema": "terrarium.frame.v1",
+        "spatial": {
+          "schema": "terrarium.spatial.v1"
+        },
         "tick": 73,
         "weather": "clear",
         "world_minutes": 493
       },
       "target_tick": 73
     },
-    "waking": {
-      "id": "waking",
-      "purpose": "deliberate wake/recovery from sleep",
+    "wake_exit": {
+      "id": "wake_exit",
+      "purpose": "wake recovery exits the supported bed through the authored open-side gate",
       "seed": 1701,
       "semantic_event": {
-        "action": "wake",
+        "action": "idle",
         "from_zone": "sleeping_nook",
         "object_id": null,
         "to_zone": "sleeping_nook"
       },
       "source": {
         "creature": {
-          "activity": "sleep",
+          "activity": "wake",
           "carrying": null,
-          "expression": "sleepy",
+          "expression": "content",
           "facing": "left",
           "id": "creature-1",
-          "intent_action": "sleep",
-          "intent_ticks_remaining": 0,
+          "intent_action": "wake",
+          "intent_ticks_remaining": 1,
           "name": "Moss",
-          "pose": "sleep",
+          "pose": "wake",
           "target_object_id": null,
-          "x": 118,
-          "y": 372,
+          "x": 222,
+          "y": 394,
           "zone": "sleeping_nook"
         },
         "frame_version": 1,
@@ -4465,31 +5429,34 @@
             "state": "placed",
             "times_inspected": 1,
             "times_moved": 1,
-            "x": 748,
-            "y": 397,
+            "x": 638,
+            "y": 354,
             "zone": "activity_corner"
           }
         ],
         "schema": "terrarium.frame.v1",
-        "tick": 77,
+        "spatial": {
+          "schema": "terrarium.spatial.v1"
+        },
+        "tick": 78,
         "weather": "clear",
-        "world_minutes": 497
+        "world_minutes": 498
       },
-      "source_tick": 77,
+      "source_tick": 78,
       "target": {
         "creature": {
           "activity": "idle",
           "carrying": null,
           "expression": "content",
-          "facing": "left",
+          "facing": "right",
           "id": "creature-1",
           "intent_action": "wake",
-          "intent_ticks_remaining": 1,
+          "intent_ticks_remaining": 0,
           "name": "Moss",
           "pose": "idle",
           "target_object_id": null,
-          "x": 118,
-          "y": 372,
+          "x": 296,
+          "y": 392,
           "zone": "sleeping_nook"
         },
         "frame_version": 1,
@@ -4512,13 +5479,28 @@
           "shelf_count": 0
         },
         "last_event": {
-          "action": "wake",
-          "decision": true,
-          "event_id": "fixture-waking",
+          "action": "idle",
+          "approach_x": 296,
+          "approach_y": 392,
+          "contact_x": null,
+          "contact_y": null,
+          "decision": false,
+          "event_id": "fixture-wake_exit",
           "from_zone": "sleeping_nook",
           "intent_action": "wake",
           "object_id": null,
-          "summary": "deliberate wake/recovery from sleep",
+          "route": [
+            {
+              "x": 296,
+              "y": 392
+            }
+          ],
+          "route_length": 74.027022,
+          "source_x": 222,
+          "source_y": 394,
+          "spatial_schema": "terrarium.spatial.v1",
+          "summary": "wake recovery exits the supported bed through the authored open-side gate",
+          "supported_action": "wake_exit",
           "target_x": null,
           "target_y": null,
           "to_zone": null,
@@ -4596,12 +5578,292 @@
             "state": "placed",
             "times_inspected": 1,
             "times_moved": 1,
-            "x": 748,
-            "y": 397,
+            "x": 638,
+            "y": 354,
             "zone": "activity_corner"
           }
         ],
         "schema": "terrarium.frame.v1",
+        "spatial": {
+          "schema": "terrarium.spatial.v1"
+        },
+        "tick": 79,
+        "weather": "clear",
+        "world_minutes": 499
+      },
+      "target_tick": 79
+    },
+    "waking": {
+      "id": "waking",
+      "purpose": "deliberate wake/recovery from sleep",
+      "seed": 1701,
+      "semantic_event": {
+        "action": "wake",
+        "from_zone": "sleeping_nook",
+        "object_id": null,
+        "to_zone": "sleeping_nook"
+      },
+      "source": {
+        "creature": {
+          "activity": "sleep",
+          "carrying": null,
+          "expression": "sleepy",
+          "facing": "left",
+          "id": "creature-1",
+          "intent_action": "sleep",
+          "intent_ticks_remaining": 0,
+          "name": "Moss",
+          "pose": "sleep",
+          "target_object_id": null,
+          "x": 222,
+          "y": 394,
+          "zone": "sleeping_nook"
+        },
+        "frame_version": 1,
+        "habitat": {
+          "activity_aftermath": {
+            "activity_corner_uses": 6,
+            "sleep_nook_bouts": 1,
+            "sleep_nook_ticks": 5,
+            "wet_window_watches": 0,
+            "window_watches": 2
+          },
+          "marks": [],
+          "path_wear": {
+            "activity_corner": 1,
+            "collection_shelf": 1,
+            "open_space": 2,
+            "sleeping_nook": 0,
+            "window": 2
+          },
+          "shelf_count": 0
+        },
+        "last_event": null,
+        "lighting": "day",
+        "logical_height": 480,
+        "logical_width": 800,
+        "objects": [
+          {
+            "carried_by": null,
+            "id": "blue_stone",
+            "kind": "stone",
+            "name": "Blue stone",
+            "state": "placed",
+            "times_inspected": 2,
+            "times_moved": 1,
+            "x": 86,
+            "y": 268,
+            "zone": "window"
+          },
+          {
+            "carried_by": null,
+            "id": "amber_leaf",
+            "kind": "leaf",
+            "name": "Amber leaf",
+            "state": "placed",
+            "times_inspected": 1,
+            "times_moved": 0,
+            "x": 212,
+            "y": 263,
+            "zone": "window"
+          },
+          {
+            "carried_by": null,
+            "id": "acorn",
+            "kind": "seed",
+            "name": "Acorn",
+            "state": "placed",
+            "times_inspected": 0,
+            "times_moved": 0,
+            "x": 612,
+            "y": 360,
+            "zone": "activity_corner"
+          },
+          {
+            "carried_by": null,
+            "id": "shell",
+            "kind": "shell",
+            "name": "Tiny shell",
+            "state": "placed",
+            "times_inspected": 1,
+            "times_moved": 0,
+            "x": 460,
+            "y": 352,
+            "zone": "open_space"
+          },
+          {
+            "carried_by": null,
+            "id": "red_thread",
+            "kind": "thread",
+            "name": "Red thread",
+            "state": "placed",
+            "times_inspected": 0,
+            "times_moved": 0,
+            "x": 150,
+            "y": 392,
+            "zone": "sleeping_nook"
+          },
+          {
+            "carried_by": null,
+            "id": "glass_star",
+            "kind": "trinket",
+            "name": "Glass star",
+            "state": "placed",
+            "times_inspected": 1,
+            "times_moved": 1,
+            "x": 638,
+            "y": 354,
+            "zone": "activity_corner"
+          }
+        ],
+        "schema": "terrarium.frame.v1",
+        "spatial": {
+          "schema": "terrarium.spatial.v1"
+        },
+        "tick": 77,
+        "weather": "clear",
+        "world_minutes": 497
+      },
+      "source_tick": 77,
+      "target": {
+        "creature": {
+          "activity": "wake",
+          "carrying": null,
+          "expression": "content",
+          "facing": "left",
+          "id": "creature-1",
+          "intent_action": "wake",
+          "intent_ticks_remaining": 1,
+          "name": "Moss",
+          "pose": "wake",
+          "target_object_id": null,
+          "x": 222,
+          "y": 394,
+          "zone": "sleeping_nook"
+        },
+        "frame_version": 1,
+        "habitat": {
+          "activity_aftermath": {
+            "activity_corner_uses": 6,
+            "sleep_nook_bouts": 1,
+            "sleep_nook_ticks": 5,
+            "wet_window_watches": 0,
+            "window_watches": 2
+          },
+          "marks": [],
+          "path_wear": {
+            "activity_corner": 1,
+            "collection_shelf": 1,
+            "open_space": 2,
+            "sleeping_nook": 0,
+            "window": 2
+          },
+          "shelf_count": 0
+        },
+        "last_event": {
+          "action": "wake",
+          "approach_x": null,
+          "approach_y": null,
+          "contact_x": null,
+          "contact_y": null,
+          "decision": true,
+          "event_id": "fixture-waking",
+          "from_zone": "sleeping_nook",
+          "intent_action": "wake",
+          "object_id": null,
+          "route": [],
+          "route_length": null,
+          "source_x": null,
+          "source_y": null,
+          "spatial_schema": null,
+          "summary": "deliberate wake/recovery from sleep",
+          "supported_action": null,
+          "target_x": null,
+          "target_y": null,
+          "to_zone": null,
+          "type": "fixture"
+        },
+        "lighting": "day",
+        "logical_height": 480,
+        "logical_width": 800,
+        "objects": [
+          {
+            "carried_by": null,
+            "id": "blue_stone",
+            "kind": "stone",
+            "name": "Blue stone",
+            "state": "placed",
+            "times_inspected": 2,
+            "times_moved": 1,
+            "x": 86,
+            "y": 268,
+            "zone": "window"
+          },
+          {
+            "carried_by": null,
+            "id": "amber_leaf",
+            "kind": "leaf",
+            "name": "Amber leaf",
+            "state": "placed",
+            "times_inspected": 1,
+            "times_moved": 0,
+            "x": 212,
+            "y": 263,
+            "zone": "window"
+          },
+          {
+            "carried_by": null,
+            "id": "acorn",
+            "kind": "seed",
+            "name": "Acorn",
+            "state": "placed",
+            "times_inspected": 0,
+            "times_moved": 0,
+            "x": 612,
+            "y": 360,
+            "zone": "activity_corner"
+          },
+          {
+            "carried_by": null,
+            "id": "shell",
+            "kind": "shell",
+            "name": "Tiny shell",
+            "state": "placed",
+            "times_inspected": 1,
+            "times_moved": 0,
+            "x": 460,
+            "y": 352,
+            "zone": "open_space"
+          },
+          {
+            "carried_by": null,
+            "id": "red_thread",
+            "kind": "thread",
+            "name": "Red thread",
+            "state": "placed",
+            "times_inspected": 0,
+            "times_moved": 0,
+            "x": 150,
+            "y": 392,
+            "zone": "sleeping_nook"
+          },
+          {
+            "carried_by": null,
+            "id": "glass_star",
+            "kind": "trinket",
+            "name": "Glass star",
+            "state": "placed",
+            "times_inspected": 1,
+            "times_moved": 1,
+            "x": 638,
+            "y": 354,
+            "zone": "activity_corner"
+          }
+        ],
+        "schema": "terrarium.frame.v1",
+        "spatial": {
+          "schema": "terrarium.spatial.v1"
+        },
         "tick": 78,
         "weather": "clear",
         "world_minutes": 498
@@ -4630,8 +5892,8 @@
           "name": "Moss",
           "pose": "place",
           "target_object_id": "blue_stone",
-          "x": 120,
-          "y": 277,
+          "x": 168,
+          "y": 316,
           "zone": "window"
         },
         "frame_version": 1,
@@ -4726,12 +5988,15 @@
             "state": "placed",
             "times_inspected": 1,
             "times_moved": 1,
-            "x": 748,
-            "y": 397,
+            "x": 638,
+            "y": 354,
             "zone": "activity_corner"
           }
         ],
         "schema": "terrarium.frame.v1",
+        "spatial": {
+          "schema": "terrarium.spatial.v1"
+        },
         "tick": 53,
         "weather": "clear",
         "world_minutes": 473
@@ -4749,8 +6014,8 @@
           "name": "Moss",
           "pose": "look_outside",
           "target_object_id": null,
-          "x": 120,
-          "y": 277,
+          "x": 168,
+          "y": 316,
           "zone": "window"
         },
         "frame_version": 1,
@@ -4774,12 +6039,22 @@
         },
         "last_event": {
           "action": "look_outside",
+          "approach_x": 168,
+          "approach_y": 316,
+          "contact_x": null,
+          "contact_y": null,
           "decision": true,
           "event_id": "fixture-window_transition",
           "from_zone": "window",
           "intent_action": "look_outside",
           "object_id": null,
+          "route": [],
+          "route_length": 0.0,
+          "source_x": 168,
+          "source_y": 316,
+          "spatial_schema": "terrarium.spatial.v1",
           "summary": "window-use settle and observation transition",
+          "supported_action": "window_watch",
           "target_x": null,
           "target_y": null,
           "to_zone": null,
@@ -4857,12 +6132,15 @@
             "state": "placed",
             "times_inspected": 1,
             "times_moved": 1,
-            "x": 748,
-            "y": 397,
+            "x": 638,
+            "y": 354,
             "zone": "activity_corner"
           }
         ],
         "schema": "terrarium.frame.v1",
+        "spatial": {
+          "schema": "terrarium.spatial.v1"
+        },
         "tick": 54,
         "weather": "clear",
         "world_minutes": 474

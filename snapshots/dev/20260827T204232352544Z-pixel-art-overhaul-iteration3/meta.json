@@ -1,0 +1,40 @@
+{
+  "art_surface": {
+    "height": 240,
+    "integer_scale": 2,
+    "smoothing": false,
+    "width": 400
+  },
+  "captured_at": "2026-08-27T20:42:32.353275Z",
+  "frame": {
+    "logical_height": 480,
+    "logical_width": 800,
+    "path": "dev/20260827T204232352544Z-pixel-art-overhaul-iteration3/frame.json",
+    "sha256": "fe7ffd8dbefc56144c7af673a810339f136ae6f08db580cf80bc8b819f0996a9",
+    "tick": 698
+  },
+  "git": {
+    "branch": "main",
+    "dirty": true,
+    "head": "75194656f294cf494c2f14eb5a2af25700153922"
+  },
+  "note": "Pixel-Art Overhaul \u2014 Iteration 3: authoritative walkable geometry, blocker-safe deterministic routes, physical approach/contact staging, supported sleep/wake navigation, route-aware sprite acting, and authored depth affordances while preserving the 400\u00d7240 pixel-native art contract.",
+  "preview": {
+    "path": "dev/20260827T204232352544Z-pixel-art-overhaul-iteration3/preview.svg",
+    "sha256": "38c4593c0220fd3ccf1a2e1b35eeb4be65c0b63ecec8d796db9d62d28a795957"
+  },
+  "schema": "terrarium.dev-snapshot.v1",
+  "snapshot_id": "20260827T204232352544Z-pixel-art-overhaul-iteration3",
+  "source": {
+    "mode": "deterministic",
+    "seed": 1701,
+    "steps": 698
+  },
+  "source_hashes": {
+    "engine": "a04fa0327b72b86c50dc7cc65d1fd1b5b9320bc2eb5c8a30fafd64661a254d15",
+    "frame_contract": "c3625d36eb58f702591d961589cd248fc6b34e0918c8f27ded7f75d9bc4a9805",
+    "renderer_css": "3a24319be5a3e0c963b8e721b637f35aedfdc24b8bef8e779ae934dd09fd62d1",
+    "renderer_js": "96bd0eb952cf40b8b5099b1b7ab47ca376bc46339c01ebd0556ed440f1f8115d"
+  },
+  "view_url": "/?snapshot=/snapshots/dev/20260827T204232352544Z-pixel-art-overhaul-iteration3/frame.json"
+}

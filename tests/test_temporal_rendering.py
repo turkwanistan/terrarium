@@ -25,15 +25,15 @@ def test_temporal_fixture_pack_is_deterministic_and_800x480():
     assert first == second
     assert set(first["scenarios"]) == {
         "arrive_settle", "left_walk", "right_walk", "carried_walk", "idle_control",
-        "sleep_transition", "waking", "window_transition", "activity_corner_transition",
-        "inspect_object", "object_pickup", "object_placement", "rain_window",
+        "sleep_transition", "waking", "wake_exit", "window_transition", "activity_corner_transition",
+        "activity_corner_approach", "shelf_approach", "inspect_object", "object_pickup", "object_placement", "rain_window",
         "populated_room", "dawn_light_transition", "dusk_light_transition", "rain_control",
     }
     assert first["hero_reel"] == [
         "left_walk", "right_walk", "arrive_settle", "idle_control", "window_transition",
         "rain_window", "inspect_object", "object_pickup", "carried_walk", "object_placement",
-        "sleep_transition", "waking", "activity_corner_transition", "populated_room",
-        "dawn_light_transition", "dusk_light_transition", "rain_control",
+        "sleep_transition", "waking", "wake_exit", "activity_corner_approach", "activity_corner_transition",
+        "shelf_approach", "populated_room", "dawn_light_transition", "dusk_light_transition", "rain_control",
     ]
     probe = first["continuity_probe"]
     assert probe["source"]["tick"] < probe["middle"]["tick"] < probe["followup"]["tick"]
@@ -42,11 +42,12 @@ def test_temporal_fixture_pack_is_deterministic_and_800x480():
             assert (frame["logical_width"], frame["logical_height"]) == (800, 480)
 
 
-def test_window_semantic_anchor_matches_sill_side_contact_space():
+def test_window_semantic_anchor_is_floor_side_of_window_objects():
     y = ZONES["window"]["y"]
     placement_ys = [slot_y for _, slot_y in PLACEMENT_SLOTS["window"]]
-    assert y == 277
-    assert min(placement_ys) - 20 <= y <= max(placement_ys) + 20
+    assert y == 316
+    assert max(placement_ys) < y
+    assert y - max(placement_ys) <= 50
 
 
 def test_temporal_tooling_is_development_gated_by_default():
@@ -67,6 +68,9 @@ def test_renderer_has_manual_clock_path_and_production_raf_path():
     assert "function causalActivityState(f, now)" in source
     assert "function placedObjectRenderState(o, f, now)" in source
     assert "function acceptFrame(next, now)" in source
+    assert "function authoredRoute(f,sourceX,sourceY)" in source
+    assert "function routeSample(points,progress)" in source
+    assert "route_distance" in source and "route_segment_index" in source
     assert "transitionSource" in source and "temporalContinuityProbe" in source
     assert "drawForegroundCausality(frame, now, renderState" in source
 

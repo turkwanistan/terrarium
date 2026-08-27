@@ -6,32 +6,26 @@ from copy import deepcopy
 from datetime import datetime, timezone
 from typing import Any
 
+from .spatial import ZONE_ANCHORS
+
 FRAME_WIDTH = 800
 FRAME_HEIGHT = 480
 STATE_SCHEMA_VERSION = 1
 RULES_VERSION = "terrarium-rules-v2-action-pacing"
 EVENT_VERSION = 1
 
-ZONES: dict[str, dict[str, int]] = {
-    "sleeping_nook": {"x": 118, "y": 372},
-    # Moss stands below the pane among the sill-side objects. The previous
-    # y=132 anchor put the creature inside the glass instead of at the visible
-    # window contact point shared by object slots and habitat wear.
-    "window": {"x": 168, "y": 277},
-    "open_space": {"x": 405, "y": 294},
-    "collection_shelf": {"x": 682, "y": 150},
-    "activity_corner": {"x": 655, "y": 372},
-}
+ZONES: dict[str, dict[str, int]] = {name: dict(anchor) for name, anchor in ZONE_ANCHORS.items()}
+
 
 # Authored object staging points make autonomous arrangements read as part of
 # the habitat instead of as random coordinate scatter. These are presentation-
 # meaningful world coordinates, not renderer-owned state.
 PLACEMENT_SLOTS: dict[str, list[tuple[int, int]]] = {
-    "sleeping_nook": [(88, 392), (118, 401), (151, 390), (181, 400), (214, 389), (238, 404)],
+    "sleeping_nook": [(238, 390), (248, 400), (258, 388), (266, 402), (242, 410), (270, 412)],
     "window": [(86, 268), (118, 279), (155, 266), (190, 278), (225, 267), (252, 281)],
     "open_space": [(326, 365), (365, 392), (404, 369), (443, 395), (482, 367), (505, 402)],
-    "collection_shelf": [(630, 104), (664, 104), (699, 104), (630, 155), (664, 155), (699, 155)],
-    "activity_corner": [(616, 340), (642, 336), (670, 341), (697, 337), (724, 342), (748, 397)],
+    "collection_shelf": [(620, 292), (640, 294), (660, 292), (680, 294), (700, 292), (720, 294)],
+    "activity_corner": [(606, 340), (620, 338), (634, 342), (648, 338), (612, 354), (638, 354)],
 }
 
 OBJECT_BLUEPRINTS = [

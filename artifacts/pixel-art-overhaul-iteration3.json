@@ -1,0 +1,260 @@
+{
+  "accepted": true,
+  "browser": {
+    "captured_sequence_scenarios": [
+      "arrive_settle",
+      "carried_walk",
+      "inspect_object",
+      "left_walk",
+      "object_pickup",
+      "object_placement",
+      "right_walk",
+      "shelf_approach",
+      "wake_exit",
+      "window_transition"
+    ],
+    "carry_turn_spotcheck": {
+      "625ms_relative_x": -22.0,
+      "628ms_relative_x": -21.997444,
+      "635ms_relative_x": -21.803991,
+      "result": "continuous across facing turn"
+    },
+    "continuity_jump_px": 0,
+    "deterministic_repeat": {
+      "byte_identical": true,
+      "scenario": "arrive_settle",
+      "sha256": "607ee52244330be6734cee5e3e706ede57669de70dc8b67c0ee1b6c94a561ea9"
+    },
+    "exact_2x_samples": 110,
+    "human_visual_inspection": "accepted for window stance, multi-turn traversal, bed ingress/sleep, wake exit, shelf approach, activity-corner approach, object manipulation, and carried navigation",
+    "raf_ms": {
+      "max": 16.8,
+      "min": 16.5,
+      "over_34ms": 0,
+      "over_50ms": 0,
+      "p50": 16.7,
+      "p95": 16.8
+    },
+    "sample_count": 110,
+    "sequence_count": 10
+  },
+  "checkpoint": "Pixel-Art Overhaul \u2014 Iteration 3: Spatial Coherence and Physical Acting",
+  "implementation": {
+    "authority": "host world/event model owns authored routes, approach endpoints, support anchors, and contact points; renderer only interpolates them",
+    "features": [
+      "authored floor bounds and furniture blockers",
+      "deterministic single-room waypoint routing",
+      "semantic target / physical approach / contact separation",
+      "supported sleep ingress and wake exit",
+      "window, shelf, desk, and object approach geometry",
+      "route-aware sprite facing and carried-object turn continuity",
+      "foreground lips/perch/tray for spatial readability"
+    ],
+    "rules_rng_version_preserved": "terrarium-rules-v2-action-pacing",
+    "spatial_schema": "terrarium.spatial.v1"
+  },
+  "promoted_auditors": {
+    "grid_temporal_auditor": {
+      "applicable_tasks": [
+        "arrive_settle",
+        "object_pickup",
+        "object_placement",
+        "wake_exit",
+        "window_transition",
+        "real_raf"
+      ],
+      "capability": "grid-quantized-temporal-render-auditor-r1",
+      "content_hash": "57fe2065ca3cc984241bee2da545db3bb318fd8a07ae90402a1dd6bc9993e697",
+      "critical_failures": 0,
+      "evaluator_hash": "3115517877e016d4b4867da15b3d5ef81045991d3bf890765c53dfdaa9a6782f",
+      "grid_contract_mismatches": 0,
+      "passed": 6,
+      "scope_note": "multi-turn routes use Terrarium route-aware spatial evaluation because this promoted auditor assumes one straight semantic motion vector",
+      "total": 6
+    },
+    "simulation_behavior_auditor": {
+      "action_diversity": 10,
+      "action_entropy_bits": 2.965419,
+      "capability": "simulation-behavior-auditor-r1",
+      "content_hash": "932573954fdf126bd4ec4f4d5a1f79a50b48b994bf374ed0cfa3415120dd093f",
+      "event_count": 500,
+      "object_interactions": 47,
+      "sequence_ok": true
+    }
+  },
+  "regression": {
+    "behavior_evaluator": {
+      "checks": {
+        "action_diversity": true,
+        "immediate_zone_reversals_bounded": true,
+        "movement_commitment_bounded": true,
+        "multiple_objects_changed": true,
+        "no_impossible_carry_state": true,
+        "non_sleep_repeat_run_bounded": true,
+        "object_interaction_present": true,
+        "object_manipulation_burst_bounded": true,
+        "visible_environment_accumulated": true
+      },
+      "metrics": {
+        "action_counts": {
+          "carry": 14,
+          "explore": 13,
+          "idle": 32,
+          "inspect": 20,
+          "look_outside": 14,
+          "place": 13,
+          "rest": 35,
+          "sleep": 14,
+          "wake": 7,
+          "walk": 26
+        },
+        "action_diversity": 10,
+        "action_entropy_bits": 3.171894,
+        "adjacent_object_manipulation_pairs": 5,
+        "consecutive_movement_pairs": 4,
+        "continuation_events": 312,
+        "decision_events": 188,
+        "events": 500,
+        "immediate_zone_reversals": 0,
+        "max_consecutive_movement_actions": 2,
+        "max_consecutive_object_manipulations": 2,
+        "max_repeat_run": {
+          "action": "sleep",
+          "length": 20
+        },
+        "moved_objects": 6,
+        "object_inspections": 20,
+        "object_pickups": 14,
+        "object_placements": 13,
+        "persistent_marks": 4,
+        "shelf_count": 3,
+        "timeline_action_counts": {
+          "carry": 27,
+          "explore": 13,
+          "idle": 110,
+          "inspect": 60,
+          "look_outside": 56,
+          "place": 26,
+          "rest": 105,
+          "sleep": 70,
+          "wake": 7,
+          "walk": 26
+        },
+        "timeline_action_entropy_bits": 2.965419,
+        "visible_intent_changes": 206
+      },
+      "passed": true,
+      "schema": "terrarium.behavior-evaluation.v1",
+      "seed": 1701,
+      "steps": 500
+    },
+    "exact_replay": {
+      "canonical_state_hash": "5415606c3265ea5bb0166adfcaefba77fe132a324c64d9863dd3bd8347425fdd",
+      "event_count": 698,
+      "ok": true,
+      "replayed_state_hash": "5415606c3265ea5bb0166adfcaefba77fe132a324c64d9863dd3bd8347425fdd"
+    },
+    "javascript_syntax": true,
+    "pytest": {
+      "failed_count": 0,
+      "passed": true,
+      "passed_count": 26
+    },
+    "python_3_10_grammar_guard": true,
+    "spatial_evaluator": {
+      "checks": {
+        "all_authored_zone_anchors_walkable": true,
+        "carried_multi_route_navigation_exercised": true,
+        "deterministic_execution": true,
+        "multi_segment_navigation_exercised": true,
+        "no_invalid_awake_furniture_occupancy": true,
+        "no_route_blocker_intersections": true,
+        "route_endpoints_match_authoritative_approach": true,
+        "semantic_target_separated_from_physical_approach": true,
+        "sleep_always_supported": true,
+        "spatial_schema_recorded_on_routes": true,
+        "targeted_actions_have_reachable_contact": true,
+        "window_watch_always_supported": true,
+        "zone_arrivals_use_authored_anchors": true
+      },
+      "metrics": {
+        "blocker_intersections": 0,
+        "carried_routes": 23,
+        "invalid_awake_endpoints": 0,
+        "max_route_points": 4,
+        "multi_segment_routes": 41,
+        "route_actions": {
+          "carry": 2,
+          "explore": 13,
+          "idle": 7,
+          "inspect": 5,
+          "place": 2,
+          "sleep": 7,
+          "walk": 26
+        },
+        "routed_actions": 62,
+        "sleep_decisions": 14,
+        "targeted_actions_with_contact": 47,
+        "targeted_actions_with_distinct_approach": 47,
+        "targeted_object_actions": 47,
+        "window_watch_decisions": 14
+      },
+      "passed": true,
+      "schema": "terrarium.spatial-evaluation.v1",
+      "seed": 1701,
+      "steps": 500
+    },
+    "technical_evaluator": {
+      "checks": {
+        "append_only_sqlite_enforced": true,
+        "event_chain_valid": true,
+        "jsonl_matches_event_count": true,
+        "logical_viewport_exact": true,
+        "renderer_frame_is_semantic": true,
+        "restart_preserves_state": true,
+        "snapshot_event_replay_exact": true
+      },
+      "metrics": {
+        "events": 80,
+        "frame_payload_bytes": 1902,
+        "jsonl_bytes": 96354,
+        "replay": {
+          "canonical_state_hash": "5018884cb99d81f9bc9fc7c3937267238970a17c29058771220cf0c720aca1cd",
+          "event_count": 80,
+          "ok": true,
+          "replayed_state_hash": "5018884cb99d81f9bc9fc7c3937267238970a17c29058771220cf0c720aca1cd"
+        },
+        "sqlite_bytes": 196608
+      },
+      "passed": true,
+      "schema": "terrarium.technical-evaluation.v1"
+    }
+  },
+  "sbc": {
+    "gen18_warranted": false,
+    "new_capability_forged": false,
+    "platform_changed": false,
+    "project_specific_spatial_evaluator_added": true
+  },
+  "schema": "terrarium.pixel-art-overhaul-iteration3.acceptance.v1",
+  "semantic_change": true,
+  "snapshot": {
+    "art_surface": {
+      "height": 240,
+      "integer_scale": 2,
+      "smoothing": false,
+      "width": 400
+    },
+    "frame_sha256": "fe7ffd8dbefc56144c7af673a810339f136ae6f08db580cf80bc8b819f0996a9",
+    "id": "20260827T204232352544Z-pixel-art-overhaul-iteration3",
+    "renderer_css_sha256": "3a24319be5a3e0c963b8e721b637f35aedfdc24b8bef8e779ae934dd09fd62d1",
+    "renderer_js_sha256": "96bd0eb952cf40b8b5099b1b7ab47ca376bc46339c01ebd0556ed440f1f8115d",
+    "seed": 1701,
+    "tick": 698
+  },
+  "source_policy": {
+    "canonical_state_host_owned": true,
+    "math_random": false,
+    "tracked_runtime_database": false
+  }
+}

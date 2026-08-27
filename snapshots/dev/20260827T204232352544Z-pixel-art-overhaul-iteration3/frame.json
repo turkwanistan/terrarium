@@ -1,0 +1,155 @@
+{
+  "creature": {
+    "activity": "walk",
+    "carrying": null,
+    "expression": "neutral",
+    "facing": "right",
+    "id": "creature-1",
+    "intent_action": "walk",
+    "intent_ticks_remaining": 1,
+    "name": "Moss",
+    "pose": "walk",
+    "target_object_id": null,
+    "x": 405,
+    "y": 378,
+    "zone": "open_space"
+  },
+  "frame_version": 1,
+  "habitat": {
+    "activity_aftermath": {
+      "activity_corner_uses": 30,
+      "sleep_nook_bouts": 10,
+      "sleep_nook_ticks": 100,
+      "wet_window_watches": 0,
+      "window_watches": 21
+    },
+    "marks": [
+      "worn_window_6",
+      "worn_collection_shelf_6",
+      "worn_activity_corner_6",
+      "worn_open_space_6",
+      "worn_sleeping_nook_6",
+      "worn_window_14"
+    ],
+    "path_wear": {
+      "activity_corner": 10,
+      "collection_shelf": 12,
+      "open_space": 12,
+      "sleeping_nook": 8,
+      "window": 15
+    },
+    "shelf_count": 5
+  },
+  "last_event": {
+    "action": "walk",
+    "approach_x": 405,
+    "approach_y": 378,
+    "contact_x": null,
+    "contact_y": null,
+    "decision": true,
+    "event_id": "evt_000000698",
+    "from_zone": "sleeping_nook",
+    "intent_action": "walk",
+    "object_id": null,
+    "route": [
+      {
+        "x": 405,
+        "y": 378
+      }
+    ],
+    "route_length": 109.895405,
+    "source_x": 296,
+    "source_y": 392,
+    "spatial_schema": "terrarium.spatial.v1",
+    "summary": "Moss wandered from sleeping nook to open space.",
+    "supported_action": null,
+    "target_x": null,
+    "target_y": null,
+    "to_zone": "open_space",
+    "type": "creature_moved"
+  },
+  "lighting": "dusk",
+  "logical_height": 480,
+  "logical_width": 800,
+  "objects": [
+    {
+      "carried_by": null,
+      "id": "blue_stone",
+      "kind": "stone",
+      "name": "Blue stone",
+      "state": "placed",
+      "times_inspected": 4,
+      "times_moved": 3,
+      "x": 660,
+      "y": 292,
+      "zone": "collection_shelf"
+    },
+    {
+      "carried_by": null,
+      "id": "amber_leaf",
+      "kind": "leaf",
+      "name": "Amber leaf",
+      "state": "placed",
+      "times_inspected": 5,
+      "times_moved": 2,
+      "x": 638,
+      "y": 354,
+      "zone": "activity_corner"
+    },
+    {
+      "carried_by": null,
+      "id": "acorn",
+      "kind": "seed",
+      "name": "Acorn",
+      "state": "placed",
+      "times_inspected": 8,
+      "times_moved": 4,
+      "x": 700,
+      "y": 292,
+      "zone": "collection_shelf"
+    },
+    {
+      "carried_by": null,
+      "id": "shell",
+      "kind": "shell",
+      "name": "Tiny shell",
+      "state": "placed",
+      "times_inspected": 6,
+      "times_moved": 3,
+      "x": 680,
+      "y": 294,
+      "zone": "collection_shelf"
+    },
+    {
+      "carried_by": null,
+      "id": "red_thread",
+      "kind": "thread",
+      "name": "Red thread",
+      "state": "placed",
+      "times_inspected": 1,
+      "times_moved": 2,
+      "x": 620,
+      "y": 292,
+      "zone": "collection_shelf"
+    },
+    {
+      "carried_by": null,
+      "id": "glass_star",
+      "kind": "trinket",
+      "name": "Glass star",
+      "state": "placed",
+      "times_inspected": 2,
+      "times_moved": 3,
+      "x": 640,
+      "y": 294,
+      "zone": "collection_shelf"
+    }
+  ],
+  "schema": "terrarium.frame.v1",
+  "spatial": {
+    "schema": "terrarium.spatial.v1"
+  },
+  "tick": 698,
+  "weather": "clear",
+  "world_minutes": 1118
+}

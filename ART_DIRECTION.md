@@ -157,3 +157,11 @@ A checkpoint should be rejected if the real 800×480 output feels filtered, smoo
 Pixel-Art Overhaul — Iteration 2 established a stricter authored-acting rule: meaningful actions use a small discrete pose vocabulary rather than continuous body deformation. Locomotion uses four authored contact/weight-shift keyframes with planted-foot readability and restrained ear/tail response. Inspect, pickup, carry, place, window watching, rest, sleep, and wake each have action-specific staging; renderer subposes may interpret canonical intent but never choose targets or mutate world state.
 
 Environmental craft follows the same hierarchy. Prefer recognizable top/front/recessed planes, shelf/sill/blanket lips, furniture supports, sparse material clusters, and hard contact shadows over broad primitive rectangles or surface noise. Persistent wear/aftermath may become visually richer only when authoritative frame state supports it. Human inspection remains the authority for silhouette, charm, composition, and material coherence; temporal auditors remain rejection gates for objective motion defects only.
+
+## Accepted Iteration 3 spatial/depth conventions
+
+Pixel-Art Overhaul — Iteration 3 makes physical staging part of the visual law. Illustrated furniture footprints and authoritative navigation geometry must agree: Moss stands on readable floor/contact space, never inside a cabinet/desk/wall just because a semantic zone points there. Window, shelf, activity corner, bowls/props, and the sleeping nook expose believable open-side approach positions.
+
+Routes may contain a small number of authored intermediate waypoints. Turns should happen at legible room corners without facing chatter. The renderer follows the authoritative route and may not shortcut through furniture. Sleep may overlap bedding only at the explicit supported bed anchor; wake must visibly leave the support through the bed gate before ordinary behavior resumes.
+
+Depth remains pixel-native and authored. Use low perch/tray/top/front planes and foreground lips where needed to explain usable surfaces. Occlusion should follow physical position, not a global draw-last rule. Carried-object attachment must remain visually continuous when Moss changes facing at a route corner.

@@ -1,61 +1,51 @@
 # Terrarium status
 
-Terrarium is normal product development after the accepted Generation 17 pilot. The current checkpoint is **Pixel-Art Overhaul — Iteration 2: Sprite Acting and Environmental Detail**. This is **not Generation 18**.
+Terrarium is normal product development after the accepted Generation 17 pilot. The current checkpoint is **Pixel-Art Overhaul — Iteration 3: Spatial Coherence and Physical Acting**. This is **not Generation 18**.
 
 ## Current checkpoint
 
-- history: `history/2026-08-27-pixel-art-overhaul-iteration2.md`
-- bounded evidence: `artifacts/pixel-art-overhaul-iteration2.json`
-- accepted snapshot: `20260827T192116263284Z-pixel-art-overhaul-iteration2`
+- history: `history/2026-08-27-pixel-art-overhaul-iteration3.md`
+- bounded evidence: `artifacts/pixel-art-overhaul-iteration3.json`
+- accepted snapshot: `20260827T204232352544Z-pixel-art-overhaul-iteration3`
 - deterministic seed/tick: **1701 / 698**
-- semantic frame SHA256: `7edb823cf657ff72ba96c6f6cf38fe45a547760b8bf4c5e0eb534372c6c4fa6c`
-- renderer JS SHA256: `7b03f5554d121fa8dec5481e8078547baac3f28589968a4da9570b3a0925e0e6`
+- semantic frame SHA256: `fe7ffd8dbefc56144c7af673a810339f136ae6f08db580cf80bc8b819f0996a9`
+- renderer JS SHA256: `96bd0eb952cf40b8b5099b1b7ab47ca376bc46339c01ebd0556ed440f1f8115d`
+- spatial schema: `terrarium.spatial.v1`
 
-The semantic frame is byte-identical to Iteration 1. This checkpoint changes presentation only: authoritative world state, object positions, behavior decisions, history, world clock, 3-second heartbeat, 1-world-minute heartbeat advance, ~72-real-minute day, and deterministic weather cadence are unchanged.
+## What Iteration 3 established
 
-## What Iteration 2 established
+Moss now inhabits an authored physical room rather than moving as a coordinate through illustration. Host-owned world/event authority defines walkable bounds, furniture blockers, deterministic room waypoints, approach anchors, supported sleep geometry, contact points, and the route used for each physical action. The renderer only interpolates the authoritative route.
 
-Moss is now an authored pixel sprite rather than a generic block body with procedural deformation. The renderer has explicit acting stages for idle, four-keyframe locomotion, inspect, pickup anticipation/contact/recovery, carry, place anticipation/contact/release/recovery, window watching, rest, sleep curl/settle, and wake/unfold. Ear, tail, gaze, planted feet, chest paws, and contact paws change in discrete authored poses. Animation remains renderer-only interpretation of canonical actions.
+Zone arrivals are now on usable floor: window at the sill-side floor/perch, shelf in front of the accessible collection tray, desk on its open side, and the sleeping nook at its entrance. Sleep always enters the supported bed anchor; wake holds a real wake pose then exits through the bed gate. Object inspect/pickup/place explicitly separate the semantic target, physical approach, and reachable contact point. Existing persisted object history is not silently rewritten; future placements use accessible authored slots.
 
-The room received the same craft pass: deeper window casing and sill, cloth folds, structured bed/blanket/pillow, woven rug, recessed shelf bays/lips/books/trinkets, desk top/apron/legs/drawer, bowls with rims/interiors, sparse plaster and floor material clusters, planted furniture feet, and stronger hard-edged grounding/occlusion. Persistent bedding, window, path, activity, and object-history marks still derive only from authoritative frame data.
+The renderer follows deterministic route polylines with calm turns and route-segment facing. Carried props transition continuously across turns rather than flipping sides. Small room-art changes clarify physical affordances while preserving the accepted Iteration-2 style.
 
-Lighting/weather remain finite palette-driven pixel changes. Rain is sparse and window-localized; no gradients, blur, smooth vector lighting, random camera motion, or high-resolution-then-pixelated rendering were introduced.
+## Acceptance
 
-## Pixel-art contract
-
-`ART_DIRECTION.md` remains visual authority.
-
-- semantic/reference frame: **800×480**;
-- internal art surface: **400×240**;
-- presentation: exact integer **2× nearest-neighbor**;
-- smoothing: disabled on both canvases;
-- all sampled browser frames: exact 2×2 duplication with zero scale errors;
-- human inspection of the actual 800×480 Canvas remains the aesthetic acceptance gate.
-
-## Temporal / regression acceptance
-
-- pytest: **22/22 PASS**;
-- Python 3.10 syntax guard: **PASS**;
+- pytest: **26/26 PASS**;
+- Python 3.10 grammar guard: **PASS**;
 - JavaScript syntax: **PASS**;
 - technical evaluator: **PASS**;
-- exact replay: **PASS**, canonical/replayed hash `2009ab06dc65bcf72379766a8a5345b0ee70bb6b2f7f9a8674ec08ad35036a5c`;
-- behavior evaluator seed 1701 / 500: **PASS**, **186 decisions + 314 continuation ticks**, all 6 objects moved;
-- deterministic browser reel: **17 scenarios / 187 sampled frames**, exact 2× contract in every sample;
-- walk vocabulary observed: keyframes **0, 1, 2, 3**;
-- repeated left-walk capture: byte-identical SHA256 `95a2f2c0f7bb551023ff0852302e316cb5d10403ea7b97f1489e9b0395348ddf`;
-- continuity interruption jump: **0 px**;
-- real RAF: **16.5 ms min / 16.7 ms p50 / 16.8 ms p95 / 16.8 ms max**, zero >34 ms and zero >50 ms stalls;
-- promoted `grid-quantized-temporal-render-auditor-r1`: **9/9 PASS**, zero quantization-contract mismatches;
-- real 800×480 visual inspection: **accepted**.
+- behavior evaluator seed 1701 / 500: **PASS**, **188 decisions + 312 continuations**, 10 action classes, all 6 objects moved;
+- spatial evaluator seed 1701 / 500: **PASS**, **62 routed actions**, **41 multi-segment routes**, **23 carried routes**, **47 targeted interactions**, **0 blocker intersections**, **0 invalid awake endpoints**;
+- exact replay at deterministic tick 698: **PASS**, canonical/replayed hash `5415606c3265ea5bb0166adfcaefba77fe132a324c64d9863dd3bd8347425fdd`;
+- deterministic real-browser repeat: byte-identical SHA256 `607ee52244330be6734cee5e3e706ede57669de70dc8b67c0ee1b6c94a561ea9`;
+- continuity interruption: **0 px**;
+- real RAF: **16.5 ms min / 16.7 ms p50 / 16.8 ms p95 / 16.8 ms max**, zero >34 ms / >50 ms;
+- promoted behavior auditor: sequence integrity true, 10 action classes, 47 object interactions;
+- promoted grid-aware temporal auditor: **6/6 applicable tasks PASS**, zero critical failures and zero grid mismatches;
+- human 800×480 inspection: **accepted**.
+
+The promoted straight-vector temporal auditor is deliberately not used as an oracle for multi-turn routes. Those routes are covered by Terrarium's route-aware spatial evaluator plus real-browser telemetry and inspection.
+
+## Pixel-art / pacing invariants
+
+`ART_DIRECTION.md` remains visual authority. Internal art stays **400×240**, displayed as exact **2× nearest-neighbor 800×480** with smoothing off. The heartbeat remains **3 real seconds**, world advance **1 minute/heartbeat**, full day ~**72 real minutes**, and behavior commitments continue across heartbeats. The existing behavior RNG rules version remains `terrarium-rules-v2-action-pacing`; spatial geometry is versioned separately.
 
 ## SBC conclusion
 
-Existing deterministic capture/evaluation infrastructure plus promoted `grid-quantized-temporal-render-auditor-r1` were sufficient. No new capability was forged, no SBC platform code changed, and no reusable substrate deficiency was demonstrated. **Gen18 is not warranted.**
+Existing SBC/project-factory infrastructure and promoted behavior/temporal capabilities were sufficient. Spatial correctness is product-specific and is covered inside Terrarium. No capability was forged, no SBC files were modified, and **Gen18 is not warranted**.
 
 ## Runtime / Git safety
 
-Canonical Moss state is user-owned and outside Git. Development/evaluation worlds are disposable. Only `data/.gitkeep` is tracked; runtime SQLite/event files must remain uncommitted. Static renderer changes are served directly from `display/web/*` with no-cache and do not require a ceremonial world-process restart.
-
-## Next product work
-
-Use direct UAT of Iteration 2 to choose the next normal Terrarium target. Preserve the pixel-art contract and semantic/render authority split. If remaining visible problems are spatial/behavioral (for example pathing through furniture or implausible resting locations), treat them as a separate navigation/affordance iteration rather than hiding semantic changes inside art code.
+Canonical Moss state remains user-owned and outside Git. Only `data/.gitkeep` may be tracked from runtime storage. Deployment must preserve the existing canonical runtime directory, event chain, seed, object history, and SQLite database.

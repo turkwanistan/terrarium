@@ -9,7 +9,11 @@ from datetime import datetime, timedelta, timezone
 from typing import Any
 
 from .events import make_event, state_patch
-from .models import PLACEMENT_SLOTS, ZONES, clone_state, lighting_for, weather_for
+from .models import PLACEMENT_SLOTS, RULES_VERSION, ZONES, clone_state, lighting_for, weather_for
+from .spatial import (
+    SLEEP_SUPPORT_ANCHOR, SPATIAL_SCHEMA, interaction_approach, interaction_contact, route_between,
+    route_length, route_payload, zone_anchor,
+)
 from .store import WorldStore
 
 
@@ -48,14 +52,32 @@ class Simulation:
         return [o for o in state["objects"] if o["zone"] == zone and o["state"] == "placed"]
 
     @staticmethod
-    def _interaction_x(creature: dict[str, Any], target_x: int, *, gap: int = 34) -> int:
-        """Return a bounded authoritative stance near an interaction target."""
-        current = int(creature["x"])
-        delta = int(target_x) - current
-        if abs(delta) <= gap:
-            return current
-        stance = int(target_x) - (gap if delta > 0 else -gap)
-        return max(52, min(748, stance))
+    def _route_creature(
+        creature: dict[str, Any],
+        details: dict[str, Any],
+        *,
+        destination: tuple[int, int],
+        destination_zone: str,
+    ) -> list[tuple[int, int]]:
+        """Move canonical state to an authored physical endpoint and record its route."""
+        source = (int(creature["x"]), int(creature["y"]))
+        source_zone = str(creature["zone"])
+        route = route_between(source, source_zone, destination, destination_zone)
+        details.update({
+            "spatial_schema": SPATIAL_SCHEMA,
+            "source_x": source[0], "source_y": source[1],
+            "approach_x": int(destination[0]), "approach_y": int(destination[1]),
+            "route": route_payload(source, route),
+            "route_length": round(route_length(source, route), 6),
+        })
+        prior = source
+        for current in route:
+            if current[0] != prior[0]:
+                creature["facing"] = "right" if current[0] > prior[0] else "left"
+            prior = current
+        creature["zone"] = destination_zone
+        creature["x"], creature["y"] = int(destination[0]), int(destination[1])
+        return route
 
     @staticmethod
     def _placement_position(state: dict[str, Any], obj: dict[str, Any], zone: str) -> tuple[int, int]:
@@ -131,6 +153,16 @@ class Simulation:
             if obj is not None:
                 details["target_x"] = int(obj["x"])
                 details["target_y"] = int(obj["y"])
+                contact = interaction_contact(
+                    zone=str(creature["zone"]), target_x=int(obj["x"]), target_y=int(obj["y"]),
+                    approach=(int(creature["x"]), int(creature["y"])),
+                )
+                details["contact_x"], details["contact_y"] = contact
+        if intent == "wake" and remaining == 0:
+            support = (int(SLEEP_SUPPORT_ANCHOR["x"]), int(SLEEP_SUPPORT_ANCHOR["y"]))
+            if (int(creature["x"]), int(creature["y"])) == support:
+                self._route_creature(creature, details, destination=zone_anchor("sleeping_nook"), destination_zone="sleeping_nook")
+                details["supported_action"] = "wake_exit"
         summary = {
             "sleep": "Moss remained curled up asleep.",
             "rest": "Moss stayed settled and rested quietly.",
@@ -147,7 +179,7 @@ class Simulation:
         state = clone_state(state)
         # Existing canonical worlds migrate forward through an ordinary hashed
         # state patch on their next tick; snapshots/events remain replayable.
-        state["rules_version"] = "terrarium-rules-v2-action-pacing"
+        state["rules_version"] = RULES_VERSION
         rng = self._rng(before)
         creature = state["creature"]
         creature.setdefault("focus_object_id", None)
@@ -253,11 +285,8 @@ class Simulation:
             if carrying and "collection_shelf" in options:
                 options.extend(["collection_shelf", "collection_shelf"])
             target = rng.choice(options)
-            old_x = int(creature["x"])
-            creature["zone"] = target
-            creature["x"] = int(ZONES[target]["x"])
-            creature["y"] = int(ZONES[target]["y"])
-            creature["facing"] = "right" if creature["x"] >= old_x else "left"
+            destination = zone_anchor(target)
+            self._route_creature(creature, details, destination=destination, destination_zone=target)
             creature["activity"] = "walk"
             creature["expression"] = "curious" if action == "explore" else "neutral"
             creature["curiosity"] = max(0.0, float(creature["curiosity"]) - (0.045 if action == "explore" else 0.018))
@@ -277,8 +306,11 @@ class Simulation:
         elif action == "inspect" and nearby:
             obj = rng.choice(nearby)
             target_x, target_y = int(obj["x"]), int(obj["y"])
-            creature["x"] = self._interaction_x(creature, target_x)
-            creature["facing"] = "right" if target_x >= int(creature["x"]) else "left"
+            approach = interaction_approach(zone=zone, target_x=target_x, target_y=target_y, current_x=int(creature["x"]), current_y=int(creature["y"]))
+            self._route_creature(creature, details, destination=approach, destination_zone=zone)
+            contact = interaction_contact(zone=zone, target_x=target_x, target_y=target_y, approach=approach)
+            details["contact_x"], details["contact_y"] = contact
+            creature["facing"] = "right" if contact[0] >= int(creature["x"]) else "left"
             obj["times_inspected"] = int(obj["times_inspected"]) + 1
             creature["activity"] = "inspect"
             creature["expression"] = "curious"
@@ -290,8 +322,11 @@ class Simulation:
         elif action == "carry" and nearby:
             obj = rng.choice(nearby)
             target_x, target_y = int(obj["x"]), int(obj["y"])
-            creature["x"] = self._interaction_x(creature, target_x)
-            creature["facing"] = "right" if target_x >= int(creature["x"]) else "left"
+            approach = interaction_approach(zone=zone, target_x=target_x, target_y=target_y, current_x=int(creature["x"]), current_y=int(creature["y"]))
+            self._route_creature(creature, details, destination=approach, destination_zone=zone)
+            contact = interaction_contact(zone=zone, target_x=target_x, target_y=target_y, approach=approach)
+            details["contact_x"], details["contact_y"] = contact
+            creature["facing"] = "right" if contact[0] >= int(creature["x"]) else "left"
             creature["carrying"] = obj["id"]
             creature["activity"] = "carry"
             creature["expression"] = "excited"
@@ -306,8 +341,11 @@ class Simulation:
         elif action == "place" and carrying:
             obj = next(o for o in state["objects"] if o["id"] == carrying)
             target_x, target_y = self._placement_position(state, obj, zone)
-            creature["x"] = self._interaction_x(creature, target_x)
-            creature["facing"] = "right" if target_x >= int(creature["x"]) else "left"
+            approach = interaction_approach(zone=zone, target_x=target_x, target_y=target_y, current_x=int(creature["x"]), current_y=int(creature["y"]))
+            self._route_creature(creature, details, destination=approach, destination_zone=zone)
+            contact = interaction_contact(zone=zone, target_x=target_x, target_y=target_y, approach=approach)
+            details["contact_x"], details["contact_y"] = contact
+            creature["facing"] = "right" if contact[0] >= int(creature["x"]) else "left"
             obj["state"] = "placed"
             obj["carried_by"] = None
             obj["zone"] = zone
@@ -321,23 +359,18 @@ class Simulation:
             event_type = "object_placed"
             summary = f"Moss placed the {obj['name'].lower()} in the {zone.replace('_', ' ')}."
         elif action == "sleep":
-            if zone != "sleeping_nook" and float(creature["energy"]) < 0.18:
-                old_x = int(creature["x"])
-                creature["zone"] = "sleeping_nook"
-                creature["x"] = ZONES["sleeping_nook"]["x"]
-                creature["y"] = ZONES["sleeping_nook"]["y"]
-                creature["facing"] = "right" if int(creature["x"]) >= old_x else "left"
-                details["to_zone"] = "sleeping_nook"
+            support = (int(SLEEP_SUPPORT_ANCHOR["x"]), int(SLEEP_SUPPORT_ANCHOR["y"]))
+            self._route_creature(creature, details, destination=support, destination_zone="sleeping_nook")
+            details.update({"to_zone": "sleeping_nook", "supported_action": "sleep"})
             creature["activity"] = "sleep"
             creature["expression"] = "sleepy"
-            if creature["zone"] == "sleeping_nook":
-                aftermath["sleep_nook_ticks"] = int(aftermath["sleep_nook_ticks"]) + 1
-                if before["creature"]["activity"] != "sleep":
-                    aftermath["sleep_nook_bouts"] = int(aftermath["sleep_nook_bouts"]) + 1
+            aftermath["sleep_nook_ticks"] = int(aftermath["sleep_nook_ticks"]) + 1
+            if before["creature"]["activity"] != "sleep":
+                aftermath["sleep_nook_bouts"] = int(aftermath["sleep_nook_bouts"]) + 1
             event_type = "creature_slept"
-            summary = f"Moss fell asleep in the {creature['zone'].replace('_', ' ')}."
+            summary = "Moss entered the sleeping nook and curled up on the supported bed spot."
         elif action == "wake":
-            creature["activity"] = "idle"
+            creature["activity"] = "wake"
             creature["expression"] = "content"
             event_type = "creature_woke"
             summary = "Moss woke up and looked around."
@@ -348,6 +381,9 @@ class Simulation:
             event_type = "creature_rested"
             summary = f"Moss rested for a while in the {zone.replace('_', ' ')}."
         elif action == "look_outside":
+            destination = zone_anchor("window")
+            self._route_creature(creature, details, destination=destination, destination_zone="window")
+            details["supported_action"] = "window_watch"
             creature["activity"] = "look_outside"
             creature["expression"] = "content" if habitat["weather"] == "rain" else "curious"
             creature["curiosity"] = max(0.0, float(creature["curiosity"]) - 0.055)

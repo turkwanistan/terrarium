@@ -3,6 +3,7 @@ from __future__ import annotations
 from typing import Any
 
 from .models import FRAME_HEIGHT, FRAME_WIDTH
+from .spatial import SPATIAL_SCHEMA
 
 FRAME_SCHEMA = "terrarium.frame.v1"
 
@@ -62,5 +63,16 @@ def make_frame(state: dict[str, Any], *, last_event: dict[str, Any] | None = Non
             "intent_action": (last_event.get("details") or {}).get("intent_action", (last_event.get("details") or {}).get("action")),
             "target_x": (last_event.get("details") or {}).get("target_x"),
             "target_y": (last_event.get("details") or {}).get("target_y"),
+            "contact_x": (last_event.get("details") or {}).get("contact_x"),
+            "contact_y": (last_event.get("details") or {}).get("contact_y"),
+            "spatial_schema": (last_event.get("details") or {}).get("spatial_schema"),
+            "source_x": (last_event.get("details") or {}).get("source_x"),
+            "source_y": (last_event.get("details") or {}).get("source_y"),
+            "approach_x": (last_event.get("details") or {}).get("approach_x"),
+            "approach_y": (last_event.get("details") or {}).get("approach_y"),
+            "route_length": (last_event.get("details") or {}).get("route_length"),
+            "route": [dict(point) for point in ((last_event.get("details") or {}).get("route") or [])],
+            "supported_action": (last_event.get("details") or {}).get("supported_action"),
         },
+        "spatial": {"schema": SPATIAL_SCHEMA},
     }

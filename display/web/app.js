@@ -159,7 +159,7 @@
 
   function drawPersistentHistory(f,p){
     const wear=f.habitat.path_wear||{};
-    const routes={sleeping_nook:[[201,210],[137,206],[77,214]],window:[[201,210],[143,170],[91,153]],collection_shelf:[[201,210],[273,171],[325,152]],activity_corner:[[201,210],[267,205],[325,214]]};
+    const routes={sleeping_nook:[[202,189],[174,191],[148,196]],window:[[202,189],[150,162],[84,158]],collection_shelf:[[202,189],[244,166],[277,156]],activity_corner:[[202,189],[245,185],[277,186]]};
     for(const [zone,points] of Object.entries(routes)){
       const visits=Number(wear[zone]||0); if(visits<5) continue;
       const count=Math.min(9,2+Math.floor(visits/4));
@@ -198,6 +198,9 @@
     // Sill: bright top lip, darker front face and support brackets.
     rect(26,104,113,3,p.creamShade); rect(23,107,120,6,p.walnutLight); rect(26,113,114,4,p.walnutDark);
     rect(35,116,7,6,p.walnutDark); rect(122,116,7,6,p.walnutDark); rect(37,116,3,3,p.walnutLight); rect(124,116,3,3,p.walnutLight);
+    // Low floor-side perch visually connects Moss's valid viewing stance to the sill.
+    rect(45,146,80,3,p.walnutLight); rect(42,149,86,6,p.walnut); rect(45,155,80,3,p.walnutDark);
+    rect(50,158,6,7,p.walnutDark); rect(116,158,6,7,p.walnutDark);
 
     if(f.weather==='rain'){
       const phase=Math.floor(now/150)%19;
@@ -268,6 +271,9 @@
     rect(312,94,15,9,p.walnutDark); rect(314,92,11,2,p.amber); rect(318,90,3,2,p.cream);
     rect(347,96,8,6,p.creamShade); rect(349,94,4,2,p.dustyBlue);
     rect(301,119,74,5,p.walnutDark); rect(306,119,8,6,p.walnutLight); rect(361,119,8,6,p.walnutLight);
+    // Accessible low collection tray: canonical shelf objects now stage here instead of inside wall bays.
+    rect(304,143,65,3,p.walnutLight); rect(302,146,69,8,p.walnut); rect(305,146,63,3,p.walnutDark);
+    rect(306,154,6,5,p.walnutDark); rect(361,154,6,5,p.walnutDark);
   }
   function drawActivityCorner(f,now,p){
     // Desk top: narrow light top plane over a darker apron and planted legs.
@@ -360,10 +366,31 @@
     return f.objects?.find(o=>o.id===id)||prior||null;
   }
   function actionTargetPoint(f){
+    const cx=Number(f.last_event?.contact_x),cy=Number(f.last_event?.contact_y);
+    if(Number.isFinite(cx)&&Number.isFinite(cy)) return {x:cx,y:cy,id:f.last_event?.object_id||f.creature?.target_object_id,contact:true};
     const lx=Number(f.last_event?.target_x),ly=Number(f.last_event?.target_y);
-    if(Number.isFinite(lx)&&Number.isFinite(ly)) return {x:lx,y:ly,id:f.last_event?.object_id||f.creature?.target_object_id};
-    const obj=actionTargetObject(f); return obj?{x:Number(obj.x),y:Number(obj.y),id:obj.id}:null;
+    if(Number.isFinite(lx)&&Number.isFinite(ly)) return {x:lx,y:ly,id:f.last_event?.object_id||f.creature?.target_object_id,contact:false};
+    const obj=actionTargetObject(f); return obj?{x:Number(obj.x),y:Number(obj.y),id:obj.id,contact:false}:null;
   }
+  function authoredRoute(f,sourceX,sourceY){
+    const points=[{x:Number(sourceX),y:Number(sourceY)}], authored=Array.isArray(f.last_event?.route)?f.last_event.route:[];
+    for(const item of authored){
+      const x=Number(item?.x),y=Number(item?.y); if(!Number.isFinite(x)||!Number.isFinite(y)) continue;
+      const prior=points[points.length-1]; if(Math.abs(prior.x-x)>1e-9||Math.abs(prior.y-y)>1e-9) points.push({x,y});
+    }
+    const end={x:Number(f.creature.x),y:Number(f.creature.y)},last=points[points.length-1];
+    if(Math.abs(last.x-end.x)>1e-9||Math.abs(last.y-end.y)>1e-9) points.push(end);
+    return points;
+  }
+  function routeSample(points,progress){
+    if(points.length<2) return {x:points[0].x,y:points[0].y,total:0,segment_index:0,segment_progress:1,segment_dx:0,segment_dy:0};
+    const lengths=[];let total=0;for(let i=1;i<points.length;i++){const len=Math.hypot(points[i].x-points[i-1].x,points[i].y-points[i-1].y);lengths.push(len);total+=len;}
+    if(total<=1e-9) return {x:points.at(-1).x,y:points.at(-1).y,total:0,segment_index:0,segment_progress:1,segment_dx:0,segment_dy:0};
+    let remaining=clamp01(progress)*total;
+    for(let i=0;i<lengths.length;i++){const len=lengths[i];if(remaining<=len||i===lengths.length-1){const t=len<=1e-9?1:clamp01(remaining/len),a=points[i],b=points[i+1];return{x:mix(a.x,b.x,t),y:mix(a.y,b.y,t),total,segment_index:i,segment_progress:t,segment_dx:b.x-a.x,segment_dy:b.y-a.y};}remaining-=len;}
+    const last=points.at(-1);return{x:last.x,y:last.y,total,segment_index:lengths.length-1,segment_progress:1,segment_dx:0,segment_dy:0};
+  }
+
   function phaseName(moving,raw,activityProgress){
     if(moving){ if(raw<.08)return'anticipation'; if(raw<.82)return'movement'; if(raw<.94)return'settle'; return'recovery'; }
     if(activityProgress<.18)return'anticipation'; if(activityProgress<.62)return'contact'; if(activityProgress<.88)return'settle'; return'hold';
@@ -375,28 +402,35 @@
 
   function creatureRenderState(f, now) {
     const c=f.creature,old=previous?.creature||c,sourceX=Number(transitionSource?.x??old.x),sourceY=Number(transitionSource?.y??old.y);
-    const semanticDistance=Math.hypot(Number(c.x)-sourceX,Number(c.y)-sourceY),duration=locomotionDuration(semanticDistance),raw=clamp01((now-fetchedAt)/duration);
-    const travel=semanticDistance>2?stagedTravel(raw):1;
-    const continuousX=mix(sourceX,Number(c.x),travel),continuousBaseY=mix(sourceY,Number(c.y),travel),moving=semanticDistance>2&&travel<1;
+    const semanticDistance=Math.hypot(Number(c.x)-sourceX,Number(c.y)-sourceY),route=authoredRoute(f,sourceX,sourceY),routeTotal=routeSample(route,1).total,duration=locomotionDuration(routeTotal),raw=clamp01((now-fetchedAt)/duration);
+    const travel=routeTotal>2?stagedTravel(raw):1,routeState=routeSample(route,travel),continuousX=routeState.x,continuousBaseY=routeState.y,moving=routeTotal>2&&travel<1;
     const activityProgress=actionEnvelope(now,c.activity),target=actionTargetPoint(f);
-    let renderedFacing=c.facing; if(!moving&&target&&['inspect','carry','place'].includes(c.activity)&&Math.abs(Number(target.x)-continuousX)>3) renderedFacing=Number(target.x)>=continuousX?'right':'left';
-    const direction=renderedFacing==='left'?-1:1,strideCount=Math.max(2,Math.round(semanticDistance/58)),walkPhase=travel*Math.PI*2*strideCount;
+    let renderedFacing=c.facing;
+    if(moving&&Math.abs(routeState.segment_dx)>3) renderedFacing=routeState.segment_dx>0?'right':'left';
+    else if(!moving&&target&&['inspect','carry','place'].includes(c.activity)&&Math.abs(Number(target.x)-continuousX)>3) renderedFacing=Number(target.x)>=continuousX?'right':'left';
+    const direction=renderedFacing==='left'?-1:1,strideCount=Math.max(2,Math.round(routeTotal/58)),walkPhase=travel*Math.PI*2*strideCount;
+    let carryDirection=direction,turningCarry=false;
+    if(moving&&c.carrying&&routeState.segment_index>0){
+      const priorA=route[routeState.segment_index-1],priorB=route[routeState.segment_index],priorDx=priorB.x-priorA.x;
+      const priorDirection=Math.abs(priorDx)>3?(priorDx>0?1:-1):direction;
+      if(priorDirection!==direction&&routeState.segment_progress<.20){ const blend=smoother01(routeState.segment_progress/.20);carryDirection=mix(priorDirection,direction,blend);turningCarry=true; }
+    }
     const walkFrame=moving?(Math.floor(walkPhase/(Math.PI/2))&3):0;
     const walkBob=moving?([0,1,0,1][walkFrame]):0;
     const breathStep=c.pose==='sleep'?((Math.floor(now/500)%2)?1:0):(!moving&&Math.floor(now/900)%2?1:0);
     const renderedX=snapDisplay(continuousX),renderedBaseY=snapDisplay(continuousBaseY),renderedY=renderedBaseY-(walkBob+breathStep)*SCALE;
     const pickupSource=c.carrying?previous?.objects?.find(o=>o.id===c.carrying&&o.state==='placed'):null;
-    const attachmentProgress=pickupSource?smoother01((activityProgress-.24)/.46):(c.carrying?1:0),holdX=direction*22,holdY=-4,attached=Boolean(c.carrying)&&attachmentProgress>=.96;
+    const attachmentProgress=pickupSource?smoother01((activityProgress-.24)/.46):(c.carrying?1:0),holdX=carryDirection*22,holdY=-4,attached=Boolean(c.carrying)&&attachmentProgress>=.96;
     let carriedWorldX=null,carriedWorldY=null;
     if(c.carrying){ const tx=renderedX+holdX,ty=renderedBaseY+holdY; carriedWorldX=pickupSource?mix(Number(pickupSource.x),tx,attachmentProgress):tx; carriedWorldY=pickupSource?mix(Number(pickupSource.y),ty,attachmentProgress):ty; carriedWorldX=snapDisplay(carriedWorldX); carriedWorldY=snapDisplay(carriedWorldY); }
     const causal=causalActivityState(f,now);
     return {
       requested_timestamp_ms:now,source_tick:previous?.tick??f.tick,target_tick:f.tick,semantic_x:c.x,semantic_y:c.y,source_x:sourceX,source_y:sourceY,
       rendered_x:renderedX,rendered_y:renderedY,rendered_base_y:renderedBaseY,continuous_x:Number(continuousX.toFixed(6)),continuous_base_y:Number(continuousBaseY.toFixed(6)),
-      interpolation_progress:Number(raw.toFixed(6)),interpolation_ease:Number(travel.toFixed(9)),motion_duration_ms:Number(duration.toFixed(3)),activity_progress:Number(activityProgress.toFixed(6)),motion_phase:phaseName(moving,raw,activityProgress),semantic_distance:Number(semanticDistance.toFixed(6)),moving,facing:renderedFacing,pose:c.pose,activity:c.activity,
-      carrying:attached?c.carrying:null,carrying_semantic:c.carrying,attachment_progress:Number(attachmentProgress.toFixed(6)),carried_rendered_x:carriedWorldX,carried_rendered_y:carriedWorldY,carried_relative_x:attached?holdX:null,carried_relative_y:attached?holdY:null,walk_phase:Number(walkPhase.toFixed(6)),walk_keyframe:walkFrame,
+      interpolation_progress:Number(raw.toFixed(6)),interpolation_ease:Number(travel.toFixed(9)),motion_duration_ms:Number(duration.toFixed(3)),activity_progress:Number(activityProgress.toFixed(6)),motion_phase:phaseName(moving,raw,activityProgress),semantic_distance:Number(semanticDistance.toFixed(6)),route_distance:Number(routeTotal.toFixed(6)),route_segment_index:routeState.segment_index,route_segment_progress:Number(routeState.segment_progress.toFixed(6)),route_points:route.map(point=>({x:Number(point.x.toFixed(6)),y:Number(point.y.toFixed(6))})),moving,facing:renderedFacing,pose:c.pose,activity:c.activity,
+      carrying:attached?c.carrying:null,carrying_semantic:c.carrying,attachment_progress:Number(attachmentProgress.toFixed(6)),carried_rendered_x:carriedWorldX,carried_rendered_y:carriedWorldY,carried_relative_x:attached?Number(holdX.toFixed(6)):null,carried_relative_y:attached?holdY:null,carry_turning:turningCarry,walk_phase:Number(walkPhase.toFixed(6)),walk_keyframe:walkFrame,
       causal_activity:{sleep_nook:Number(causal.sleep_nook.toFixed(6)),window:Number(causal.window.toFixed(6)),activity_corner:Number(causal.activity_corner.toFixed(6))},
-      interaction_target:target?{object_id:target.id||null,x:Number(target.x.toFixed(6)),y:Number(target.y.toFixed(6))}:null,object_placement:activePlacementState(f,now),
+      interaction_target:target?{object_id:target.id||null,x:Number(target.x.toFixed(6)),y:Number(target.y.toFixed(6)),contact:Boolean(target.contact)}:null,semantic_target:(Number.isFinite(Number(f.last_event?.target_x))&&Number.isFinite(Number(f.last_event?.target_y)))?{x:Number(f.last_event.target_x),y:Number(f.last_event.target_y),object_id:f.last_event?.object_id||null}:null,object_placement:activePlacementState(f,now),
       ambient_classes:[f.weather==='rain'?'rain':f.weather==='mist'?'mist':null,'pixel-motes',c.pose==='sleep'?'breathing':moving?'walk-cycle':'quiet-breathing',causal.sleep_nook>0?'bedding-contact':null,causal.window>0?'window-contact':null,causal.activity_corner>0?'work-surface-contact':null].filter(Boolean),
       art_grid:{width:ART_W,height:ART_H,scale:SCALE,x:px(renderedX),y:px(renderedBaseY)},
     };
@@ -418,7 +452,7 @@
     const walkFrame=rs.walk_keyframe||0;
     const target=actionTargetPoint(f);
     const localTargetX=target?clamp((px(target.x)-x)*flip,10,19):16;
-    const localTargetY=target?clamp(px(target.y)-baseY,-8,10):4;
+    const localTargetY=target?clamp(px(target.y)-baseY,-14,10):4;
     const idleFrame=Math.floor(now/900)&1;
     const inspectStage=authoredStage(ap,[.20,.46,.76]);
     const pickupStage=authoredStage(ap,[.16,.34,.58,.80]);
@@ -559,7 +593,7 @@
       else if(placeStage===2||placeStage===3) contactPaw(localTargetX,localTargetY,true);
       else if(placeStage===4) contactPaw(11,2,false);
     }
-    if(pose==='window'&&windowStage>=1){ rect(8,-1,4,5,p.dogDark); rect(10,2,5,2,p.dogCream); }
+    if(pose==='window'&&windowStage>=1){ rect(8,-7,4,6,p.dogDark); rect(10,-3,5,2,p.dogCream); rect(4,-6,3,5,p.dogDark); }
 
     ctx.restore();
   }
@@ -571,6 +605,8 @@
 
   function drawForegroundFurniture(f,now,p){
     for(const y of [62,87,112]) rect(303,y,70,2,p.walnutDark);
+    rect(303,151,68,4,p.walnutDark); rect(305,151,64,1,p.walnutLight);
+    if(f.creature.zone==='window'&&f.creature.activity==='look_outside'){ rect(44,155,82,3,p.walnutDark); rect(47,155,76,1,p.walnutLight); }
     rect(294,179,77,3,p.walnutDark); rect(296,179,73,1,p.walnutLight);
   }
   function drawForegroundCausality(f, now, rs, p) {
