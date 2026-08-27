@@ -1,14 +1,14 @@
 # Terrarium Status
 
-Checkpoint: **POST-GEN17 PRODUCT CHECKPOINT — ACTIVITY AFTERMATH**.
+Checkpoint: **POST-GEN17 PRODUCT CHECKPOINT — TEMPORAL AFTERMATH POLISH**.
 
 This is normal Terrarium development after the accepted Generation 17 pilot. It is **not Generation 18**.
 
 ## Current product state
 
-Latest checkpoint: repeated existing activities now leave deterministic physical aftermath. Window-watching leaves pane/sill traces, activity-corner use rearranges papers/work marks, and accumulated sleeping-nook sleep rumples the nest. These cues are derived from persistent `habitat.activity_aftermath`; the renderer remains disposable and non-authoritative.
+The room already records what Moss has been doing through persistent `habitat.activity_aftermath`; the latest checkpoint improves how that history becomes visible. Existing window traces, activity-corner clutter, and sleeping-nook wear now emerge progressively instead of appearing in discrete renderer count buckets. The renderer also gives those persistent traces restrained weather/ambient response while remaining disposable and non-authoritative.
 
-Meaningful snapshot: `20260827T054359565518Z-activity-aftermath` (seed 1701, tick 240). Comparison/evidence: `artifacts/activity-aftermath-comparison.json` and `history/2026-08-27-activity-aftermath.md`.
+Meaningful snapshot: `20260827T115103702156Z-temporal-aftermath-polish` (seed 1701, tick 240). Evidence: `artifacts/temporal-aftermath-polish.json` and `history/2026-08-27-temporal-aftermath-polish.md`.
 
 Inherited Gen17 guarantees remain intact:
 
@@ -18,56 +18,59 @@ Inherited Gen17 guarantees remain intact:
 - append-only/hash-chained event history;
 - process/browser restart persistence;
 - autonomous idle/walk/explore/rest/sleep/wake/look-outside/inspect/carry/place behavior;
-- multiple habitat zones, persistent objects, and persistent habitat wear;
+- multiple habitat zones, persistent objects, persistent habitat wear, and persistent activity aftermath;
 - canonical living state is user-owned outside Git; renderer is disposable/non-authoritative.
 
 Latest visible improvement:
 
-- autonomous object placements now use deterministic authored habitat positions instead of random scatter;
-- placement collision avoidance keeps small collections legible;
-- accumulated `path_wear` now renders as connected worn travel routes through the diorama;
-- frequently moved possessions leave subtle settled/scuffed physical cues;
-- `TerrariumFrame` exposes the already-canonical `times_inspected` field for future presentation work without moving authority into the renderer.
+- activity-aftermath changes interpolate over **1.8 seconds** between authoritative frame updates;
+- **26 authored layers** now emerge progressively: 5 window smudges, 5 wet-window streaks, 4 bedding creases, 5 activity-corner papers, and 7 work marks;
+- stable hash-derived micro-variation gives traces/papers organic placement without `Math.random` or renderer-owned state;
+- rain/mist/clear conditions alter how already-persistent window history reads;
+- bedding compression, pillow shift, and creases grow continuously from actual sleep history;
+- generic path-wear routes are slightly quieter so activity-specific aftermath has clearer visual priority.
 
 Meaningful development snapshot:
 
-- `20260827T050435058386Z-lived-in-staging`
+- `20260827T115103702156Z-temporal-aftermath-polish`
 - deterministic seed **1701**, tick **240**
-- frame SHA256 `1070774ead7f46638b3a409d1a7896ffdcf7f49c8fb582e6bf8171aec3ca2d53`
+- frame SHA256 `12624190b1759215a62d4ffa3af70aa5ac759940f32b7c8362301e0fb043334e`
+- renderer SHA256 `9e727e04145c5a084555970d0a8bb7c269a6ba27c6b51db46e0324103f55fbd3`
+
+The frame SHA is intentionally identical to the previous activity-aftermath checkpoint; this iteration changes presentation, not canonical world outcome.
 
 ## Evidence
 
 Current checkpoint regression:
 
 - pytest: **14/14 PASS**;
+- JavaScript syntax check: **PASS**;
 - Python 3.10 syntax compatibility: **PASS**;
 - technical evaluator: **PASS** — exact replay, event-chain integrity, append-only SQLite enforcement, restart equality, fixed 800×480 frame;
-- behavior evaluator seed 1701 / 500 steps: **PASS** — the accepted 10-action distribution is unchanged, entropy **3.151553 bits**, 28 placements, 28 pickups, 58 inspections, all 6 objects moved, 10 persistent habitat marks;
-- activity-aftermath comparison: previous tick 240 has 0 recognizable activity classes, same-horizon improved tick 240 has 2, accelerated tick 720 has all 3; legacy frame equality after removing the new aftermath field is **true**.
+- behavior evaluator seed 1701 / 500 steps: **PASS** — accepted action distribution unchanged, entropy **3.151553 bits**, 28 placements, 28 pickups, 58 inspections, all 6 objects moved, 10 persistent habitat marks.
 
-Visual-storytelling comparison (`artifacts/visual-storytelling-comparison.json`):
+Temporal-aftermath evidence (`artifacts/temporal-aftermath-polish.json`):
 
-- fresh tick 0: 0 moved objects, 0 visible routes, 0 authored-anchor objects, 0 marks;
-- accepted Gen17 baseline tick 240: 3 moved objects, 5 visible routes, 0 authored-anchor objects, 9 marks;
-- improved accelerated life tick 720: 6 moved objects, 5 strongly worn routes, 6/6 placed objects at authored anchors, 6 settled-use cues, 10 marks.
+- previous renderer SHA256 `9083851633567c9e520020b252b61c23ecd5f85ca68609da9b780af848ebac0c` → current `9e727e04145c5a084555970d0a8bb7c269a6ba27c6b51db46e0324103f55fbd3`;
+- previous and current seed-1701/tick-240 semantic frame SHA256 are both `12624190b1759215a62d4ffa3af70aa5ac759940f32b7c8362301e0fb043334e`;
+- same-horizon semantic frame equality: **true**;
+- seven old activity-specific discrete stage-rule tokens detected before, **zero** remaining after;
+- renderer `Math.random`: **absent**;
+- stable deterministic micro-variation and weather-conditioned persistent-window rendering: **present**.
 
-Same-seed/same-horizon counterfactual (`artifacts/visual-storytelling-counterfactual.json`):
-
-- old Gen17 commit `0fa3952`, seed 1701 / tick 720: shelf_count 5, total path wear 226, 6 placed objects but only **4 unique coordinates** because two shelf-object pairs overlap;
-- current implementation, same seed/tick: shelf_count 5, total path wear 226, **6 unique authored coordinates for 6 placed objects**.
-
-This isolates a real product/layout improvement from merely simulating longer.
+Earlier spatial/activity evidence remains valid in `artifacts/visual-storytelling-comparison.json`, `artifacts/visual-storytelling-counterfactual.json`, and `artifacts/activity-aftermath-comparison.json`.
 
 ## Browser inspection
 
 The actual Canvas renderer was inspected at 800×480 through the mediated browser:
 
-- fresh isolated world verified at tick 0;
-- Gen17 deterministic baseline captured before implementation;
-- improved isolated world verified at tick 720 with shelf_count 5 and all 10 persistent marks;
-- new deterministic snapshot opened through the renderer and verified at tick 240.
+- accepted tick-240 aftermath scene before the change;
+- updated tick-240 scene with the exact same semantic frame;
+- deterministic tick-720 accelerated scene with all three aftermath classes present: 14 sleeping-nook sleep ticks across 4 bouts, 30 window watches, and 67 activity-corner uses;
+- temporary rain + wet-window renderer counterfactual, viewed twice 1.2 seconds apart to exercise the ambient weather-bound trace animation;
+- final milestone snapshot opened through the real Canvas renderer.
 
-The visual comparison artifacts intentionally do **not** claim to be a subjective warmth/smoothness oracle. Automated temporal/subjective visual-quality judging remains weak.
+Temporary inspection frames were removed before snapshot capture. Automated evidence does **not** claim to measure subjective warmth, charm, or beauty; perceptual judgment came from renderer inspection.
 
 ## Self-Building Computer / capability evidence
 
@@ -79,11 +82,9 @@ Existing promoted capability:
 - content hash `932573954fdf126bd4ec4f4d5a1f79a50b48b994bf374ed0cfa3415120dd093f`
 - evaluator hash `1c9eaed4c4174212f84a7db52d4c5f47e1a106a88461f6880023d4dd7c5f53ae`
 
-Held-out post-change reuse: **PASS** on 180 ordered events with 10 action classes, entropy 3.174454 bits, 42 object interactions, and `sequence_ok=true`.
+Post-change regression reuse: **PASS** via Forge run `cap_20260827T115050Z_933e3d93`. The current deterministic 180-event audit input SHA256 `fa438bef63e3aa56b353638b27b42248c06682347d4b8684cca3fc2874df5b11` matched the held-out vector exactly; result: 10 action classes, entropy **3.174454**, 42 object interactions, `sequence_ok=true`.
 
-The successful reuse was recorded as procedural episode `ep_091c8bfcdd8027f0ba2c`. Re-distillation produced candidate memory `3eaa33c60f47c1d4c2255ae518fdb573f111f10e8f389f045dcf050c39a1eed8`, but held-out activation failed closed because the recorded episode environment omitted the required `input_schema_hash` precondition. It remains **CANDIDATE**. No gate or authority rule was weakened.
-
-Operational Lab remains `gen6-experience-memory-r1-dc0d2cb41595`; permanent MCP surface remains 10. Frozen Optiplex_MCP was not modified.
+Candidate procedural memories remain non-authoritative. No applicability, evaluation, or promotion gate was weakened. Operational Lab remains `gen6-experience-memory-r1-dc0d2cb41595`; permanent MCP surface remains 10. Frozen Optiplex_MCP was not modified.
 
 ## Inherited Gen17 runtime proof
 
@@ -94,7 +95,7 @@ Operational Lab remains `gen6-experience-memory-r1-dc0d2cb41595`; permanent MCP 
 
 ## Highest-value next product improvement
 
-Strengthen the **temporal readability and subtle animation of the existing physical aftermath** so transitions feel natural when history crosses thresholds, while preserving the no-dashboard diorama. Prefer renderer polish/evidence over adding new mechanics.
+Make **present activity and accumulated aftermath feel causally connected in the renderer**. When Moss is currently sleeping, watching the window, or using the activity corner, let the already-existing traces respond subtly to that action/environment. Keep it renderer-only unless evidence reveals a real world-model gap; do not add dashboards, dialogue, learned routines, hardware work, or broad mechanics yet.
 
 ## Development / runtime policy
 
@@ -104,6 +105,10 @@ Strengthen the **temporal readability and subtle animation of the existing physi
 - runtime state defaults to `${XDG_STATE_HOME:-$HOME/.local/state}/terrarium/live` and must remain outside Git;
 - repo-local `data/*` is ignored except `.gitkeep` and is development/legacy-only;
 - normal development creates one tested commit/push attempt per meaningful checkpoint.
+
+## Canonical runtime deployment status
+
+The repository source is updated, but the actual host-owned Moss runtime could not be safely inspected or restarted from the available mediated boundary: the canonical user-owned runtime directory is outside the project workspace, while the browser development service is isolated and non-canonical. No replacement world was created and canonical runtime state was not touched. A LAN URL is therefore not claimed until the real host runtime can be verified.
 
 ## Remote
 

@@ -1,0 +1,34 @@
+{
+  "captured_at": "2026-08-27T11:51:03.702865Z",
+  "frame": {
+    "logical_height": 480,
+    "logical_width": 800,
+    "path": "dev/20260827T115103702156Z-temporal-aftermath-polish/frame.json",
+    "sha256": "12624190b1759215a62d4ffa3af70aa5ac759940f32b7c8362301e0fb043334e",
+    "tick": 240
+  },
+  "git": {
+    "branch": "main",
+    "dirty": true,
+    "head": "3621aa32b39edbb446288a84c538dce434ac4a11"
+  },
+  "note": "Accumulated activity aftermath now emerges continuously: window traces respond subtly to weather, bedding compression and creases grow gradually, activity-corner papers/work marks layer in organically, and generic path wear is quieter so specific history remains legible.",
+  "preview": {
+    "path": "dev/20260827T115103702156Z-temporal-aftermath-polish/preview.svg",
+    "sha256": "b5c07cbfcfbed6d07f6e7877866e33cf2d51882bd7b924eea08c8ef706df4f71"
+  },
+  "schema": "terrarium.dev-snapshot.v1",
+  "snapshot_id": "20260827T115103702156Z-temporal-aftermath-polish",
+  "source": {
+    "mode": "deterministic",
+    "seed": 1701,
+    "steps": 240
+  },
+  "source_hashes": {
+    "engine": "c56a8761bcf0c25b319ab1d1a6df714fb44f9d692ae06c2c91b6d75edb597a96",
+    "frame_contract": "fe4401664e4b09b4ff8171b1bd73c9cbd0b3fff4091672ba732c69b01c27a956",
+    "renderer_css": "706070e63996d0ce2a9ccf19f9ed6dc29b91a8134195f3aee992b5e4cfe28268",
+    "renderer_js": "9e727e04145c5a084555970d0a8bb7c269a6ba27c6b51db46e0324103f55fbd3"
+  },
+  "view_url": "/?snapshot=/snapshots/dev/20260827T115103702156Z-temporal-aftermath-polish/frame.json"
+}

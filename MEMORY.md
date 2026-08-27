@@ -49,3 +49,9 @@ Do not reinterpret the successful capability run as an ACTIVE memory promotion. 
 ## Post-Gen17 activity-aftermath reuse
 
 For checkpoint `2026-08-27-activity-aftermath`, the promoted `simulation-behavior-auditor-r1` capability was reused on a fresh 180-event post-change stream and passed with all 10 action classes, entropy `3.174454`, 42 object interactions, and sequence integrity (`cap_20260827T054348Z_b67454cd`). Procedural-memory retrieval still returned `NO_MEMORY`; candidate memories remain non-authoritative. No gate was weakened and no new reusable SBC capability gap was justified.
+
+## Post-Gen17 temporal-aftermath polish reuse
+
+For checkpoint `2026-08-27-temporal-aftermath-polish`, the promoted `simulation-behavior-auditor-r1` capability was resolved at content hash `932573954fdf126bd4ec4f4d5a1f79a50b48b994bf374ed0cfa3415120dd093f` with evaluator hash `1c9eaed4c4174212f84a7db52d4c5f47e1a106a88461f6880023d4dd7c5f53ae` and reused as a renderer-only behavior regression. The current deterministic 180-event stream SHA256 `fa438bef63e3aa56b353638b27b42248c06682347d4b8684cca3fc2874df5b11` matched the held-out audit vector exactly; Forge run `cap_20260827T115050Z_933e3d93` passed with all 10 action classes, entropy `3.174454`, 42 object interactions, and sequence integrity.
+
+No new capability was forged because the iteration exposed no reusable capability gap. Existing procedural memories remain `CANDIDATE`/non-authoritative; no activation or promotion gate was weakened.

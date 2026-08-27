@@ -1,0 +1,78 @@
+{
+  "accelerated_tick": 720,
+  "canvas_inspection": {
+    "accelerated_tick": 720,
+    "rain_counterfactual_inspected": true,
+    "rain_counterfactual_interval_seconds": 1.2,
+    "same_horizon_tick": 240,
+    "subjective_quality_metric_claimed": false,
+    "temporary_inspection_frames_retained": false,
+    "viewport": [
+      800,
+      480
+    ]
+  },
+  "claim_scope": "Objective determinism/source-structure evidence only; Canvas inspection is used separately for perceptual judgment.",
+  "renderer": {
+    "after_sha256": "9e727e04145c5a084555970d0a8bb7c269a6ba27c6b51db46e0324103f55fbd3",
+    "before_sha256": "9083851633567c9e520020b252b61c23ecd5f85ca68609da9b780af848ebac0c",
+    "changed": true,
+    "counter_transition_interpolation_ms": 1800,
+    "previous_discrete_activity_stage_rules_present": 7,
+    "previous_discrete_activity_stage_rules_remaining": 0,
+    "progressive_authored_layers": {
+      "activity_corner_papers": 5,
+      "activity_corner_work_marks": 7,
+      "sleeping_nook_creases": 4,
+      "total": 26,
+      "wet_window_streaks": 5,
+      "window_smudges": 5
+    },
+    "remaining_rule_tokens": [],
+    "renderer_uses_math_random": false,
+    "stable_hash_variation_present": true,
+    "weather_conditioned_persistent_window_traces": true
+  },
+  "same_horizon_tick": 240,
+  "sbc_reuse": {
+    "action_diversity": 10,
+    "action_entropy_bits": 3.174454,
+    "capability": "simulation-behavior-auditor-r1",
+    "content_hash": "932573954fdf126bd4ec4f4d5a1f79a50b48b994bf374ed0cfa3415120dd093f",
+    "evaluator_hash": "1c9eaed4c4174212f84a7db52d4c5f47e1a106a88461f6880023d4dd7c5f53ae",
+    "input_sha256": "fa438bef63e3aa56b353638b27b42248c06682347d4b8684cca3fc2874df5b11",
+    "object_interactions": 42,
+    "passed": true,
+    "run_id": "cap_20260827T115050Z_933e3d93",
+    "sequence_ok": true
+  },
+  "schema": "terrarium.temporal-aftermath-polish-evidence.v1",
+  "seed": 1701,
+  "semantic_world": {
+    "accepted_tick240_frame_sha256": "12624190b1759215a62d4ffa3af70aa5ac759940f32b7c8362301e0fb043334e",
+    "current_tick240_frame_sha256": "12624190b1759215a62d4ffa3af70aa5ac759940f32b7c8362301e0fb043334e",
+    "engine_source_changed": false,
+    "frame_contract_source_changed": false,
+    "same_horizon_frame_equal": true,
+    "tick240_activity_aftermath": {
+      "activity_corner_uses": 17,
+      "sleep_nook_bouts": 0,
+      "sleep_nook_ticks": 0,
+      "wet_window_watches": 0,
+      "window_watches": 11
+    },
+    "tick720_activity_aftermath": {
+      "activity_corner_uses": 67,
+      "sleep_nook_bouts": 4,
+      "sleep_nook_ticks": 14,
+      "wet_window_watches": 0,
+      "window_watches": 30
+    }
+  },
+  "snapshot": {
+    "frame_sha256": "12624190b1759215a62d4ffa3af70aa5ac759940f32b7c8362301e0fb043334e",
+    "preview_sha256": "b5c07cbfcfbed6d07f6e7877866e33cf2d51882bd7b924eea08c8ef706df4f71",
+    "renderer_sha256": "9e727e04145c5a084555970d0a8bb7c269a6ba27c6b51db46e0324103f55fbd3",
+    "snapshot_id": "20260827T115103702156Z-temporal-aftermath-polish"
+  }
+}

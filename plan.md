@@ -48,6 +48,18 @@ Evidence: `history/2026-08-27-lived-in-staging.md`, `artifacts/visual-storytelli
 
 Evidence: `history/2026-08-27-activity-aftermath.md`, `artifacts/activity-aftermath-comparison.json`, snapshot `20260827T054359565518Z-activity-aftermath`.
 
+## Completed normal product checkpoint — Temporal aftermath polish
+
+- activity-aftermath counter changes interpolate over 1.8 seconds in the renderer;
+- 26 authored aftermath layers fade in progressively instead of appearing through integer count buckets;
+- stable hash-derived micro-variation keeps papers/traces organic without `Math.random`;
+- persistent window traces respond subtly to rain/mist/clear conditions;
+- bedding compression, pillow drift, and creases grow continuously from actual sleep history;
+- generic path wear is quieter so activity-specific history retains visual priority;
+- the canonical seed-1701/tick-240 frame is unchanged from the previous checkpoint.
+
+Evidence: `history/2026-08-27-temporal-aftermath-polish.md`, `artifacts/temporal-aftermath-polish.json`, snapshot `20260827T115103702156Z-temporal-aftermath-polish`.
+
 ## Evaluation loop
 
 Keep the development loop: implement → deterministic accelerated run → technical/behavior evaluation → live browser inspection → identify weakness → bounded change → replay/regression.
@@ -58,7 +70,7 @@ Use project-factory / Experiment Capsule / counterfactual / Forge capabilities o
 
 ## Next product iteration
 
-Highest-value target: improve **temporal readability and subtle animation of the existing physical aftermath**. History thresholds should emerge naturally rather than pop abruptly, while remaining deterministic, physical, and dashboard-free. Evaluate the actual renderer before adding any new mechanics.
+Highest-value target: make **present activity and accumulated aftermath feel causally connected**. While Moss sleeps, watches the window, or uses the activity corner, the already-existing traces should respond subtly to the current action/environment without moving authority into the renderer or adding new mechanics.
 
 Automated subjective/temporal visual-quality judging remains a known weak area. Treat it honestly; do not call a static metric a warmth/smoothness oracle.
 

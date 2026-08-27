@@ -65,6 +65,15 @@ def live_frame(data_dir: str) -> tuple[dict, dict]:
     return frame, source
 
 
+def _smooth01(value: float) -> float:
+    t = max(0.0, min(1.0, float(value)))
+    return t * t * (3.0 - 2.0 * t)
+
+
+def _emergence(value: float, start: float, span: float) -> float:
+    return _smooth01((float(value) - float(start)) / max(0.001, float(span)))
+
+
 def preview_svg(frame: dict) -> str:
     palettes = {
         "night": ("#27313d", "#3b342f", "#162238"),
@@ -88,17 +97,48 @@ def preview_svg(frame: dict) -> str:
     sleep_ticks = int(aftermath.get("sleep_nook_ticks", 0))
     sleep_bouts = int(aftermath.get("sleep_nook_bouts", 0))
     window_watches = int(aftermath.get("window_watches", 0))
+    wet_watches = int(aftermath.get("wet_window_watches", 0))
     corner_uses = int(aftermath.get("activity_corner_uses", 0))
-    if sleep_ticks > 0:
-        parts.append(f'<ellipse cx="164" cy="389" rx="{45+min(18,sleep_bouts*3)}" ry="{16+min(8,sleep_ticks*.18):.1f}" fill="#4c3a30" opacity="{min(.26,.055+sleep_ticks*.009):.3f}"/>')
-        parts.append(f'<rect x="{70+min(13,sleep_bouts*2)}" y="{367+min(4,sleep_bouts)}" width="72" height="29" rx="9" fill="#d0b992"/>')
-    if window_watches > 0:
-        for i in range(min(5,1+window_watches//4)):
-            parts.append(f'<ellipse cx="{102+i*28}" cy="{190-(i%2)*6}" rx="8" ry="4" fill="#e2d8c4" opacity="{min(.18,.035+window_watches*.006):.3f}"/>')
-        parts.append(f'<rect x="80" y="215" width="155" height="{3+min(4,window_watches//7)}" fill="#3b2d26" opacity="{min(.20,.035+window_watches*.007):.3f}"/>')
-    if corner_uses >= 2:
-        for i in range(min(4,1+corner_uses//6)):
-            parts.append(f'<rect x="{599+i*24}" y="{332-(i%2)*5}" width="22" height="11" fill="#dac99e" opacity=".88"/>')
+    nest_strength = _emergence(sleep_ticks, 0, 18)
+    if nest_strength > 0:
+        rx = 44 + 17 * _emergence(sleep_bouts, 0, 5)
+        ry = 15 + 8 * nest_strength
+        parts.append(f'<ellipse cx="164" cy="389" rx="{rx:.1f}" ry="{ry:.1f}" fill="#4c3a30" opacity="{.235*nest_strength:.3f}"/>')
+    pillow_shift = 13 * _emergence(sleep_bouts, 0, 6)
+    pillow_drop = 4 * _emergence(sleep_bouts, 0, 5)
+    parts.append(f'<rect x="{70+pillow_shift:.1f}" y="{367+pillow_drop:.1f}" width="72" height="29" rx="9" fill="#d0b992"/>')
+    for i in range(4):
+        strength = _emergence(sleep_ticks, 1+i*3.5, 8)
+        if strength <= 0:
+            continue
+        x1 = 128+i*22; y1 = 374+i*4; cx = 145+i*18; x2 = 132+i*22
+        parts.append(f'<path d="M {x1} {y1} Q {cx} 385 {x2} 402" fill="none" stroke="#5d4839" stroke-width="{1.2+strength*.8:.2f}" opacity="{.28*strength:.3f}"/>')
+    for i in range(5):
+        strength = _emergence(window_watches, 1+i*2.8, 6.5)
+        if strength <= 0:
+            continue
+        parts.append(f'<ellipse cx="{96+i*31}" cy="{190-(i%2)*6}" rx="8" ry="{3.2+strength*1.4:.1f}" fill="#e2d8c4" opacity="{.115*strength:.3f}"/>')
+    sill_strength = _emergence(window_watches, 1, 22)
+    if sill_strength > 0:
+        parts.append(f'<rect x="80" y="215" width="155" height="{2+4*sill_strength:.2f}" fill="#3b2d26" opacity="{.16*sill_strength:.3f}"/>')
+    weather_glint = .78 if frame.get("weather") == "rain" else .72 if frame.get("weather") == "mist" else .46
+    for i in range(5):
+        strength = _emergence(wet_watches, .4+i*1.3, 4.5)
+        if strength <= 0:
+            continue
+        x = 93+i*32
+        parts.append(f'<path d="M {x} 149 Q {x+5} 165 {x-1} 182" fill="none" stroke="#e1e8e0" stroke-width="{1.4+strength*.8:.2f}" opacity="{.20*strength*weather_glint:.3f}"/>')
+    for i in range(5):
+        strength = _emergence(corner_uses, 1+i*4.2, 8)
+        if strength <= 0:
+            continue
+        parts.append(f'<rect x="{597+i*25}" y="{332-(i%2)*5}" width="22" height="11" fill="#dac99e" opacity="{.82*strength:.3f}"/>')
+    for i in range(7):
+        strength = _emergence(corner_uses, 2+i*3.2, 7)
+        if strength <= 0:
+            continue
+        x = 612+i*16
+        parts.append(f'<line x1="{x}" y1="344" x2="{x+8}" y2="340" stroke="#4b362b" stroke-width="1.1" opacity="{.46*strength:.3f}"/>')
 
     route_paths = {
         "sleeping_nook": "M 405 421 Q 274 408 154 427",
@@ -110,8 +150,8 @@ def preview_svg(frame: dict) -> str:
     for zone, path_data in route_paths.items():
         wear = int(path_wear.get(zone, 0))
         if wear < 5: continue
-        opacity = min(.24, .025 + (wear - 4) * .006)
-        width = min(16, 3 + wear * .22)
+        opacity = min(.18, .018 + (wear - 4) * .0048)
+        width = min(12, 2.6 + wear * .17)
         parts.append(f'<path d="{path_data}" fill="none" stroke="#2f221b" stroke-width="{width:.2f}" stroke-linecap="round" opacity="{opacity:.3f}"/>')
     for obj in frame["objects"]:
         moved = int(obj.get("times_moved", 0))

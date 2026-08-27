@@ -2,6 +2,14 @@
 
 Git-friendly visual milestones. The SVG is a lightweight capture-time thumbnail; run Terrarium and open `/snapshots/` for the same stored frame through the real Canvas renderer.
 
+## 20260827T115103702156Z-temporal-aftermath-polish
+
+Accumulated activity aftermath now emerges continuously: window traces respond subtly to weather, bedding compression and creases grow gradually, activity-corner papers/work marks layer in organically, and generic path wear is quieter so specific history remains legible.
+
+![20260827T115103702156Z-temporal-aftermath-polish](dev/20260827T115103702156Z-temporal-aftermath-polish/preview.svg)
+
+Deterministic tick `240` · renderer `9e727e04145c`
+
 ## 20260827T054359565518Z-activity-aftermath
 
 Repeated window-watching now leaves sill/smudge traces, activity-corner use rearranges papers and work marks, and longer-lived scenes develop a rumpled sleeping nook from actual accumulated activity history.

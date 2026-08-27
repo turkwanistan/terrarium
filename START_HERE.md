@@ -6,9 +6,9 @@ This repository is the authoritative Terrarium project created during the accept
 
 Gen17 Phase 0–2 remains the accepted architectural/runtime baseline: deterministic persistent host-owned world state, exact replay, disposable 800×480 renderer, autonomous behavior, persistent objects, and habitat wear.
 
-The latest normal product checkpoint is **Activity aftermath** (`history/2026-08-27-activity-aftermath.md`). Repeated window-watching, activity-corner use, and sleeping-nook sleep now leave distinct deterministic physical consequences, while canonical runtime architecture and authority boundaries remain unchanged.
+The latest normal product checkpoint is **Temporal aftermath polish** (`history/2026-08-27-temporal-aftermath-polish.md`). Existing history-derived physical consequences now emerge progressively in the renderer, respond subtly to current weather, and use quieter visual hierarchy without changing canonical world behavior or authority boundaries.
 
-Meaningful snapshot: `snapshots/dev/20260827T054359565518Z-activity-aftermath`.
+Meaningful snapshot: `snapshots/dev/20260827T115103702156Z-temporal-aftermath-polish`.
 
 ## Fresh-session procedure
 
@@ -23,19 +23,19 @@ Meaningful snapshot: `snapshots/dev/20260827T054359565518Z-activity-aftermath`.
 
 ## Current visual-storytelling evidence
 
-`artifacts/visual-storytelling-comparison.json` compares fresh tick 0, the accepted Gen17 tick-240 baseline, and improved tick-720 accelerated life. `artifacts/visual-storytelling-counterfactual.json` holds a same-seed/same-horizon comparison against Gen17 commit `0fa3952`; old Gen17 overlaps two shelf-object pairs at tick 720, while the current implementation gives all six placed objects distinct authored coordinates with the same shelf count and path wear.
+`artifacts/visual-storytelling-comparison.json` and `artifacts/activity-aftermath-comparison.json` retain the earlier spatial/history comparisons. The latest `artifacts/temporal-aftermath-polish.json` proves the seed-1701/tick-240 semantic frame is unchanged while the renderer moved from seven discrete activity-stage rules to 26 progressively emerging authored aftermath layers with no `Math.random`.
 
 ## Self-Building Computer / memory state
 
 The promoted reusable capability remains `simulation-behavior-auditor-r1`, content hash `932573954fdf126bd4ec4f4d5a1f79a50b48b994bf374ed0cfa3415120dd093f`, evaluator hash `1c9eaed4c4174212f84a7db52d4c5f47e1a106a88461f6880023d4dd7c5f53ae`.
 
-It was genuinely reused on the lived-in-staging checkpoint and passed. That real reuse was recorded, but memory activation remained fail-closed because the recorded held-out episode omitted the required `input_schema_hash` environment precondition. See `MEMORY.md`; do not weaken that gate or treat either memory object as active authority.
+It has now been reused again on the temporal-aftermath checkpoint (`cap_20260827T115050Z_933e3d93`) and passed on the matching 180-event deterministic stream. Candidate procedural memories remain non-authoritative; do not weaken applicability or promotion gates merely to activate them. See `MEMORY.md`.
 
 Operational Optiplex_Lab remains accepted Gen6 with permanent MCP surface 10. Frozen Optiplex_MCP must not be modified.
 
 ## Highest-value next work
 
-Polish **temporal readability of the new activity aftermath**: keep the cues physical and history-derived, but make threshold transitions and subtle animation feel natural without adding dashboards or unrelated mechanics.
+Make **present activity and accumulated aftermath feel causally connected in the renderer**: let the existing bedding, window traces, and activity-corner aftermath react subtly when Moss is currently using those spaces, without adding dashboards, routines, dialogue, or broad new mechanics.
 
 ## Git / remote safety
 

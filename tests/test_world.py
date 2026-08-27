@@ -106,6 +106,9 @@ def test_frame_contract_is_exact_and_renderer_not_canonical(tmp_path):
     html=(Path('display/web/index.html')).read_text(); js=Path('display/web/app.js').read_text()
     assert 'width="800" height="480"' in html
     assert 'localStorage' not in js and 'sessionStorage' not in js
+    assert 'Math.random' not in js
+    assert 'function historyValue' in js and 'function emergence' in js and 'function stableUnit' in js
+    assert 'Math.floor(windowWatches' not in js and 'Math.floor(cornerUses' not in js and 'Math.floor(sleepTicks' not in js
     store.close()
 
 
