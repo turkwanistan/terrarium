@@ -27,6 +27,45 @@
     return {wall:'#8b806f', floor:'#6e5946', trim:'#7c5d46', glow:'#f4cf82', sky:'#82a6a1', rug:'#73806a'};
   }
 
+  function drawPersistentHistory(f) {
+    const wear = f.habitat.path_wear || {};
+    const routes = {
+      sleeping_nook: {end:[154,427], control:[274,408]},
+      window: {end:[182,306], control:[286,337]},
+      collection_shelf: {end:[650,303], control:[548,333]},
+      activity_corner: {end:[650,427], control:[535,408]},
+    };
+    ctx.save();
+    ctx.lineCap='round';
+    for (const [zone, route] of Object.entries(routes)) {
+      const visits = Number(wear[zone] || 0);
+      if (visits < 5) continue;
+      const alpha = Math.min(.24, .025 + (visits - 4) * .006);
+      const width = Math.min(16, 3 + visits * .22);
+      ctx.strokeStyle = `rgba(47,34,27,${alpha})`;
+      ctx.lineWidth = width;
+      ctx.beginPath(); ctx.moveTo(405,421);
+      ctx.quadraticCurveTo(route.control[0],route.control[1],route.end[0],route.end[1]); ctx.stroke();
+      ctx.strokeStyle = `rgba(222,198,154,${Math.min(.10,alpha*.42)})`;
+      ctx.lineWidth = Math.max(1.5,width*.18);
+      ctx.setLineDash([7,12]);
+      ctx.beginPath(); ctx.moveTo(405,421);
+      ctx.quadraticCurveTo(route.control[0],route.control[1],route.end[0],route.end[1]); ctx.stroke();
+      ctx.setLineDash([]);
+    }
+
+    // Frequently moved possessions leave small settled/scuffed patches. They
+    // are physical cues, not labels: reopening the diorama reveals use without
+    // turning the world into an activity feed.
+    for (const o of f.objects || []) {
+      const moved = Number(o.times_moved || 0);
+      if (o.state !== 'placed' || moved < 2) continue;
+      ctx.fillStyle = `rgba(39,29,24,${Math.min(.16,.035+moved*.012)})`;
+      ctx.beginPath(); ctx.ellipse(o.x,o.y+7,13+Math.min(7,moved),5,0,0,Math.PI*2); ctx.fill();
+    }
+    ctx.restore();
+  }
+
   function drawBackground(f, now) {
     const p = palette(f.lighting);
     ctx.fillStyle = p.wall; ctx.fillRect(0, 0, 800, 315);
@@ -72,6 +111,9 @@
     ctx.fillStyle = '#b99263'; ctx.fillRect(625, 366, 42, 25); ctx.fillStyle = '#d7c797'; ctx.fillRect(632,370,34,18);
     ctx.fillStyle = '#70513e'; ctx.fillRect(748, 339, 28, 36); ctx.fillStyle = '#5f7555';
     for (let i=0;i<5;i++){ ctx.beginPath(); ctx.ellipse(762 + (i-2)*7, 331 - Math.abs(i-2)*7, 9, 17, (i-2)*.35, 0, Math.PI*2); ctx.fill(); }
+
+    // Repeated travel becomes a physical route through the room.
+    drawPersistentHistory(f);
 
     // Persistent wear is intentionally subtle but visible.
     for (const [zone, wear] of Object.entries(f.habitat.path_wear || {})) {

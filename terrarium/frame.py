@@ -31,7 +31,7 @@ def make_frame(state: dict[str, Any], *, last_event: dict[str, Any] | None = Non
             "carrying": creature["carrying"],
         },
         "objects": [
-            {k: obj[k] for k in ("id", "name", "kind", "x", "y", "zone", "state", "carried_by", "times_moved")}
+            {k: obj[k] for k in ("id", "name", "kind", "x", "y", "zone", "state", "carried_by", "times_moved", "times_inspected")}
             for obj in state["objects"]
         ],
         "habitat": {

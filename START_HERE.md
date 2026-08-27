@@ -1,31 +1,44 @@
 # START HERE
 
-This repository is the authoritative Terrarium project created during Self-Building Computer Generation 17. Read `STATUS.md`, `plan.md`, and `terrarium.md` before changing behavior or architecture.
+This repository is the authoritative Terrarium project created during the accepted Self-Building Computer Generation 17 pilot and now developed as a normal product. Read `STATUS.md`, `plan.md`, `terrarium.md`, and `MEMORY.md` before changing behavior or architecture. Do not invent a new Self-Building Computer generation merely because a Terrarium checkpoint completes.
 
 ## Current checkpoint
 
-Phase 0–2 initial scope is implemented and evaluated. The world is deterministic, persistent, event-sourced/snapshotted, renderer-independent, and capable of autonomous object/environment changes. The reference renderer is fixed at 800×480 logical pixels.
+Gen17 Phase 0–2 remains the accepted architectural/runtime baseline: deterministic persistent host-owned world state, exact replay, disposable 800×480 renderer, autonomous behavior, persistent objects, and habitat wear.
+
+The latest normal product checkpoint is **Lived-in staging** (`history/2026-08-27-lived-in-staging.md`). It makes accumulated history easier to read without dashboards: autonomous object placements use authored habitat-aware staging positions, repeated travel renders as worn routes, and frequently moved possessions leave subtle settled-use cues. The canonical runtime architecture and authority boundaries are unchanged.
+
+Meaningful snapshot: `snapshots/dev/20260827T050435058386Z-lived-in-staging`.
 
 ## Fresh-session procedure
 
-1. Inspect `git status` and remote state; preserve unrelated work. Normal Terrarium development should commit/push only at meaningful tested checkpoints, unless the user says otherwise.
-2. Read `STATUS.md`, `plan.md`, `terrarium.md`, `MEMORY.md`, and `history/GEN17.md`. Repository/live evidence is authoritative over chat memory.
+1. Inspect `git status`, log, remote/tracking state, and active jobs/services; preserve unrelated work.
+2. Read `STATUS.md`, `plan.md`, `terrarium.md`, `MEMORY.md`, `history/GEN17.md`, and the latest checkpoint history file.
 3. Run `python -m pytest -q`.
 4. Run `python evaluations/evaluate_technical.py` and `python evaluations/evaluate_behavior.py --seed 1701 --steps 500`.
-5. Inspect `artifacts/gen17-live-replay.json`, `artifacts/gen17-technical-eval.json`, and `artifacts/gen17-behavior-eval.json`.
-6. Search relevant Self-Building Computer procedural memory only after reading repository authority; validate applicability/hashes and never treat candidate memory as accepted truth.
-7. For live visual work, start `python -m terrarium.api.server --data-dir data/live --seed 1701 --tick-seconds 1` and inspect the browser renderer. Treat the world process as authority, never the browser.
-8. After a meaningful visible/product improvement, capture a deterministic dev snapshot (`tools/capture_dev_snapshot.py`), inspect `/snapshots/`, update status/history, then commit/push the tested checkpoint.
+5. Inspect the latest checkpoint artifacts plus `artifacts/gen17-live-replay.json` when validating inherited persistence/replay claims.
+6. Search relevant Self-Building Computer procedural memory only after reading repository authority; validate applicability/preconditions and capability/evaluator hashes. Candidate memory is never source authority.
+7. For normal live viewing, prefer the canonical OptiPlex world via `./scripts/run_lan.sh`; the browser is disposable. For isolated development comparisons, use an ignored development data directory and never confuse it with canonical Moss.
+8. After a meaningful visible/product improvement: test/evaluate → run the actual renderer → visually inspect → capture one deterministic development snapshot → update status/history → commit → attempt the mediated push.
 
-## Gen17 builder evidence
+## Current visual-storytelling evidence
 
-The Gen16 project-factory path classified the project capabilities with required-evidence recall 1.0 / critical FN 0. A real missing capability, `simulation-behavior-auditor-r1`, was forged, independently evaluated, used twice on Terrarium, mutation-tested, and promoted by the existing governor. Its content hash is `932573954fdf126bd4ec4f4d5a1f79a50b48b994bf374ed0cfa3415120dd093f`.
+`artifacts/visual-storytelling-comparison.json` compares fresh tick 0, the accepted Gen17 tick-240 baseline, and improved tick-720 accelerated life. `artifacts/visual-storytelling-counterfactual.json` holds a same-seed/same-horizon comparison against Gen17 commit `0fa3952`; old Gen17 overlaps two shelf-object pairs at tick 720, while the current implementation gives all six placed objects distinct authored coordinates with the same shelf count and path wear.
 
-A project-driven Lab defect was also found: Capability Forge required JSON Schema Draft 2020-12 but the guest had `jsonschema 3.2.0`. The guest-local dependency was repaired to `jsonschema 4.23.0`; Forge selftest returned 8/8 and Gen16 regression returned 40/40 afterward. Permanent MCP surface remains 10 tools and the operational Gen6 server/LKG is unchanged.
+## Self-Building Computer / memory state
+
+The promoted reusable capability remains `simulation-behavior-auditor-r1`, content hash `932573954fdf126bd4ec4f4d5a1f79a50b48b994bf374ed0cfa3415120dd093f`, evaluator hash `1c9eaed4c4174212f84a7db52d4c5f47e1a106a88461f6880023d4dd7c5f53ae`.
+
+It was genuinely reused on the lived-in-staging checkpoint and passed. That real reuse was recorded, but memory activation remained fail-closed because the recorded held-out episode omitted the required `input_schema_hash` environment precondition. See `MEMORY.md`; do not weaken that gate or treat either memory object as active authority.
+
+Operational Optiplex_Lab remains accepted Gen6 with permanent MCP surface 10. Frozen Optiplex_MCP must not be modified.
 
 ## Highest-value next work
 
-Improve the feeling that activity happened while the viewer was away: strengthen visual storytelling of persistent object movement/accumulation and temporal animation quality, then add stronger browser/temporal visual acceptance evidence. Do not jump to learned preferences, conversation, or hardware merely for breadth.
+Make **specific existing activities leave distinct physical aftermath** in the diorama: sleeping should gradually alter the nook, repeated window-watching should leave subtle window/sill traces, and repeated activity-corner use should accumulate small work/paper marks. Prefer communicating *what Moss has been doing* over adding new mechanics, preferences, conversation, or hardware breadth.
 
 ## Git / remote safety
-The local repository has real checkpoint history and `origin` points to `git@github.com:turkwanistan/terrarium.git`. The first mediated push was blocked because credentials were not provisioned for this new project. Do not embed tokens, keys, or copied SSH credentials. Once the GitHub repository/project authorization exists, use the mediated project push path at each meaningful tested checkpoint.
+
+Canonical runtime state lives outside Git under the user-owned Terrarium state directory. Never commit SQLite/WAL/SHM files or runtime event ledgers. Development snapshots are intentionally versioned product history.
+
+`origin` is `git@github.com:turkwanistan/terrarium.git`; `main` tracks `origin/main`. Use the mediated project push path when authorized. Do not embed or copy credentials into the repository or bypass the credential boundary.

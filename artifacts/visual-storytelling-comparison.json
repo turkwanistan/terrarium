@@ -1,0 +1,45 @@
+{
+  "baseline_frame": "snapshots/dev/20260827T041252779231Z-gen17-accepted-baseline/frame.json",
+  "fresh": {
+    "intentional_anchor_objects": 0,
+    "intentional_anchor_ratio": 0.0,
+    "objects_moved": 0,
+    "persistent_mark_count": 0,
+    "placed_objects": 6,
+    "settled_objects_with_scuff_cue": 0,
+    "strong_route_count": 0,
+    "tick": 0,
+    "total_object_moves": 0,
+    "total_path_wear": 0,
+    "visible_route_count": 0
+  },
+  "gen17_baseline": {
+    "intentional_anchor_objects": 0,
+    "intentional_anchor_ratio": 0.0,
+    "objects_moved": 3,
+    "persistent_mark_count": 9,
+    "placed_objects": 5,
+    "settled_objects_with_scuff_cue": 1,
+    "strong_route_count": 0,
+    "tick": 240,
+    "total_object_moves": 13,
+    "total_path_wear": 73,
+    "visible_route_count": 5
+  },
+  "improved_accelerated_life": {
+    "intentional_anchor_objects": 6,
+    "intentional_anchor_ratio": 1.0,
+    "objects_moved": 6,
+    "persistent_mark_count": 10,
+    "placed_objects": 6,
+    "settled_objects_with_scuff_cue": 6,
+    "strong_route_count": 5,
+    "tick": 720,
+    "total_object_moves": 38,
+    "total_path_wear": 226,
+    "visible_route_count": 5
+  },
+  "note": "Objective diorama cues only; this does not claim to be a subjective visual-quality oracle.",
+  "schema": "terrarium.visual-storytelling-comparison.v1",
+  "seed": 1701
+}

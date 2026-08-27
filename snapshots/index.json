@@ -15,6 +15,21 @@
         "steps": 240
       },
       "tick": 240
+    },
+    {
+      "captured_at": "2026-08-27T05:04:35.059208Z",
+      "frame_path": "/snapshots/dev/20260827T050435058386Z-lived-in-staging/frame.json",
+      "meta_path": "/snapshots/dev/20260827T050435058386Z-lived-in-staging/meta.json",
+      "note": "Persistent travel now reads as worn routes, while autonomous object placements settle into distinct habitat-aware positions instead of random or overlapping coordinates.",
+      "preview_path": "/snapshots/dev/20260827T050435058386Z-lived-in-staging/preview.svg",
+      "renderer_sha256": "4fead941b8ab3e32bc73626a5407f77fbeb93f68d29515c30d8a11bde0ca9537",
+      "snapshot_id": "20260827T050435058386Z-lived-in-staging",
+      "source": {
+        "mode": "deterministic",
+        "seed": 1701,
+        "steps": 240
+      },
+      "tick": 240
     }
   ]
 }

@@ -1,0 +1,34 @@
+{
+  "captured_at": "2026-08-27T05:04:35.059208Z",
+  "frame": {
+    "logical_height": 480,
+    "logical_width": 800,
+    "path": "dev/20260827T050435058386Z-lived-in-staging/frame.json",
+    "sha256": "1070774ead7f46638b3a409d1a7896ffdcf7f49c8fb582e6bf8171aec3ca2d53",
+    "tick": 240
+  },
+  "git": {
+    "branch": "main",
+    "dirty": true,
+    "head": "0fa39523f36d5fe996e2c73b146e526e0e4ddad2"
+  },
+  "note": "Persistent travel now reads as worn routes, while autonomous object placements settle into distinct habitat-aware positions instead of random or overlapping coordinates.",
+  "preview": {
+    "path": "dev/20260827T050435058386Z-lived-in-staging/preview.svg",
+    "sha256": "15a7b9a44d0e13d0d03f4c78943c23031acf7d2949ff2f3b8160776def77a870"
+  },
+  "schema": "terrarium.dev-snapshot.v1",
+  "snapshot_id": "20260827T050435058386Z-lived-in-staging",
+  "source": {
+    "mode": "deterministic",
+    "seed": 1701,
+    "steps": 240
+  },
+  "source_hashes": {
+    "engine": "8b9b81c2cd3ec90e99cbcfe5d0016f0d8238646c12e1f323024985954744b61c",
+    "frame_contract": "87d9751643c12c8e5656fde11e3b568bf8c09fa076f9adb6769246fe8027f7c6",
+    "renderer_css": "706070e63996d0ce2a9ccf19f9ed6dc29b91a8134195f3aee992b5e4cfe28268",
+    "renderer_js": "4fead941b8ab3e32bc73626a5407f77fbeb93f68d29515c30d8a11bde0ca9537"
+  },
+  "view_url": "/?snapshot=/snapshots/dev/20260827T050435058386Z-lived-in-staging/frame.json"
+}

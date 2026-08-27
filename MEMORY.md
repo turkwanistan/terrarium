@@ -37,3 +37,11 @@ The canonical always-on OptiPlex Terrarium runtime is currently Python 3.10. Pro
 ## Runtime ownership regression
 
 The persistent Terrarium database must be owned by the account that runs the world service. Mediated development services may create repo-local files as another UID, so Linux launchers must not depend on repository file ownership for the living database. They default to `${XDG_STATE_HOME:-$HOME/.local/state}/terrarium/live` and migrate legacy repo-local state with a verified SQLite backup. Source control stores product history; the user-owned runtime directory stores Moss's living state.
+
+## Post-Gen17 lived-in-staging reuse
+
+During the `2026-08-27-lived-in-staging` product checkpoint, the authoritative promoted capability `simulation-behavior-auditor-r1` was resolved again at content hash `932573954fdf126bd4ec4f4d5a1f79a50b48b994bf374ed0cfa3415120dd093f` with evaluator hash `1c9eaed4c4174212f84a7db52d4c5f47e1a106a88461f6880023d4dd7c5f53ae` and reused on a genuine post-change 180-event Terrarium stream. The capability passed with sequence integrity, all 10 action classes, entropy `3.174454`, and 42 configured object interactions.
+
+That successful real reuse was recorded as procedural episode `ep_091c8bfcdd8027f0ba2c`. Re-distillation produced memory object `3eaa33c60f47c1d4c2255ae518fdb573f111f10e8f389f045dcf050c39a1eed8`, but the held-out activation check remained fail-closed: the recorded episode's environment omitted the required `input_schema_hash` precondition, so applicability rejected it and the new memory remains `CANDIDATE`.
+
+Do not reinterpret the successful capability run as an ACTIVE memory promotion. Do not weaken or delete the input-schema precondition to make the distiller pass. The episode is useful evidence, while repository/source/live state and the promoted Forge capability remain the authority.

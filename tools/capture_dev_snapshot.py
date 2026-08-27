@@ -84,7 +84,26 @@ def preview_svg(frame: dict) -> str:
         '<rect x="595" y="61" width="157" height="17" fill="#4c372d"/><rect x="603" y="78" width="8" height="158" fill="#4c372d"/><rect x="736" y="78" width="8" height="158" fill="#4c372d"/>',
         '<rect x="590" y="351" width="145" height="12" fill="#4b352c"/><rect x="604" y="363" width="9" height="48" fill="#4b352c"/><rect x="712" y="363" width="9" height="48" fill="#4b352c"/>',
     ]
-    for zone, wear in (frame.get("habitat", {}).get("path_wear") or {}).items():
+    route_paths = {
+        "sleeping_nook": "M 405 421 Q 274 408 154 427",
+        "window": "M 405 421 Q 286 337 182 306",
+        "collection_shelf": "M 405 421 Q 548 333 650 303",
+        "activity_corner": "M 405 421 Q 535 408 650 427",
+    }
+    path_wear = frame.get("habitat", {}).get("path_wear") or {}
+    for zone, path_data in route_paths.items():
+        wear = int(path_wear.get(zone, 0))
+        if wear < 5: continue
+        opacity = min(.24, .025 + (wear - 4) * .006)
+        width = min(16, 3 + wear * .22)
+        parts.append(f'<path d="{path_data}" fill="none" stroke="#2f221b" stroke-width="{width:.2f}" stroke-linecap="round" opacity="{opacity:.3f}"/>')
+    for obj in frame["objects"]:
+        moved = int(obj.get("times_moved", 0))
+        if obj["state"] != "placed" or moved < 2: continue
+        opacity = min(.16, .035 + moved * .012)
+        rx = 13 + min(7, moved)
+        parts.append(f'<ellipse cx="{obj["x"]}" cy="{obj["y"]+7}" rx="{rx}" ry="5" fill="#271d18" opacity="{opacity:.3f}"/>')
+    for zone, wear in path_wear.items():
         if wear < 6: continue
         pos = {"sleeping_nook":(118,427),"window":(168,277),"open_space":(405,429),"collection_shelf":(682,246),"activity_corner":(655,427)}.get(zone)
         if pos: parts.append(f'<ellipse cx="{pos[0]}" cy="{pos[1]}" rx="{33+min(18,wear)}" ry="7" fill="#2a1f19" opacity=".18"/>')

@@ -9,7 +9,7 @@ import pytest
 from terrarium.engine import WorldEngine
 from terrarium.events import verify_chain
 from terrarium.frame import make_frame
-from terrarium.models import canonical_json
+from terrarium.models import PLACEMENT_SLOTS, canonical_json
 from terrarium.replay import assert_exact_replay
 from terrarium.store import WorldStore
 
@@ -68,11 +68,24 @@ def test_world_is_autonomous_and_habitat_accumulates(tmp_path):
     store.close()
 
 
+def test_autonomous_object_placements_use_authored_habitat_slots(tmp_path):
+    store,engine=engine_at(tmp_path)
+    placements=[]
+    for _ in range(500):
+        event=engine.step()
+        if event['type']=='object_placed': placements.append(event)
+    assert len(placements)>=8
+    for event in placements:
+        assert (event['details']['x'],event['details']['y']) in PLACEMENT_SLOTS[event['details']['to_zone']]
+    store.close()
+
+
 def test_frame_contract_is_exact_and_renderer_not_canonical(tmp_path):
     store,engine=engine_at(tmp_path); engine.run_steps(3)
     frame=make_frame(engine.current_state(),last_event=store.last_event())
     assert (frame['logical_width'],frame['logical_height'])==(800,480)
     assert 'rng_state' not in frame and 'energy' not in frame['creature']
+    assert all('times_inspected' in obj for obj in frame['objects'])
     html=(Path('display/web/index.html')).read_text(); js=Path('display/web/app.js').read_text()
     assert 'width="800" height="480"' in html
     assert 'localStorage' not in js and 'sessionStorage' not in js

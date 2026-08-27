@@ -1,0 +1,130 @@
+{
+  "current": {
+    "intentional_anchor_objects": 6,
+    "objects": [
+      {
+        "id": "blue_stone",
+        "state": "placed",
+        "times_moved": 5,
+        "x": 699,
+        "y": 155,
+        "zone": "collection_shelf"
+      },
+      {
+        "id": "amber_leaf",
+        "state": "placed",
+        "times_moved": 3,
+        "x": 664,
+        "y": 104,
+        "zone": "collection_shelf"
+      },
+      {
+        "id": "acorn",
+        "state": "placed",
+        "times_moved": 5,
+        "x": 670,
+        "y": 341,
+        "zone": "activity_corner"
+      },
+      {
+        "id": "shell",
+        "state": "placed",
+        "times_moved": 10,
+        "x": 699,
+        "y": 104,
+        "zone": "collection_shelf"
+      },
+      {
+        "id": "red_thread",
+        "state": "placed",
+        "times_moved": 12,
+        "x": 630,
+        "y": 104,
+        "zone": "collection_shelf"
+      },
+      {
+        "id": "glass_star",
+        "state": "placed",
+        "times_moved": 3,
+        "x": 630,
+        "y": 155,
+        "zone": "collection_shelf"
+      }
+    ],
+    "placed_objects": 6,
+    "shelf_count": 5,
+    "tick": 720,
+    "total_path_wear": 226,
+    "unique_placed_coordinates": 6
+  },
+  "finding": "At the same seed/horizon and with identical shelf_count/path wear, Gen17 overlaps two shelf object pairs while the current implementation gives every placed object a distinct authored coordinate.",
+  "gen17": {
+    "commit": "0fa3952",
+    "intentional_anchor_objects": 0,
+    "objects": [
+      {
+        "id": "blue_stone",
+        "state": "placed",
+        "times_moved": 5,
+        "x": 632,
+        "y": 157,
+        "zone": "collection_shelf"
+      },
+      {
+        "id": "amber_leaf",
+        "state": "placed",
+        "times_moved": 3,
+        "x": 716,
+        "y": 184,
+        "zone": "collection_shelf"
+      },
+      {
+        "id": "acorn",
+        "state": "placed",
+        "times_moved": 5,
+        "x": 680,
+        "y": 392,
+        "zone": "activity_corner"
+      },
+      {
+        "id": "shell",
+        "state": "placed",
+        "times_moved": 10,
+        "x": 632,
+        "y": 157,
+        "zone": "collection_shelf"
+      },
+      {
+        "id": "red_thread",
+        "state": "placed",
+        "times_moved": 12,
+        "x": 632,
+        "y": 184,
+        "zone": "collection_shelf"
+      },
+      {
+        "id": "glass_star",
+        "state": "placed",
+        "times_moved": 3,
+        "x": 716,
+        "y": 184,
+        "zone": "collection_shelf"
+      }
+    ],
+    "placed_objects": 6,
+    "shelf_count": 5,
+    "tick": 720,
+    "total_path_wear": 226,
+    "unique_placed_coordinates": 4
+  },
+  "note": "Objective layout evidence only; not a subjective visual-quality oracle.",
+  "question": "Does authored placement improve accumulated-life legibility beyond simply simulating longer?",
+  "schema": "terrarium.visual-storytelling-counterfactual.v1",
+  "seed": 1701,
+  "source_hashes": {
+    "engine": "8b9b81c2cd3ec90e99cbcfe5d0016f0d8238646c12e1f323024985954744b61c",
+    "models": "b17c088d8953617b569d276097b0ca1e204f449a0e5c39016f58e9a87ab7768a",
+    "renderer": "4fead941b8ab3e32bc73626a5407f77fbeb93f68d29515c30d8a11bde0ca9537"
+  },
+  "steps": 720
+}

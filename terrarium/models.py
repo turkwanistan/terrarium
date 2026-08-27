@@ -20,6 +20,17 @@ ZONES: dict[str, dict[str, int]] = {
     "activity_corner": {"x": 655, "y": 372},
 }
 
+# Authored object staging points make autonomous arrangements read as part of
+# the habitat instead of as random coordinate scatter. These are presentation-
+# meaningful world coordinates, not renderer-owned state.
+PLACEMENT_SLOTS: dict[str, list[tuple[int, int]]] = {
+    "sleeping_nook": [(88, 392), (118, 401), (151, 390), (181, 400), (214, 389), (238, 404)],
+    "window": [(86, 268), (118, 279), (155, 266), (190, 278), (225, 267), (252, 281)],
+    "open_space": [(326, 365), (365, 392), (404, 369), (443, 395), (482, 367), (505, 402)],
+    "collection_shelf": [(630, 104), (664, 104), (699, 104), (630, 155), (664, 155), (699, 155)],
+    "activity_corner": [(616, 340), (642, 336), (670, 341), (697, 337), (724, 342), (748, 397)],
+}
+
 OBJECT_BLUEPRINTS = [
     ("blue_stone", "Blue stone", "stone", "open_space", 372, 333),
     ("amber_leaf", "Amber leaf", "leaf", "window", 212, 263),

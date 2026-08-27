@@ -9,7 +9,7 @@ from datetime import datetime, timedelta, timezone
 from typing import Any
 
 from .events import make_event, state_patch
-from .models import ZONES, clone_state, lighting_for, weather_for
+from .models import PLACEMENT_SLOTS, ZONES, clone_state, lighting_for, weather_for
 from .store import WorldStore
 
 
@@ -38,6 +38,28 @@ class Simulation:
     @staticmethod
     def _object_in_zone(state: dict[str, Any], zone: str) -> list[dict[str, Any]]:
         return [o for o in state["objects"] if o["zone"] == zone and o["state"] == "placed"]
+
+    @staticmethod
+    def _placement_position(state: dict[str, Any], obj: dict[str, Any], zone: str) -> tuple[int, int]:
+        """Choose a deterministic authored staging point for a placed object.
+
+        Repeated autonomous life should gradually create arrangements that look
+        habitat-aware rather than like random coordinate scatter. Existing
+        placed objects reserve nearby slots so small collections stay legible.
+        """
+        slots = PLACEMENT_SLOTS[zone]
+        material = f"{obj['id']}:{zone}:{int(obj['times_moved']) + 1}".encode("utf-8")
+        start = int.from_bytes(hashlib.sha256(material).digest()[:2], "big") % len(slots)
+        occupied = [
+            (int(other["x"]), int(other["y"]))
+            for other in state["objects"]
+            if other["id"] != obj["id"] and other["state"] == "placed" and other["zone"] == zone
+        ]
+        for offset in range(len(slots)):
+            x, y = slots[(start + offset) % len(slots)]
+            if all((x - ox) ** 2 + (y - oy) ** 2 >= 20 ** 2 for ox, oy in occupied):
+                return x, y
+        return slots[start]
 
     def step(self, state: dict[str, Any]) -> tuple[str, str, dict[str, Any], dict[str, Any]]:
         before = state
@@ -160,13 +182,7 @@ class Simulation:
             obj["state"] = "placed"
             obj["carried_by"] = None
             obj["zone"] = zone
-            if zone == "collection_shelf":
-                shelf_items = [o for o in state["objects"] if o["zone"] == zone and o["state"] == "placed" and o["id"] != obj["id"]]
-                obj["x"] = 632 + 28 * (len(shelf_items) % 4)
-                obj["y"] = 184 - 27 * (len(shelf_items) // 4)
-            else:
-                obj["x"] = max(42, min(758, int(creature["x"]) + rng.randint(-34, 34)))
-                obj["y"] = max(88, min(420, int(creature["y"]) + rng.randint(18, 34)))
+            obj["x"], obj["y"] = self._placement_position(state, obj, zone)
             obj["times_moved"] = int(obj["times_moved"]) + 1
             creature["carrying"] = None
             creature["activity"] = "place"
