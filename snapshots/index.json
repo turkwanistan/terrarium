@@ -120,6 +120,21 @@
         "steps": 698
       },
       "tick": 698
+    },
+    {
+      "captured_at": "2026-08-27T18:39:24.460019Z",
+      "frame_path": "/snapshots/dev/20260827T183924459328Z-pixel-art-overhaul-iteration1/frame.json",
+      "meta_path": "/snapshots/dev/20260827T183924459328Z-pixel-art-overhaul-iteration1/meta.json",
+      "note": "Pixel-native 400x240 Terrarium art surface with exact 2x nearest-neighbor presentation, brown floppy-eared Moss hero sprite, rebuilt warm room, persistent pixel-history marks, and palette-based day/dusk/night/weather states.",
+      "preview_path": "/snapshots/dev/20260827T183924459328Z-pixel-art-overhaul-iteration1/preview.svg",
+      "renderer_sha256": "b2fc125fb72560fd8414850b26cf08cad31bd2f2ba7bab8792bffe9b7eccc0be",
+      "snapshot_id": "20260827T183924459328Z-pixel-art-overhaul-iteration1",
+      "source": {
+        "mode": "deterministic",
+        "seed": 1701,
+        "steps": 698
+      },
+      "tick": 698
     }
   ]
 }

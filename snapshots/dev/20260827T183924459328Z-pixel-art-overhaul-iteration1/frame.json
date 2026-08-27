@@ -1,0 +1,138 @@
+{
+  "creature": {
+    "activity": "inspect",
+    "carrying": null,
+    "expression": "curious",
+    "facing": "right",
+    "id": "creature-1",
+    "intent_action": "inspect",
+    "intent_ticks_remaining": 2,
+    "name": "Moss",
+    "pose": "inspect",
+    "target_object_id": "amber_leaf",
+    "x": 682,
+    "y": 150,
+    "zone": "collection_shelf"
+  },
+  "frame_version": 1,
+  "habitat": {
+    "activity_aftermath": {
+      "activity_corner_uses": 40,
+      "sleep_nook_bouts": 2,
+      "sleep_nook_ticks": 25,
+      "wet_window_watches": 0,
+      "window_watches": 13
+    },
+    "marks": [
+      "worn_activity_corner_6",
+      "worn_collection_shelf_6",
+      "worn_window_6",
+      "worn_open_space_6",
+      "worn_sleeping_nook_6",
+      "worn_collection_shelf_14",
+      "worn_activity_corner_14"
+    ],
+    "path_wear": {
+      "activity_corner": 14,
+      "collection_shelf": 16,
+      "open_space": 12,
+      "sleeping_nook": 9,
+      "window": 13
+    },
+    "shelf_count": 6
+  },
+  "last_event": {
+    "action": "inspect",
+    "decision": true,
+    "event_id": "evt_000000698",
+    "from_zone": "collection_shelf",
+    "intent_action": "inspect",
+    "object_id": "amber_leaf",
+    "summary": "Moss stopped to inspect the amber leaf.",
+    "target_x": 699,
+    "target_y": 104,
+    "to_zone": null,
+    "type": "object_inspected"
+  },
+  "lighting": "dusk",
+  "logical_height": 480,
+  "logical_width": 800,
+  "objects": [
+    {
+      "carried_by": null,
+      "id": "blue_stone",
+      "kind": "stone",
+      "name": "Blue stone",
+      "state": "placed",
+      "times_inspected": 7,
+      "times_moved": 3,
+      "x": 630,
+      "y": 155,
+      "zone": "collection_shelf"
+    },
+    {
+      "carried_by": null,
+      "id": "amber_leaf",
+      "kind": "leaf",
+      "name": "Amber leaf",
+      "state": "placed",
+      "times_inspected": 3,
+      "times_moved": 1,
+      "x": 699,
+      "y": 104,
+      "zone": "collection_shelf"
+    },
+    {
+      "carried_by": null,
+      "id": "acorn",
+      "kind": "seed",
+      "name": "Acorn",
+      "state": "placed",
+      "times_inspected": 2,
+      "times_moved": 2,
+      "x": 699,
+      "y": 155,
+      "zone": "collection_shelf"
+    },
+    {
+      "carried_by": null,
+      "id": "shell",
+      "kind": "shell",
+      "name": "Tiny shell",
+      "state": "placed",
+      "times_inspected": 7,
+      "times_moved": 3,
+      "x": 664,
+      "y": 155,
+      "zone": "collection_shelf"
+    },
+    {
+      "carried_by": null,
+      "id": "red_thread",
+      "kind": "thread",
+      "name": "Red thread",
+      "state": "placed",
+      "times_inspected": 3,
+      "times_moved": 2,
+      "x": 664,
+      "y": 104,
+      "zone": "collection_shelf"
+    },
+    {
+      "carried_by": null,
+      "id": "glass_star",
+      "kind": "trinket",
+      "name": "Glass star",
+      "state": "placed",
+      "times_inspected": 10,
+      "times_moved": 3,
+      "x": 630,
+      "y": 104,
+      "zone": "collection_shelf"
+    }
+  ],
+  "schema": "terrarium.frame.v1",
+  "tick": 698,
+  "weather": "clear",
+  "world_minutes": 1118
+}

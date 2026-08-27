@@ -1,8 +1,25 @@
 (() => {
   'use strict';
+
+  const DISPLAY_W = 800;
+  const DISPLAY_H = 480;
+  const ART_W = 400;
+  const ART_H = 240;
+  const SCALE = 2;
+
   const canvas = document.getElementById('terrarium');
-  const ctx = canvas.getContext('2d', { alpha: false });
+  const displayCtx = canvas.getContext('2d', { alpha: false });
+  const artCanvas = document.createElement('canvas');
+  artCanvas.width = ART_W;
+  artCanvas.height = ART_H;
+  const ctx = artCanvas.getContext('2d', { alpha: false });
   const debug = document.getElementById('debug');
+
+  if (canvas.width !== DISPLAY_W || canvas.height !== DISPLAY_H) throw new Error('Terrarium logical viewport must be exactly 800x480');
+  if (artCanvas.width !== ART_W || artCanvas.height !== ART_H) throw new Error('Terrarium art surface must be exactly 400x240');
+  ctx.imageSmoothingEnabled = false;
+  displayCtx.imageSmoothingEnabled = false;
+
   const params = new URLSearchParams(window.location.search);
   const snapshotPath = params.get('snapshot');
   const temporalScenario = params.get('temporal');
@@ -13,13 +30,12 @@
   const temporalEasing = params.get('easing') === 'legacy' ? 'legacy' : 'current';
   const temporalContinuity = params.get('continuity') === 'legacy' ? 'legacy' : 'current';
   const temporalContinuityProbe = params.get('continuityProbe') === '1';
+
   const telemetryNode = document.createElement('pre');
   telemetryNode.id = 'temporal-telemetry';
   telemetryNode.setAttribute('aria-label', 'Terrarium temporal telemetry');
   telemetryNode.style.cssText = 'position:fixed;left:-10000px;top:0;width:1px;height:1px;overflow:hidden;white-space:pre-wrap';
   document.body.appendChild(telemetryNode);
-  if (canvas.width !== 800 || canvas.height !== 480) throw new Error('Terrarium logical viewport must be exactly 800x480');
-  ctx.imageSmoothingEnabled = false;
 
   let frame = null;
   let previous = null;
@@ -29,6 +45,7 @@
   let connected = false;
   let debugVisible = false;
   let lastPollError = null;
+
   const MOTION = Object.freeze({
     locomotion_min_ms: 1500, locomotion_max_ms: 2300, locomotion_base_ms: 1400, locomotion_px_ms: 1.4,
     activity_ms: 1300, contact_ms: 1200, placement_ms: 2200, history_ms: 1800, engagement_ms: 1200, environment_ms: 3000,
@@ -37,745 +54,445 @@
     idle: 950, rest: 1450, inspect: 1800, carry: 1900, place: 2200,
     look_outside: 1700, sleep: 2200, wake: 2000, walk: 1300,
   });
-  const rain = Array.from({length: 28}, (_, i) => ({x: (i * 67) % 800, y: (i * 41) % 250, speed: 0.40 + (i % 4) * 0.10}));
-  const dust = Array.from({length: 8}, (_, i) => ({x: 92 + (i * 59) % 286, y: 88 + (i * 47) % 214, phase: i * 1.7}));
 
-  function mix(a, b, t) { return a + (b - a) * t; }
-  function clamp(v, lo, hi) { return Math.max(lo, Math.min(hi, v)); }
-  function clamp01(v) { return clamp(v, 0, 1); }
-  function smooth01(v) { const t=clamp01(v); return t*t*(3-2*t); }
-  function smoother01(v) { const t=clamp01(v); return t*t*t*(t*(t*6-15)+10); }
-  function settled01(v) { const t=clamp01(v); return t*t*t*t*(35 - 84*t + 70*t*t - 20*t*t*t); }
-  function transitionEase(v) { return temporalEasing === 'legacy' ? smooth01(v) : settled01(v); }
-  function locomotionDuration(distance) { return clamp(MOTION.locomotion_base_ms + distance * MOTION.locomotion_px_ms, MOTION.locomotion_min_ms, MOTION.locomotion_max_ms); }
-  function stagedTravel(raw) { return transitionEase((raw - .08) / .80); }
-  function actionEnvelope(now, activity) { if (!previous) return 1; const duration=ACTION_DURATION[activity] || MOTION.activity_ms; return transitionEase((now-activityStartedAt)/duration); }
-  function emergence(value, start, span) { return smooth01((value-start)/Math.max(.001,span)); }
-  function historyValue(f, key, now) {
-    const target=Number(f.habitat.activity_aftermath?.[key] || 0);
-    if (!previous || snapshotPath) return target;
-    const source=Number(previous.habitat?.activity_aftermath?.[key] || 0);
+  // Deliberately finite, reusable palette families. Environmental changes swap
+  // and step these colors; they never introduce gradients or bloom.
+  const PALETTES = Object.freeze({
+    day: {
+      wall:'#a48b6a', wallShade:'#8a7155', wallLight:'#c0a27a', floor:'#785638', floorShade:'#60422f', floorLight:'#916947',
+      walnut:'#533824', walnutDark:'#352519', walnutLight:'#765236', cream:'#e5cf9f', creamShade:'#c3aa7d', moss:'#66774b', mossDark:'#435437',
+      amber:'#d39a4a', sky:'#7eaaa6', skyDark:'#557c7e', dustyBlue:'#668399', rain:'#b0c7c0', shadow:'#2e241d', paper:'#d7c493',
+      dog:'#8b5d3b', dogDark:'#5f3c29', dogLight:'#b47c50', dogCream:'#d9bd8d', eye:'#2d241e', rug:'#66754e', rugLight:'#819064', foliage:'#536b42',
+    },
+    dawn: {
+      wall:'#967b69', wallShade:'#765d52', wallLight:'#b49378', floor:'#684b37', floorShade:'#51392e', floorLight:'#805c44',
+      walnut:'#513523', walnutDark:'#332319', walnutLight:'#714c34', cream:'#ddc494', creamShade:'#b99c73', moss:'#61704b', mossDark:'#414f38',
+      amber:'#d59655', sky:'#b77b70', skyDark:'#765c68', dustyBlue:'#6d758c', rain:'#a9b9b4', shadow:'#2c2220', paper:'#ceb786',
+      dog:'#84583c', dogDark:'#5b3a2a', dogLight:'#aa744f', dogCream:'#d0b382', eye:'#2b2421', rug:'#626f51', rugLight:'#788263', foliage:'#536643',
+    },
+    dusk: {
+      wall:'#78645f', wallShade:'#604d4b', wallLight:'#92766e', floor:'#604331', floorShade:'#493128', floorLight:'#79533c',
+      walnut:'#4b3022', walnutDark:'#302019', walnutLight:'#684631', cream:'#cfae82', creamShade:'#aa8969', moss:'#59664a', mossDark:'#3c4738',
+      amber:'#ce864b', sky:'#865d78', skyDark:'#54465f', dustyBlue:'#606b83', rain:'#9caeac', shadow:'#282022', paper:'#c2a97f',
+      dog:'#79503a', dogDark:'#52362a', dogLight:'#9e6a4d', dogCream:'#c3a57e', eye:'#292326', rug:'#59624d', rugLight:'#6f785d', foliage:'#4d5d42',
+    },
+    night: {
+      wall:'#3e4650', wallShade:'#303640', wallLight:'#535b62', floor:'#49382f', floorShade:'#342925', floorLight:'#5a4538',
+      walnut:'#422c21', walnutDark:'#2b201b', walnutLight:'#5c4030', cream:'#b69c79', creamShade:'#927a62', moss:'#4d5b46', mossDark:'#354039',
+      amber:'#c78647', sky:'#1d2a43', skyDark:'#131c30', dustyBlue:'#4f637c', rain:'#8299a0', shadow:'#211d22', paper:'#ad9473',
+      dog:'#6c4937', dogDark:'#4a3329', dogLight:'#8d624a', dogCream:'#ae9374', eye:'#201f24', rug:'#4d5948', rugLight:'#63705a', foliage:'#414f3d',
+    },
+  });
+
+  const rain = Array.from({length: 22}, (_, i) => ({x:(i*37)%194, y:(i*29)%72, phase:(i*7)%17}));
+  const motes = Array.from({length: 9}, (_, i) => ({x:45+(i*47)%310, y:35+(i*31)%125, phase:i*1.7}));
+
+  function mix(a,b,t){ return a+(b-a)*t; }
+  function clamp(v,lo,hi){ return Math.max(lo,Math.min(hi,v)); }
+  function clamp01(v){ return clamp(v,0,1); }
+  function smooth01(v){ const t=clamp01(v); return t*t*(3-2*t); }
+  function smoother01(v){ const t=clamp01(v); return t*t*t*(t*(t*6-15)+10); }
+  function settled01(v){ const t=clamp01(v); return t*t*t*t*(35-84*t+70*t*t-20*t*t*t); }
+  function transitionEase(v){ return temporalEasing==='legacy' ? smooth01(v) : settled01(v); }
+  function locomotionDuration(distance){ return clamp(MOTION.locomotion_base_ms+distance*MOTION.locomotion_px_ms,MOTION.locomotion_min_ms,MOTION.locomotion_max_ms); }
+  function stagedTravel(raw){ return transitionEase((raw-.08)/.80); }
+  function actionEnvelope(now,activity){ if(!previous) return 1; const duration=ACTION_DURATION[activity]||MOTION.activity_ms; return transitionEase((now-activityStartedAt)/duration); }
+  function emergence(value,start,span){ return smooth01((value-start)/Math.max(.001,span)); }
+  function px(v){ return Math.round(Number(v)/SCALE); }
+  function snapDisplay(v){ return px(v)*SCALE; }
+  function rect(x,y,w,h,color){ ctx.fillStyle=color; ctx.fillRect(Math.round(x),Math.round(y),Math.max(1,Math.round(w)),Math.max(1,Math.round(h))); }
+  function stableUnit(label,index){
+    let h=2166136261; const text=`${label}:${index}`;
+    for(let i=0;i<text.length;i++){ h^=text.charCodeAt(i); h=Math.imul(h,16777619); }
+    return (h>>>0)/4294967295;
+  }
+
+  function historyValue(f,key,now){
+    const target=Number(f.habitat.activity_aftermath?.[key]||0);
+    if(!previous||snapshotPath) return target;
+    const source=Number(previous.habitat?.activity_aftermath?.[key]||0);
     return mix(source,target,smooth01((now-fetchedAt)/MOTION.history_ms));
   }
-  function activityEngagement(f, now, zone, activities) {
-    const current = f.creature.zone === zone && activities.includes(f.creature.activity);
-    if (!previous || snapshotPath) return current ? 1 : 0;
-    const prior = previous.creature?.zone === zone && activities.includes(previous.creature?.activity);
-    if (current === prior) return current ? 1 : 0;
+  function activityEngagement(f,now,zone,activities){
+    const current=f.creature.zone===zone&&activities.includes(f.creature.activity);
+    if(!previous||snapshotPath) return current?1:0;
+    const prior=previous.creature?.zone===zone&&activities.includes(previous.creature?.activity);
+    if(current===prior) return current?1:0;
     const t=smoother01((now-fetchedAt)/MOTION.engagement_ms);
-    return current ? t : 1-t;
+    return current?t:1-t;
   }
   function causalActivityState(f, now) {
     return {
-      sleep_nook: activityEngagement(f,now,'sleeping_nook',['sleep']),
-      window: activityEngagement(f,now,'window',['look_outside']),
-      activity_corner: activityEngagement(f,now,'activity_corner',['inspect','carry','place']),
+      sleep_nook:activityEngagement(f,now,'sleeping_nook',['sleep']),
+      window:activityEngagement(f,now,'window',['look_outside']),
+      activity_corner:activityEngagement(f,now,'activity_corner',['inspect','carry','place']),
     };
   }
-  function stableUnit(label, index) {
-    let h=2166136261;
-    const text=`${label}:${index}`;
-    for (let i=0;i<text.length;i++){ h^=text.charCodeAt(i); h=Math.imul(h,16777619); }
-    return (h>>>0)/4294967295;
+
+  function worldMinuteAt(f,now){
+    const target=Number(f.world_minutes||0);
+    if(!previous||snapshotPath) return target;
+    const source=Number(previous.world_minutes??target);
+    let delta=target-source; if(delta<-720) delta+=1440; if(delta>720) delta-=1440;
+    return source+delta*smoother01((now-fetchedAt)/MOTION.environment_ms);
   }
-  function rounded(x, y, w, h, r, fill) {
-    ctx.beginPath(); ctx.roundRect(x, y, w, h, r); ctx.fillStyle = fill; ctx.fill();
-  }
-  function palette(lighting) {
-    const common = {
-      wood:'#4a342a', woodTop:'#6b4c39', woodDark:'#34251f', cloth:'#a99170', clothLight:'#c8b38b',
-      paper:'#d3c291', foliage:'#5c7053', objectShadow:'rgba(30,22,18,.24)', moss:'#60745b', mossLight:'#74896c',
-    };
-    if (lighting === 'night') return {...common, wall:'#2c3540', floor:'#3d342e', trim:'#59483a', glow:'#d7a45d', sky:'#17243a', rug:'#536052', ambient:'#c7a96e'};
-    if (lighting === 'dawn') return {...common, wall:'#766961', floor:'#5a493c', trim:'#765b46', glow:'#efbc77', sky:'#c48073', rug:'#63705b', ambient:'#efcf98'};
-    if (lighting === 'dusk') return {...common, wall:'#665a58', floor:'#574438', trim:'#705541', glow:'#e8a662', sky:'#8a6075', rug:'#626b59', ambient:'#dfb47e'};
-    return {...common, wall:'#867c6b', floor:'#665240', trim:'#745845', glow:'#edc77e', sky:'#81a39e', rug:'#6c7964', ambient:'#ead6a8'};
-  }
-  function hexRgb(value) {
-    const v=value.replace('#',''); return [parseInt(v.slice(0,2),16),parseInt(v.slice(2,4),16),parseInt(v.slice(4,6),16)];
-  }
-  function blendHex(a,b,t) {
-    const aa=hexRgb(a), bb=hexRgb(b);
-    const cc=aa.map((v,i)=>Math.round(mix(v,bb[i],clamp01(t))));
-    return `#${cc.map(v=>v.toString(16).padStart(2,'0')).join('')}`;
-  }
-  function blendPalette(a,b,t) {
-    const out={...a};
-    for (const key of Object.keys(a)) if (typeof a[key]==='string' && a[key].startsWith('#') && typeof b[key]==='string' && b[key].startsWith('#')) out[key]=blendHex(a[key],b[key],t);
-    return out;
-  }
-  function worldMinuteAt(f, now) {
-    const target=Number(f.world_minutes || 0);
-    if (!previous || snapshotPath) return target;
-    const source=Number(previous.world_minutes ?? target);
-    let delta=target-source;
-    if (delta < -720) delta += 1440;
-    if (delta > 720) delta -= 1440;
-    return source + delta*smoother01((now-fetchedAt)/MOTION.environment_ms);
-  }
-  function visualLighting(f, now) {
+  function visualLighting(f,now){
     const minute=((worldMinuteAt(f,now)%1440)+1440)%1440;
-    const transitions=[
-      [360,'night','dawn'], [480,'dawn','day'], [1050,'day','dusk'], [1170,'dusk','night'],
-    ];
-    for (const [center,from,to] of transitions) {
-      if (minute >= center-30 && minute < center+30) {
-        const t=smoother01((minute-(center-30))/60);
-        return {palette:blendPalette(palette(from),palette(to),t), night:from==='night' ? 1-t : to==='night' ? t : 0, minute};
+    // Four deliberate palette steps through each one-hour boundary. This keeps
+    // environmental change calm while retaining a finite pixel-art palette.
+    const transitions=[[360,'night','dawn'],[480,'dawn','day'],[1050,'day','dusk'],[1170,'dusk','night']];
+    for(const [center,from,to] of transitions){
+      if(minute>=center-30&&minute<center+30){
+        const q=Math.floor(clamp01((minute-(center-30))/60)*4);
+        return {palette: q<2 ? PALETTES[from] : PALETTES[to], night: to==='night'&&q>=2 ? 1 : from==='night'&&q<2 ? 1 : 0, minute};
       }
     }
-    return {palette:palette(f.lighting), night:f.lighting==='night'?1:0, minute};
+    return {palette:PALETTES[f.lighting]||PALETTES.day,night:f.lighting==='night'?1:0,minute};
   }
 
-  function drawPersistentHistory(f) {
-    const wear = f.habitat.path_wear || {};
-    const routes = {
-      sleeping_nook: {end:[154,427], control:[274,408]},
-      window: {end:[182,306], control:[286,337]},
-      collection_shelf: {end:[650,303], control:[548,333]},
-      activity_corner: {end:[650,427], control:[535,408]},
-    };
-    ctx.save();
-    ctx.lineCap='round';
-    for (const [zone, route] of Object.entries(routes)) {
-      const visits = Number(wear[zone] || 0);
-      if (visits < 5) continue;
-      const alpha = Math.min(.18, .018 + (visits - 4) * .0048);
-      const width = Math.min(12, 2.6 + visits * .17);
-      ctx.strokeStyle = `rgba(47,34,27,${alpha})`;
-      ctx.lineWidth = width;
-      ctx.beginPath(); ctx.moveTo(405,421);
-      ctx.quadraticCurveTo(route.control[0],route.control[1],route.end[0],route.end[1]); ctx.stroke();
-      ctx.strokeStyle = `rgba(222,198,154,${Math.min(.10,alpha*.42)})`;
-      ctx.lineWidth = Math.max(1.5,width*.18);
-      ctx.setLineDash([7,12]);
-      ctx.beginPath(); ctx.moveTo(405,421);
-      ctx.quadraticCurveTo(route.control[0],route.control[1],route.end[0],route.end[1]); ctx.stroke();
-      ctx.setLineDash([]);
-    }
-
-    // Frequently moved possessions leave small settled/scuffed patches. They
-    // are physical cues, not labels: reopening the diorama reveals use without
-    // turning the world into an activity feed.
-    for (const o of f.objects || []) {
-      const moved = Number(o.times_moved || 0);
-      if (o.state !== 'placed' || moved < 2) continue;
-      ctx.fillStyle = `rgba(39,29,24,${Math.min(.16,.035+moved*.012)})`;
-      ctx.beginPath(); ctx.ellipse(o.x,o.y+7,13+Math.min(7,moved),5,0,0,Math.PI*2); ctx.fill();
-    }
-    ctx.restore();
+  function drawPixelLine(x0,y0,x1,y1,color,thickness=1){
+    x0=Math.round(x0); y0=Math.round(y0); x1=Math.round(x1); y1=Math.round(y1);
+    const dx=Math.abs(x1-x0), sx=x0<x1?1:-1, dy=-Math.abs(y1-y0), sy=y0<y1?1:-1;
+    let err=dx+dy;
+    while(true){ rect(x0-Math.floor(thickness/2),y0-Math.floor(thickness/2),thickness,thickness,color); if(x0===x1&&y0===y1) break; const e2=2*err; if(e2>=dy){err+=dy;x0+=sx;} if(e2<=dx){err+=dx;y0+=sy;} }
   }
 
-  function drawBackground(f, now) {
-    const visual = visualLighting(f, now);
-    const p = visual.palette, nightAmount=visual.night, daylight=1-nightAmount;
-    const causal = causalActivityState(f, now);
-    ctx.fillStyle = p.wall; ctx.fillRect(0, 0, 800, 315);
-    ctx.fillStyle = p.floor; ctx.fillRect(0, 315, 800, 165);
-    // A real baseboard and quiet floor seams make the room read as one physical
-    // box instead of two flat color fields. Keep them lower-contrast than Moss.
-    ctx.fillStyle = p.woodDark; ctx.fillRect(0, 306, 800, 14);
-    ctx.fillStyle = p.trim; ctx.fillRect(0, 306, 800, 5);
-    ctx.strokeStyle='rgba(42,31,25,.10)'; ctx.lineWidth=2;
-    for (const y of [357,405,453]) { ctx.beginPath(); ctx.moveTo(0,y); ctx.lineTo(800,y); ctx.stroke(); }
-    if (daylight > .01) {
-      const beamAlpha=(f.lighting === 'dusk' ? .035 : .055)*daylight;
-      ctx.fillStyle = `rgba(239,210,156,${beamAlpha.toFixed(4)})`;
-      ctx.beginPath(); ctx.moveTo(92,210); ctx.lineTo(245,210); ctx.lineTo(410,480); ctx.lineTo(176,480); ctx.closePath(); ctx.fill();
-    }
-
-    // Window / weather: environmental time instead of a dashboard clock.
-    ctx.fillStyle='rgba(31,23,20,.16)'; ctx.fillRect(49,53,235,176);
-    rounded(54, 48, 225, 172, 5, p.woodDark);
-    rounded(65, 58, 203, 151, 2, p.sky);
-    if (daylight > .01) { ctx.save(); ctx.globalAlpha=daylight; ctx.fillStyle='#f5d293'; ctx.beginPath(); ctx.arc(215,92,18,0,Math.PI*2); ctx.fill(); ctx.restore(); }
-    if (nightAmount > .01) { ctx.save(); ctx.globalAlpha=nightAmount; ctx.fillStyle='#ddd2a8'; ctx.beginPath(); ctx.arc(224,91,14,0,Math.PI*2); ctx.fill(); ctx.restore(); }
-    ctx.fillStyle = 'rgba(35,45,55,.33)'; ctx.fillRect(163,58,7,151); ctx.fillRect(65,130,203,7);
-    if (f.weather === 'rain') {
-      ctx.strokeStyle = 'rgba(190,214,218,.65)'; ctx.lineWidth = 2;
-      for (const d of rain) {
-        const y = 62 + ((d.y + now * d.speed * .06) % 143);
-        const x = 68 + (d.x % 195);
-        ctx.beginPath(); ctx.moveTo(x,y); ctx.lineTo(x-5,y+11); ctx.stroke();
-      }
-    } else if (f.weather === 'mist') {
-      ctx.fillStyle = 'rgba(224,224,210,.18)'; ctx.fillRect(65,118,203,46); ctx.fillRect(65,172,203,20);
-    }
-    // Persistent window traces emerge continuously. Current weather changes
-    // how the same history reads: rain glints on old streaks, mist softens
-    // smudges, and clear weather leaves the dried traces understated.
-    const windowWatches = historyValue(f,'window_watches',now);
-    const wetWatches = historyValue(f,'wet_window_watches',now);
-    const smudgeWeather = f.weather === 'rain' ? .72 : f.weather === 'mist' ? .84 : 1;
-    for (let i=0;i<5;i++) {
-      const strength=emergence(windowWatches,1+i*2.8,6.5);
-      if (strength <= 0) continue;
-      const x=96+i*31 + (stableUnit('window-smudge-x',i)-.5)*8;
-      const y=190-(i%2)*6 + (stableUnit('window-smudge-y',i)-.5)*5;
-      ctx.fillStyle=`rgba(226,216,196,${(.115*strength*smudgeWeather).toFixed(4)})`;
-      ctx.beginPath(); ctx.ellipse(x,y,7+stableUnit('window-smudge-r',i)*3,3.2+strength*1.4,-.24+(stableUnit('window-smudge-a',i)-.5)*.18,0,Math.PI*2); ctx.fill();
-    }
-    const sillStrength=emergence(windowWatches,1,22);
-    if (sillStrength > 0) {
-      ctx.fillStyle=`rgba(59,45,38,${(.16*sillStrength).toFixed(4)})`;
-      ctx.fillRect(80,215,155,2+4*sillStrength);
-      ctx.fillStyle=`rgba(191,168,133,${(.055*sillStrength).toFixed(4)})`;
-      ctx.fillRect(91,216,104,1);
-    }
-    for (let i=0;i<5;i++) {
-      const strength=emergence(wetWatches,.4+i*1.3,4.5);
-      if (strength <= 0) continue;
-      const x=93+i*32+(stableUnit('wet-streak-x',i)-.5)*7;
-      const glint=f.weather==='rain' ? .78+.22*Math.sin(now*.0012+i*1.3) : f.weather==='mist' ? .72 : .46;
-      ctx.strokeStyle=`rgba(225,232,224,${(.20*strength*glint).toFixed(4)})`; ctx.lineWidth=1.4+strength*.8;
-      ctx.beginPath(); ctx.moveTo(x,149); ctx.quadraticCurveTo(x+3+stableUnit('wet-streak-b',i)*4,165,x-1,182); ctx.stroke();
-      if (f.weather==='rain' && strength>.3) {
-        const beadY=153+((now*.018+i*27)%25);
-        ctx.fillStyle=`rgba(238,242,232,${(.10*strength).toFixed(4)})`;
-        ctx.fillRect(x-1,beadY,2,3);
+  function drawPersistentHistory(f,p){
+    const wear=f.habitat.path_wear||{};
+    const routes={sleeping_nook:[[201,210],[137,206],[77,214]],window:[[201,210],[143,170],[91,153]],collection_shelf:[[201,210],[273,171],[325,152]],activity_corner:[[201,210],[267,205],[325,214]]};
+    for(const [zone,points] of Object.entries(routes)){
+      const visits=Number(wear[zone]||0); if(visits<5) continue;
+      const count=Math.min(9,2+Math.floor(visits/4));
+      for(let i=0;i<count;i++){
+        const t=(i+1)/(count+1); const u=1-t;
+        const x=u*u*points[0][0]+2*u*t*points[1][0]+t*t*points[2][0];
+        const y=u*u*points[0][1]+2*u*t*points[1][1]+t*t*points[2][1];
+        rect(x-2,y+(i%2),4+(visits>18?2:0),1,p.floorShade);
+        if(i%3===0) rect(x,y-1,2,1,p.floorLight);
       }
     }
-
-    // Current window watching activates the same pane and sill where persistent
-    // traces accumulate. This response is grounded in canonical activity and
-    // position; it is not an independent decorative animation.
-    if (causal.window > 0) {
-      const contactX=Math.max(88,Math.min(242,Number(f.creature.x)));
-      const pulse=.86+.14*Math.sin(now*.0016);
-      const wet=f.weather==='rain' || f.weather==='mist';
-      ctx.fillStyle=`rgba(232,228,211,${(.075*causal.window*pulse*(wet?1.25:1)).toFixed(4)})`;
-      ctx.beginPath(); ctx.ellipse(contactX,198,20+5*causal.window,6+2*causal.window,-.08,0,Math.PI*2); ctx.fill();
-      ctx.strokeStyle=`rgba(224,215,194,${(.14*causal.window).toFixed(4)})`; ctx.lineWidth=1.2;
-      ctx.beginPath(); ctx.moveTo(contactX-13,216); ctx.quadraticCurveTo(contactX,213,contactX+13,216); ctx.stroke();
+    for(const o of f.objects||[]){
+      const moved=Number(o.times_moved||0); if(o.state!=='placed'||moved<2) continue;
+      const x=px(o.x),y=px(o.y); rect(x-5,y+3,10,2,p.shadow); if(moved>5) rect(x-3,y+2,6,1,p.floorShade);
     }
+  }
 
-    // Sleeping nook compression, pillow drift and creases all grow as
-    // continuous functions of actual accumulated sleep rather than popping at
-    // integer renderer thresholds. A sub-pixel cloth drift keeps old wear
-    // visually integrated with the ambient room without changing world state.
-    const sleepTicks = historyValue(f,'sleep_nook_ticks',now);
-    const sleepBouts = historyValue(f,'sleep_nook_bouts',now);
-    rounded(49, 356, 216, 75, 9, p.woodDark);
-    rounded(54, 351, 210, 74, 9, p.wood);
-    rounded(62, 362, 188, 53, 9, p.cloth);
-    const nestStrength=emergence(sleepTicks,0,18);
-    if (nestStrength > 0) {
-      ctx.fillStyle=`rgba(76,58,48,${(.235*nestStrength).toFixed(4)})`;
-      ctx.beginPath(); ctx.ellipse(164,389,44+17*emergence(sleepBouts,0,5),15+8*nestStrength,-.08,0,Math.PI*2); ctx.fill();
-    }
-    // Existing sleep wear physically responds while Moss is asleep in the
-    // nook. The local pressure follows canonical x and breathing, while the
-    // accumulated nest strength remains history-owned.
-    if (causal.sleep_nook > 0) {
-      const breath=.5+.5*Math.sin(now*.002);
-      const pressX=Math.max(92,Math.min(214,Number(f.creature.x)+12));
-      ctx.fillStyle=`rgba(62,47,40,${(.17*causal.sleep_nook*(.82+.18*breath)).toFixed(4)})`;
-      ctx.beginPath(); ctx.ellipse(pressX,397+breath,31+5*breath,8+4*causal.sleep_nook,-.06,0,Math.PI*2); ctx.fill();
-      ctx.strokeStyle=`rgba(218,194,151,${(.12*causal.sleep_nook).toFixed(4)})`; ctx.lineWidth=1.1;
-      ctx.beginPath(); ctx.moveTo(pressX-33,390); ctx.quadraticCurveTo(pressX-18,397+2*breath,pressX-7,401); ctx.stroke();
-      ctx.beginPath(); ctx.moveTo(pressX+10,401); ctx.quadraticCurveTo(pressX+24,396+2*breath,pressX+36,391); ctx.stroke();
-    }
-    const pillowShift=13*emergence(sleepBouts,0,6);
-    rounded(70+pillowShift,367+4*emergence(sleepBouts,0,5),72,29,9,p.clothLight);
-    for (let i=0;i<4;i++) {
-      const strength=emergence(sleepTicks,1+i*3.5,8);
-      if (strength <= 0) continue;
-      const clothDrift=Math.sin(now*.0007+i*1.9)*.55*strength;
-      ctx.strokeStyle=`rgba(93,72,57,${(.28*strength).toFixed(4)})`; ctx.lineWidth=1.2+strength*.8;
-      ctx.beginPath(); ctx.moveTo(128+i*22,374+i*4+clothDrift); ctx.quadraticCurveTo(145+i*18,385+clothDrift,132+i*22,402); ctx.stroke();
-    }
-    ctx.fillStyle = p.woodTop; ctx.fillRect(45, 426, 224, 8);
+  function drawWindow(f,now,p){
+    rect(22,23,121,91,p.walnutDark); rect(25,26,115,85,p.walnut); rect(31,30,103,75,p.sky);
+    rect(81,30,4,75,p.skyDark); rect(31,65,103,4,p.skyDark);
+    // Tiny stepped sun/moon clusters instead of circles.
+    if(f.lighting==='night'){ rect(108,41,10,8,p.cream); rect(105,44,13,5,p.cream); rect(111,39,4,2,p.cream); }
+    else { rect(105,39,14,10,p.amber); rect(102,42,20,5,p.amber); rect(109,36,6,3,p.cream); }
+    // Curtains: irregular stair-steps, not smooth drapery.
+    rect(24,27,8,79,p.creamShade); rect(20,31,7,68,p.cream); rect(17,38,5,48,p.creamShade); rect(132,27,8,79,p.creamShade); rect(139,32,7,66,p.cream); rect(146,39,4,47,p.creamShade);
+    for(let y=34;y<98;y+=13){ rect(21,y,9,2,p.wallShade); rect(136,y+3,9,2,p.wallShade); }
+    rect(27,105,112,6,p.walnutLight); rect(24,111,118,4,p.walnutDark);
 
-    // Rug / open living space.
-    rounded(296, 333, 224, 91, 30, p.rug);
-    ctx.strokeStyle = 'rgba(225,211,176,.13)'; ctx.lineWidth = 2;
-    for (let y=351; y<413; y+=16) { ctx.beginPath(); ctx.moveTo(319,y); ctx.lineTo(497,y); ctx.stroke(); }
-
-    // Collection shelf; items themselves are canonical world objects.
-    ctx.fillStyle = 'rgba(28,20,17,.16)'; ctx.fillRect(590,66,167,177);
-    ctx.fillStyle = p.wood; ctx.fillRect(595, 61, 157, 17); ctx.fillRect(603, 78, 8, 158); ctx.fillRect(736, 78, 8, 158);
-    ctx.fillStyle = p.woodTop; for (const y of [118,169,220]) ctx.fillRect(603,y,141,10);
-    ctx.fillStyle = 'rgba(15,10,8,.14)'; ctx.fillRect(611,87,125,31); ctx.fillRect(611,128,125,41); ctx.fillRect(611,179,125,41);
-
-    // Activity-corner history is layered rather than counted: every paper and
-    // work mark fades into the same authored composition over a different
-    // history range. Stable hash offsets add organic variation with no random
-    // renderer state and no authority outside the canonical counters.
-    const cornerUses=historyValue(f,'activity_corner_uses',now);
-    ctx.fillStyle='rgba(30,22,18,.16)'; ctx.fillRect(585,358,155,59);
-    ctx.fillStyle=p.woodTop; ctx.fillRect(590,351,145,12); ctx.fillStyle=p.wood; ctx.fillRect(604,363,9,48); ctx.fillRect(712,363,9,48);
-    ctx.save(); ctx.translate(648,379); ctx.rotate(.16*emergence(cornerUses,0,28));
-    ctx.fillStyle=p.woodTop; ctx.fillRect(-23,-13,46,27); ctx.fillStyle=p.paper; ctx.fillRect(-17,-9,35,18); ctx.restore();
-    for(let i=0;i<5;i++) {
-      const strength=emergence(cornerUses,1+i*4.2,8);
-      if(strength<=0) continue;
-      const x=607+i*25+(stableUnit('paper-x',i)-.5)*7;
-      const y=337-(i%2)*5+(stableUnit('paper-y',i)-.5)*5;
-      const drift=Math.sin(now*.00055+i*1.4)*.35*strength;
-      const side=x < Number(f.creature.x) ? -1 : 1;
-      const contactShift=causal.activity_corner*side*(.7+stableUnit('paper-contact',i)*2.2);
-      const contactLift=causal.activity_corner*(i%2 ? -1.2 : -.35);
-      ctx.save();ctx.translate(x+contactShift,y+drift+contactLift);ctx.rotate((stableUnit('paper-r',i)-.5)*.18 + side*.025*causal.activity_corner);
-      ctx.fillStyle=`rgba(211,194,145,${(.68*strength).toFixed(4)})`;ctx.fillRect(-10,-5,22,11);
-      ctx.strokeStyle=`rgba(108,82,58,${(.16*strength).toFixed(4)})`;ctx.lineWidth=.8;ctx.strokeRect(-10,-5,22,11);ctx.restore();
-    }
-    for(let i=0;i<7;i++) {
-      const strength=emergence(cornerUses,2+i*3.2,7);
-      if(strength<=0) continue;
-      ctx.strokeStyle=`rgba(75,54,43,${(.46*strength).toFixed(4)})`;ctx.lineWidth=1.1;
-      const x=612+i*16; ctx.beginPath();ctx.moveTo(x,344);ctx.lineTo(x+8,340+(stableUnit('work-mark-y',i)-.5)*5);ctx.stroke();
-    }
-    if (causal.activity_corner > 0) {
-      const handX=Math.max(610,Math.min(712,Number(f.creature.x)-8));
-      ctx.strokeStyle=`rgba(225,205,164,${(.18*causal.activity_corner).toFixed(4)})`; ctx.lineWidth=1.2;
-      ctx.beginPath(); ctx.moveTo(handX-12,350); ctx.quadraticCurveTo(handX,346,handX+12,349); ctx.stroke();
-    }
-    ctx.fillStyle = p.woodTop; ctx.fillRect(748, 339, 28, 36); ctx.fillStyle = p.foliage;
-    for (let i=0;i<5;i++){ ctx.beginPath(); ctx.ellipse(762 + (i-2)*7, 331 - Math.abs(i-2)*7, 9, 17, (i-2)*.35, 0, Math.PI*2); ctx.fill(); }
-
-    // Repeated travel becomes a physical route through the room.
-    drawPersistentHistory(f);
-
-    // Persistent wear is intentionally subtle but visible.
-    for (const [zone, wear] of Object.entries(f.habitat.path_wear || {})) {
-      if (wear < 6) continue;
-      const pos = {sleeping_nook:[118,427],window:[168,277],open_space:[405,429],collection_shelf:[682,246],activity_corner:[655,427]}[zone];
-      if (!pos) continue;
-      ctx.fillStyle = `rgba(42,31,25,${Math.min(.22, .035 + wear*.006)})`;
-      ctx.beginPath(); ctx.ellipse(pos[0], pos[1], 33 + Math.min(18,wear), 7, 0, 0, Math.PI*2); ctx.fill();
+    if(f.weather==='rain'){
+      const phase=Math.floor(now/120)%17;
+      for(const d of rain){ const x=34+d.x%96; const y=31+((d.y+phase+d.phase)%68); rect(x,y,1,4,p.rain); rect(x-1,y+4,1,2,p.rain); }
+    } else if(f.weather==='mist'){
+      for(let y=45;y<91;y+=11) for(let x=35+(y%3);x<129;x+=17) rect(x,y,10,2,p.rain);
     }
 
-    if (nightAmount > .01) {
-      const glow = ctx.createRadialGradient(425,265,30,425,265,340);
-      glow.addColorStop(0,`rgba(244,181,93,${(.16*nightAmount).toFixed(4)})`); glow.addColorStop(1,`rgba(10,16,30,${(.36*nightAmount).toFixed(4)})`);
-      ctx.fillStyle = glow; ctx.fillRect(0,0,800,480);
+    const watches=historyValue(f,'window_watches',now), wet=historyValue(f,'wet_window_watches',now);
+    for(let i=0;i<6;i++){
+      const strength=emergence(watches,1+i*2.5,6); if(strength<=0) continue;
+      const x=47+i*13+(stableUnit('smudge',i)>.5?1:0), y=91-(i%2)*3;
+      rect(x,y,5,1,p.creamShade); if(strength>.55) rect(x+1,y+1,4,1,p.skyDark);
     }
-    for (const d of dust) {
-      const alpha = .025 + .018 * Math.sin(now*.00035 + d.phase);
-      ctx.fillStyle = `rgba(239,216,169,${alpha})`; ctx.fillRect(d.x, d.y, 2, 2);
+    for(let i=0;i<5;i++){
+      const strength=emergence(wet,.4+i*1.3,4.5); if(strength<=0) continue;
+      const x=45+i*16; rect(x,75,1,8,p.rain); rect(x+1,83,1,4,p.rain);
     }
+    if(causalActivityState(f,now).window>0){ const cx=clamp(px(f.creature.x),44,121); rect(cx-8,101,16,2,p.creamShade); rect(cx-4,103,8,1,p.walnutLight); }
+  }
+
+  function drawBed(f,now,p){
+    rect(23,177,111,40,p.walnutDark); rect(27,174,105,38,p.walnut); rect(31,181,95,28,p.creamShade);
+    rect(34,184,39,13,p.cream); rect(37,187,33,8,p.creamShade);
+    // Hand-authored blanket clusters.
+    rect(76,183,48,22,p.dustyBlue); rect(72,188,53,16,p.dustyBlue); rect(83,181,39,5,p.dustyBlue);
+    rect(78,187,20,2,p.creamShade); rect(103,193,18,2,p.skyDark); rect(75,200,33,2,p.skyDark);
+    const sleepTicks=historyValue(f,'sleep_nook_ticks',now), sleepBouts=historyValue(f,'sleep_nook_bouts',now);
+    const nest=emergence(sleepTicks,0,18); if(nest>0){ rect(77,196,43+Math.floor(8*emergence(sleepBouts,0,5)),5,p.walnutDark); rect(84,194,24,2,p.floorShade); }
+    for(let i=0;i<4;i++){ const s=emergence(sleepTicks,1+i*3.5,8); if(s>.2){ rect(65+i*12,187+i*2,8,1,p.walnutLight); rect(70+i*10,193+i,6,1,p.skyDark); } }
+    rect(22,213,113,5,p.walnutLight);
+  }
+
+  function drawRug(p){
+    // Large open moss-green center assembled as stepped rows.
+    const rows=[[154,173,92],[149,177,102],[146,181,108],[145,185,110],[145,189,110],[147,193,106],[151,197,98],[157,201,86],[165,205,70]];
+    for(const [x,y,w] of rows) rect(x,y,w,4,p.rug);
+    for(let x=163;x<238;x+=18){ rect(x,181+(x%3),10,1,p.rugLight); rect(x+5,196-(x%4),8,1,p.mossDark); }
+    rect(158,176,84,1,p.rugLight); rect(164,204,70,1,p.mossDark);
+  }
+
+  function drawShelf(f,p){
+    rect(295,30,84,91,p.shadow); rect(298,29,79,10,p.walnut); rect(301,39,5,79,p.walnutDark); rect(369,39,5,79,p.walnutDark);
+    for(const y of [59,84,109]){ rect(304,y,68,6,p.walnutLight); rect(306,y+6,65,3,p.walnutDark); }
+    // Books/knickknacks are decorative fixed clusters; canonical movable items are drawn separately.
+    const books=[[310,44,4,13,p.dustyBlue],[315,47,3,10,p.amber],[319,43,5,14,p.moss],[326,48,4,9,p.creamShade],[339,68,4,13,p.cream],[344,66,5,15,p.dustyBlue],[350,70,3,11,p.amber]];
+    for(const b of books) rect(...b);
+    rect(310,93,16,9,p.walnutDark); rect(312,91,12,2,p.amber);
+  }
+
+  function drawActivityCorner(f,now,p){
+    rect(292,180,80,30,p.shadow); rect(295,175,73,7,p.walnutLight); rect(302,182,5,25,p.walnutDark); rect(356,182,5,25,p.walnutDark); rect(293,179,77,4,p.walnut);
+    const uses=historyValue(f,'activity_corner_uses',now);
+    rect(320,169,23,10,p.walnut); rect(322,166,20,3,p.paper); rect(324,168,15,5,p.paper);
+    for(let i=0;i<5;i++){ const s=emergence(uses,1+i*4.2,8); if(s<=0) continue; const x=302+i*12+(stableUnit('paper',i)>.5?2:0); const y=168-(i%2)*3; rect(x,y,11,5,p.paper); rect(x+2,y+2,6,1,p.walnutLight); }
+    for(let i=0;i<7;i++){ const s=emergence(uses,2+i*3.2,7); if(s>.1) rect(305+i*8,171-(i%3),5,1,p.walnutDark); }
+    // Pot + plant.
+    rect(373,171,13,13,p.amber); rect(371,169,17,4,p.creamShade); rect(378,155,3,15,p.foliage);
+    rect(371,158,8,5,p.foliage); rect(381,156,8,5,p.moss); rect(368,163,8,4,p.mossDark); rect(382,163,9,4,p.foliage);
+    if(causalActivityState(f,now).activity_corner>0){ const hx=clamp(px(f.creature.x)-4,305,356); rect(hx-6,174,12,1,p.cream); }
+  }
+
+  function drawBowls(p){
+    rect(257,213,20,3,p.shadow); rect(258,208,18,5,p.dustyBlue); rect(261,206,12,2,p.cream); rect(286,214,19,3,p.shadow); rect(287,209,17,5,p.amber); rect(290,207,11,2,p.creamShade);
+  }
+
+  function drawBackground(f,now){
+    const p=visualLighting(f,now).palette;
+    rect(0,0,ART_W,158,p.wall); rect(0,158,ART_W,82,p.floor);
+    // Wall boards/panel rhythm; all clusters align to art pixels.
+    for(let y=17;y<153;y+=27) rect(0,y,ART_W,1,p.wallShade);
+    for(let x=12;x<395;x+=43){ rect(x,18+(x%4),2,6,p.wallLight); rect(x+5,20+(x%3),6,1,p.wallLight); }
+    rect(0,153,ART_W,7,p.walnutDark); rect(0,153,ART_W,2,p.walnutLight);
+    for(const y of [178,202,226]) rect(0,y,ART_W,1,p.floorShade);
+    for(let x=16;x<390;x+=52){ rect(x,162+(x%5),15,1,p.floorLight); rect(x+7,186+(x%7),11,1,p.floorShade); }
+
+    drawWindow(f,now,p);
+    drawBed(f,now,p);
+    drawRug(p);
+    drawShelf(f,p);
+    drawActivityCorner(f,now,p);
+    drawBowls(p);
+    drawPersistentHistory(f,p);
+
+    // Lived-in small clusters: flowers, scuffs and stitching, kept sparse.
+    rect(277,150,4,2,p.amber); rect(281,148,2,4,p.foliage); rect(274,149,2,2,p.cream);
+    rect(17,218,7,1,p.floorShade); rect(33,229,5,1,p.floorLight); rect(244,222,9,1,p.floorShade);
+
+    const phase=Math.floor(now/650);
+    for(const m of motes){ if((phase+Math.floor(m.phase))%4!==0) continue; rect(m.x,m.y,1,1,p.cream); }
+    return p;
   }
 
   function placedObjectRenderState(o, f, now) {
     const source=previous?.objects?.find(item=>item.id===o.id);
-    if (!snapshotPath && source?.state === 'carried' && o.state === 'placed') {
-      const raw=clamp01((now-fetchedAt)/MOTION.placement_ms);
-      const t=smoother01((raw-.34)/.58);
-      const facing=previous?.creature?.facing === 'left' ? -1 : 1;
-      const originX=(transitionSource?.x ?? Number(previous.creature.x)) + facing*22;
-      const originY=(transitionSource?.y ?? Number(previous.creature.y)) - 4;
-      return {
-        x:mix(originX,Number(o.x),t),
-        y:mix(originY,Number(o.y),t),
-        progress:t,
-        phase:raw < .34 ? 'prepare' : t < 1 ? 'lower-contact' : 'settled',
-        transitioning:t < 1,
-      };
+    if(!snapshotPath&&source?.state==='carried'&&o.state==='placed'){
+      const raw=clamp01((now-fetchedAt)/MOTION.placement_ms),t=smoother01((raw-.34)/.58),facing=previous?.creature?.facing==='left'?-1:1;
+      const originX=(transitionSource?.x??Number(previous.creature.x))+facing*22, originY=(transitionSource?.y??Number(previous.creature.y))-4;
+      return {x:mix(originX,Number(o.x),t),y:mix(originY,Number(o.y),t),progress:t,phase:raw<.34?'prepare':t<1?'lower-contact':'settled',transitioning:t<1};
     }
     return {x:Number(o.x),y:Number(o.y),progress:1,phase:'settled',transitioning:false};
   }
-
-  function activePlacementState(f, now) {
-    if (!previous || snapshotPath) return null;
-    for (const o of f.objects || []) {
-      const source=previous.objects?.find(item=>item.id===o.id);
-      if (source?.state === 'carried' && o.state === 'placed') {
-        const rs=placedObjectRenderState(o,f,now);
-        return {object_id:o.id,rendered_x:Number(rs.x.toFixed(6)),rendered_y:Number(rs.y.toFixed(6)),target_x:Number(o.x),target_y:Number(o.y),progress:Number(rs.progress.toFixed(6)),phase:rs.phase};
-      }
-    }
+  function activePlacementState(f,now){
+    if(!previous||snapshotPath) return null;
+    for(const o of f.objects||[]){ const source=previous.objects?.find(item=>item.id===o.id); if(source?.state==='carried'&&o.state==='placed'){ const rs=placedObjectRenderState(o,f,now); return {object_id:o.id,rendered_x:Number(rs.x.toFixed(6)),rendered_y:Number(rs.y.toFixed(6)),target_x:Number(o.x),target_y:Number(o.y),progress:Number(rs.progress.toFixed(6)),phase:rs.phase}; } }
     return null;
   }
 
-  function drawWorldObject(o, f, now) {
-    if (o.state === 'carried') return;
-    const rs=placedObjectRenderState(o,f,now);
-    ctx.save();
-    ctx.fillStyle='rgba(30,22,18,.18)';
-    ctx.beginPath(); ctx.ellipse(rs.x,rs.y+6,10,3.5,0,0,Math.PI*2); ctx.fill();
-    ctx.restore();
-    drawObject({...o,x:rs.x,y:rs.y});
+  function drawObject(o,paletteOverride=null){
+    if(o.state==='carried') return;
+    const p=paletteOverride||PALETTES.day,x=px(o.x),y=px(o.y);
+    rect(x-5,y+3,10,2,p.shadow);
+    if(o.kind==='stone'){ rect(x-5,y-2,10,5,p.dustyBlue); rect(x-3,y-4,6,2,p.dustyBlue); rect(x-2,y-3,3,1,p.rain); rect(x+3,y,2,1,p.skyDark); }
+    else if(o.kind==='leaf'){ rect(x-5,y-1,9,3,p.amber); rect(x-3,y-3,7,2,p.amber); rect(x-1,y+2,2,2,p.walnutDark); drawPixelLine(x-4,y+3,x+4,y-3,p.walnutDark,1); }
+    else if(o.kind==='seed'){ rect(x-4,y-3,8,6,p.walnutLight); rect(x-3,y-4,6,2,p.walnut); rect(x-2,y-1,4,2,p.amber); }
+    else if(o.kind==='shell'){ rect(x-4,y-3,8,6,p.cream); rect(x-5,y-1,10,3,p.cream); rect(x-2,y-2,4,1,p.creamShade); rect(x-1,y,3,1,p.walnutLight); }
+    else if(o.kind==='thread'){ rect(x-5,y-2,8,2,'#a85c4d'); rect(x-3,y,7,2,'#a85c4d'); rect(x+2,y-1,3,1,p.creamShade); }
+    else { rect(x-5,y-1,11,3,p.cream); rect(x-3,y-4,6,9,p.cream); rect(x-1,y-2,2,5,p.amber); }
   }
+  function drawWorldObject(o,f,now,p){ if(o.state==='carried') return; const rs=placedObjectRenderState(o,f,now); drawObject({...o,x:rs.x,y:rs.y},p); }
 
-  function drawObject(o) {
-    if (o.state === 'carried') return;
-    const x=o.x, y=o.y;
-    ctx.save(); ctx.translate(x,y);
-    if (o.kind === 'stone') { ctx.fillStyle='#557487'; ctx.beginPath(); ctx.ellipse(0,0,11,8,-.2,0,Math.PI*2); ctx.fill(); ctx.fillStyle='#8ba2ad'; ctx.fillRect(-3,-4,4,2); }
-    else if (o.kind === 'leaf') { ctx.fillStyle='#b8773f'; ctx.beginPath(); ctx.ellipse(0,0,11,5,-.55,0,Math.PI*2); ctx.fill(); ctx.strokeStyle='#6d5135'; ctx.lineWidth=1.3; ctx.beginPath(); ctx.moveTo(-9,6); ctx.lineTo(9,-6); ctx.stroke(); }
-    else if (o.kind === 'seed') { ctx.fillStyle='#87633d'; ctx.beginPath(); ctx.arc(0,0,7,0,Math.PI*2); ctx.fill(); ctx.fillStyle='#5d472e'; ctx.fillRect(-5,-7,10,3); }
-    else if (o.kind === 'shell') { ctx.fillStyle='#d0b6a0'; ctx.beginPath(); ctx.arc(0,0,8,0,Math.PI*2); ctx.fill(); ctx.strokeStyle='#977f70'; ctx.lineWidth=1.2; ctx.beginPath(); ctx.arc(0,0,4,0,Math.PI*1.7); ctx.stroke(); }
-    else if (o.kind === 'thread') { ctx.strokeStyle='#9f564b'; ctx.lineWidth=3; ctx.beginPath(); ctx.arc(0,0,9,0,Math.PI*1.6); ctx.arc(4,1,6,0,Math.PI*1.7); ctx.stroke(); }
-    else { ctx.fillStyle='#d8c3a8'; ctx.beginPath(); for(let i=0;i<10;i++){const r=i%2?4:9,a=-Math.PI/2+i*Math.PI/5; const px=Math.cos(a)*r,py=Math.sin(a)*r; i?ctx.lineTo(px,py):ctx.moveTo(px,py);} ctx.closePath();ctx.fill(); ctx.strokeStyle='rgba(86,70,59,.45)';ctx.lineWidth=1;ctx.stroke(); }
-    ctx.restore();
+  function actionTargetObject(f){
+    const id=f.creature?.target_object_id||f.last_event?.object_id; if(!id) return null;
+    const prior=previous?.objects?.find(o=>o.id===id); if(f.creature.activity==='carry'&&prior?.state==='placed') return prior;
+    return f.objects?.find(o=>o.id===id)||prior||null;
   }
-
-  function actionTargetObject(f) {
-    const id=f.creature?.target_object_id || f.last_event?.object_id;
-    if (!id) return null;
-    const prior=previous?.objects?.find(o=>o.id===id);
-    if (f.creature.activity==='carry' && prior?.state==='placed') return prior;
-    return f.objects?.find(o=>o.id===id) || prior || null;
+  function actionTargetPoint(f){
+    const lx=Number(f.last_event?.target_x),ly=Number(f.last_event?.target_y);
+    if(Number.isFinite(lx)&&Number.isFinite(ly)) return {x:lx,y:ly,id:f.last_event?.object_id||f.creature?.target_object_id};
+    const obj=actionTargetObject(f); return obj?{x:Number(obj.x),y:Number(obj.y),id:obj.id}:null;
   }
-  function actionTargetPoint(f) {
-    const lx=Number(f.last_event?.target_x), ly=Number(f.last_event?.target_y);
-    if (Number.isFinite(lx) && Number.isFinite(ly)) return {x:lx,y:ly,id:f.last_event?.object_id || f.creature?.target_object_id};
-    const obj=actionTargetObject(f);
-    return obj ? {x:Number(obj.x),y:Number(obj.y),id:obj.id} : null;
-  }
-
-  function phaseName(moving, raw, activityProgress) {
-    if (moving) {
-      if (raw < .08) return 'anticipation';
-      if (raw < .82) return 'movement';
-      if (raw < .94) return 'settle';
-      return 'recovery';
-    }
-    if (activityProgress < .18) return 'anticipation';
-    if (activityProgress < .62) return 'contact';
-    if (activityProgress < .88) return 'settle';
-    return 'hold';
+  function phaseName(moving,raw,activityProgress){
+    if(moving){ if(raw<.08)return'anticipation'; if(raw<.82)return'movement'; if(raw<.94)return'settle'; return'recovery'; }
+    if(activityProgress<.18)return'anticipation'; if(activityProgress<.62)return'contact'; if(activityProgress<.88)return'settle'; return'hold';
   }
 
   function creatureRenderState(f, now) {
-    const c = f.creature;
-    const old = previous?.creature || c;
-    const sourceX = Number(transitionSource?.x ?? old.x);
-    const sourceY = Number(transitionSource?.y ?? old.y);
-    const semanticDistance = Math.hypot(Number(c.x)-sourceX, Number(c.y)-sourceY);
-    const duration = locomotionDuration(semanticDistance);
-    const raw = clamp01((now-fetchedAt)/duration);
-    const travel = semanticDistance > 2 ? stagedTravel(raw) : 1;
-    const x = mix(sourceX, Number(c.x), travel), baseY = mix(sourceY, Number(c.y), travel);
-    const moving = semanticDistance > 2 && travel < 1;
-    const activityProgress=actionEnvelope(now,c.activity);
-    const target=actionTargetPoint(f);
-    let renderedFacing=c.facing;
-    if (!moving && target && ['inspect','carry','place'].includes(c.activity) && Math.abs(Number(target.x)-x)>3) renderedFacing=Number(target.x)>=x?'right':'left';
-    const direction=renderedFacing==='left'?-1:1;
-    const strideCount=Math.max(2,Math.round(semanticDistance/58));
-    const walkPhase=travel*Math.PI*2*strideCount;
-    const walkBob=moving ? Math.abs(Math.sin(walkPhase))*2.15 : 0;
-    const sleepBreath=c.pose==='sleep' ? Math.sin(now*.0017)*.55 : 0;
-    const idleBreath=!moving && c.pose!=='sleep' ? Math.sin(now*.00115)*.55 : 0;
-    const bob=walkBob+sleepBreath+idleBreath;
-    const y=baseY-bob;
-    const pickupSource=c.carrying ? previous?.objects?.find(o=>o.id===c.carrying && o.state==='placed') : null;
-    const attachmentProgress=pickupSource ? smoother01((activityProgress-.24)/.46) : (c.carrying ? 1 : 0);
-    const holdX=direction*22, holdY=-4;
-    const attached=Boolean(c.carrying) && attachmentProgress>=.96;
-    let carriedWorldX=null, carriedWorldY=null;
-    if (c.carrying) {
-      const targetHoldX=x+holdX, targetHoldY=baseY+holdY;
-      carriedWorldX=pickupSource ? mix(Number(pickupSource.x),targetHoldX,attachmentProgress) : targetHoldX;
-      carriedWorldY=pickupSource ? mix(Number(pickupSource.y),targetHoldY,attachmentProgress) : targetHoldY;
-    }
+    const c=f.creature,old=previous?.creature||c,sourceX=Number(transitionSource?.x??old.x),sourceY=Number(transitionSource?.y??old.y);
+    const semanticDistance=Math.hypot(Number(c.x)-sourceX,Number(c.y)-sourceY),duration=locomotionDuration(semanticDistance),raw=clamp01((now-fetchedAt)/duration);
+    const travel=semanticDistance>2?stagedTravel(raw):1;
+    const continuousX=mix(sourceX,Number(c.x),travel),continuousBaseY=mix(sourceY,Number(c.y),travel),moving=semanticDistance>2&&travel<1;
+    const activityProgress=actionEnvelope(now,c.activity),target=actionTargetPoint(f);
+    let renderedFacing=c.facing; if(!moving&&target&&['inspect','carry','place'].includes(c.activity)&&Math.abs(Number(target.x)-continuousX)>3) renderedFacing=Number(target.x)>=continuousX?'right':'left';
+    const direction=renderedFacing==='left'?-1:1,strideCount=Math.max(2,Math.round(semanticDistance/58)),walkPhase=travel*Math.PI*2*strideCount;
+    const walkBob=moving?(Math.floor(Math.abs(Math.sin(walkPhase))*2)):0;
+    const breathStep=c.pose==='sleep'?((Math.floor(now/500)%2)?1:0):(!moving&&Math.floor(now/900)%2?1:0);
+    const renderedX=snapDisplay(continuousX),renderedBaseY=snapDisplay(continuousBaseY),renderedY=renderedBaseY-(walkBob+breathStep)*SCALE;
+    const pickupSource=c.carrying?previous?.objects?.find(o=>o.id===c.carrying&&o.state==='placed'):null;
+    const attachmentProgress=pickupSource?smoother01((activityProgress-.24)/.46):(c.carrying?1:0),holdX=direction*22,holdY=-4,attached=Boolean(c.carrying)&&attachmentProgress>=.96;
+    let carriedWorldX=null,carriedWorldY=null;
+    if(c.carrying){ const tx=renderedX+holdX,ty=renderedBaseY+holdY; carriedWorldX=pickupSource?mix(Number(pickupSource.x),tx,attachmentProgress):tx; carriedWorldY=pickupSource?mix(Number(pickupSource.y),ty,attachmentProgress):ty; carriedWorldX=snapDisplay(carriedWorldX); carriedWorldY=snapDisplay(carriedWorldY); }
     const causal=causalActivityState(f,now);
     return {
-      requested_timestamp_ms: now,
-      source_tick: previous?.tick ?? f.tick,
-      target_tick: f.tick,
-      semantic_x: c.x, semantic_y: c.y,
-      source_x: sourceX, source_y: sourceY,
-      rendered_x: Number(x.toFixed(6)), rendered_y: Number(y.toFixed(6)),
-      rendered_base_y: Number(baseY.toFixed(6)),
-      interpolation_progress: Number(raw.toFixed(6)),
-      interpolation_ease: Number(travel.toFixed(9)),
-      motion_duration_ms: Number(duration.toFixed(3)),
-      activity_progress: Number(activityProgress.toFixed(6)),
-      motion_phase: phaseName(moving,raw,activityProgress),
-      semantic_distance: Number(semanticDistance.toFixed(6)),
-      moving, facing: renderedFacing, pose: c.pose, activity: c.activity,
-      carrying: attached ? c.carrying : null,
-      carrying_semantic: c.carrying,
-      attachment_progress: Number(attachmentProgress.toFixed(6)),
-      carried_rendered_x: carriedWorldX===null ? null : Number(carriedWorldX.toFixed(6)),
-      carried_rendered_y: carriedWorldY===null ? null : Number(carriedWorldY.toFixed(6)),
-      carried_relative_x: attached ? holdX : null,
-      carried_relative_y: attached ? holdY : null,
-      walk_phase: Number(walkPhase.toFixed(6)),
-      causal_activity: {
-        sleep_nook: Number(causal.sleep_nook.toFixed(6)),
-        window: Number(causal.window.toFixed(6)),
-        activity_corner: Number(causal.activity_corner.toFixed(6)),
-      },
-      interaction_target: target ? {object_id:target.id||null,x:Number(target.x.toFixed(6)),y:Number(target.y.toFixed(6))} : null,
-      object_placement: activePlacementState(f,now),
-      ambient_classes: [f.weather === 'rain' ? 'rain' : f.weather === 'mist' ? 'mist' : null, 'window-motes', c.pose === 'sleep' ? 'breathing' : moving ? 'walk-cycle' : 'quiet-breathing', causal.sleep_nook>0?'bedding-contact':null, causal.window>0?'window-contact':null, causal.activity_corner>0?'work-surface-contact':null].filter(Boolean),
+      requested_timestamp_ms:now,source_tick:previous?.tick??f.tick,target_tick:f.tick,semantic_x:c.x,semantic_y:c.y,source_x:sourceX,source_y:sourceY,
+      rendered_x:renderedX,rendered_y:renderedY,rendered_base_y:renderedBaseY,continuous_x:Number(continuousX.toFixed(6)),continuous_base_y:Number(continuousBaseY.toFixed(6)),
+      interpolation_progress:Number(raw.toFixed(6)),interpolation_ease:Number(travel.toFixed(9)),motion_duration_ms:Number(duration.toFixed(3)),activity_progress:Number(activityProgress.toFixed(6)),motion_phase:phaseName(moving,raw,activityProgress),semantic_distance:Number(semanticDistance.toFixed(6)),moving,facing:renderedFacing,pose:c.pose,activity:c.activity,
+      carrying:attached?c.carrying:null,carrying_semantic:c.carrying,attachment_progress:Number(attachmentProgress.toFixed(6)),carried_rendered_x:carriedWorldX,carried_rendered_y:carriedWorldY,carried_relative_x:attached?holdX:null,carried_relative_y:attached?holdY:null,walk_phase:Number(walkPhase.toFixed(6)),
+      causal_activity:{sleep_nook:Number(causal.sleep_nook.toFixed(6)),window:Number(causal.window.toFixed(6)),activity_corner:Number(causal.activity_corner.toFixed(6))},
+      interaction_target:target?{object_id:target.id||null,x:Number(target.x.toFixed(6)),y:Number(target.y.toFixed(6))}:null,object_placement:activePlacementState(f,now),
+      ambient_classes:[f.weather==='rain'?'rain':f.weather==='mist'?'mist':null,'pixel-motes',c.pose==='sleep'?'breathing':moving?'walk-cycle':'quiet-breathing',causal.sleep_nook>0?'bedding-contact':null,causal.window>0?'window-contact':null,causal.activity_corner>0?'work-surface-contact':null].filter(Boolean),
+      art_grid:{width:ART_W,height:ART_H,scale:SCALE,x:px(renderedX),y:px(renderedBaseY)},
     };
   }
 
-  function drawCreature(f, now) {
-    const c=f.creature;
-    const rs=creatureRenderState(f,now);
-    const p=visualLighting(f,now).palette;
-    const x=rs.rendered_x, y=rs.rendered_y, moving=rs.moving;
-    const flip=rs.facing==='left'?-1:1;
-    const ap=rs.activity_progress;
-    const prior=previous?.creature?.activity;
-    const target=actionTargetPoint(f);
-    let sleepBlend=0;
-    if (c.activity==='sleep') sleepBlend=prior==='sleep' ? 1 : smoother01((ap-.12)/.58);
-    else if (prior==='sleep') sleepBlend=1-smoother01((ap-.10)/.68);
-    const actionGate=rs.moving ? smoother01((rs.interpolation_progress-.52)/.38) : 1;
-    const inspectBlend=(c.activity==='inspect' ? smoother01((ap-.10)/.42)*actionGate : prior==='inspect' ? 1-smoother01(ap/.34) : 0);
-    const windowBlend=c.activity==='look_outside' ? smoother01((ap-.12)/.48) : prior==='look_outside' ? 1-smoother01(ap/.38) : 0;
-    const carryReach=c.activity==='carry' ? smoother01((ap-.12)/.54)*actionGate : 0;
-    const placeReach=c.activity==='place' ? smoother01((ap-.16)/.46)*actionGate * (1-smoother01((ap-.88)/.12)) : 0;
-    const restBlend=['idle','rest'].includes(c.activity) && !moving ? .55 : 0;
-    const targetDy=target ? clamp((Number(target.y)-y)/70,-1,1) : 0;
-    const lean=inspectBlend*.09 + windowBlend*.055 + carryReach*.04;
-    const bodyDrop=restBlend*2 + sleepBlend*8 + (c.activity==='carry'?1.2:0);
-    const headX=9 + inspectBlend*4 + windowBlend*3 + sleepBlend*6;
-    const headY=-16 + bodyDrop + sleepBlend*8 + targetDy*inspectBlend*3;
-    const tailMood=(c.activity==='carry'? -4 : c.activity==='look_outside'?2 : restBlend*3);
+  function drawMossSprite(f,now,rs,p){
+    const c=f.creature,flip=rs.facing==='left'?-1:1,ap=rs.activity_progress,prior=previous?.creature?.activity;
+    const x=px(rs.rendered_x),baseY=px(rs.rendered_base_y),bob=Math.round((rs.rendered_base_y-rs.rendered_y)/SCALE);
+    let pose='idle';
+    if(c.activity==='sleep'||c.pose==='sleep') pose='sleep';
+    else if(c.activity==='wake') pose='wake';
+    else if(rs.moving) pose='walk';
+    else if(c.activity==='inspect') pose='inspect';
+    else if(c.activity==='carry') pose='carry';
+    else if(c.activity==='place') pose='place';
+    else if(c.activity==='look_outside') pose='window';
+    else if(c.activity==='rest') pose='rest';
+    const phase=Math.floor(rs.walk_phase/Math.PI)%2;
+    const target=actionTargetPoint(f),targetY=target?px(target.y):baseY;
 
-    ctx.save(); ctx.translate(x,y); ctx.scale(flip,1);
-    ctx.fillStyle='rgba(28,21,18,.25)';
-    ctx.beginPath(); ctx.ellipse(-3,21+sleepBlend*3,24+sleepBlend*10,6.5-sleepBlend*1.2,0,0,Math.PI*2); ctx.fill();
-
-    // Tail is the strongest silhouette cue. It curls lower and forward during sleep.
-    ctx.strokeStyle='#465642'; ctx.lineWidth=12; ctx.lineCap='round';
-    ctx.beginPath(); ctx.moveTo(-18,4+bodyDrop*.25);
-    ctx.quadraticCurveTo(-38,-4+sleepBlend*16+tailMood,-30,-24+sleepBlend*29+tailMood);
-    ctx.stroke();
-    ctx.strokeStyle='#64765e'; ctx.lineWidth=4;
-    ctx.beginPath(); ctx.moveTo(-23,1+bodyDrop*.25); ctx.quadraticCurveTo(-35,-4+sleepBlend*15+tailMood,-30,-19+sleepBlend*26+tailMood); ctx.stroke();
-
-    ctx.save(); ctx.translate(0,bodyDrop); ctx.rotate(lean-.075*sleepBlend);
-    ctx.fillStyle=p.moss;
-    ctx.beginPath(); ctx.ellipse(-2,2,25+sleepBlend*7,20-sleepBlend*4,0,0,Math.PI*2); ctx.fill();
-    ctx.fillStyle='#7f8e70';
-    ctx.beginPath(); ctx.ellipse(7,7,12+sleepBlend*5,8,0,0,Math.PI*2); ctx.fill();
-    ctx.restore();
-
-    ctx.save(); ctx.translate(headX,headY); ctx.rotate(lean*.45-.05*sleepBlend+targetDy*inspectBlend*.07);
-    ctx.fillStyle=p.mossLight;
-    ctx.beginPath(); ctx.ellipse(0,0,20+sleepBlend*1.5,18-sleepBlend*1.5,-.06,0,Math.PI*2); ctx.fill();
-    ctx.fillStyle=p.mossLight;
-    const earLift=(c.expression==='curious' || c.activity==='look_outside') ? -2 : 0;
-    ctx.beginPath(); ctx.moveTo(-13,-11+sleepBlend*4); ctx.lineTo(-8,-30+sleepBlend*10+earLift); ctx.lineTo(-1,-13+sleepBlend*3); ctx.closePath(); ctx.fill();
-    ctx.beginPath(); ctx.moveTo(7,-13+sleepBlend*4); ctx.lineTo(18,-29+sleepBlend*10+earLift); ctx.lineTo(18,-9+sleepBlend*3); ctx.closePath(); ctx.fill();
-    ctx.fillStyle='#d6c59d';
-    ctx.beginPath(); ctx.ellipse(10,6,9,7,0,0,Math.PI*2); ctx.fill();
-    ctx.fillStyle='#252923';
-    if (sleepBlend>.45 || c.expression==='sleepy') {
-      ctx.fillRect(-6,-3,7,2); ctx.fillRect(7,-4,7,2);
-    } else {
-      const gaze=target ? 1.0 : 0, gazeY=target ? clamp(targetDy*1.6,-1.5,1.5) : 0;
-      ctx.beginPath(); ctx.arc(-2+gaze,-4+gazeY,2.6,0,Math.PI*2); ctx.arc(11+gaze,-5+gazeY,2.6,0,Math.PI*2); ctx.fill();
+    ctx.save(); ctx.translate(x,baseY-bob); ctx.scale(flip,1);
+    if(pose==='sleep'){
+      rect(-16,5,31,4,p.shadow); rect(-13,-3,25,9,p.dogDark); rect(-10,-7,22,12,p.dog); rect(2,-9,12,10,p.dogLight); rect(8,-7,7,6,p.dogCream);
+      rect(-15,-6,7,7,p.dogDark); rect(-17,-2,5,5,p.dog); rect(6,-13,5,6,p.dogDark); rect(10,-12,5,7,p.dogDark);
+      rect(11,-6,2,1,p.eye); rect(-4,1,9,2,p.dogLight); rect(-10,2,7,2,p.dogDark);
+      ctx.restore(); return;
     }
-    ctx.fillStyle='#3c332d'; ctx.fillRect(17,6,4,3);
-    ctx.restore();
 
-    if (sleepBlend<.72) {
-      ctx.strokeStyle='#475642'; ctx.lineWidth=5.5; ctx.lineCap='round';
-      ctx.beginPath();
-      if (moving) {
-        const stride=Math.sin(rs.walk_phase)*5.5;
-        ctx.moveTo(-10,15+bodyDrop*.35); ctx.lineTo(-12-stride,26);
-        ctx.moveTo(8,15+bodyDrop*.35); ctx.lineTo(11+stride,26);
-      } else {
-        ctx.moveTo(-10,15+bodyDrop*.35); ctx.lineTo(-11,26-bodyDrop*.15);
-        ctx.moveTo(8,15+bodyDrop*.35); ctx.lineTo(10,26-bodyDrop*.15);
-      }
-      ctx.stroke();
-      const reach=Math.max(inspectBlend*.72,carryReach,placeReach);
-      if (reach>.02) {
-        const localTargetX=target ? (Number(target.x)-x)*flip : 26;
-        const localTargetY=target ? Number(target.y)-y : 8;
-        const endX=target ? clamp(localTargetX,17,34) : 25;
-        const endY=target ? clamp(localTargetY,-21,22) : 8+placeReach*8;
-        ctx.strokeStyle='#566650'; ctx.lineWidth=5; ctx.beginPath();
-        ctx.moveTo(10,5+bodyDrop*.35); ctx.lineTo(mix(18,endX,reach),mix(8,endY,reach)); ctx.stroke();
-      }
+    const crouch=pose==='rest'?2:pose==='carry'?1:0;
+    const lean=(pose==='inspect'||pose==='place')?2:pose==='window'?1:0;
+    // Shadow is sparse and fully hard-edged.
+    rect(-13,10,26,3,p.shadow); rect(-9,13,18,1,p.shadow);
+    // Tail silhouette.
+    if(pose==='rest'){ rect(-18,1,6,3,p.dogDark); rect(-21,3,6,3,p.dog); }
+    else { rect(-18,-3+crouch,7,3,p.dogDark); rect(-21,-6+crouch,5,3,p.dog); rect(-22,-9+crouch,3,3,p.dogLight); }
+    // Compact body: 2-4 stepped shades.
+    rect(-13,-5+crouch,23,12,p.dogDark); rect(-11,-8+crouch,21,13,p.dog); rect(-7,-5+crouch,16,7,p.dogLight); rect(-5,1+crouch,11,3,p.dogDark);
+    // Planted short legs / walk keyframes.
+    if(pose==='walk'){
+      if(phase===0){ rect(-9,4+crouch,5,8,p.dogDark); rect(4,5+crouch,5,6,p.dogDark); rect(-11,11+crouch,7,2,p.dogDark); rect(4,10+crouch,7,2,p.dogDark); }
+      else { rect(-8,5+crouch,5,6,p.dogDark); rect(3,4+crouch,5,8,p.dogDark); rect(-9,10+crouch,7,2,p.dogDark); rect(3,11+crouch,7,2,p.dogDark); }
+    } else { rect(-9,5+crouch,5,7,p.dogDark); rect(4,5+crouch,5,7,p.dogDark); rect(-10,11+crouch,7,2,p.dogDark); rect(4,11+crouch,7,2,p.dogDark); }
+
+    // Slightly oversized head, side/three-quarter by default.
+    const hx=5+lean,hy=-14+crouch+(pose==='rest'?2:0)+(targetY>baseY&&pose==='inspect'?1:0);
+    rect(hx-7,hy-5,14,12,p.dogDark); rect(hx-6,hy-7,13,12,p.dog); rect(hx-3,hy-5,10,7,p.dogLight);
+    // Floppy ears, intentionally asymmetrical clusters.
+    const earDrop=(c.expression==='curious'||pose==='window')?-1:1;
+    rect(hx-8,hy-6+earDrop,5,9,p.dogDark); rect(hx-10,hy-2+earDrop,5,7,p.dogDark); rect(hx+5,hy-6+earDrop,4,8,p.dogDark); rect(hx+7,hy-2+earDrop,4,6,p.dogDark);
+    // Muzzle / minimal face; no accessory required for the core hero set.
+    rect(hx+2,hy,8,5,p.dogCream); rect(hx+7,hy+1,3,2,p.eye); rect(hx+1,hy-3,2,2,p.eye);
+    if(c.expression==='sleepy'){ rect(hx,hy-2,3,1,p.eye); }
+    else if(pose==='inspect'||pose==='window'){ rect(hx+1,hy-4,2,2,p.eye); }
+    rect(hx+5,hy+4,3,1,p.dogDark);
+    // Single highlight clusters keep the sprite lively without glossy rendering.
+    rect(hx-1,hy-5,3,1,p.dogCream); rect(-3,-6+crouch,5,1,p.dogLight);
+
+    // Interaction forepaw key poses. Contact remains target-owned.
+    if(['inspect','carry','place'].includes(pose)){
+      const reach=pose==='inspect'?smooth01((ap-.12)/.42):pose==='carry'?smooth01((ap-.12)/.54):smooth01((ap-.16)/.46)*(1-smooth01((ap-.9)/.1));
+      if(reach>.05){ const endX=target?clamp((px(target.x)-x)*flip,9,18):14; const endY=target?clamp(px(target.y)-baseY,-8,11):4; const ex=Math.round(mix(8,endX,reach)),ey=Math.round(mix(2,endY,reach)); drawPixelLine(7,0+crouch,ex,ey,p.dogDark,3); rect(ex-1,ey,4,2,p.dogLight); }
     }
     ctx.restore();
+  }
 
-    if (c.carrying) {
-      const obj=f.objects.find(o=>o.id===c.carrying) || previous?.objects?.find(o=>o.id===c.carrying);
-      if (obj && rs.carried_rendered_x!==null) drawObject({...obj,state:'placed',x:rs.carried_rendered_x,y:rs.carried_rendered_y});
-    }
+  function drawCreature(f,now,p){
+    const rs=creatureRenderState(f,now); drawMossSprite(f,now,rs,p);
+    if(f.creature.carrying){ const obj=f.objects.find(o=>o.id===f.creature.carrying)||previous?.objects?.find(o=>o.id===f.creature.carrying); if(obj&&rs.carried_rendered_x!==null) drawObject({...obj,state:'placed',x:rs.carried_rendered_x,y:rs.carried_rendered_y},p); }
     return rs;
   }
 
-  function drawForegroundFurniture(f, now) {
-    const p=visualLighting(f,now).palette;
-    // Thin front lips provide real occlusion without turning furniture into a
-    // wall in front of Moss. Shelf objects/legs can disappear behind these
-    // edges; the activity desk similarly owns its front edge.
-    ctx.fillStyle=p.woodDark;
-    for (const y of [125,176,227]) ctx.fillRect(603,y,141,3);
-    ctx.fillStyle='rgba(47,33,26,.70)'; ctx.fillRect(590,359,145,5);
-    ctx.fillStyle=p.woodTop; ctx.fillRect(590,359,145,2);
+  function drawForegroundFurniture(f,now,p){
+    for(const y of [62,87,112]) rect(303,y,70,2,p.walnutDark);
+    rect(294,179,77,3,p.walnutDark); rect(296,179,73,1,p.walnutLight);
+  }
+  function drawForegroundCausality(f, now, rs, p) {
+    const causal=causalActivityState(f,now);
+    if(causal.sleep_nook>0){ const x=px(rs.rendered_x),y=px(rs.rendered_base_y); rect(x-15,y+4,31,8,p.dustyBlue); rect(x-11,y+3,23,3,p.dustyBlue); rect(x-8,y+6,17,1,p.skyDark); }
   }
 
-  function drawForegroundCausality(f, now, rs) {
-    const causal=causalActivityState(f,now);
-    // A shallow blanket lip crosses Moss's lower body only while sleeping in
-    // the nook, providing a foreground contact/depth cue without new state.
-    if (causal.sleep_nook > 0) {
-      const x=rs.rendered_x, y=rs.rendered_base_y;
-      ctx.save();
-      ctx.fillStyle=`rgba(180,153,116,${(.72*causal.sleep_nook).toFixed(4)})`;
-      ctx.beginPath(); ctx.moveTo(x-31,y+9); ctx.quadraticCurveTo(x-3,y+18,x+35,y+12); ctx.lineTo(x+35,y+24); ctx.quadraticCurveTo(x,y+29,x-31,y+21); ctx.closePath(); ctx.fill();
-      ctx.strokeStyle=`rgba(94,72,57,${(.28*causal.sleep_nook).toFixed(4)})`; ctx.lineWidth=1.2;
-      ctx.beginPath(); ctx.moveTo(x-27,y+14); ctx.quadraticCurveTo(x+1,y+20,x+31,y+15); ctx.stroke();
-      ctx.restore();
-    }
+  function presentArtSurface(){
+    displayCtx.imageSmoothingEnabled=false;
+    displayCtx.clearRect(0,0,DISPLAY_W,DISPLAY_H);
+    displayCtx.drawImage(artCanvas,0,0,ART_W,ART_H,0,0,DISPLAY_W,DISPLAY_H);
   }
 
   function render(now, scheduleNext = true) {
-    if (!frame) {
-      ctx.fillStyle='#25242b';ctx.fillRect(0,0,800,480);
-      if (scheduleNext) requestAnimationFrame(render); return null;
-    }
-    drawBackground(frame, now);
-    for (const o of frame.objects) drawWorldObject(o,frame,now);
-    const renderState = drawCreature(frame, now);
-    drawForegroundFurniture(frame, now);
-    drawForegroundCausality(frame, now, renderState);
-    if (debugVisible) {
-      debug.hidden=false;
-      debug.textContent = JSON.stringify({mode:snapshotPath?'snapshot':'live', connected, tick:frame.tick, lighting:frame.lighting, weather:frame.weather, creature:frame.creature, shelf_count:frame.habitat.shelf_count, marks:frame.habitat.marks, last_event:frame.last_event, poll_error:lastPollError}, null, 2);
-    } else debug.hidden=true;
-    if (scheduleNext) requestAnimationFrame(render);
+    if(!frame){ rect(0,0,ART_W,ART_H,'#25242b'); presentArtSurface(); if(scheduleNext)requestAnimationFrame(render); return null; }
+    const p=drawBackground(frame,now);
+    for(const o of frame.objects) drawWorldObject(o,frame,now,p);
+    const renderState=drawCreature(frame,now,p);
+    drawForegroundFurniture(frame,now,p);
+    drawForegroundCausality(frame, now, renderState, p);
+    presentArtSurface();
+    if(debugVisible){ debug.hidden=false; debug.textContent=JSON.stringify({mode:snapshotPath?'snapshot':'live',connected,tick:frame.tick,lighting:frame.lighting,weather:frame.weather,art_surface:[ART_W,ART_H],display:[DISPLAY_W,DISPLAY_H],scale:SCALE,creature:frame.creature,last_event:frame.last_event,poll_error:lastPollError},null,2); } else debug.hidden=true;
+    if(scheduleNext) requestAnimationFrame(render);
     return renderState;
   }
 
-  async function rasterTelemetry() {
-    const image = ctx.getImageData(0,0,800,480);
-    let h=2166136261;
-    for (let i=0;i<image.data.length;i+=4) {
-      h^=image.data[i]; h=Math.imul(h,16777619);
-      h^=image.data[i+1]; h=Math.imul(h,16777619);
-      h^=image.data[i+2]; h=Math.imul(h,16777619);
-      h^=image.data[i+3]; h=Math.imul(h,16777619);
-    }
-    const pixelHash=`fnv1a32:${(h>>>0).toString(16).padStart(8,'0')}`;
-    const gridW=20, gridH=12, cellW=40, cellH=40, grid=[];
-    for(let gy=0;gy<gridH;gy++) {
-      for(let gx=0;gx<gridW;gx++) {
-        let total=0,count=0;
-        for(let y=gy*cellH;y<(gy+1)*cellH;y+=4) for(let x=gx*cellW;x<(gx+1)*cellW;x+=4) {
-          const i=(y*800+x)*4; total += image.data[i]*.2126 + image.data[i+1]*.7152 + image.data[i+2]*.0722; count++;
-        }
-        grid.push(Number((total/count).toFixed(3)));
-      }
-    }
-    return {width:800,height:480,pixel_hash:pixelHash,luma_grid_width:gridW,luma_grid_height:gridH,luma_grid:grid};
+  async function rasterTelemetry(){
+    const image=displayCtx.getImageData(0,0,DISPLAY_W,DISPLAY_H); let h=2166136261;
+    for(let i=0;i<image.data.length;i+=4){ h^=image.data[i];h=Math.imul(h,16777619);h^=image.data[i+1];h=Math.imul(h,16777619);h^=image.data[i+2];h=Math.imul(h,16777619);h^=image.data[i+3];h=Math.imul(h,16777619); }
+    let scaleErrors=0;
+    for(let y=0;y<DISPLAY_H;y+=2){ for(let x=0;x<DISPLAY_W;x+=2){ const i=(y*DISPLAY_W+x)*4; for(const [dx,dy] of [[1,0],[0,1],[1,1]]){ const j=((y+dy)*DISPLAY_W+(x+dx))*4; for(let c=0;c<4;c++) if(image.data[i+c]!==image.data[j+c]){scaleErrors++;break;} } } }
+    const pixelHash=`fnv1a32:${(h>>>0).toString(16).padStart(8,'0')}`,gridW=20,gridH=12,cellW=40,cellH=40,grid=[];
+    for(let gy=0;gy<gridH;gy++) for(let gx=0;gx<gridW;gx++){ let total=0,count=0; for(let y=gy*cellH;y<(gy+1)*cellH;y+=4) for(let x=gx*cellW;x<(gx+1)*cellW;x+=4){ const i=(y*DISPLAY_W+x)*4; total+=image.data[i]*.2126+image.data[i+1]*.7152+image.data[i+2]*.0722;count++; } grid.push(Number((total/count).toFixed(3))); }
+    return {width:DISPLAY_W,height:DISPLAY_H,art_width:ART_W,art_height:ART_H,integer_scale:SCALE,image_smoothing:false,scale2x_exact:scaleErrors===0,scale2x_error_blocks:scaleErrors,pixel_hash:pixelHash,luma_grid_width:gridW,luma_grid_height:gridH,luma_grid:grid};
   }
 
-  function publishTemporal(payload) {
-    window.__terrariumTemporalResult = payload;
-    telemetryNode.textContent = JSON.stringify(payload);
-    document.title = `Terrarium Temporal ${payload.status || 'ready'}`;
-    fetch('/api/dev/temporal-evidence', {method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)}).catch(()=>{});
-  }
-
-  async function captureTemporalSample(timestamp) {
-    const state = render(timestamp, false);
-    const raster = await rasterTelemetry();
-    return {...state, raster};
-  }
+  function publishTemporal(payload){ window.__terrariumTemporalResult=payload; telemetryNode.textContent=JSON.stringify(payload); document.title=`Terrarium Temporal ${payload.status||'ready'}`; fetch('/api/dev/temporal-evidence',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)}).catch(()=>{}); }
+  async function captureTemporalSample(timestamp) { const state=render(timestamp,false); const raster=await rasterTelemetry(); return {...state,raster}; }
 
   function acceptFrame(next, now) {
-    if (!frame) { frame=next; previous=null; transitionSource=null; fetchedAt=now; activityStartedAt=now; return; }
-    if (next.tick === frame.tick) return;
-    const current=creatureRenderState(frame,now);
-    const source=temporalContinuity==='legacy' ? null : {x:current.rendered_x,y:current.rendered_base_y};
-    const continuesIntent=next.last_event?.decision===false && next.creature?.intent_action && next.creature.intent_action===frame.creature?.intent_action;
-    previous=frame; frame=next; transitionSource=source; fetchedAt=now;
-    if (!continuesIntent) activityStartedAt=now;
+    if(!frame){frame=next;previous=null;transitionSource=null;fetchedAt=now;activityStartedAt=now;return;}
+    if(next.tick===frame.tick)return;
+    const current=creatureRenderState(frame,now),source=temporalContinuity==='legacy'?null:{x:current.continuous_x,y:current.continuous_base_y};
+    const continuesIntent=next.last_event?.decision===false&&next.creature?.intent_action&&next.creature.intent_action===frame.creature?.intent_action;
+    previous=frame;frame=next;transitionSource=source;fetchedAt=now;if(!continuesIntent)activityStartedAt=now;
   }
-
-  async function poll() {
-    try {
-      const response = await fetch('/api/frame', {cache:'no-store'});
-      if (!response.ok) throw new Error(`HTTP ${response.status}`);
-      const next = await response.json();
-      if (next.logical_width !== 800 || next.logical_height !== 480) throw new Error('authoritative frame contract mismatch');
-      acceptFrame(next,performance.now());
-      connected=true; lastPollError=null;
-    } catch (err) {
-      connected=false; lastPollError=String(err);
-    }
+  async function poll(){
+    try{ const response=await fetch('/api/frame',{cache:'no-store'});if(!response.ok)throw new Error(`HTTP ${response.status}`);const next=await response.json();if(next.logical_width!==DISPLAY_W||next.logical_height!==DISPLAY_H)throw new Error('authoritative frame contract mismatch');acceptFrame(next,performance.now());connected=true;lastPollError=null; }
+    catch(err){connected=false;lastPollError=String(err);}
   }
-
-  async function loadSnapshot() {
-    try {
-      if (!snapshotPath || !snapshotPath.startsWith('/snapshots/dev/') || !snapshotPath.endsWith('/frame.json')) throw new Error('invalid snapshot path');
-      const response = await fetch(snapshotPath, {cache:'no-store'});
-      if (!response.ok) throw new Error(`HTTP ${response.status}`);
-      const next = await response.json();
-      if (next.logical_width !== 800 || next.logical_height !== 480) throw new Error('snapshot frame contract mismatch');
-      frame=next; previous=null; transitionSource=null; fetchedAt=performance.now(); activityStartedAt=fetchedAt; connected=true; lastPollError=null;
-    } catch (err) { connected=false; lastPollError=String(err); }
+  async function loadSnapshot(){
+    try{ if(!snapshotPath||!snapshotPath.startsWith('/snapshots/dev/')||!snapshotPath.endsWith('/frame.json'))throw new Error('invalid snapshot path');const response=await fetch(snapshotPath,{cache:'no-store'});if(!response.ok)throw new Error(`HTTP ${response.status}`);const next=await response.json();if(next.logical_width!==DISPLAY_W||next.logical_height!==DISPLAY_H)throw new Error('snapshot frame contract mismatch');frame=next;previous=null;transitionSource=null;fetchedAt=performance.now();activityStartedAt=fetchedAt;connected=true;lastPollError=null; }
+    catch(err){connected=false;lastPollError=String(err);}
   }
-
-  async function loadTemporalScenario() {
-    try {
-      const response = await fetch('/api/dev/temporal-fixtures', {cache:'no-store'});
-      if (!response.ok) throw new Error(`HTTP ${response.status}`);
-      const pack = await response.json();
-      if (temporalContinuityProbe) {
-        const probe=pack.continuity_probe;
-        if (!probe) throw new Error('continuity probe fixture is missing');
-        previous=probe.source; frame=probe.middle; transitionSource=null; fetchedAt=0; activityStartedAt=0; connected=true; lastPollError=null;
-        const interrupt=Number(probe.interrupt_ms || 1000);
-        const before=await captureTemporalSample(interrupt);
-        acceptFrame(probe.followup,interrupt);
-        const after=await captureTemporalSample(interrupt);
-        const jump=Math.hypot(after.rendered_x-before.rendered_x,after.rendered_base_y-before.rendered_base_y);
-        publishTemporal({
-          schema:'terrarium.continuity-probe.v1',status:'ready',scenario:'continuity_probe',easing:temporalContinuity,continuity:temporalContinuity,
-          interrupt_ms:interrupt,source_tick:probe.source.tick,middle_tick:probe.middle.tick,followup_tick:probe.followup.tick,
-          first_event:probe.first_event,second_event:probe.second_event,jump_px:Number(jump.toFixed(6)),before,after
-        });
-        return;
+  async function loadTemporalScenario(){
+    try{
+      const response=await fetch('/api/dev/temporal-fixtures',{cache:'no-store'});if(!response.ok)throw new Error(`HTTP ${response.status}`);const pack=await response.json();
+      if(temporalContinuityProbe){
+        const probe=pack.continuity_probe;if(!probe)throw new Error('continuity probe fixture is missing');previous=probe.source;frame=probe.middle;transitionSource=null;fetchedAt=0;activityStartedAt=0;connected=true;lastPollError=null;
+        const interrupt=Number(probe.interrupt_ms||1000),before=await captureTemporalSample(interrupt);acceptFrame(probe.followup,interrupt);const after=await captureTemporalSample(interrupt),jump=Math.hypot(after.continuous_x-before.continuous_x,after.continuous_base_y-before.continuous_base_y);
+        publishTemporal({schema:'terrarium.continuity-probe.v1',status:'ready',scenario:'continuity_probe',easing:temporalContinuity,continuity:temporalContinuity,interrupt_ms:interrupt,source_tick:probe.source.tick,middle_tick:probe.middle.tick,followup_tick:probe.followup.tick,first_event:probe.first_event,second_event:probe.second_event,jump_px:Number(jump.toFixed(6)),before,after});return;
       }
-      const scenario = pack.scenarios?.[temporalScenario];
-      if (!scenario) throw new Error(`unknown temporal scenario: ${temporalScenario}`);
-      previous=scenario.source; frame=scenario.target; transitionSource=null; fetchedAt=0; activityStartedAt=0; connected=true; lastPollError=null;
-      if (frame.logical_width !== 800 || frame.logical_height !== 480 || previous.logical_width !== 800 || previous.logical_height !== 480) throw new Error('temporal fixture frame contract mismatch');
-      if (temporalRafProbe) {
-        const intervals=[]; let last=null; let start=null; let frames=0;
-        await new Promise(resolve => {
-          function probe(ts) {
-            if (start === null) start=ts;
-            if (last !== null) intervals.push(ts-last);
-            last=ts; frames++;
-            render(ts-start,false);
-            if (ts-start >= temporalDuration) resolve(); else requestAnimationFrame(probe);
-          }
-          requestAnimationFrame(probe);
-        });
-        const sorted=[...intervals].sort((a,b)=>a-b);
-        const pct=p=>sorted.length ? sorted[Math.min(sorted.length-1,Math.floor((sorted.length-1)*p))] : 0;
-        publishTemporal({
-          schema:'terrarium.raf-probe.v1',status:'ready',scenario:temporalScenario,frames,
-          duration_ms:Number((last-start).toFixed(3)),interval_count:intervals.length,
-          interval_ms:{min:Number((sorted[0]||0).toFixed(3)),p50:Number(pct(.5).toFixed(3)),p95:Number(pct(.95).toFixed(3)),max:Number((sorted.at(-1)||0).toFixed(3)),over_34ms:intervals.filter(v=>v>34).length,over_50ms:intervals.filter(v=>v>50).length},
-          intervals_ms:intervals.map(v=>Number(v.toFixed(3)))
-        });
-        return;
+      const scenario=pack.scenarios?.[temporalScenario];if(!scenario)throw new Error(`unknown temporal scenario: ${temporalScenario}`);previous=scenario.source;frame=scenario.target;transitionSource=null;fetchedAt=0;activityStartedAt=0;connected=true;lastPollError=null;
+      if(frame.logical_width!==DISPLAY_W||frame.logical_height!==DISPLAY_H||previous.logical_width!==DISPLAY_W||previous.logical_height!==DISPLAY_H)throw new Error('temporal fixture frame contract mismatch');
+      if(temporalRafProbe){
+        const intervals=[];let last=null,start=null,frames=0;await new Promise(resolve=>{function probe(ts){if(start===null)start=ts;if(last!==null)intervals.push(ts-last);last=ts;frames++;render(ts-start,false);if(ts-start>=temporalDuration)resolve();else requestAnimationFrame(probe);}requestAnimationFrame(probe);});
+        const sorted=[...intervals].sort((a,b)=>a-b),pct=p=>sorted.length?sorted[Math.min(sorted.length-1,Math.floor((sorted.length-1)*p))]:0;publishTemporal({schema:'terrarium.raf-probe.v1',status:'ready',scenario:temporalScenario,frames,duration_ms:Number((last-start).toFixed(3)),interval_count:intervals.length,interval_ms:{min:Number((sorted[0]||0).toFixed(3)),p50:Number(pct(.5).toFixed(3)),p95:Number(pct(.95).toFixed(3)),max:Number((sorted.at(-1)||0).toFixed(3)),over_34ms:intervals.filter(v=>v>34).length,over_50ms:intervals.filter(v=>v>50).length},intervals_ms:intervals.map(v=>Number(v.toFixed(3)))});return;
       }
-      if (temporalSequence) {
-        const timestamps=pack.recommended_timestamps_ms || [0,250,500,750,1000,1250,1500];
-        const samples=[];
-        for (const t of timestamps) samples.push(await captureTemporalSample(Number(t)));
-        publishTemporal({schema:'terrarium.temporal-capture.v1',status:'ready',scenario:temporalScenario,easing:temporalEasing,source_tick:scenario.source_tick,target_tick:scenario.target_tick,semantic_event:scenario.semantic_event,samples});
-        return;
-      }
-      const sample=await captureTemporalSample(temporalTimestamp);
-      publishTemporal({schema:'terrarium.temporal-keyframe.v1',status:'ready',scenario:temporalScenario,easing:temporalEasing,source_tick:scenario.source_tick,target_tick:scenario.target_tick,semantic_event:scenario.semantic_event,sample});
-    } catch (err) {
-      connected=false; lastPollError=String(err); publishTemporal({schema:'terrarium.temporal-error.v1',status:'error',error:String(err)});
-    }
+      if(temporalSequence){ const timestamps=pack.recommended_timestamps_ms||[0,250,500,750,1000,1250,1500],samples=[];for(const t of timestamps)samples.push(await captureTemporalSample(Number(t)));publishTemporal({schema:'terrarium.temporal-capture.v1',status:'ready',scenario:temporalScenario,easing:temporalEasing,source_tick:scenario.source_tick,target_tick:scenario.target_tick,semantic_event:scenario.semantic_event,samples});return; }
+      const sample=await captureTemporalSample(temporalTimestamp);publishTemporal({schema:'terrarium.temporal-keyframe.v1',status:'ready',scenario:temporalScenario,easing:temporalEasing,source_tick:scenario.source_tick,target_tick:scenario.target_tick,semantic_event:scenario.semantic_event,sample});
+    }catch(err){connected=false;lastPollError=String(err);publishTemporal({schema:'terrarium.temporal-error.v1',status:'error',error:String(err)});}
   }
 
-  document.addEventListener('keydown', ev => { if (ev.key.toLowerCase()==='d') debugVisible=!debugVisible; });
-  if (temporalScenario) loadTemporalScenario();
-  else if (snapshotPath) { loadSnapshot(); requestAnimationFrame(render); }
-  else { poll(); setInterval(poll, 700); requestAnimationFrame(render); }
+  window.__terrariumPixelRenderer = Object.freeze({art_width:ART_W,art_height:ART_H,display_width:DISPLAY_W,display_height:DISPLAY_H,integer_scale:SCALE,smoothing:false});
+  document.addEventListener('keydown',ev=>{if(ev.key.toLowerCase()==='d')debugVisible=!debugVisible;});
+  if(temporalScenario)loadTemporalScenario();else if(snapshotPath){loadSnapshot();requestAnimationFrame(render);}else{poll();setInterval(poll,700);requestAnimationFrame(render);}
 })();

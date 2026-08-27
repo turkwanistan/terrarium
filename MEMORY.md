@@ -98,3 +98,11 @@ Checkpoint `2026-08-27-action-choreography-pacing` established a reusable **mult
 **Environmental interpolation does not create environmental authority:** the renderer may blend palette/daylight/night-glow between authoritative `world_minutes`, but canonical `world_minutes`, lighting phase and deterministic weather remain host-owned. Real-clock synchronization remains a possible future product choice, not an implicit renderer behavior.
 
 The existing promoted behavior and temporal capabilities were sufficient; no capability was forged, no permanent MCP surface grew, and **No Gen18 warranted**.
+
+## Post-Gen17 pixel-grid temporal specialization
+
+Checkpoint `2026-08-27-pixel-art-overhaul-iteration1` established a reusable temporal-evaluation rule for integer-grid renderers. A valid pixel renderer can preserve a smooth deterministic presentation trajectory internally while snapping visible output to an integer art grid; short moves may therefore have an irreducible visible step large enough to trip a subpixel endpoint-speed ratio even when settling is correct.
+
+Do not solve this by weakening the original dangerous defect gates or by pretending the quantized coordinate is smooth. The accepted reusable specialization is `grid-quantized-temporal-render-auditor-r1`, content hash `57fe2065ca3cc984241bee2da545db3bb318fd8a07ae90402a1dd6bc9993e697`, Forge evaluator hash `3115517877e016d4b4867da15b3d5ef81045991d3bf890765c53dfdaa9a6782f`. It may use the deterministic continuous presentation anchor for endpoint-settling measurement only when the visible coordinate remains within half a declared grid cell of that anchor; otherwise `grid_quantization_contract` fails closed. The original temporal oracle remained 10/10, Forge evaluation passed 6/6, two real tasks passed, and Gen14 killed 2/2 dangerous specialization mutants.
+
+This is a capability specialization, not an SBC substrate deficiency. Existing Forge/Gen14 mechanisms handled it; **No Gen18 warranted**.

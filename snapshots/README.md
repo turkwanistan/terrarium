@@ -2,6 +2,14 @@
 
 Git-friendly visual milestones. The SVG is a lightweight capture-time thumbnail; run Terrarium and open `/snapshots/` for the same stored frame through the real Canvas renderer.
 
+## 20260827T183924459328Z-pixel-art-overhaul-iteration1
+
+Pixel-native 400x240 Terrarium art surface with exact 2x nearest-neighbor presentation, brown floppy-eared Moss hero sprite, rebuilt warm room, persistent pixel-history marks, and palette-based day/dusk/night/weather states.
+
+![20260827T183924459328Z-pixel-art-overhaul-iteration1](dev/20260827T183924459328Z-pixel-art-overhaul-iteration1/preview.svg)
+
+Deterministic tick `698` · renderer `b2fc125fb725`
+
 ## 20260827T175337017716Z-action-choreography-pacing
 
 Moss now acts at authoritative targets with deliberate contact and recovery, calmer multi-tick behavior commitments, physical furniture occlusion, and a persistent 72-minute day whose dusk lighting changes gradually rather than time-lapsing.

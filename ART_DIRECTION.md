@@ -1,80 +1,153 @@
-# Terrarium art direction
+# Terrarium Pixel-Art Direction
 
-This document governs the reference 800×480 renderer. Objective temporal evaluators prove correctness; visual judgment still decides whether the scene is charming, readable, and coherent.
+This file is the visual authority for Terrarium. Human inspection of the real renderer governs charm, coherence, composition, and appeal. Automated evaluators protect mechanical correctness; there is no synthetic beauty score.
 
-## Visual identity
+## Rendering contract
 
-Terrarium is a **cozy low-resolution storybook diorama**: one small room, hand-placed and softly worn, with Moss as the clear focal character. Shapes are chunky enough to read at 800×480, details are sparse, and history appears as physical traces rather than UI.
+- Author art on a **400×240 internal Canvas surface**.
+- Present at the fixed external/reference **800×480** size using exact **2× integer nearest-neighbor scaling**.
+- Keep both internal drawing and final scaling smoothing disabled.
+- Snap semantic 800-space presentation coordinates to the 400×240 art grid at the renderer boundary; canonical `TerrariumFrame` coordinates remain hardware-neutral and authoritative.
+- Never draw high-resolution 800×480 art and pixelate it afterward.
+- Avoid subpixel transforms, antialias-dependent primitives, gradients, blur, bloom, and glossy post-processing.
 
-- **Cozy** = warm neutrals, low glare, soft contact shadows, breathing room, calm motion.
-- **Lived-in** = a few persistent scuffs, creases, moved objects, and work traces with visible causes.
-- **Natural** = moss/wood/cloth/stone families share muted earthy values; nothing is neon or plasticky.
-- **Magical** = restrained warm light, glass glints, weather, and rare tiny motes—not particle spectacle.
-- **Not** a dashboard, vector icon set, noisy procedural demo, flat clip-art room, or constantly animated game scene.
+## Target aesthetic
 
-## Palette
+Finished handcrafted late-16-bit/early-32-bit farming/life-RPG pixel art: warm, cozy, readable, slightly whimsical, and materially grounded. Pixels should be clearly visible and moderately chunky. Silhouettes and clustered shapes matter more than detail count.
 
-Core habitat families:
-- wall / plaster: warm desaturated taupe;
-- floor / trim / furniture: deep walnut and umber;
-- cloth / paper: oat, flax, faded gold;
-- foliage / rug: muted sage and lichen;
-- stone / glass: cool slate and dusty blue-green.
+The image should read as authored pixel art even when viewed at native 800×480 presentation size—not as smooth vector art with a filter.
 
-Moss:
-- body: lichen green;
-- head/high plane: lighter sage;
-- underside/muzzle: warm flax;
-- deepest features/outline accents: charcoal olive.
+## Palette families
 
-Accents are scarce: amber leaf, red thread, blue stone, glass star. An accent should occupy much less area than Moss.
+Core families:
 
-Value hierarchy: Moss and the active contact area are clearest; furniture is one step quieter; accumulated aftermath is quieter again. Dawn/day are softly warm, dusk shifts mauve/amber, night shifts blue-charcoal with localized warm glow, and rain cools the window rather than the whole room.
+- **moss green** — rug, foliage, low-saturation natural accents;
+- **walnut brown** — furniture, trim, outlines, floor depth;
+- **golden amber** — leaves, warm accents, daylight highlights;
+- **dusty blue** — blanket, stone, cool environmental accents;
+- **cream** — cloth, paper, selective highlights;
+- **Moss brown** — warm medium brown body with dark brown shadow/ears and restrained tan highlights.
 
-## Shape language
+Use mostly **2–4 stepped shades per material/object**. Neighboring shades should differ enough to form readable clusters. Reserve the lightest values for small deliberate highlights. Reserve the darkest values for selective outlines, contact edges, deep overlaps, and focal facial features.
 
-Moss uses rounded, bottom-heavy forms: large tail, compact body, slightly oversized head, short planted legs, pointed ears softened by rounded joins. The silhouette must remain recognizable without facial features.
+Avoid neon saturation and large ramps of near-identical shades.
 
-Furniture uses broad rectangles with softened corners and visible thickness. Organic items use asymmetry and curves. Avoid arbitrary tiny geometry, razor-thin lines, and mixed illustration vocabularies.
+## Pixel-cluster rules
 
-Edges are mostly fill-defined. Use 1–3 px dark accents only for material seams, object definition, or important facial features; do not outline everything.
+- Build forms from intentional rectangles/stair-steps and connected clusters, not smooth analytic curves.
+- Prefer a few coherent clusters over scattered single-pixel noise.
+- Texture exists to communicate material: short wood-grain runs, cloth stitches/speckles, leaf clumps, flower pixels, floor scuffs, paper marks, bedding creases.
+- Break repetitive tiling with deterministic authored offsets or stable hash-derived variation; never use runtime `Math.random`.
+- Keep noisy texture away from Moss's face and interaction contact points.
+- One-pixel highlights are accents, not a blanket sparkle layer.
 
-## Depth and composition
+## Perspective and scale
 
-The frame is an illustration with three layers:
-1. **background** — wall, window view, shelf back, light;
-2. **midground** — floor, bed, rug, desk, objects, Moss;
-3. **foreground** — blanket lip / occasional near-edge framing and contact overlap.
+Use a flattened three-quarter/slightly elevated game-world view. Depth comes from vertical ordering, overlap, stepped top/front faces, value separation, and sparse contact shadows—not perspective realism.
 
-Objects touching a surface receive a small contact shadow. Furniture has a quiet cast/contact shadow. Overlap should explain depth; avoid tangencies where Moss or objects merely kiss an edge. The open center remains negative space for readable traversal.
+Useful art-grid scale conventions at 400×240:
 
-## Materials
+- Moss hero sprite: roughly **40–46 px wide × 30–38 px tall** including ears/tail in active poses;
+- movable props: roughly **8–12 px** major dimension;
+- furniture edges: typically **2–6 px** thick depending on structural importance;
+- contact shadows: usually **1–3 px** tall and narrower than the subject;
+- major room zones must remain readable without labels.
 
-- **wood**: dark walnut base, one warmer top plane, small shadow underneath; no random grain noise;
-- **cloth/bedding**: broad matte shapes, folds only where history/contact justifies them;
-- **glass**: cool transparent value shifts and sparse glints, never bright white outlines;
-- **stone/shell/seed**: one base fill plus one small plane/highlight;
-- **paper**: warm flax, thin umber edge, low-contrast marks;
-- **foliage**: muted sage clusters with large leaf shapes;
-- **floor/wall**: large quiet value fields; texture is structural, not speckled noise.
+The large moss-green rug/open center is a composition anchor and negative-space buffer around Moss.
 
-## Motion hierarchy
+## Outlines and shading
 
-1. **Primary** — Moss and an object Moss is actively manipulating.
-2. **Secondary** — bedding compression, paper response, object settle, local contact shadow changes.
-3. **Ambient** — rain, window light, a few slow motes.
+Use selective dark outlines where they improve silhouette separation or clarify overlapping forms. Do not ring every object uniformly.
 
-Primary motion gets the largest displacement and clearest timing. Secondary motion stays local. Ambient motion must never make the eye leave Moss.
+Shading is graphical and stepped:
 
-## Motion grammar
+1. dark/contact shade;
+2. base color;
+3. lighter plane/cluster;
+4. optional tiny highlight.
 
-Actions use the smallest useful subset of **anticipation → movement → contact → settle → recovery**.
+Do not simulate volumetric airbrush lighting. Shadows are sparse, hard-edged, and subordinate to silhouettes.
 
-- **walk**: orient/plant → ease into locomotion → stable travel → decelerate → plant/settle;
-- **inspect**: face target → small lean → hold/contact → recover;
-- **carry**: orient/reach → object contact → bind object to a clear chest/paw hold → recover into locomotion;
-- **place**: stop/prepare → lower → surface contact → release → object settle → retract;
-- **window**: arrive → settle at sill → quiet forward gaze → calm departure;
-- **sleep**: arrive → compress into nook → curl/settle → slow breathing; wake reverses deliberately rather than popping upright.
+## Moss sprite language
 
-Do not use motion merely because time is passing. Idle gestures are slow and sparse. No whole-scene camera movement, random jitter, procedural zoom, or uncontrolled randomness.
+Moss is a **small expressive brown floppy-eared dog**:
+
+- compact body;
+- slightly oversized head;
+- floppy asymmetrical ears;
+- short planted legs;
+- readable tail;
+- minimal face with dark eye/nose pixels;
+- strong side/three-quarter gameplay silhouette.
+
+The default sprite has **no glasses** and does not depend on accessories for identity.
+
+Prefer side and three-quarter poses. Front-facing presentation should be exceptional and semantically motivated, never the default idle solution.
+
+Required hero-pose vocabulary:
+
+- idle/rest: compact planted stance with restrained breathing/ear/tail change;
+- locomotion: left/right mirrored gameplay silhouette with two readable leg keyframes and minimal vertical bob;
+- inspect/contact: target-facing head/ear/gaze shift plus a bounded forepaw/lean contact pose;
+- pickup: contact first, then transfer into the chest/paw hold;
+- carry: rigid object attachment and steadier posture;
+- place: stop → lower/contact → release → settle → retract;
+- sleep: supported curl into the sleeping nook, partially overlapped by bedding;
+- wake: deliberate unfold/stand transition;
+- window watch: planted sill-facing observation with quiet posture.
+
+Favor key poses and readable silhouettes over high frame counts.
+
+## Room identity
+
+Preserve the persistent Terrarium room rather than replacing it with a decorative mockup:
+
+- warm wood interior/floor;
+- large readable moss-green rug/open center;
+- window with curtain framing;
+- shelf/bookshelf;
+- plants/foliage;
+- sleeping bed/nook;
+- bowls;
+- activity desk/corner;
+- all existing persistent interactive objects;
+- meaningful foreground shelf/desk/blanket overlaps.
+
+Persistent history remains visible in pixel language: worn routes, object scuffs, sleep compression/creases, window smudges/wet traces, activity papers/marks, and other causal aftermath. These marks must derive from canonical history counters/positions; the renderer may visualize them but not invent history.
+
+## Environmental states
+
+Day, dawn, dusk, and night use finite palette/value shifts rather than smooth high-resolution lighting. Small staged palette steps are preferred to continuous glossy grading.
+
+Rain/mist use sparse integer-grid marks inside the window/environment. Ambient motion stays quiet and must never compete with Moss. No camera shake, random zoom, full-screen particle noise, or bloom.
+
+## Depth and occlusion
+
+Foreground furniture edges and bedding may cover Moss/props when world position implies it. Occlusion should clarify space rather than hide actions. Contact points remain readable.
+
+Depth priority:
+
+1. background wall/window;
+2. floor/rug/history marks;
+3. world objects;
+4. Moss and carried object;
+5. foreground shelf/desk/blanket lips;
+6. minimal ambient pixel effects where appropriate.
+
+## Motion rules
+
+Canonical behavior, target ownership, and pacing remain outside renderer authority.
+
+- Heartbeat continuation must not restart animation clocks.
+- Motion may be deliberately grid-quantized at the 400×240 art boundary, but semantic/presentation interpolation remains deterministic and continuous before quantization.
+- Never add random jitter to fake liveliness.
+- Anticipation, contact, hold, settle, and recovery should read as distinct key-pose phases.
+- Whole-scene motion is prohibited unless explicitly designed later.
+- Carried objects remain rigidly attached after transfer.
+- Environmental animation is slower/quieter than character acting.
+
+`temporal-render-auditor-r1` still guards its original dangerous defect classes. For integer-grid output, `grid-quantized-temporal-render-auditor-r1` may evaluate endpoint settling from the continuous presentation anchor only when the visible coordinates prove the declared quantization contract. Neither auditor judges artistic quality.
+
+## Acceptance by human visual inspection
+
+A checkpoint should be rejected if the real 800×480 output feels filtered, smooth/vector-like, over-detailed, muddy, neon, glossy, visually noisy, compositionally confused, or if Moss stops being the focal character—even if automated tests pass.

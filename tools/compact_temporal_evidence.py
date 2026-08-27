@@ -60,6 +60,7 @@ def compact(payload: dict[str, Any], *, block_x: int = 2, block_y: int = 2) -> d
     keep = {
         "requested_timestamp_ms", "source_tick", "target_tick", "semantic_x", "semantic_y",
         "source_x", "source_y", "rendered_x", "rendered_y", "rendered_base_y",
+        "continuous_x", "continuous_base_y",
         "interpolation_progress", "interpolation_ease", "semantic_distance", "moving",
         "facing", "pose", "activity", "carrying", "carried_rendered_x", "carried_rendered_y",
         "carried_relative_x", "carried_relative_y", "ambient_classes",
@@ -70,9 +71,17 @@ def compact(payload: dict[str, Any], *, block_x: int = 2, block_y: int = 2) -> d
         row = {key: sample.get(key) for key in keep}
         row["raster"] = reduce_grid(sample["raster"], block_x=block_x, block_y=block_y)
         samples.append(row)
+    first_raster = payload["samples"][0].get("raster", {}) if payload.get("samples") else {}
+    quantization = None
+    if first_raster.get("integer_scale"):
+        quantization = {
+            "step_px": float(first_raster["integer_scale"]),
+            "source": "pixel-native integer display scale",
+        }
     return {
         "mode": "sequence",
         "samples": samples,
+        "quantization": quantization,
         "provenance": {
             "scenario": payload.get("scenario"),
             "easing": payload.get("easing"),

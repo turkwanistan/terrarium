@@ -95,3 +95,22 @@ Only after the software experience is compelling: preferences/routines, richer l
 ## Checkpoint discipline
 
 For each meaningful user-visible iteration: implement → test/evaluate → run/inspect → capture one deterministic development snapshot → update `STATUS.md` / history → commit → push attempt. Avoid snapshotting every small edit and never commit the live SQLite/event ledger. Git is product-development history, not a backup of Moss's living state.
+
+## Completed normal product checkpoint — Pixel-Art Overhaul, Iteration 1
+
+- replaced the smooth storybook/vector-like presentation with a true 400×240 pixel-native Canvas art surface;
+- exact 2× nearest-neighbor presentation preserves the fixed 800×480 reference contract without changing canonical semantic coordinates;
+- rebuilt Moss as a brown floppy-eared gameplay sprite with side/three-quarter orientation, no default glasses, and pixel key poses for the existing action vocabulary;
+- rebuilt the core room with clustered stepped shading, selective outlines, moss/walnut/amber/dusty-blue/cream palette families, hard-edged depth, and persistent-history marks;
+- moved day/dawn/dusk/night/rain/mist presentation to finite palette/value steps and sparse pixel effects;
+- preserved canonical action commitments, targets, contact/attachment/place/sleep semantics, 72-minute day, ~9-minute weather blocks, and calm decision cadence;
+- proved exact raster scaling across 16 deterministic real-browser scenarios / 176 sampled frames with zero scale errors;
+- the original promoted temporal auditor exposed a valid integer-grid endpoint-settling coverage gap;
+- existing Capability Forge produced promoted `grid-quantized-temporal-render-auditor-r1` (`57fe2065ca3cc984241bee2da545db3bb318fd8a07ae90402a1dd6bc9993e697`), preserving the original 10/10 oracle and killing 2/2 dangerous Gen14 mutants;
+- no SBC substrate change or Gen18 work was required.
+
+Evidence: `history/2026-08-27-pixel-art-overhaul-iteration1.md`, `artifacts/pixel-art-overhaul-iteration1.json`, snapshot `20260827T183924459328Z-pixel-art-overhaul-iteration1`.
+
+## Next product iteration
+
+Pixel-Art Overhaul, Iteration 2 should be driven by direct human UAT of the accepted first pass. Prefer craft over feature count: refine Moss silhouette/ears/legs/tail and key poses; improve room object silhouettes and material clusters; tune composition/negative space; strengthen furniture depth and foreground overlaps; refine environmental palettes and rain readability; and make each existing interaction legible at a glance. Preserve the exact 400×240 → 800×480 pipeline and the grid-aware temporal rejection gate.

@@ -75,125 +75,43 @@ def _emergence(value: float, start: float, span: float) -> float:
 
 
 def preview_svg(frame: dict) -> str:
-    palettes = {
-        "night": ("#27313d", "#3b342f", "#162238"),
-        "dawn": ("#75665e", "#5b493b", "#c78373"),
-        "dusk": ("#665957", "#594438", "#8e5e76"),
-        "day": ("#8b806f", "#6e5946", "#82a6a1"),
+    # Lightweight Git preview only. The real Canvas renderer remains authority.
+    colors = {
+        "day": ("#a48b6a", "#785638", "#7eaaa6"),
+        "dawn": ("#967b69", "#684b37", "#b77b70"),
+        "dusk": ("#78645f", "#604331", "#865d78"),
+        "night": ("#3e4650", "#49382f", "#1d2a43"),
     }
-    wall, floor, sky = palettes.get(frame["lighting"], palettes["day"])
-    object_colors = {"stone":"#557487","leaf":"#b8773f","seed":"#87633d","shell":"#d0b6a0","thread":"#9f564b","trinket":"#d8c3a8"}
+    wall, floor, sky = colors.get(frame["lighting"], colors["day"])
     parts = [
-        '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 480" width="800" height="480">',
-        f'<rect width="800" height="315" fill="{wall}"/><rect y="315" width="800" height="165" fill="{floor}"/>',
-        '<rect x="54" y="48" width="225" height="172" rx="5" fill="#392f31"/>',
-        f'<rect x="65" y="58" width="203" height="151" rx="2" fill="{sky}"/>',
-        '<rect x="52" y="353" width="210" height="74" rx="8" fill="#463a34"/><rect x="62" y="362" width="188" height="53" rx="8" fill="#a28c70"/>',
-        '<rect x="296" y="333" width="224" height="91" rx="30" fill="#73806a" opacity=".9"/>',
-        '<rect x="595" y="61" width="157" height="17" fill="#4c372d"/><rect x="603" y="78" width="8" height="158" fill="#4c372d"/><rect x="736" y="78" width="8" height="158" fill="#4c372d"/>',
-        '<rect x="590" y="351" width="145" height="12" fill="#4b352c"/><rect x="604" y="363" width="9" height="48" fill="#4b352c"/><rect x="712" y="363" width="9" height="48" fill="#4b352c"/>',
+        '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 240" width="800" height="480" shape-rendering="crispEdges">',
+        f'<rect width="400" height="158" fill="{wall}"/><rect y="158" width="400" height="82" fill="{floor}"/>',
+        '<rect x="22" y="23" width="121" height="91" fill="#352519"/>',
+        f'<rect x="31" y="30" width="103" height="75" fill="{sky}"/><rect x="81" y="30" width="4" height="75" fill="#557c7e"/><rect x="31" y="65" width="103" height="4" fill="#557c7e"/>',
+        '<rect x="20" y="31" width="9" height="68" fill="#e5cf9f"/><rect x="139" y="32" width="7" height="66" fill="#e5cf9f"/>',
+        '<rect x="23" y="177" width="111" height="40" fill="#352519"/><rect x="31" y="181" width="95" height="28" fill="#c3aa7d"/><rect x="76" y="183" width="48" height="22" fill="#668399"/>',
+        '<rect x="149" y="177" width="102" height="28" fill="#66754e"/><rect x="157" y="173" width="86" height="36" fill="#66754e"/>',
+        '<rect x="298" y="29" width="79" height="10" fill="#533824"/><rect x="301" y="39" width="5" height="79" fill="#352519"/><rect x="369" y="39" width="5" height="79" fill="#352519"/>',
+        '<rect x="295" y="175" width="73" height="7" fill="#765236"/><rect x="302" y="182" width="5" height="25" fill="#352519"/><rect x="356" y="182" width="5" height="25" fill="#352519"/>',
     ]
-    aftermath = frame.get("habitat", {}).get("activity_aftermath") or {}
-    sleep_ticks = int(aftermath.get("sleep_nook_ticks", 0))
-    sleep_bouts = int(aftermath.get("sleep_nook_bouts", 0))
-    window_watches = int(aftermath.get("window_watches", 0))
-    wet_watches = int(aftermath.get("wet_window_watches", 0))
-    corner_uses = int(aftermath.get("activity_corner_uses", 0))
-    nest_strength = _emergence(sleep_ticks, 0, 18)
-    if nest_strength > 0:
-        rx = 44 + 17 * _emergence(sleep_bouts, 0, 5)
-        ry = 15 + 8 * nest_strength
-        parts.append(f'<ellipse cx="164" cy="389" rx="{rx:.1f}" ry="{ry:.1f}" fill="#4c3a30" opacity="{.235*nest_strength:.3f}"/>')
-    pillow_shift = 13 * _emergence(sleep_bouts, 0, 6)
-    pillow_drop = 4 * _emergence(sleep_bouts, 0, 5)
-    parts.append(f'<rect x="{70+pillow_shift:.1f}" y="{367+pillow_drop:.1f}" width="72" height="29" rx="9" fill="#d0b992"/>')
-    for i in range(4):
-        strength = _emergence(sleep_ticks, 1+i*3.5, 8)
-        if strength <= 0:
-            continue
-        x1 = 128+i*22; y1 = 374+i*4; cx = 145+i*18; x2 = 132+i*22
-        parts.append(f'<path d="M {x1} {y1} Q {cx} 385 {x2} 402" fill="none" stroke="#5d4839" stroke-width="{1.2+strength*.8:.2f}" opacity="{.28*strength:.3f}"/>')
-    for i in range(5):
-        strength = _emergence(window_watches, 1+i*2.8, 6.5)
-        if strength <= 0:
-            continue
-        parts.append(f'<ellipse cx="{96+i*31}" cy="{190-(i%2)*6}" rx="8" ry="{3.2+strength*1.4:.1f}" fill="#e2d8c4" opacity="{.115*strength:.3f}"/>')
-    sill_strength = _emergence(window_watches, 1, 22)
-    if sill_strength > 0:
-        parts.append(f'<rect x="80" y="215" width="155" height="{2+4*sill_strength:.2f}" fill="#3b2d26" opacity="{.16*sill_strength:.3f}"/>')
-    weather_glint = .78 if frame.get("weather") == "rain" else .72 if frame.get("weather") == "mist" else .46
-    for i in range(5):
-        strength = _emergence(wet_watches, .4+i*1.3, 4.5)
-        if strength <= 0:
-            continue
-        x = 93+i*32
-        parts.append(f'<path d="M {x} 149 Q {x+5} 165 {x-1} 182" fill="none" stroke="#e1e8e0" stroke-width="{1.4+strength*.8:.2f}" opacity="{.20*strength*weather_glint:.3f}"/>')
-    for i in range(5):
-        strength = _emergence(corner_uses, 1+i*4.2, 8)
-        if strength <= 0:
-            continue
-        parts.append(f'<rect x="{597+i*25}" y="{332-(i%2)*5}" width="22" height="11" fill="#dac99e" opacity="{.82*strength:.3f}"/>')
-    for i in range(7):
-        strength = _emergence(corner_uses, 2+i*3.2, 7)
-        if strength <= 0:
-            continue
-        x = 612+i*16
-        parts.append(f'<line x1="{x}" y1="344" x2="{x+8}" y2="340" stroke="#4b362b" stroke-width="1.1" opacity="{.46*strength:.3f}"/>')
-
-    route_paths = {
-        "sleeping_nook": "M 405 421 Q 274 408 154 427",
-        "window": "M 405 421 Q 286 337 182 306",
-        "collection_shelf": "M 405 421 Q 548 333 650 303",
-        "activity_corner": "M 405 421 Q 535 408 650 427",
-    }
-    path_wear = frame.get("habitat", {}).get("path_wear") or {}
-    for zone, path_data in route_paths.items():
-        wear = int(path_wear.get(zone, 0))
-        if wear < 5: continue
-        opacity = min(.18, .018 + (wear - 4) * .0048)
-        width = min(12, 2.6 + wear * .17)
-        parts.append(f'<path d="{path_data}" fill="none" stroke="#2f221b" stroke-width="{width:.2f}" stroke-linecap="round" opacity="{opacity:.3f}"/>')
+    object_colors = {"stone":"#668399","leaf":"#d39a4a","seed":"#765236","shell":"#e5cf9f","thread":"#a85c4d","trinket":"#d7c493"}
     for obj in frame["objects"]:
-        moved = int(obj.get("times_moved", 0))
-        if obj["state"] != "placed" or moved < 2: continue
-        opacity = min(.16, .035 + moved * .012)
-        rx = 13 + min(7, moved)
-        parts.append(f'<ellipse cx="{obj["x"]}" cy="{obj["y"]+7}" rx="{rx}" ry="5" fill="#271d18" opacity="{opacity:.3f}"/>')
-    for zone, wear in path_wear.items():
-        if wear < 6: continue
-        pos = {"sleeping_nook":(118,427),"window":(168,277),"open_space":(405,429),"collection_shelf":(682,246),"activity_corner":(655,427)}.get(zone)
-        if pos: parts.append(f'<ellipse cx="{pos[0]}" cy="{pos[1]}" rx="{33+min(18,wear)}" ry="7" fill="#2a1f19" opacity=".18"/>')
-    for obj in frame["objects"]:
-        if obj["state"] == "carried": continue
-        color = object_colors.get(obj["kind"], "#d8c3a8")
-        parts.append(f'<circle cx="{obj["x"]}" cy="{obj["y"]}" r="8" fill="{color}" stroke="#302823" stroke-width="2"/>')
-    c = frame["creature"]
-    # Snapshot thumbnails mirror the current semantic-contact cues at settled
-    # strength so the Git-friendly checkpoint remains representative of the
-    # real Canvas view without inventing separate world state.
-    if c["zone"] == "window" and c["activity"] == "look_outside":
-        contact_x = max(88, min(242, int(c["x"])))
-        parts.append(f'<ellipse cx="{contact_x}" cy="198" rx="25" ry="8" fill="#e8e4d3" opacity=".075"/>')
-        parts.append(f'<path d="M {contact_x-13} 216 Q {contact_x} 213 {contact_x+13} 216" fill="none" stroke="#e0d7c2" stroke-width="1.2" opacity=".14"/>')
-    if c["zone"] == "sleeping_nook" and c["activity"] == "sleep":
-        press_x = max(92, min(214, int(c["x"])+12))
-        parts.append(f'<ellipse cx="{press_x}" cy="398" rx="34" ry="11" fill="#3e2f28" opacity=".17"/>')
-    if c["zone"] == "activity_corner" and c["activity"] in {"inspect", "carry", "place"}:
-        hand_x = max(610, min(712, int(c["x"])-8))
-        parts.append(f'<path d="M {hand_x-12} 350 Q {hand_x} 346 {hand_x+12} 349" fill="none" stroke="#e1cda4" stroke-width="1.2" opacity=".18"/>')
-    parts += [
-        f'<ellipse cx="{c["x"]}" cy="{c["y"]+19}" rx="24" ry="7" fill="#1e1614" opacity=".24"/>',
-        f'<ellipse cx="{c["x"]-2}" cy="{c["y"]+2}" rx="24" ry="20" fill="#60705a"/>',
-        f'<ellipse cx="{c["x"]+9}" cy="{c["y"]-16}" rx="20" ry="18" fill="#718267"/>',
-        f'<circle cx="{c["x"]+6}" cy="{c["y"]-20}" r="2.6" fill="#252923"/><circle cx="{c["x"]+23}" cy="{c["y"]-21}" r="2.6" fill="#252923"/>',
-    ]
-    if c["zone"] == "sleeping_nook" and c["activity"] == "sleep":
-        x, y = int(c["x"]), int(c["y"])
-        parts.append(f'<path d="M {x-31} {y+9} Q {x-3} {y+18} {x+35} {y+12} L {x+35} {y+24} Q {x} {y+29} {x-31} {y+21} Z" fill="#b49974" opacity=".72"/>')
-    if frame["weather"] == "rain":
-        for i in range(14):
-            x = 72 + (i * 14) % 188; y = 68 + (i * 23) % 125
-            parts.append(f'<line x1="{x}" y1="{y}" x2="{x-5}" y2="{y+11}" stroke="#bed6da" stroke-width="2" opacity=".55"/>')
+        if obj["state"] == "carried":
+            continue
+        x, y = round(obj["x"] / 2), round(obj["y"] / 2)
+        color = object_colors.get(obj["kind"], "#e5cf9f")
+        parts += [f'<rect x="{x-4}" y="{y-2}" width="8" height="5" fill="{color}"/>', f'<rect x="{x-2}" y="{y-3}" width="4" height="1" fill="#e5cf9f"/>']
+    c = frame["creature"]; x, y = round(c["x"] / 2), round(c["y"] / 2)
+    if c["pose"] == "sleep" or c["activity"] == "sleep":
+        parts += [f'<rect x="{x-13}" y="{y-3}" width="25" height="9" fill="#8b5d3b"/>', f'<rect x="{x+2}" y="{y-9}" width="12" height="10" fill="#b47c50"/>', f'<rect x="{x+8}" y="{y-7}" width="6" height="6" fill="#d9bd8d"/>']
+    else:
+        flip = -1 if c.get("facing") == "left" else 1
+        hx = x + 5 * flip
+        parts += [f'<rect x="{x-13}" y="{y-8}" width="23" height="13" fill="#8b5d3b"/>', f'<rect x="{hx-7}" y="{y-19}" width="14" height="12" fill="#8b5d3b"/>', f'<rect x="{hx-10}" y="{y-17}" width="5" height="8" fill="#5f3c29"/>', f'<rect x="{hx+5}" y="{y-18}" width="5" height="8" fill="#5f3c29"/>', f'<rect x="{hx+2}" y="{y-14}" width="8" height="5" fill="#d9bd8d"/>']
+    if frame.get("weather") == "rain":
+        for i in range(18):
+            xx = 34 + (i * 17) % 96; yy = 31 + (i * 13) % 68
+            parts.append(f'<rect x="{xx}" y="{yy}" width="1" height="4" fill="#b0c7c0"/>')
     parts.append('</svg>')
     return ''.join(parts) + '\n'
 
@@ -245,6 +163,7 @@ def main() -> int:
         "captured_at": utc_now(),
         "note": args.note,
         "preview": {"path": f"dev/{snapshot_id}/preview.svg", "sha256": sha_file(preview_path)},
+        "art_surface": {"width": 400, "height": 240, "integer_scale": 2, "smoothing": False},
         "frame": {
             "path": f"dev/{snapshot_id}/frame.json",
             "sha256": sha_json(frame),

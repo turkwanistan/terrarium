@@ -1,0 +1,40 @@
+{
+  "art_surface": {
+    "height": 240,
+    "integer_scale": 2,
+    "smoothing": false,
+    "width": 400
+  },
+  "captured_at": "2026-08-27T18:39:24.460019Z",
+  "frame": {
+    "logical_height": 480,
+    "logical_width": 800,
+    "path": "dev/20260827T183924459328Z-pixel-art-overhaul-iteration1/frame.json",
+    "sha256": "7edb823cf657ff72ba96c6f6cf38fe45a547760b8bf4c5e0eb534372c6c4fa6c",
+    "tick": 698
+  },
+  "git": {
+    "branch": "main",
+    "dirty": true,
+    "head": "e825086b5c1fe627a784812e1a86fb48fecff1c5"
+  },
+  "note": "Pixel-native 400x240 Terrarium art surface with exact 2x nearest-neighbor presentation, brown floppy-eared Moss hero sprite, rebuilt warm room, persistent pixel-history marks, and palette-based day/dusk/night/weather states.",
+  "preview": {
+    "path": "dev/20260827T183924459328Z-pixel-art-overhaul-iteration1/preview.svg",
+    "sha256": "b0401c9529c1e6959e0744794aad2763652137e685b0ef83f63fd5ae3c2c2359"
+  },
+  "schema": "terrarium.dev-snapshot.v1",
+  "snapshot_id": "20260827T183924459328Z-pixel-art-overhaul-iteration1",
+  "source": {
+    "mode": "deterministic",
+    "seed": 1701,
+    "steps": 698
+  },
+  "source_hashes": {
+    "engine": "9c1d6be9938b17f950fc620b9b6ee7c6523db02fb854fb3ded52df930c8d48a5",
+    "frame_contract": "a80279c5e471dd808086f3a03c00775d469e07398fb688c7b3d45b0e158810d0",
+    "renderer_css": "3a24319be5a3e0c963b8e721b637f35aedfdc24b8bef8e779ae934dd09fd62d1",
+    "renderer_js": "b2fc125fb72560fd8414850b26cf08cad31bd2f2ba7bab8792bffe9b7eccc0be"
+  },
+  "view_url": "/?snapshot=/snapshots/dev/20260827T183924459328Z-pixel-art-overhaul-iteration1/frame.json"
+}

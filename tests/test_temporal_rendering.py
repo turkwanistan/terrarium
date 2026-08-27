@@ -68,4 +68,29 @@ def test_renderer_has_manual_clock_path_and_production_raf_path():
     assert "function placedObjectRenderState(o, f, now)" in source
     assert "function acceptFrame(next, now)" in source
     assert "transitionSource" in source and "temporalContinuityProbe" in source
-    assert "drawForegroundCausality(frame, now, renderState)" in source
+    assert "drawForegroundCausality(frame, now, renderState" in source
+
+
+def test_renderer_is_pixel_native_400x240_with_exact_2x_present_path():
+    source = (ROOT / "display" / "web" / "app.js").read_text(encoding="utf-8")
+    assert "const ART_W = 400" in source and "const ART_H = 240" in source
+    assert "const SCALE = 2" in source
+    assert "artCanvas.width = ART_W" in source and "artCanvas.height = ART_H" in source
+    assert "displayCtx.imageSmoothingEnabled = false" in source
+    assert "ctx.imageSmoothingEnabled = false" in source
+    assert "displayCtx.drawImage(artCanvas,0,0,ART_W,ART_H,0,0,DISPLAY_W,DISPLAY_H)" in source
+    assert "scale2x_exact" in source and "scale2x_error_blocks" in source
+    assert "window.__terrariumPixelRenderer" in source
+    assert "createRadialGradient" not in source
+    assert "roundRect" not in source
+    assert "ctx.ellipse" not in source
+
+
+def test_moss_pixel_sprite_is_brown_and_default_has_no_glasses():
+    source = (ROOT / "display" / "web" / "app.js").read_text(encoding="utf-8")
+    assert "dog:'#8b5d3b'" in source
+    assert "function drawMossSprite" in source
+    assert "pose==='walk'" in source and "pose==='sleep'" in source
+    assert "pose==='inspect'" in source and "pose==='carry'" in source and "pose==='place'" in source
+    assert "pose==='window'" in source and "c.activity==='wake'" in source
+    assert "glasses" not in source.lower()

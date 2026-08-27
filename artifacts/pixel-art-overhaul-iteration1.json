@@ -1,0 +1,141 @@
+{
+  "accepted": true,
+  "accepted_snapshot": {
+    "frame_sha256": "7edb823cf657ff72ba96c6f6cf38fe45a547760b8bf4c5e0eb534372c6c4fa6c",
+    "id": "20260827T183924459328Z-pixel-art-overhaul-iteration1",
+    "renderer_sha256": "b2fc125fb72560fd8414850b26cf08cad31bd2f2ba7bab8792bffe9b7eccc0be",
+    "seed": 1701,
+    "semantic_frame_unchanged_from_baseline": true,
+    "tick": 698
+  },
+  "baseline": {
+    "commit": "e825086",
+    "frame_sha256": "7edb823cf657ff72ba96c6f6cf38fe45a547760b8bf4c5e0eb534372c6c4fa6c",
+    "renderer_sha256": "17feafe5e5c0c6327df0bef5aa00f5617847949dbd0e23e41516a37240f8a61a",
+    "snapshot": "20260827T175337017716Z-action-choreography-pacing"
+  },
+  "evidence_retention": "raw browser and Lab transport evidence removed after this bounded artifact is written",
+  "grid_temporal_specialization": {
+    "capability": "grid-quantized-temporal-render-auditor-r1",
+    "content_hash": "57fe2065ca3cc984241bee2da545db3bb318fd8a07ae90402a1dd6bc9993e697",
+    "forge_cases": "6/6 PASS",
+    "forge_evaluator_hash": "3115517877e016d4b4867da15b3d5ef81045991d3bf890765c53dfdaa9a6782f",
+    "gen14_mutation_testing": {
+      "dangerous_mutants": 2,
+      "kill_rate": 1.0,
+      "killed": 2,
+      "survivors": 0
+    },
+    "original_oracle_preserved": "10/10 classifications",
+    "pixel_sequences": "9/9 PASS including RAF",
+    "real_tasks": "2/2 PASS",
+    "rule": "continuous endpoint anchor may replace quantized endpoint-speed ratio only when rendered coordinates remain within half a declared grid cell of that anchor",
+    "state": "PROMOTED"
+  },
+  "original_temporal_auditor": {
+    "capability": "temporal-render-auditor-r1",
+    "content_hash": "5481ecd6e2e46d9b3a502fbabff5a24f27ffed9f925ab0868ed30a3ba13575b1",
+    "coverage_gap_demonstrated": true,
+    "result": "valid pixel-grid sequences exposed endpoint_settling false positives; all other defect classes remained clean"
+  },
+  "raster_proof": {
+    "all_exact_2x": true,
+    "all_smoothing_disabled": true,
+    "deterministic_scenarios": [
+      "activity_corner_transition",
+      "arrive_settle",
+      "carried_walk",
+      "dawn_light_transition",
+      "dusk_light_transition",
+      "idle_control",
+      "inspect_object",
+      "left_walk",
+      "object_pickup",
+      "object_placement",
+      "populated_room",
+      "rain_window",
+      "right_walk",
+      "sleep_transition",
+      "waking",
+      "window_transition"
+    ],
+    "sampled_frames": 176,
+    "scale_error_blocks": 0,
+    "scenario_count": 16
+  },
+  "regression": {
+    "behavior_changed": false,
+    "behavior_evaluator_seed_1701_500": "PASS: 186 decisions + 314 continuation ticks; 6 moved objects",
+    "exact_replay_hash": "2009ab06dc65bcf72379766a8a5345b0ee70bb6b2f7f9a8674ec08ad35036a5c",
+    "javascript_syntax": "PASS",
+    "promoted_behavior_auditor_rerun_required": false,
+    "pytest": "22/22 PASS",
+    "python_3_10_compatibility": "PASS via pytest grammar guard",
+    "technical_evaluator": "PASS"
+  },
+  "renderer_contract": {
+    "art_surface": [
+      400,
+      240
+    ],
+    "authoritative_frame_contract_unchanged": true,
+    "external_surface": [
+      800,
+      480
+    ],
+    "integer_scale": 2,
+    "nearest_neighbor": true,
+    "smoothing": false,
+    "subpixel_art_placement": false
+  },
+  "representative_states": [
+    "idle/day",
+    "left/right walk",
+    "inspect/contact",
+    "pickup",
+    "carry",
+    "place",
+    "sleep",
+    "wake",
+    "window",
+    "populated accumulated-history room",
+    "dawn",
+    "dusk/night",
+    "rain",
+    "activity corner"
+  ],
+  "sbc_conclusion": {
+    "gen18_warranted": false,
+    "new_permanent_mcp_surface": false,
+    "reason": "existing Capability Forge + Gen14 isolation absorbed the demonstrated reusable auditor specialization without substrate change"
+  },
+  "schema": "terrarium.pixel-art-overhaul-iteration1.v1",
+  "temporal": {
+    "continuity_jump_px": 0,
+    "deterministic_repeat_byte_identical": true,
+    "deterministic_repeat_left_walk_sha256": "dfe4612dbf9376a743c84893137f46f5e5e8b74c5a8eae263bac940f01ab1793",
+    "real_raf": {
+      "max": 16.8,
+      "min": 16.6,
+      "over_34ms": 0,
+      "over_50ms": 0,
+      "p50": 16.7,
+      "p95": 16.8
+    }
+  },
+  "visual_uat": {
+    "accepted": true,
+    "criteria": [
+      "handcrafted pixel clusters",
+      "brown floppy-eared Moss",
+      "no default glasses",
+      "side/three-quarter gameplay orientation",
+      "warm room coherence",
+      "persistent history legibility",
+      "Moss focal priority",
+      "palette-based environment",
+      "interaction readability"
+    ],
+    "real_800x480_canvas_inspected": true
+  }
+}
