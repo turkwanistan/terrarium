@@ -11,8 +11,11 @@ from .spatial import ZONE_ANCHORS
 FRAME_WIDTH = 800
 FRAME_HEIGHT = 480
 STATE_SCHEMA_VERSION = 1
-RULES_VERSION = "terrarium-rules-v3-routine-coherence"
+RULES_VERSION = "terrarium-rules-v4-long-horizon-habits"
 BEHAVIOR_CONTEXT_SCHEMA = "terrarium.behavior-context.v1"
+HABIT_PROFILE_SCHEMA = "terrarium.habits.v1"
+HABIT_CONTEXTS = ("dawn", "day", "dusk", "night")
+RNG_STREAM_VERSION = "terrarium-rules-v3-routine-coherence"
 EVENT_VERSION = 1
 
 ZONES: dict[str, dict[str, int]] = {name: dict(anchor) for name, anchor in ZONE_ANCHORS.items()}
@@ -121,6 +124,16 @@ def initial_state(seed: int, *, created_at: str | None = None) -> dict[str, Any]
                 "recent_zones": ["sleeping_nook"],
                 "recent_objects": [],
                 "intent": None,
+            },
+            "habit_profile": {
+                "schema": HABIT_PROFILE_SCHEMA,
+                "migration_origin": "native",
+                "experience_count": 0,
+                "zone_affinity": {name: 0.0 for name in ZONES},
+                "object_affinity": {obj["id"]: 0.0 for obj in objects},
+                "context_zone_affinity": {
+                    context: {name: 0.0 for name in ZONES} for context in HABIT_CONTEXTS
+                },
             },
         },
         "habitat": {

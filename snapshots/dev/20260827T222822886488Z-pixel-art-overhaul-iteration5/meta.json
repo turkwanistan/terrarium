@@ -1,0 +1,40 @@
+{
+  "art_surface": {
+    "height": 240,
+    "integer_scale": 2,
+    "smoothing": false,
+    "width": 400
+  },
+  "captured_at": "2026-08-27T22:28:22.887367Z",
+  "frame": {
+    "logical_height": 480,
+    "logical_width": 800,
+    "path": "dev/20260827T222822886488Z-pixel-art-overhaul-iteration5/frame.json",
+    "sha256": "a275783dc04234b1da10d8bb6dd1b8a2bcaaeba134ee5ae07f0062687cf51290",
+    "tick": 10080
+  },
+  "git": {
+    "branch": "main",
+    "dirty": true,
+    "head": "208c8609e92cabaf01247e57c7fb1b48730a666b"
+  },
+  "note": "Accepted Iteration 5 long-horizon habits: persistent bounded learned zone/object/context preferences with deterministic exploration and history-dependent divergence.",
+  "preview": {
+    "path": "dev/20260827T222822886488Z-pixel-art-overhaul-iteration5/preview.svg",
+    "sha256": "7a20d054c55958cb80446a8ae0a74770df26215ad5031d3a08cb870acd954457"
+  },
+  "schema": "terrarium.dev-snapshot.v1",
+  "snapshot_id": "20260827T222822886488Z-pixel-art-overhaul-iteration5",
+  "source": {
+    "mode": "deterministic",
+    "seed": 1701,
+    "steps": 10080
+  },
+  "source_hashes": {
+    "engine": "40fb808cbe00a6b22d0f07784b9308ad35f1b1c44a323cb5ce3dcc6c32a702c4",
+    "frame_contract": "c3625d36eb58f702591d961589cd248fc6b34e0918c8f27ded7f75d9bc4a9805",
+    "renderer_css": "3a24319be5a3e0c963b8e721b637f35aedfdc24b8bef8e779ae934dd09fd62d1",
+    "renderer_js": "96bd0eb952cf40b8b5099b1b7ab47ca376bc46339c01ebd0556ed440f1f8115d"
+  },
+  "view_url": "/?snapshot=/snapshots/dev/20260827T222822886488Z-pixel-art-overhaul-iteration5/frame.json"
+}

@@ -1,0 +1,1121 @@
+{
+  "hero_reel": [
+    "habit_day2",
+    "habit_day5",
+    "habit_day7"
+  ],
+  "recommended_timestamps_ms": [
+    0
+  ],
+  "scenarios": {
+    "habit_day2": {
+      "habit_profile": {
+        "context_zone_affinity": {
+          "dawn": {
+            "activity_corner": 0.078003,
+            "collection_shelf": 0.153921,
+            "open_space": 0.0,
+            "sleeping_nook": 0.20604,
+            "window": 0.162573
+          },
+          "day": {
+            "activity_corner": 0.285761,
+            "collection_shelf": 0.530697,
+            "open_space": 0.329217,
+            "sleeping_nook": 0.550576,
+            "window": 0.292823
+          },
+          "dusk": {
+            "activity_corner": 0.062075,
+            "collection_shelf": 0.163109,
+            "open_space": 0.141037,
+            "sleeping_nook": 0.134637,
+            "window": 0.113952
+          },
+          "night": {
+            "activity_corner": 0.322093,
+            "collection_shelf": 0.434222,
+            "open_space": 0.309724,
+            "sleeping_nook": 0.61454,
+            "window": 0.419518
+          }
+        },
+        "experience_count": 652,
+        "migration_origin": "native",
+        "object_affinity": {
+          "acorn": 0.365471,
+          "amber_leaf": 0.372538,
+          "blue_stone": 0.47007,
+          "glass_star": 0.424323,
+          "red_thread": 0.352647,
+          "shell": 0.384246
+        },
+        "schema": "terrarium.habits.v1",
+        "zone_affinity": {
+          "activity_corner": 0.471086,
+          "collection_shelf": 0.665485,
+          "open_space": 0.462903,
+          "sleeping_nook": 0.69516,
+          "window": 0.527525
+        }
+      },
+      "id": "habit_day2",
+      "purpose": "long-horizon rendered observation at simulation tick 2880",
+      "seed": 1701,
+      "semantic_event": {
+        "action": "long_horizon_observation",
+        "from_zone": "collection_shelf",
+        "to_zone": "collection_shelf"
+      },
+      "source": {
+        "creature": {
+          "activity": "idle",
+          "carrying": null,
+          "expression": "neutral",
+          "facing": "right",
+          "id": "creature-1",
+          "intent_action": "idle",
+          "intent_ticks_remaining": 2,
+          "name": "Moss",
+          "pose": "idle",
+          "target_object_id": null,
+          "x": 554,
+          "y": 312,
+          "zone": "collection_shelf"
+        },
+        "frame_version": 1,
+        "habitat": {
+          "activity_aftermath": {
+            "activity_corner_uses": 94,
+            "sleep_nook_bouts": 33,
+            "sleep_nook_ticks": 595,
+            "wet_window_watches": 0,
+            "window_watches": 28
+          },
+          "marks": [
+            "worn_collection_shelf_6",
+            "worn_open_space_6",
+            "worn_activity_corner_6",
+            "worn_collection_shelf_14",
+            "worn_window_6",
+            "worn_open_space_14",
+            "worn_activity_corner_14",
+            "worn_sleeping_nook_6",
+            "worn_window_14"
+          ],
+          "path_wear": {
+            "activity_corner": 35,
+            "collection_shelf": 58,
+            "open_space": 34,
+            "sleeping_nook": 11,
+            "window": 22
+          },
+          "shelf_count": 6
+        },
+        "last_event": {
+          "action": "idle",
+          "approach_x": null,
+          "approach_y": null,
+          "contact_x": null,
+          "contact_y": null,
+          "decision": true,
+          "event_id": "fixture-habit-2880",
+          "from_zone": "collection_shelf",
+          "intent_action": "idle",
+          "object_id": null,
+          "route": [],
+          "route_length": null,
+          "source_x": null,
+          "source_y": null,
+          "spatial_schema": null,
+          "summary": "Long-horizon habit observation at tick 2880.",
+          "supported_action": null,
+          "target_x": null,
+          "target_y": null,
+          "to_zone": null,
+          "type": "fixture"
+        },
+        "lighting": "dawn",
+        "logical_height": 480,
+        "logical_width": 800,
+        "objects": [
+          {
+            "carried_by": null,
+            "id": "blue_stone",
+            "kind": "stone",
+            "name": "Blue stone",
+            "state": "placed",
+            "times_inspected": 18,
+            "times_moved": 15,
+            "x": 700,
+            "y": 292,
+            "zone": "collection_shelf"
+          },
+          {
+            "carried_by": null,
+            "id": "amber_leaf",
+            "kind": "leaf",
+            "name": "Amber leaf",
+            "state": "placed",
+            "times_inspected": 10,
+            "times_moved": 11,
+            "x": 620,
+            "y": 292,
+            "zone": "collection_shelf"
+          },
+          {
+            "carried_by": null,
+            "id": "acorn",
+            "kind": "seed",
+            "name": "Acorn",
+            "state": "placed",
+            "times_inspected": 14,
+            "times_moved": 9,
+            "x": 660,
+            "y": 292,
+            "zone": "collection_shelf"
+          },
+          {
+            "carried_by": null,
+            "id": "shell",
+            "kind": "shell",
+            "name": "Tiny shell",
+            "state": "placed",
+            "times_inspected": 11,
+            "times_moved": 12,
+            "x": 680,
+            "y": 294,
+            "zone": "collection_shelf"
+          },
+          {
+            "carried_by": null,
+            "id": "red_thread",
+            "kind": "thread",
+            "name": "Red thread",
+            "state": "placed",
+            "times_inspected": 10,
+            "times_moved": 11,
+            "x": 640,
+            "y": 294,
+            "zone": "collection_shelf"
+          },
+          {
+            "carried_by": null,
+            "id": "glass_star",
+            "kind": "trinket",
+            "name": "Glass star",
+            "state": "placed",
+            "times_inspected": 13,
+            "times_moved": 13,
+            "x": 720,
+            "y": 294,
+            "zone": "collection_shelf"
+          }
+        ],
+        "schema": "terrarium.frame.v1",
+        "spatial": {
+          "schema": "terrarium.spatial.v1"
+        },
+        "tick": 2880,
+        "weather": "clear",
+        "world_minutes": 3300
+      },
+      "source_tick": 2880,
+      "target": {
+        "creature": {
+          "activity": "idle",
+          "carrying": null,
+          "expression": "neutral",
+          "facing": "right",
+          "id": "creature-1",
+          "intent_action": "idle",
+          "intent_ticks_remaining": 2,
+          "name": "Moss",
+          "pose": "idle",
+          "target_object_id": null,
+          "x": 554,
+          "y": 312,
+          "zone": "collection_shelf"
+        },
+        "frame_version": 1,
+        "habitat": {
+          "activity_aftermath": {
+            "activity_corner_uses": 94,
+            "sleep_nook_bouts": 33,
+            "sleep_nook_ticks": 595,
+            "wet_window_watches": 0,
+            "window_watches": 28
+          },
+          "marks": [
+            "worn_collection_shelf_6",
+            "worn_open_space_6",
+            "worn_activity_corner_6",
+            "worn_collection_shelf_14",
+            "worn_window_6",
+            "worn_open_space_14",
+            "worn_activity_corner_14",
+            "worn_sleeping_nook_6",
+            "worn_window_14"
+          ],
+          "path_wear": {
+            "activity_corner": 35,
+            "collection_shelf": 58,
+            "open_space": 34,
+            "sleeping_nook": 11,
+            "window": 22
+          },
+          "shelf_count": 6
+        },
+        "last_event": {
+          "action": "idle",
+          "approach_x": null,
+          "approach_y": null,
+          "contact_x": null,
+          "contact_y": null,
+          "decision": true,
+          "event_id": "fixture-habit-2880",
+          "from_zone": "collection_shelf",
+          "intent_action": "idle",
+          "object_id": null,
+          "route": [],
+          "route_length": null,
+          "source_x": null,
+          "source_y": null,
+          "spatial_schema": null,
+          "summary": "Long-horizon habit observation at tick 2880.",
+          "supported_action": null,
+          "target_x": null,
+          "target_y": null,
+          "to_zone": null,
+          "type": "fixture"
+        },
+        "lighting": "dawn",
+        "logical_height": 480,
+        "logical_width": 800,
+        "objects": [
+          {
+            "carried_by": null,
+            "id": "blue_stone",
+            "kind": "stone",
+            "name": "Blue stone",
+            "state": "placed",
+            "times_inspected": 18,
+            "times_moved": 15,
+            "x": 700,
+            "y": 292,
+            "zone": "collection_shelf"
+          },
+          {
+            "carried_by": null,
+            "id": "amber_leaf",
+            "kind": "leaf",
+            "name": "Amber leaf",
+            "state": "placed",
+            "times_inspected": 10,
+            "times_moved": 11,
+            "x": 620,
+            "y": 292,
+            "zone": "collection_shelf"
+          },
+          {
+            "carried_by": null,
+            "id": "acorn",
+            "kind": "seed",
+            "name": "Acorn",
+            "state": "placed",
+            "times_inspected": 14,
+            "times_moved": 9,
+            "x": 660,
+            "y": 292,
+            "zone": "collection_shelf"
+          },
+          {
+            "carried_by": null,
+            "id": "shell",
+            "kind": "shell",
+            "name": "Tiny shell",
+            "state": "placed",
+            "times_inspected": 11,
+            "times_moved": 12,
+            "x": 680,
+            "y": 294,
+            "zone": "collection_shelf"
+          },
+          {
+            "carried_by": null,
+            "id": "red_thread",
+            "kind": "thread",
+            "name": "Red thread",
+            "state": "placed",
+            "times_inspected": 10,
+            "times_moved": 11,
+            "x": 640,
+            "y": 294,
+            "zone": "collection_shelf"
+          },
+          {
+            "carried_by": null,
+            "id": "glass_star",
+            "kind": "trinket",
+            "name": "Glass star",
+            "state": "placed",
+            "times_inspected": 13,
+            "times_moved": 13,
+            "x": 720,
+            "y": 294,
+            "zone": "collection_shelf"
+          }
+        ],
+        "schema": "terrarium.frame.v1",
+        "spatial": {
+          "schema": "terrarium.spatial.v1"
+        },
+        "tick": 2880,
+        "weather": "clear",
+        "world_minutes": 3300
+      },
+      "target_tick": 2880
+    },
+    "habit_day5": {
+      "habit_profile": {
+        "context_zone_affinity": {
+          "dawn": {
+            "activity_corner": 0.191481,
+            "collection_shelf": 0.320408,
+            "open_space": 0.179536,
+            "sleeping_nook": 0.377976,
+            "window": 0.263102
+          },
+          "day": {
+            "activity_corner": 0.395015,
+            "collection_shelf": 0.58789,
+            "open_space": 0.572319,
+            "sleeping_nook": 0.659437,
+            "window": 0.726951
+          },
+          "dusk": {
+            "activity_corner": 0.206871,
+            "collection_shelf": 0.37245,
+            "open_space": 0.264961,
+            "sleeping_nook": 0.317165,
+            "window": 0.161567
+          },
+          "night": {
+            "activity_corner": 0.442771,
+            "collection_shelf": 0.55785,
+            "open_space": 0.454158,
+            "sleeping_nook": 0.728287,
+            "window": 0.712329
+          }
+        },
+        "experience_count": 1610,
+        "migration_origin": "native",
+        "object_affinity": {
+          "acorn": 0.527818,
+          "amber_leaf": 0.547863,
+          "blue_stone": 0.617604,
+          "glass_star": 0.507892,
+          "red_thread": 0.595383,
+          "shell": 0.566894
+        },
+        "schema": "terrarium.habits.v1",
+        "zone_affinity": {
+          "activity_corner": 0.49677,
+          "collection_shelf": 0.629984,
+          "open_space": 0.580659,
+          "sleeping_nook": 0.675472,
+          "window": 0.721219
+        }
+      },
+      "id": "habit_day5",
+      "purpose": "long-horizon rendered observation at simulation tick 7200",
+      "seed": 1701,
+      "semantic_event": {
+        "action": "long_horizon_observation",
+        "from_zone": "open_space",
+        "to_zone": "open_space"
+      },
+      "source": {
+        "creature": {
+          "activity": "idle",
+          "carrying": null,
+          "expression": "neutral",
+          "facing": "left",
+          "id": "creature-1",
+          "intent_action": "idle",
+          "intent_ticks_remaining": 2,
+          "name": "Moss",
+          "pose": "idle",
+          "target_object_id": null,
+          "x": 405,
+          "y": 378,
+          "zone": "open_space"
+        },
+        "frame_version": 1,
+        "habitat": {
+          "activity_aftermath": {
+            "activity_corner_uses": 210,
+            "sleep_nook_bouts": 76,
+            "sleep_nook_ticks": 1309,
+            "wet_window_watches": 0,
+            "window_watches": 99
+          },
+          "marks": [
+            "worn_collection_shelf_6",
+            "worn_open_space_6",
+            "worn_activity_corner_6",
+            "worn_collection_shelf_14",
+            "worn_window_6",
+            "worn_open_space_14",
+            "worn_activity_corner_14",
+            "worn_sleeping_nook_6",
+            "worn_window_14",
+            "worn_sleeping_nook_14"
+          ],
+          "path_wear": {
+            "activity_corner": 80,
+            "collection_shelf": 130,
+            "open_space": 90,
+            "sleeping_nook": 36,
+            "window": 67
+          },
+          "shelf_count": 4
+        },
+        "last_event": {
+          "action": "idle",
+          "approach_x": null,
+          "approach_y": null,
+          "contact_x": null,
+          "contact_y": null,
+          "decision": true,
+          "event_id": "fixture-habit-7200",
+          "from_zone": "open_space",
+          "intent_action": "idle",
+          "object_id": null,
+          "route": [],
+          "route_length": null,
+          "source_x": null,
+          "source_y": null,
+          "spatial_schema": null,
+          "summary": "Long-horizon habit observation at tick 7200.",
+          "supported_action": null,
+          "target_x": null,
+          "target_y": null,
+          "to_zone": null,
+          "type": "fixture"
+        },
+        "lighting": "dawn",
+        "logical_height": 480,
+        "logical_width": 800,
+        "objects": [
+          {
+            "carried_by": null,
+            "id": "blue_stone",
+            "kind": "stone",
+            "name": "Blue stone",
+            "state": "placed",
+            "times_inspected": 33,
+            "times_moved": 32,
+            "x": 606,
+            "y": 340,
+            "zone": "activity_corner"
+          },
+          {
+            "carried_by": null,
+            "id": "amber_leaf",
+            "kind": "leaf",
+            "name": "Amber leaf",
+            "state": "placed",
+            "times_inspected": 20,
+            "times_moved": 26,
+            "x": 638,
+            "y": 354,
+            "zone": "activity_corner"
+          },
+          {
+            "carried_by": null,
+            "id": "acorn",
+            "kind": "seed",
+            "name": "Acorn",
+            "state": "placed",
+            "times_inspected": 27,
+            "times_moved": 21,
+            "x": 660,
+            "y": 292,
+            "zone": "collection_shelf"
+          },
+          {
+            "carried_by": null,
+            "id": "shell",
+            "kind": "shell",
+            "name": "Tiny shell",
+            "state": "placed",
+            "times_inspected": 25,
+            "times_moved": 26,
+            "x": 620,
+            "y": 292,
+            "zone": "collection_shelf"
+          },
+          {
+            "carried_by": null,
+            "id": "red_thread",
+            "kind": "thread",
+            "name": "Red thread",
+            "state": "placed",
+            "times_inspected": 31,
+            "times_moved": 25,
+            "x": 700,
+            "y": 292,
+            "zone": "collection_shelf"
+          },
+          {
+            "carried_by": null,
+            "id": "glass_star",
+            "kind": "trinket",
+            "name": "Glass star",
+            "state": "placed",
+            "times_inspected": 22,
+            "times_moved": 23,
+            "x": 720,
+            "y": 294,
+            "zone": "collection_shelf"
+          }
+        ],
+        "schema": "terrarium.frame.v1",
+        "spatial": {
+          "schema": "terrarium.spatial.v1"
+        },
+        "tick": 7200,
+        "weather": "clear",
+        "world_minutes": 7620
+      },
+      "source_tick": 7200,
+      "target": {
+        "creature": {
+          "activity": "idle",
+          "carrying": null,
+          "expression": "neutral",
+          "facing": "left",
+          "id": "creature-1",
+          "intent_action": "idle",
+          "intent_ticks_remaining": 2,
+          "name": "Moss",
+          "pose": "idle",
+          "target_object_id": null,
+          "x": 405,
+          "y": 378,
+          "zone": "open_space"
+        },
+        "frame_version": 1,
+        "habitat": {
+          "activity_aftermath": {
+            "activity_corner_uses": 210,
+            "sleep_nook_bouts": 76,
+            "sleep_nook_ticks": 1309,
+            "wet_window_watches": 0,
+            "window_watches": 99
+          },
+          "marks": [
+            "worn_collection_shelf_6",
+            "worn_open_space_6",
+            "worn_activity_corner_6",
+            "worn_collection_shelf_14",
+            "worn_window_6",
+            "worn_open_space_14",
+            "worn_activity_corner_14",
+            "worn_sleeping_nook_6",
+            "worn_window_14",
+            "worn_sleeping_nook_14"
+          ],
+          "path_wear": {
+            "activity_corner": 80,
+            "collection_shelf": 130,
+            "open_space": 90,
+            "sleeping_nook": 36,
+            "window": 67
+          },
+          "shelf_count": 4
+        },
+        "last_event": {
+          "action": "idle",
+          "approach_x": null,
+          "approach_y": null,
+          "contact_x": null,
+          "contact_y": null,
+          "decision": true,
+          "event_id": "fixture-habit-7200",
+          "from_zone": "open_space",
+          "intent_action": "idle",
+          "object_id": null,
+          "route": [],
+          "route_length": null,
+          "source_x": null,
+          "source_y": null,
+          "spatial_schema": null,
+          "summary": "Long-horizon habit observation at tick 7200.",
+          "supported_action": null,
+          "target_x": null,
+          "target_y": null,
+          "to_zone": null,
+          "type": "fixture"
+        },
+        "lighting": "dawn",
+        "logical_height": 480,
+        "logical_width": 800,
+        "objects": [
+          {
+            "carried_by": null,
+            "id": "blue_stone",
+            "kind": "stone",
+            "name": "Blue stone",
+            "state": "placed",
+            "times_inspected": 33,
+            "times_moved": 32,
+            "x": 606,
+            "y": 340,
+            "zone": "activity_corner"
+          },
+          {
+            "carried_by": null,
+            "id": "amber_leaf",
+            "kind": "leaf",
+            "name": "Amber leaf",
+            "state": "placed",
+            "times_inspected": 20,
+            "times_moved": 26,
+            "x": 638,
+            "y": 354,
+            "zone": "activity_corner"
+          },
+          {
+            "carried_by": null,
+            "id": "acorn",
+            "kind": "seed",
+            "name": "Acorn",
+            "state": "placed",
+            "times_inspected": 27,
+            "times_moved": 21,
+            "x": 660,
+            "y": 292,
+            "zone": "collection_shelf"
+          },
+          {
+            "carried_by": null,
+            "id": "shell",
+            "kind": "shell",
+            "name": "Tiny shell",
+            "state": "placed",
+            "times_inspected": 25,
+            "times_moved": 26,
+            "x": 620,
+            "y": 292,
+            "zone": "collection_shelf"
+          },
+          {
+            "carried_by": null,
+            "id": "red_thread",
+            "kind": "thread",
+            "name": "Red thread",
+            "state": "placed",
+            "times_inspected": 31,
+            "times_moved": 25,
+            "x": 700,
+            "y": 292,
+            "zone": "collection_shelf"
+          },
+          {
+            "carried_by": null,
+            "id": "glass_star",
+            "kind": "trinket",
+            "name": "Glass star",
+            "state": "placed",
+            "times_inspected": 22,
+            "times_moved": 23,
+            "x": 720,
+            "y": 294,
+            "zone": "collection_shelf"
+          }
+        ],
+        "schema": "terrarium.frame.v1",
+        "spatial": {
+          "schema": "terrarium.spatial.v1"
+        },
+        "tick": 7200,
+        "weather": "clear",
+        "world_minutes": 7620
+      },
+      "target_tick": 7200
+    },
+    "habit_day7": {
+      "habit_profile": {
+        "context_zone_affinity": {
+          "dawn": {
+            "activity_corner": 0.28755,
+            "collection_shelf": 0.449732,
+            "open_space": 0.236516,
+            "sleeping_nook": 0.409223,
+            "window": 0.330584
+          },
+          "day": {
+            "activity_corner": 0.497569,
+            "collection_shelf": 0.617967,
+            "open_space": 0.553008,
+            "sleeping_nook": 0.687408,
+            "window": 0.738179
+          },
+          "dusk": {
+            "activity_corner": 0.234427,
+            "collection_shelf": 0.383007,
+            "open_space": 0.339675,
+            "sleeping_nook": 0.416559,
+            "window": 0.342406
+          },
+          "night": {
+            "activity_corner": 0.449864,
+            "collection_shelf": 0.622776,
+            "open_space": 0.540791,
+            "sleeping_nook": 0.727994,
+            "window": 0.695245
+          }
+        },
+        "experience_count": 2248,
+        "migration_origin": "native",
+        "object_affinity": {
+          "acorn": 0.639954,
+          "amber_leaf": 0.620286,
+          "blue_stone": 0.640959,
+          "glass_star": 0.608019,
+          "red_thread": 0.541659,
+          "shell": 0.605945
+        },
+        "schema": "terrarium.habits.v1",
+        "zone_affinity": {
+          "activity_corner": 0.525,
+          "collection_shelf": 0.663574,
+          "open_space": 0.589326,
+          "sleeping_nook": 0.671983,
+          "window": 0.674036
+        }
+      },
+      "id": "habit_day7",
+      "purpose": "long-horizon rendered observation at simulation tick 10080",
+      "seed": 1701,
+      "semantic_event": {
+        "action": "long_horizon_observation",
+        "from_zone": "collection_shelf",
+        "to_zone": "collection_shelf"
+      },
+      "source": {
+        "creature": {
+          "activity": "rest",
+          "carrying": null,
+          "expression": "content",
+          "facing": "right",
+          "id": "creature-1",
+          "intent_action": "rest",
+          "intent_ticks_remaining": 1,
+          "name": "Moss",
+          "pose": "rest",
+          "target_object_id": null,
+          "x": 554,
+          "y": 312,
+          "zone": "collection_shelf"
+        },
+        "frame_version": 1,
+        "habitat": {
+          "activity_aftermath": {
+            "activity_corner_uses": 301,
+            "sleep_nook_bouts": 106,
+            "sleep_nook_ticks": 1841,
+            "wet_window_watches": 0,
+            "window_watches": 152
+          },
+          "marks": [
+            "worn_collection_shelf_6",
+            "worn_open_space_6",
+            "worn_activity_corner_6",
+            "worn_collection_shelf_14",
+            "worn_window_6",
+            "worn_open_space_14",
+            "worn_activity_corner_14",
+            "worn_sleeping_nook_6",
+            "worn_window_14",
+            "worn_sleeping_nook_14"
+          ],
+          "path_wear": {
+            "activity_corner": 107,
+            "collection_shelf": 177,
+            "open_space": 124,
+            "sleeping_nook": 43,
+            "window": 98
+          },
+          "shelf_count": 5
+        },
+        "last_event": {
+          "action": "rest",
+          "approach_x": null,
+          "approach_y": null,
+          "contact_x": null,
+          "contact_y": null,
+          "decision": false,
+          "event_id": "fixture-habit-10080",
+          "from_zone": "collection_shelf",
+          "intent_action": "rest",
+          "object_id": null,
+          "route": [],
+          "route_length": null,
+          "source_x": null,
+          "source_y": null,
+          "spatial_schema": null,
+          "summary": "Long-horizon habit observation at tick 10080.",
+          "supported_action": null,
+          "target_x": null,
+          "target_y": null,
+          "to_zone": null,
+          "type": "fixture"
+        },
+        "lighting": "dawn",
+        "logical_height": 480,
+        "logical_width": 800,
+        "objects": [
+          {
+            "carried_by": null,
+            "id": "blue_stone",
+            "kind": "stone",
+            "name": "Blue stone",
+            "state": "placed",
+            "times_inspected": 43,
+            "times_moved": 42,
+            "x": 443,
+            "y": 395,
+            "zone": "open_space"
+          },
+          {
+            "carried_by": null,
+            "id": "amber_leaf",
+            "kind": "leaf",
+            "name": "Amber leaf",
+            "state": "placed",
+            "times_inspected": 33,
+            "times_moved": 37,
+            "x": 620,
+            "y": 292,
+            "zone": "collection_shelf"
+          },
+          {
+            "carried_by": null,
+            "id": "acorn",
+            "kind": "seed",
+            "name": "Acorn",
+            "state": "placed",
+            "times_inspected": 41,
+            "times_moved": 33,
+            "x": 640,
+            "y": 294,
+            "zone": "collection_shelf"
+          },
+          {
+            "carried_by": null,
+            "id": "shell",
+            "kind": "shell",
+            "name": "Tiny shell",
+            "state": "placed",
+            "times_inspected": 34,
+            "times_moved": 36,
+            "x": 680,
+            "y": 294,
+            "zone": "collection_shelf"
+          },
+          {
+            "carried_by": null,
+            "id": "red_thread",
+            "kind": "thread",
+            "name": "Red thread",
+            "state": "placed",
+            "times_inspected": 36,
+            "times_moved": 31,
+            "x": 720,
+            "y": 294,
+            "zone": "collection_shelf"
+          },
+          {
+            "carried_by": null,
+            "id": "glass_star",
+            "kind": "trinket",
+            "name": "Glass star",
+            "state": "placed",
+            "times_inspected": 33,
+            "times_moved": 35,
+            "x": 700,
+            "y": 292,
+            "zone": "collection_shelf"
+          }
+        ],
+        "schema": "terrarium.frame.v1",
+        "spatial": {
+          "schema": "terrarium.spatial.v1"
+        },
+        "tick": 10080,
+        "weather": "clear",
+        "world_minutes": 10500
+      },
+      "source_tick": 10080,
+      "target": {
+        "creature": {
+          "activity": "rest",
+          "carrying": null,
+          "expression": "content",
+          "facing": "right",
+          "id": "creature-1",
+          "intent_action": "rest",
+          "intent_ticks_remaining": 1,
+          "name": "Moss",
+          "pose": "rest",
+          "target_object_id": null,
+          "x": 554,
+          "y": 312,
+          "zone": "collection_shelf"
+        },
+        "frame_version": 1,
+        "habitat": {
+          "activity_aftermath": {
+            "activity_corner_uses": 301,
+            "sleep_nook_bouts": 106,
+            "sleep_nook_ticks": 1841,
+            "wet_window_watches": 0,
+            "window_watches": 152
+          },
+          "marks": [
+            "worn_collection_shelf_6",
+            "worn_open_space_6",
+            "worn_activity_corner_6",
+            "worn_collection_shelf_14",
+            "worn_window_6",
+            "worn_open_space_14",
+            "worn_activity_corner_14",
+            "worn_sleeping_nook_6",
+            "worn_window_14",
+            "worn_sleeping_nook_14"
+          ],
+          "path_wear": {
+            "activity_corner": 107,
+            "collection_shelf": 177,
+            "open_space": 124,
+            "sleeping_nook": 43,
+            "window": 98
+          },
+          "shelf_count": 5
+        },
+        "last_event": {
+          "action": "rest",
+          "approach_x": null,
+          "approach_y": null,
+          "contact_x": null,
+          "contact_y": null,
+          "decision": false,
+          "event_id": "fixture-habit-10080",
+          "from_zone": "collection_shelf",
+          "intent_action": "rest",
+          "object_id": null,
+          "route": [],
+          "route_length": null,
+          "source_x": null,
+          "source_y": null,
+          "spatial_schema": null,
+          "summary": "Long-horizon habit observation at tick 10080.",
+          "supported_action": null,
+          "target_x": null,
+          "target_y": null,
+          "to_zone": null,
+          "type": "fixture"
+        },
+        "lighting": "dawn",
+        "logical_height": 480,
+        "logical_width": 800,
+        "objects": [
+          {
+            "carried_by": null,
+            "id": "blue_stone",
+            "kind": "stone",
+            "name": "Blue stone",
+            "state": "placed",
+            "times_inspected": 43,
+            "times_moved": 42,
+            "x": 443,
+            "y": 395,
+            "zone": "open_space"
+          },
+          {
+            "carried_by": null,
+            "id": "amber_leaf",
+            "kind": "leaf",
+            "name": "Amber leaf",
+            "state": "placed",
+            "times_inspected": 33,
+            "times_moved": 37,
+            "x": 620,
+            "y": 292,
+            "zone": "collection_shelf"
+          },
+          {
+            "carried_by": null,
+            "id": "acorn",
+            "kind": "seed",
+            "name": "Acorn",
+            "state": "placed",
+            "times_inspected": 41,
+            "times_moved": 33,
+            "x": 640,
+            "y": 294,
+            "zone": "collection_shelf"
+          },
+          {
+            "carried_by": null,
+            "id": "shell",
+            "kind": "shell",
+            "name": "Tiny shell",
+            "state": "placed",
+            "times_inspected": 34,
+            "times_moved": 36,
+            "x": 680,
+            "y": 294,
+            "zone": "collection_shelf"
+          },
+          {
+            "carried_by": null,
+            "id": "red_thread",
+            "kind": "thread",
+            "name": "Red thread",
+            "state": "placed",
+            "times_inspected": 36,
+            "times_moved": 31,
+            "x": 720,
+            "y": 294,
+            "zone": "collection_shelf"
+          },
+          {
+            "carried_by": null,
+            "id": "glass_star",
+            "kind": "trinket",
+            "name": "Glass star",
+            "state": "placed",
+            "times_inspected": 33,
+            "times_moved": 35,
+            "x": 700,
+            "y": 292,
+            "zone": "collection_shelf"
+          }
+        ],
+        "schema": "terrarium.frame.v1",
+        "spatial": {
+          "schema": "terrarium.spatial.v1"
+        },
+        "tick": 10080,
+        "weather": "clear",
+        "world_minutes": 10500
+      },
+      "target_tick": 10080
+    }
+  },
+  "schema": "terrarium.habit-render-fixtures.v1"
+}

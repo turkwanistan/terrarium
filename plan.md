@@ -158,6 +158,19 @@ Evidence: `history/2026-08-27-pixel-art-overhaul-iteration3.md`, `artifacts/pixe
 
 Evidence: `history/2026-08-27-pixel-art-overhaul-iteration4.md`, `artifacts/pixel-art-overhaul-iteration4.json`, snapshot `20260827T212849313774Z-pixel-art-overhaul-iteration4`.
 
+## Completed normal product checkpoint — Pixel-Art Overhaul, Iteration 5
+
+- added bounded persistent `terrarium.habits.v1` zone, object, and dawn/day/dusk/night contextual affinities learned from actual experience;
+- kept the model compact and interpretable rather than adding needs bars, personality labels, schedules, a general planner, or an LLM layer;
+- used saturating reinforcement, slight decay, normalization, slow maturity, exploration floors, and existing recent-history inhibition to prevent lock-in;
+- preserved the accepted Iteration-4 RNG stream so migration does not gratuitously reroll behavior before habits mature;
+- added conservative neutral migration for existing worlds without replacing Moss, possessions, routine context, object history, or the event ledger;
+- added deterministic multi-seed long-horizon evaluation plus equivalent-physical-state / different-history divergence tests;
+- passed 33/33 tests and all technical/behavior/spatial/coherence/habit gates, with real 800×480 day-2/day-5/day-7 browser fixture UAT;
+- renderer code remained byte-identical; no SBC platform change, Capability Forge work, MCP growth, or Gen18 was required.
+
+Evidence: `history/2026-08-27-pixel-art-overhaul-iteration5.md`, `artifacts/pixel-art-overhaul-iteration5.json`, snapshot `20260827T222822886488Z-pixel-art-overhaul-iteration5`.
+
 ## Next product iteration
 
-Choose from direct UAT after the canonical runtime is updated. The next likely maturity layer is **longer-lived preference and routine identity**: recurring favorite places/objects/time-of-day tendencies that emerge over days without turning Moss into a needs-bar or scripted RPG agent. Keep that separate from this short-horizon coherence layer, and only pursue it if live observation shows the new local intent model is stable.
+Choose from direct canonical-runtime UAT after deployment. Let actual observation decide whether the next maturity target is richer expression of learned habits, longer-lived environmental consequences, or another concrete product weakness. Do not invent a new generation or generic planning layer by cadence.

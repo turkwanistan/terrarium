@@ -1,0 +1,44 @@
+{
+  "finding": "Iteration 4 preserves short-horizon coherence but has no persistent preference state; lifetime times_inspected novelty pressure keeps long-run object attention nearly uniform, so history cannot become a durable individual tendency.",
+  "rules_version": "terrarium-rules-v3-routine-coherence",
+  "schema": "terrarium.iteration5-long-horizon-baseline.v1",
+  "seeds": {
+    "1701": {
+      "decision_events": 2921,
+      "object_interactions": {
+        "acorn": 128,
+        "amber_leaf": 117,
+        "blue_stone": 108,
+        "glass_star": 118,
+        "red_thread": 111,
+        "shell": 112
+      },
+      "top_object_interaction_share": 0.1844,
+      "top_zone_entry_share": 0.272,
+      "zone_entries": {
+        "activity_corner": 124,
+        "collection_shelf": 179,
+        "open_space": 130,
+        "sleeping_nook": 132,
+        "window": 93
+      }
+    },
+    "1702": {
+      "decision_events": 2951,
+      "top_object_interaction_share": 0.1927,
+      "top_zone_entry_share": 0.2831
+    },
+    "42": {
+      "decision_events": 2954,
+      "top_object_interaction_share": 0.202,
+      "top_zone_entry_share": 0.2711
+    },
+    "999": {
+      "decision_events": 2925,
+      "top_object_interaction_share": 0.1906,
+      "top_zone_entry_share": 0.2743
+    }
+  },
+  "source_commit": "208c860",
+  "steps": 10080
+}

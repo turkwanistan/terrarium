@@ -9,7 +9,10 @@ from datetime import datetime, timedelta, timezone
 from typing import Any
 
 from .events import make_event, state_patch
-from .models import BEHAVIOR_CONTEXT_SCHEMA, PLACEMENT_SLOTS, RULES_VERSION, ZONES, clone_state, lighting_for, weather_for
+from .models import (
+    BEHAVIOR_CONTEXT_SCHEMA, HABIT_CONTEXTS, HABIT_PROFILE_SCHEMA, PLACEMENT_SLOTS, RNG_STREAM_VERSION, RULES_VERSION, ZONES,
+    clone_state, lighting_for, weather_for,
+)
 from .spatial import (
     SLEEP_SUPPORT_ANCHOR, SPATIAL_SCHEMA, interaction_approach, interaction_contact, route_between,
     route_length, route_payload, zone_anchor,
@@ -43,7 +46,7 @@ class Simulation:
     def _rng(self, state: dict[str, Any]) -> random.Random:
         # Keep host compatibility with Python 3.10. Python 3.12 accepts
         # same-quote expressions inside f-strings (PEP 701); 3.10 does not.
-        material = f"{state['seed']}:{state['rules_version']}:{int(state['tick']) + 1}".encode("utf-8")
+        material = f"{state['seed']}:{RNG_STREAM_VERSION}:{int(state['tick']) + 1}".encode("utf-8")
         tick_seed = int.from_bytes(hashlib.sha256(material).digest()[:16], "big")
         return random.Random(tick_seed)
 
@@ -90,6 +93,101 @@ class Simulation:
         context["recent_objects"] = (recent + [str(object_id)])[-4:]
 
     @staticmethod
+    def _habit_profile(state: dict[str, Any]) -> dict[str, Any]:
+        """Return the bounded long-horizon habit profile, migrating old worlds neutrally.
+
+        Existing v3 worlds do not contain enough durable evidence to reconstruct
+        exact historical preferences without replaying and reinterpreting their
+        entire ledger under rules that did not yet exist.  Migration therefore
+        preserves the world exactly and starts the new profile at a documented
+        neutral baseline; all subsequent learning comes from canonical experience.
+        """
+        creature = state["creature"]
+        object_ids = [str(obj["id"]) for obj in state["objects"]]
+        profile = creature.get("habit_profile")
+        if not isinstance(profile, dict) or profile.get("schema") != HABIT_PROFILE_SCHEMA:
+            profile = {
+                "schema": HABIT_PROFILE_SCHEMA,
+                "migration_origin": "neutral-existing-world",
+                "experience_count": 0,
+                "zone_affinity": {name: 0.0 for name in ZONES},
+                "object_affinity": {object_id: 0.0 for object_id in object_ids},
+                "context_zone_affinity": {
+                    context: {name: 0.0 for name in ZONES} for context in HABIT_CONTEXTS
+                },
+            }
+            creature["habit_profile"] = profile
+
+        def clean_map(raw: Any, keys: list[str]) -> dict[str, float]:
+            raw = raw if isinstance(raw, dict) else {}
+            return {
+                key: round(max(0.0, min(1.0, float(raw.get(key, 0.0) or 0.0))), 6)
+                for key in keys
+            }
+
+        profile["schema"] = HABIT_PROFILE_SCHEMA
+        profile.setdefault("migration_origin", "native")
+        profile["experience_count"] = max(0, int(profile.get("experience_count", 0)))
+        profile["zone_affinity"] = clean_map(profile.get("zone_affinity"), list(ZONES))
+        profile["object_affinity"] = clean_map(profile.get("object_affinity"), object_ids)
+        context_raw = profile.get("context_zone_affinity")
+        context_raw = context_raw if isinstance(context_raw, dict) else {}
+        profile["context_zone_affinity"] = {
+            context: clean_map(context_raw.get(context), list(ZONES)) for context in HABIT_CONTEXTS
+        }
+        return profile
+
+    @staticmethod
+    def _relative_affinity(values: dict[str, float], key: str, *, strength: float) -> float:
+        """Convert bounded memory into a normalized multiplier with an exploration floor."""
+        if not values or key not in values:
+            return 1.0
+        mean = sum(float(value) for value in values.values()) / len(values)
+        relative = float(values.get(key, 0.0)) - mean
+        return max(0.68, min(1.72, 1.0 + strength * relative))
+
+    @staticmethod
+    def _habit_maturity(profile: dict[str, Any] | None) -> float:
+        if not profile:
+            return 0.0
+        experiences = max(0, int(profile.get("experience_count", 0)))
+        return max(0.0, min(1.0, (experiences - 180) / 720.0))
+
+    @staticmethod
+    def _reinforce_map(values: dict[str, float], key: str, amount: float) -> None:
+        # Slow global forgetting prevents permanent lock-in; saturating reward
+        # prevents runaway reinforcement.  Rounded storage keeps exact replay
+        # stable across serialization/restart boundaries.
+        for name in list(values):
+            values[name] = round(max(0.0, min(1.0, float(values[name]) * 0.9985)), 6)
+        current = float(values.get(key, 0.0))
+        values[key] = round(max(0.0, min(1.0, current + amount * (1.0 - current))), 6)
+
+    def _learn_from_decision(
+        self,
+        state: dict[str, Any],
+        *,
+        action: str,
+        zone: str,
+        object_id: str | None,
+        lighting: str,
+    ) -> None:
+        profile = self._habit_profile(state)
+        zone_reward = {
+            "idle": 0.010, "rest": 0.014, "look_outside": 0.020,
+            "inspect": 0.012, "carry": 0.008, "place": 0.016, "sleep": 0.014,
+        }.get(action, 0.0)
+        object_reward = {"inspect": 0.018, "carry": 0.012, "place": 0.020}.get(action, 0.0)
+        if zone_reward > 0.0 and zone in ZONES:
+            self._reinforce_map(profile["zone_affinity"], zone, zone_reward)
+            context = lighting if lighting in HABIT_CONTEXTS else "day"
+            context_reward = zone_reward * (1.20 if action in {"rest", "look_outside", "sleep"} else 0.85)
+            self._reinforce_map(profile["context_zone_affinity"][context], zone, context_reward)
+            profile["experience_count"] = int(profile["experience_count"]) + 1
+        if object_reward > 0.0 and object_id and object_id in profile["object_affinity"]:
+            self._reinforce_map(profile["object_affinity"], object_id, object_reward)
+
+    @staticmethod
     def _weighted_pick(rng: random.Random, weighted: list[tuple[str, float]]) -> str:
         total = sum(max(0.0, float(weight)) for _, weight in weighted)
         if total <= 0.0:
@@ -108,6 +206,7 @@ class Simulation:
         nearby: list[dict[str, Any]],
         context: dict[str, Any],
         *,
+        habit_profile: dict[str, Any] | None = None,
         preferred_id: str | None = None,
     ) -> dict[str, Any]:
         if preferred_id:
@@ -125,10 +224,14 @@ class Simulation:
             # this for now" inhibition whenever another local object exists.
             if alternatives_exist and object_id == last_object_id:
                 continue
-            weight = 1.0 / (1.0 + 0.12 * int(obj.get("times_inspected", 0)))
+            weight = 1.0 / (1.0 + 0.025 * min(20, int(obj.get("times_inspected", 0))))
             if object_id in recent[-4:]:
                 weight *= 0.42
-            weighted.append((object_id, max(0.01, weight)))
+            if habit_profile is not None:
+                weight *= self._relative_affinity(
+                    habit_profile.get("object_affinity", {}), object_id, strength=1.80 * self._habit_maturity(habit_profile)
+                )
+            weighted.append((object_id, max(0.035, weight)))
         return by_id[self._weighted_pick(rng, weighted)]
 
     def _choose_destination(
@@ -139,6 +242,7 @@ class Simulation:
         *,
         zone: str,
         carrying: str | None,
+        habit_profile: dict[str, Any] | None = None,
     ) -> str:
         """Choose travel as a consequence of context instead of a uniform room hop."""
         intent = dict(context.get("intent") or {})
@@ -178,7 +282,15 @@ class Simulation:
                     weight *= 1.0 + 0.45 * curiosity
                 if target == "sleeping_nook" and energy < 0.48:
                     weight *= 1.0 + (0.48 - energy) * 4.0
-            weighted.append((target, max(0.01, weight)))
+                if habit_profile is not None:
+                    weight *= self._relative_affinity(
+                        habit_profile.get("zone_affinity", {}), target, strength=1.05 * self._habit_maturity(habit_profile)
+                    )
+                    contextual = (habit_profile.get("context_zone_affinity", {}) or {}).get(
+                        str(state["habitat"]["lighting"]), {}
+                    )
+                    weight *= self._relative_affinity(contextual, target, strength=0.85 * self._habit_maturity(habit_profile))
+            weighted.append((target, max(0.045, weight)))
         return self._weighted_pick(rng, weighted)
 
     @staticmethod
@@ -323,6 +435,7 @@ class Simulation:
         creature.setdefault("focus_object_id", None)
         creature.setdefault("behavior_commitment", {"action": None, "ticks_remaining": 0, "object_id": None})
         context = self._behavior_context(creature)
+        habit_profile = self._habit_profile(state)
         if creature.get("carrying") and not context.get("intent"):
             # Legacy/live worlds may upgrade while Moss is already holding an
             # object.  Continue that possession through normal state evolution
@@ -424,7 +537,7 @@ class Simulation:
             movement_context_penalty = 0.08
         elif intent_kind == "window_session" and zone == "window":
             if intent_stage == "arrived":
-                add("look_outside", 3.20)
+                add("look_outside", 3.45)
                 movement_context_penalty = 0.035
             else:
                 add("look_outside", 0.85)
@@ -469,7 +582,7 @@ class Simulation:
         focus_object_id = None
 
         if action in {"walk", "explore"}:
-            target = self._choose_destination(rng, state, context, zone=zone, carrying=carrying)
+            target = self._choose_destination(rng, state, context, zone=zone, carrying=carrying, habit_profile=habit_profile)
             destination = zone_anchor(target)
             self._route_creature(creature, details, destination=destination, destination_zone=target)
             creature["activity"] = "walk"
@@ -506,7 +619,7 @@ class Simulation:
             event_type = "creature_moved"
             summary = f"Moss headed from {zone.replace('_', ' ')} to {target.replace('_', ' ')} and settled in."
         elif action == "inspect" and nearby:
-            obj = self._choose_object(rng, nearby, context, preferred_id=str(intent_object_id) if intent_object_id else None)
+            obj = self._choose_object(rng, nearby, context, habit_profile=habit_profile, preferred_id=(str(intent_object_id) if intent_kind == "object_session" and intent_stage == "inspected" and intent_object_id else None))
             target_x, target_y = int(obj["x"]), int(obj["y"])
             approach = interaction_approach(zone=zone, target_x=target_x, target_y=target_y, current_x=int(creature["x"]), current_y=int(creature["y"]))
             self._route_creature(creature, details, destination=approach, destination_zone=zone)
@@ -524,7 +637,7 @@ class Simulation:
             event_type = "object_inspected"
             summary = f"Moss stopped to inspect the {obj['name'].lower()}."
         elif action == "carry" and nearby:
-            obj = self._choose_object(rng, nearby, context, preferred_id=str(intent_object_id) if intent_object_id else None)
+            obj = self._choose_object(rng, nearby, context, habit_profile=habit_profile, preferred_id=(str(intent_object_id) if intent_kind == "object_session" and intent_stage == "inspected" and intent_object_id else None))
             target_x, target_y = int(obj["x"]), int(obj["y"])
             approach = interaction_approach(zone=zone, target_x=target_x, target_y=target_y, current_x=int(creature["x"]), current_y=int(creature["y"]))
             self._route_creature(creature, details, destination=approach, destination_zone=zone)
@@ -633,6 +746,15 @@ class Simulation:
 
         if zone == "activity_corner" and action in {"idle", "rest", "inspect", "carry", "place"}:
             aftermath["activity_corner_uses"] = int(aftermath["activity_corner_uses"]) + 1
+        self._learn_from_decision(
+            state,
+            action=action,
+            zone=str(creature["zone"]),
+            object_id=str(focus_object_id) if focus_object_id else None,
+            lighting=str(habitat["lighting"]),
+        )
+        details["habit_schema"] = HABIT_PROFILE_SCHEMA
+        details["habit_experience_count"] = int(habit_profile["experience_count"])
         creature["recent_actions"] = (recent + [action])[-8:]
         creature["focus_object_id"] = focus_object_id
         creature["behavior_commitment"] = {

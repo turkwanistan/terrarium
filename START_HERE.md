@@ -4,16 +4,17 @@ Terrarium is a normal product built after the accepted Self-Building Computer Ge
 
 ## Current checkpoint
 
-**Pixel-Art Overhaul — Iteration 4: Behavioral Intent and Routine Coherence**
+**Pixel-Art Overhaul — Iteration 5: Long-Horizon Preferences and Habit Formation**
 
-- history: `history/2026-08-27-pixel-art-overhaul-iteration4.md`
-- evidence: `artifacts/pixel-art-overhaul-iteration4.json`
-- snapshot: `snapshots/dev/20260827T212849313774Z-pixel-art-overhaul-iteration4`
-- seed/tick: **1701 / 698**
-- frame SHA256: `aee7d6188523b4f3cf1539d653a8816e2dc87ae10a86d62ddb3d1b1ac9e3df9f`
+- history: `history/2026-08-27-pixel-art-overhaul-iteration5.md`
+- evidence: `artifacts/pixel-art-overhaul-iteration5.json`
+- snapshot: `snapshots/dev/20260827T222822886488Z-pixel-art-overhaul-iteration5`
+- seed/tick: **1701 / 10080**
+- frame SHA256: `a275783dc04234b1da10d8bb6dd1b8a2bcaaeba134ee5ae07f0062687cf51290`
 - renderer JS SHA256: `96bd0eb952cf40b8b5099b1b7ab47ca376bc46339c01ebd0556ed440f1f8115d`
-- behavior rules: `terrarium-rules-v3-routine-coherence`
+- behavior rules: `terrarium-rules-v4-long-horizon-habits`
 - behavior context: `terrarium.behavior-context.v1`
+- habit profile: `terrarium.habits.v1`
 - spatial schema: `terrarium.spatial.v1`
 
 Read `STATUS.md`, `ART_DIRECTION.md`, `plan.md`, `terrarium.md`, and the latest history entry before editing.
@@ -25,17 +26,19 @@ Read `STATUS.md`, `ART_DIRECTION.md`, `plan.md`, `terrarium.md`, and the latest 
 - world engine owns behavior, bounded routine context, semantic targets, physical route/approach/contact authority, object state, history, time, and pacing;
 - renderer may interpolate authoritative routes and animate authored poses but may not invent navigation, intent, or targets;
 - heartbeat: **3 real seconds**; world advance: **1 minute/heartbeat**; full day ~**72 real minutes**;
-- behavior RNG: `terrarium-rules-v3-routine-coherence`; geometry: `terrarium.spatial.v1`.
+- behavior rules: `terrarium-rules-v4-long-horizon-habits`; RNG stream remains pinned to `terrarium-rules-v3-routine-coherence`; geometry: `terrarium.spatial.v1`.
 
-## Behavioral law after Iteration 4
+## Behavioral law after Iteration 5
 
-Moss has a small deterministic short-horizon context, not a general utility-AI framework: at most four recent zones, four recent objects, and one current routine intent. Movement should follow an intention; arrivals normally settle before new travel; window visits become viewing sessions; inspection can continue into same-object pickup; carrying follows one chosen delivery target; placement has recovery; wake has recovery and supported egress. Recent zones/objects inhibit obvious ping-pong and fixation.
+Iteration-4 short-horizon coherence remains intact: at most four recent zones, four recent objects, and one current routine intent. On top of that, canonical `terrarium.habits.v1` accumulates slow bounded zone, object, and time-of-day-context affinity from actual experience. It is a preference memory, not personality scripting or a needs system.
 
-Favorite spots remain authored uses of the compact spatial graph rather than a navigation grid. Canonical event history remains the long-term memory; hot behavior state stays bounded.
+Reinforcement saturates, old evidence decays slightly, preference influence phases in slowly, and every weighted choice retains an exploration floor. Recent-zone/object inhibition still prevents immediate ping-pong and fixation. Habits may bias future choices but never bypass reachability, possession/session continuity, spatial authority, or environmental constraints.
+
+Existing worlds migrate to a documented neutral habit baseline without resetting Moss or fabricating historical preferences. Canonical event history remains authoritative; the renderer receives behavior consequences, not hidden personality labels.
 
 ## Regression procedure
 
-Run `python -m pytest -q`, `node --check display/web/app.js`, technical/behavior/spatial/coherence evaluators, exact replay, deterministic browser captures, continuity + RAF probes, applicable promoted temporal audits, and real 800×480 browser inspection. Treat coherence metrics as diagnostics, not targets to game.
+Run `python -m pytest -q`, `node --check display/web/app.js`, technical/behavior/spatial/coherence/long-horizon-habit evaluators, exact replay, deterministic browser captures, continuity + RAF probes, applicable promoted temporal audits, and real 800×480 browser inspection. Treat coherence metrics as diagnostics, not targets to game.
 
 Promoted reusable capabilities remain:
 - `simulation-behavior-auditor-r1` — `932573954fdf126bd4ec4f4d5a1f79a50b48b994bf374ed0cfa3415120dd093f`

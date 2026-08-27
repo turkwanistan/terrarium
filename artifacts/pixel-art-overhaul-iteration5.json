@@ -1,0 +1,233 @@
+{
+  "accepted": true,
+  "baseline": {
+    "finding": "Iteration 4 preserves short-horizon coherence but has no persistent preference state; lifetime times_inspected novelty pressure keeps long-run object attention nearly uniform, so history cannot become a durable individual tendency.",
+    "rules_version": "terrarium-rules-v3-routine-coherence",
+    "schema": "terrarium.iteration5-long-horizon-baseline.v1",
+    "seeds": {
+      "1701": {
+        "decision_events": 2921,
+        "object_interactions": {
+          "acorn": 128,
+          "amber_leaf": 117,
+          "blue_stone": 108,
+          "glass_star": 118,
+          "red_thread": 111,
+          "shell": 112
+        },
+        "top_object_interaction_share": 0.1844,
+        "top_zone_entry_share": 0.272,
+        "zone_entries": {
+          "activity_corner": 124,
+          "collection_shelf": 179,
+          "open_space": 130,
+          "sleeping_nook": 132,
+          "window": 93
+        }
+      },
+      "1702": {
+        "decision_events": 2951,
+        "top_object_interaction_share": 0.1927,
+        "top_zone_entry_share": 0.2831
+      },
+      "42": {
+        "decision_events": 2954,
+        "top_object_interaction_share": 0.202,
+        "top_zone_entry_share": 0.2711
+      },
+      "999": {
+        "decision_events": 2925,
+        "top_object_interaction_share": 0.1906,
+        "top_zone_entry_share": 0.2743
+      }
+    },
+    "source_commit": "208c860",
+    "steps": 10080
+  },
+  "behavior": {
+    "anti_lock_in": [
+      "saturating reinforcement",
+      "0.9985 global decay per qualifying map update",
+      "mean-normalized bounded multipliers",
+      "180-experience maturity delay + 720-experience ramp",
+      "choice floors",
+      "Iteration-4 recent-zone/object inhibition"
+    ],
+    "contexts": [
+      "dawn",
+      "day",
+      "dusk",
+      "night"
+    ],
+    "dimensions": [
+      "zone_affinity",
+      "object_affinity",
+      "context_zone_affinity"
+    ],
+    "habit_schema": "terrarium.habits.v1",
+    "rng_stream_version": "terrarium-rules-v3-routine-coherence",
+    "rules_version": "terrarium-rules-v4-long-horizon-habits",
+    "short_horizon_context_schema": "terrarium.behavior-context.v1"
+  },
+  "checkpoint": "Pixel-Art Overhaul \u2014 Iteration 5: Long-Horizon Preferences and Habit Formation",
+  "controlled_history_divergence": {
+    "cross_advantage_range": [
+      0.176623,
+      0.324419
+    ],
+    "each_profile_duplicate_run_exact": true,
+    "physical_present_state_equal": true,
+    "profiles": [
+      "window + amber_leaf",
+      "activity_corner + acorn"
+    ],
+    "same_seed": true
+  },
+  "migration": {
+    "existing_worlds": "neutral-existing-world baseline on next ordinary transition",
+    "historical_reconstruction": "not fabricated; old history predates the preference rules and is left authoritative as history rather than reinterpreted as exact preference evidence",
+    "preserves": [
+      "canonical creature identity/state",
+      "objects and positions",
+      "possession",
+      "behavior_context",
+      "event/snapshot history"
+    ]
+  },
+  "multi_seed_long_horizon": {
+    "all_passed": true,
+    "results": {
+      "1701": {
+        "all_action_classes": 10,
+        "controlled_history_cross_advantage": 0.215625,
+        "distinct_day_destination_vectors": 7,
+        "habit_experience_count": 2248,
+        "learned_object_choice_uplift": 0.019583,
+        "learned_zone_choice_uplift": 0.042917,
+        "object_affinity_range": 0.0993,
+        "passed": true,
+        "top_non_delivery_destination_share": 0.24024,
+        "top_object_selection_share": 0.195853,
+        "zone_affinity_range": 0.149036,
+        "zones_selected": 5
+      },
+      "1702": {
+        "all_action_classes": 10,
+        "controlled_history_cross_advantage": 0.201108,
+        "distinct_day_destination_vectors": 7,
+        "habit_experience_count": 2239,
+        "learned_object_choice_uplift": 0.035833,
+        "learned_zone_choice_uplift": 0.0275,
+        "object_affinity_range": 0.194446,
+        "passed": true,
+        "top_non_delivery_destination_share": 0.244514,
+        "top_object_selection_share": 0.207424,
+        "zone_affinity_range": 0.202891,
+        "zones_selected": 5
+      },
+      "42": {
+        "all_action_classes": 10,
+        "controlled_history_cross_advantage": 0.176623,
+        "distinct_day_destination_vectors": 7,
+        "habit_experience_count": 2238,
+        "learned_object_choice_uplift": 0.0275,
+        "learned_zone_choice_uplift": 0.0225,
+        "object_affinity_range": 0.143866,
+        "passed": true,
+        "top_non_delivery_destination_share": 0.244624,
+        "top_object_selection_share": 0.195,
+        "zone_affinity_range": 0.158427,
+        "zones_selected": 5
+      },
+      "999": {
+        "all_action_classes": 10,
+        "controlled_history_cross_advantage": 0.324419,
+        "distinct_day_destination_vectors": 7,
+        "habit_experience_count": 2253,
+        "learned_object_choice_uplift": 0.020417,
+        "learned_zone_choice_uplift": 0.042917,
+        "object_affinity_range": 0.108495,
+        "passed": true,
+        "top_non_delivery_destination_share": 0.252492,
+        "top_object_selection_share": 0.190372,
+        "zone_affinity_range": 0.237517,
+        "zones_selected": 5
+      }
+    },
+    "steps": 10080
+  },
+  "sbc": {
+    "gen18_warranted": false,
+    "modified": false,
+    "new_capability_forged": false,
+    "reason": "long-horizon preference state, migration, divergence measurement, and rendered observation were solvable as Terrarium product code with existing evaluation/temporal substrate"
+  },
+  "schema": "terrarium.pixel-art-overhaul-iteration5-evidence.v1",
+  "snapshot": {
+    "id": "20260827T222822886488Z-pixel-art-overhaul-iteration5",
+    "renderer_js_sha256": "96bd0eb952cf40b8b5099b1b7ab47ca376bc46339c01ebd0556ed440f1f8115d",
+    "seed": 1701,
+    "semantic_frame_sha256": "a275783dc04234b1da10d8bb6dd1b8a2bcaaeba134ee5ae07f0062687cf51290",
+    "tick": 10080
+  },
+  "validation": {
+    "accelerated_disposable_stress_note": "0.01-second disposable service hit an event-ledger extension race at tick 623 under concurrent debug reads; excluded from acceptance, normal 3-second product cadence not implicated, no canonical state touched.",
+    "behavior": {
+      "action_diversity": 10,
+      "passed": true,
+      "seed": 1701,
+      "steps": 2000
+    },
+    "coherence": {
+      "passed": true,
+      "robustness_seeds": [
+        1701,
+        1702,
+        42,
+        999
+      ]
+    },
+    "javascript_syntax": true,
+    "pytest": {
+      "count": 33,
+      "passed": true
+    },
+    "python310_grammar_guard": true,
+    "real_browser": {
+      "all_temporal_ready": true,
+      "captures": [
+        "terrarium-iter5-habit-day2.png",
+        "terrarium-iter5-habit-day5.png",
+        "terrarium-iter5-habit-day7.png"
+      ],
+      "checkpoints": [
+        "habit_day2",
+        "habit_day5",
+        "habit_day7"
+      ],
+      "day7_pixel_hash": "fnv1a32:d50a941d",
+      "day7_scale2x_error_blocks": 0,
+      "day7_scale2x_exact": true,
+      "path": "actual Canvas renderer via development-gated deterministic temporal fixtures",
+      "viewport": "800x480"
+    },
+    "renderer_unchanged_from_iteration4": true,
+    "spatial": {
+      "blocker_intersections": 0,
+      "invalid_awake_endpoints": 0,
+      "passed": true,
+      "seed": 1701,
+      "steps": 2000
+    },
+    "technical": {
+      "event_chain_valid": true,
+      "passed": true,
+      "restart_preserves_state": true,
+      "snapshot_event_replay_exact": true
+    },
+    "temporal_tests": {
+      "count": 6,
+      "passed": true
+    }
+  }
+}

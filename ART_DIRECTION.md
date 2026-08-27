@@ -172,3 +172,9 @@ Pixel-Art Overhaul — Iteration 4 makes **behavioral continuity part of acting 
 Stillness is valid acting. Do not add secondary motion, random ear/tail noise, or extra walking merely to keep the screen busy. A quiet planted Moss who has a readable reason to remain where he is is preferable to visually diverse but purposeless motion. The strongest acting question is now: **does this pose look like a continuation of what Moss just chose to do?**
 
 Favorite spots are authored physical affordances, not renderer inventions. Any future visual differentiation of a favorite spot must be grounded in canonical state/history rather than hidden presentation memory.
+
+## Accepted Iteration 5 long-horizon habit conventions
+
+Pixel-Art Overhaul — Iteration 5 makes **repetition across days part of character readability** without giving the renderer any memory or behavioral authority. A viewer should be able to infer a favorite only from Moss repeatedly choosing a place, object, or context over time. Do not add labels, badges, meters, glow, UI callouts, or renderer-only decoration that declares a preference.
+
+Habits must remain visually alive rather than choreographed. Familiar places may recur, favorite objects may receive more attention, and time-of-day tendencies may become recognizable, but individual days still need variation and environmental responsiveness. The acting question expands from “does this pose continue the last action?” to **“over many visits, does this still look like the same creature making characteristic choices?”**
