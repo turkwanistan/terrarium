@@ -178,90 +178,136 @@
   }
 
   function drawWindow(f,now,p){
-    rect(22,23,121,91,p.walnutDark); rect(25,26,115,85,p.walnut); rect(31,30,103,75,p.sky);
-    rect(81,30,4,75,p.skyDark); rect(31,65,103,4,p.skyDark);
-    // Tiny stepped sun/moon clusters instead of circles.
-    if(f.lighting==='night'){ rect(108,41,10,8,p.cream); rect(105,44,13,5,p.cream); rect(111,39,4,2,p.cream); }
-    else { rect(105,39,14,10,p.amber); rect(102,42,20,5,p.amber); rect(109,36,6,3,p.cream); }
-    // Curtains: irregular stair-steps, not smooth drapery.
-    rect(24,27,8,79,p.creamShade); rect(20,31,7,68,p.cream); rect(17,38,5,48,p.creamShade); rect(132,27,8,79,p.creamShade); rect(139,32,7,66,p.cream); rect(146,39,4,47,p.creamShade);
-    for(let y=34;y<98;y+=13){ rect(21,y,9,2,p.wallShade); rect(136,y+3,9,2,p.wallShade); }
-    rect(27,105,112,6,p.walnutLight); rect(24,111,118,4,p.walnutDark);
+    // Deep inset casing: top/side planes make the window feel built into the wall.
+    rect(20,21,125,94,p.shadow); rect(22,22,121,91,p.walnutDark); rect(25,25,115,86,p.walnut);
+    rect(29,28,107,79,p.walnutLight); rect(32,30,101,75,p.sky);
+    rect(80,30,5,75,p.skyDark); rect(31,64,103,5,p.skyDark);
+    rect(83,31,1,72,p.creamShade); rect(32,67,100,1,p.creamShade);
+    // Exterior focal cluster.
+    if(f.lighting==='night'){
+      rect(108,41,10,8,p.cream); rect(105,44,13,5,p.cream); rect(111,39,4,2,p.cream);
+      rect(48,42,2,2,p.creamShade); rect(64,52,1,1,p.cream); rect(121,57,2,1,p.creamShade);
+    } else {
+      rect(105,39,14,10,p.amber); rect(102,42,20,5,p.amber); rect(109,36,6,3,p.cream);
+    }
+    // Curtains use broad stepped cloth masses plus a few fold/shadow clusters.
+    rect(21,27,10,78,p.creamShade); rect(18,31,9,67,p.cream); rect(15,39,7,47,p.creamShade);
+    rect(132,27,10,78,p.creamShade); rect(139,32,9,65,p.cream); rect(146,40,6,46,p.creamShade);
+    for(const [x,y,w] of [[19,35,8],[18,50,7],[17,68,6],[22,89,7],[137,38,8],[141,54,7],[143,72,6],[137,91,8]]) rect(x,y,w,2,p.wallShade);
+    rect(17,28,14,4,p.walnut); rect(132,28,17,4,p.walnut); rect(18,27,12,2,p.walnutLight); rect(134,27,13,2,p.walnutLight);
+    // Sill: bright top lip, darker front face and support brackets.
+    rect(26,104,113,3,p.creamShade); rect(23,107,120,6,p.walnutLight); rect(26,113,114,4,p.walnutDark);
+    rect(35,116,7,6,p.walnutDark); rect(122,116,7,6,p.walnutDark); rect(37,116,3,3,p.walnutLight); rect(124,116,3,3,p.walnutLight);
 
     if(f.weather==='rain'){
-      const phase=Math.floor(now/120)%17;
-      for(const d of rain){ const x=34+d.x%96; const y=31+((d.y+phase+d.phase)%68); rect(x,y,1,4,p.rain); rect(x-1,y+4,1,2,p.rain); }
+      const phase=Math.floor(now/150)%19;
+      for(const d of rain){
+        const x=34+d.x%96,y=31+((d.y+phase+d.phase)%67);
+        rect(x,y,1,3,p.rain); if((d.phase&1)===0) rect(x-1,y+3,1,2,p.rain);
+      }
+      // Water gathering on the lower panes, kept sparse and clustered.
+      for(const [x,y,w] of [[38,92,9],[58,88,5],[91,94,11],[115,90,7]]){ rect(x,y,w,1,p.rain); rect(x+2,y+1,Math.max(2,w-4),1,p.skyDark); }
     } else if(f.weather==='mist'){
-      for(let y=45;y<91;y+=11) for(let x=35+(y%3);x<129;x+=17) rect(x,y,10,2,p.rain);
+      for(let y=45;y<91;y+=12) for(let x=35+(y%3);x<129;x+=19) rect(x,y,9,2,p.rain);
     }
 
-    const watches=historyValue(f,'window_watches',now), wet=historyValue(f,'wet_window_watches',now);
+    const watches=historyValue(f,'window_watches',now),wet=historyValue(f,'wet_window_watches',now);
     for(let i=0;i<6;i++){
       const strength=emergence(watches,1+i*2.5,6); if(strength<=0) continue;
-      const x=47+i*13+(stableUnit('smudge',i)>.5?1:0), y=91-(i%2)*3;
+      const x=47+i*13+(stableUnit('smudge',i)>.5?1:0),y=91-(i%2)*3;
       rect(x,y,5,1,p.creamShade); if(strength>.55) rect(x+1,y+1,4,1,p.skyDark);
     }
     for(let i=0;i<5;i++){
       const strength=emergence(wet,.4+i*1.3,4.5); if(strength<=0) continue;
-      const x=45+i*16; rect(x,75,1,8,p.rain); rect(x+1,83,1,4,p.rain);
+      const x=45+i*16; rect(x,75,1,7,p.rain); rect(x+1,82,1,4,p.rain);
     }
-    if(causalActivityState(f,now).window>0){ const cx=clamp(px(f.creature.x),44,121); rect(cx-8,101,16,2,p.creamShade); rect(cx-4,103,8,1,p.walnutLight); }
+    if(causalActivityState(f,now).window>0){ const cx=clamp(px(f.creature.x),44,121); rect(cx-8,103,16,2,p.creamShade); rect(cx-4,105,8,1,p.walnutLight); }
   }
-
   function drawBed(f,now,p){
-    rect(23,177,111,40,p.walnutDark); rect(27,174,105,38,p.walnut); rect(31,181,95,28,p.creamShade);
-    rect(34,184,39,13,p.cream); rect(37,187,33,8,p.creamShade);
-    // Hand-authored blanket clusters.
-    rect(76,183,48,22,p.dustyBlue); rect(72,188,53,16,p.dustyBlue); rect(83,181,39,5,p.dustyBlue);
-    rect(78,187,20,2,p.creamShade); rect(103,193,18,2,p.skyDark); rect(75,200,33,2,p.skyDark);
-    const sleepTicks=historyValue(f,'sleep_nook_ticks',now), sleepBouts=historyValue(f,'sleep_nook_bouts',now);
-    const nest=emergence(sleepTicks,0,18); if(nest>0){ rect(77,196,43+Math.floor(8*emergence(sleepBouts,0,5)),5,p.walnutDark); rect(84,194,24,2,p.floorShade); }
-    for(let i=0;i<4;i++){ const s=emergence(sleepTicks,1+i*3.5,8); if(s>.2){ rect(65+i*12,187+i*2,8,1,p.walnutLight); rect(70+i*10,193+i,6,1,p.skyDark); } }
-    rect(22,213,113,5,p.walnutLight);
+    // Headboard and frame with exposed posts and a recessed mattress.
+    rect(21,175,114,44,p.shadow); rect(22,172,9,44,p.walnutDark); rect(126,173,9,44,p.walnutDark);
+    rect(24,170,5,5,p.walnutLight); rect(128,171,5,5,p.walnutLight);
+    rect(29,177,99,35,p.walnut); rect(32,180,93,29,p.creamShade);
+    rect(33,182,42,14,p.cream); rect(36,184,36,10,p.creamShade); rect(38,184,28,2,p.cream);
+    // Blanket is an authored stepped mass, not one rectangle.
+    rect(77,181,45,4,p.dustyBlue); rect(73,185,51,6,p.dustyBlue); rect(70,191,55,8,p.dustyBlue); rect(73,199,51,7,p.dustyBlue);
+    rect(80,183,18,2,p.creamShade); rect(75,189,24,2,p.skyDark); rect(103,194,18,2,p.skyDark); rect(79,201,30,2,p.skyDark);
+    rect(91,186,2,8,p.creamShade); rect(112,198,8,1,p.creamShade);
+    const sleepTicks=historyValue(f,'sleep_nook_ticks',now),sleepBouts=historyValue(f,'sleep_nook_bouts',now);
+    const nest=emergence(sleepTicks,0,18);
+    if(nest>0){
+      rect(77,196,43+Math.floor(8*emergence(sleepBouts,0,5)),5,p.walnutDark); rect(84,194,24,2,p.floorShade);
+      if(nest>.45){ rect(88,192,13,1,p.creamShade); rect(105,198,10,1,p.skyDark); }
+    }
+    for(let i=0;i<4;i++){
+      const s=emergence(sleepTicks,1+i*3.5,8); if(s>.2){ rect(65+i*12,187+i*2,8,1,p.walnutLight); rect(70+i*10,193+i,6,1,p.skyDark); }
+    }
+    // Footboard front plane and feet.
+    rect(22,210,113,5,p.walnutLight); rect(22,215,113,4,p.walnutDark); rect(27,219,8,5,p.walnutDark); rect(122,219,8,5,p.walnutDark);
+    rect(29,219,4,3,p.walnutLight); rect(124,219,4,3,p.walnutLight);
   }
-
   function drawRug(p){
-    // Large open moss-green center assembled as stepped rows.
-    const rows=[[154,173,92],[149,177,102],[146,181,108],[145,185,110],[145,189,110],[147,193,106],[151,197,98],[157,201,86],[165,205,70]];
+    const rows=[[154,172,92],[149,176,102],[146,180,108],[144,184,112],[144,188,112],[146,192,108],[150,196,100],[156,200,88],[164,204,72]];
     for(const [x,y,w] of rows) rect(x,y,w,4,p.rug);
-    for(let x=163;x<238;x+=18){ rect(x,181+(x%3),10,1,p.rugLight); rect(x+5,196-(x%4),8,1,p.mossDark); }
-    rect(158,176,84,1,p.rugLight); rect(164,204,70,1,p.mossDark);
+    // A deliberate woven border and a few broad fibers.
+    rect(158,174,84,2,p.rugLight); rect(151,178,98,1,p.mossDark); rect(149,198,98,2,p.mossDark); rect(160,203,80,1,p.rugLight);
+    for(const [x,y,w] of [[165,181,11],[188,184,9],[214,179,12],[173,193,13],[204,196,10],[228,190,8]]) rect(x,y,w,1,p.rugLight);
+    for(const [x,y,w] of [[177,187,8],[198,191,12],[221,184,7],[187,200,9]]) rect(x,y,w,1,p.mossDark);
+    for(const x of [156,171,187,205,222,238]) rect(x,201+(x%2),1,4,p.rugLight);
   }
-
   function drawShelf(f,p){
-    rect(295,30,84,91,p.shadow); rect(298,29,79,10,p.walnut); rect(301,39,5,79,p.walnutDark); rect(369,39,5,79,p.walnutDark);
-    for(const y of [59,84,109]){ rect(304,y,68,6,p.walnutLight); rect(306,y+6,65,3,p.walnutDark); }
-    // Books/knickknacks are decorative fixed clusters; canonical movable items are drawn separately.
-    const books=[[310,44,4,13,p.dustyBlue],[315,47,3,10,p.amber],[319,43,5,14,p.moss],[326,48,4,9,p.creamShade],[339,68,4,13,p.cream],[344,66,5,15,p.dustyBlue],[350,70,3,11,p.amber]];
-    for(const b of books) rect(...b);
-    rect(310,93,16,9,p.walnutDark); rect(312,91,12,2,p.amber);
+    // Cabinet silhouette with top cap, recessed back and shelf lips.
+    rect(293,29,88,94,p.shadow); rect(296,27,83,11,p.walnutDark); rect(299,28,77,7,p.walnutLight);
+    rect(299,38,7,81,p.walnutDark); rect(369,38,7,81,p.walnutDark); rect(306,39,63,78,p.walnut);
+    rect(309,41,57,16,p.walnutDark); rect(309,66,57,16,p.walnutDark); rect(309,91,57,16,p.walnutDark);
+    for(const y of [58,83,108]){ rect(304,y,68,6,p.walnutLight); rect(306,y+6,65,3,p.walnutDark); rect(311,y,54,1,p.creamShade); }
+    const books=[[310,44,4,13,p.dustyBlue],[315,47,3,10,p.amber],[319,43,5,14,p.moss],[325,48,4,9,p.creamShade],[338,69,4,12,p.cream],[343,66,5,15,p.dustyBlue],[349,70,3,11,p.amber]];
+    for(const b of books){ rect(...b); rect(b[0],b[1],1,b[3],p.shadow); }
+    // Small fixed trinkets make shelf bays recognizable without competing with movable props.
+    rect(337,48,12,7,p.walnutLight); rect(339,46,8,2,p.creamShade); rect(342,44,3,2,p.amber);
+    rect(312,94,15,9,p.walnutDark); rect(314,92,11,2,p.amber); rect(318,90,3,2,p.cream);
+    rect(347,96,8,6,p.creamShade); rect(349,94,4,2,p.dustyBlue);
+    rect(301,119,74,5,p.walnutDark); rect(306,119,8,6,p.walnutLight); rect(361,119,8,6,p.walnutLight);
   }
-
   function drawActivityCorner(f,now,p){
-    rect(292,180,80,30,p.shadow); rect(295,175,73,7,p.walnutLight); rect(302,182,5,25,p.walnutDark); rect(356,182,5,25,p.walnutDark); rect(293,179,77,4,p.walnut);
+    // Desk top: narrow light top plane over a darker apron and planted legs.
+    rect(291,178,81,33,p.shadow); rect(294,173,76,4,p.walnutLight); rect(291,177,82,6,p.walnut); rect(296,183,72,5,p.walnutDark);
+    rect(300,188,7,23,p.walnutDark); rect(356,188,7,23,p.walnutDark); rect(302,188,3,18,p.walnutLight); rect(358,188,3,18,p.walnutLight);
+    rect(311,188,35,10,p.walnut); rect(314,190,29,6,p.walnutDark); rect(339,192,3,2,p.amber);
     const uses=historyValue(f,'activity_corner_uses',now);
-    rect(320,169,23,10,p.walnut); rect(322,166,20,3,p.paper); rect(324,168,15,5,p.paper);
-    for(let i=0;i<5;i++){ const s=emergence(uses,1+i*4.2,8); if(s<=0) continue; const x=302+i*12+(stableUnit('paper',i)>.5?2:0); const y=168-(i%2)*3; rect(x,y,11,5,p.paper); rect(x+2,y+2,6,1,p.walnutLight); }
-    for(let i=0;i<7;i++){ const s=emergence(uses,2+i*3.2,7); if(s>.1) rect(305+i*8,171-(i%3),5,1,p.walnutDark); }
-    // Pot + plant.
-    rect(373,171,13,13,p.amber); rect(371,169,17,4,p.creamShade); rect(378,155,3,15,p.foliage);
-    rect(371,158,8,5,p.foliage); rect(381,156,8,5,p.moss); rect(368,163,8,4,p.mossDark); rect(382,163,9,4,p.foliage);
+    // Notebook and increasingly lived-in canonical activity aftermath.
+    rect(319,167,24,10,p.walnutDark); rect(321,165,21,3,p.paper); rect(323,168,16,6,p.paper); rect(325,169,11,1,p.walnutLight);
+    for(let i=0;i<5;i++){
+      const s=emergence(uses,1+i*4.2,8); if(s<=0) continue;
+      const x=300+i*12+(stableUnit('paper',i)>.5?2:0),y=168-(i%2)*3;
+      rect(x,y,11,5,p.paper); rect(x+2,y+2,6,1,p.walnutLight); if(s>.6) rect(x+8,y+1,2,1,p.amber);
+    }
+    for(let i=0;i<7;i++){ const s=emergence(uses,2+i*3.2,7); if(s>.1) rect(304+i*8,172-(i%3),5,1,p.walnutDark); }
+    // Pot + layered leaf clumps.
+    rect(373,171,13,13,p.amber); rect(371,168,17,4,p.creamShade); rect(375,181,9,3,p.walnutDark);
+    rect(378,154,3,15,p.foliage); rect(371,157,8,5,p.foliage); rect(381,155,8,5,p.moss); rect(368,162,8,4,p.mossDark); rect(382,162,9,4,p.foliage); rect(375,151,7,5,p.moss);
     if(causalActivityState(f,now).activity_corner>0){ const hx=clamp(px(f.creature.x)-4,305,356); rect(hx-6,174,12,1,p.cream); }
   }
-
   function drawBowls(p){
-    rect(257,213,20,3,p.shadow); rect(258,208,18,5,p.dustyBlue); rect(261,206,12,2,p.cream); rect(286,214,19,3,p.shadow); rect(287,209,17,5,p.amber); rect(290,207,11,2,p.creamShade);
+    // Two squat stepped bowls with rims/interiors and their own contact shadows.
+    rect(256,214,22,3,p.shadow); rect(258,208,18,6,p.dustyBlue); rect(260,206,14,3,p.cream); rect(262,207,10,2,p.skyDark); rect(260,213,14,2,p.skyDark);
+    rect(285,215,21,3,p.shadow); rect(287,209,17,6,p.amber); rect(289,207,13,3,p.creamShade); rect(291,208,9,2,p.walnutDark); rect(289,214,13,2,p.walnutDark);
   }
-
   function drawBackground(f,now){
     const p=visualLighting(f,now).palette;
     rect(0,0,ART_W,158,p.wall); rect(0,158,ART_W,82,p.floor);
-    // Wall boards/panel rhythm; all clusters align to art pixels.
+    // Plaster/board irregularity: broad authored runs, not confetti texture.
     for(let y=17;y<153;y+=27) rect(0,y,ART_W,1,p.wallShade);
-    for(let x=12;x<395;x+=43){ rect(x,18+(x%4),2,6,p.wallLight); rect(x+5,20+(x%3),6,1,p.wallLight); }
-    rect(0,153,ART_W,7,p.walnutDark); rect(0,153,ART_W,2,p.walnutLight);
+    for(const [x,y,w] of [[12,20,18],[61,45,13],[104,74,21],[164,32,15],[214,93,24],[268,55,18],[331,132,22],[362,18,14]]){
+      rect(x,y,w,1,p.wallLight); rect(x+3,y+2,Math.max(4,w-8),1,p.wallShade);
+    }
+    rect(0,152,ART_W,8,p.walnutDark); rect(0,152,ART_W,2,p.walnutLight); rect(0,159,ART_W,2,p.floorShade);
+    // Floor boards receive seams, knots and short grain clusters with open breathing room.
     for(const y of [178,202,226]) rect(0,y,ART_W,1,p.floorShade);
-    for(let x=16;x<390;x+=52){ rect(x,162+(x%5),15,1,p.floorLight); rect(x+7,186+(x%7),11,1,p.floorShade); }
+    for(const x of [48,99,154,207,262,317,369]){ const y=160+((x/3)%24); rect(x,y,1,17,p.floorShade); }
+    for(const [x,y,w] of [[16,164,15],[73,186,12],[125,215,17],[184,166,13],[239,221,18],[300,191,15],[348,229,19]]){
+      rect(x,y,w,1,p.floorLight); rect(x+4,y+2,Math.max(3,w-8),1,p.floorShade);
+    }
 
     drawWindow(f,now,p);
     drawBed(f,now,p);
@@ -271,15 +317,15 @@
     drawBowls(p);
     drawPersistentHistory(f,p);
 
-    // Lived-in small clusters: flowers, scuffs and stitching, kept sparse.
-    rect(277,150,4,2,p.amber); rect(281,148,2,4,p.foliage); rect(274,149,2,2,p.cream);
+    // A few composition-balancing accents near otherwise empty edges.
+    rect(276,149,4,2,p.amber); rect(280,147,2,4,p.foliage); rect(273,148,2,2,p.cream);
     rect(17,218,7,1,p.floorShade); rect(33,229,5,1,p.floorLight); rect(244,222,9,1,p.floorShade);
+    rect(268,151,14,2,p.walnutDark); rect(271,147,8,4,p.walnut); rect(274,144,3,3,p.foliage);
 
-    const phase=Math.floor(now/650);
-    for(const m of motes){ if((phase+Math.floor(m.phase))%4!==0) continue; rect(m.x,m.y,1,1,p.cream); }
+    const phase=Math.floor(now/850);
+    for(const m of motes){ if((phase+Math.floor(m.phase))%5!==0) continue; rect(m.x,m.y,1,1,p.cream); }
     return p;
   }
-
   function placedObjectRenderState(o, f, now) {
     const source=previous?.objects?.find(item=>item.id===o.id);
     if(!snapshotPath&&source?.state==='carried'&&o.state==='placed'){
@@ -322,6 +368,10 @@
     if(moving){ if(raw<.08)return'anticipation'; if(raw<.82)return'movement'; if(raw<.94)return'settle'; return'recovery'; }
     if(activityProgress<.18)return'anticipation'; if(activityProgress<.62)return'contact'; if(activityProgress<.88)return'settle'; return'hold';
   }
+  function authoredStage(progress,cuts){
+    for(let i=0;i<cuts.length;i++) if(progress<cuts[i]) return i;
+    return cuts.length;
+  }
 
   function creatureRenderState(f, now) {
     const c=f.creature,old=previous?.creature||c,sourceX=Number(transitionSource?.x??old.x),sourceY=Number(transitionSource?.y??old.y);
@@ -331,7 +381,8 @@
     const activityProgress=actionEnvelope(now,c.activity),target=actionTargetPoint(f);
     let renderedFacing=c.facing; if(!moving&&target&&['inspect','carry','place'].includes(c.activity)&&Math.abs(Number(target.x)-continuousX)>3) renderedFacing=Number(target.x)>=continuousX?'right':'left';
     const direction=renderedFacing==='left'?-1:1,strideCount=Math.max(2,Math.round(semanticDistance/58)),walkPhase=travel*Math.PI*2*strideCount;
-    const walkBob=moving?(Math.floor(Math.abs(Math.sin(walkPhase))*2)):0;
+    const walkFrame=moving?(Math.floor(walkPhase/(Math.PI/2))&3):0;
+    const walkBob=moving?([0,1,0,1][walkFrame]):0;
     const breathStep=c.pose==='sleep'?((Math.floor(now/500)%2)?1:0):(!moving&&Math.floor(now/900)%2?1:0);
     const renderedX=snapDisplay(continuousX),renderedBaseY=snapDisplay(continuousBaseY),renderedY=renderedBaseY-(walkBob+breathStep)*SCALE;
     const pickupSource=c.carrying?previous?.objects?.find(o=>o.id===c.carrying&&o.state==='placed'):null;
@@ -343,7 +394,7 @@
       requested_timestamp_ms:now,source_tick:previous?.tick??f.tick,target_tick:f.tick,semantic_x:c.x,semantic_y:c.y,source_x:sourceX,source_y:sourceY,
       rendered_x:renderedX,rendered_y:renderedY,rendered_base_y:renderedBaseY,continuous_x:Number(continuousX.toFixed(6)),continuous_base_y:Number(continuousBaseY.toFixed(6)),
       interpolation_progress:Number(raw.toFixed(6)),interpolation_ease:Number(travel.toFixed(9)),motion_duration_ms:Number(duration.toFixed(3)),activity_progress:Number(activityProgress.toFixed(6)),motion_phase:phaseName(moving,raw,activityProgress),semantic_distance:Number(semanticDistance.toFixed(6)),moving,facing:renderedFacing,pose:c.pose,activity:c.activity,
-      carrying:attached?c.carrying:null,carrying_semantic:c.carrying,attachment_progress:Number(attachmentProgress.toFixed(6)),carried_rendered_x:carriedWorldX,carried_rendered_y:carriedWorldY,carried_relative_x:attached?holdX:null,carried_relative_y:attached?holdY:null,walk_phase:Number(walkPhase.toFixed(6)),
+      carrying:attached?c.carrying:null,carrying_semantic:c.carrying,attachment_progress:Number(attachmentProgress.toFixed(6)),carried_rendered_x:carriedWorldX,carried_rendered_y:carriedWorldY,carried_relative_x:attached?holdX:null,carried_relative_y:attached?holdY:null,walk_phase:Number(walkPhase.toFixed(6)),walk_keyframe:walkFrame,
       causal_activity:{sleep_nook:Number(causal.sleep_nook.toFixed(6)),window:Number(causal.window.toFixed(6)),activity_corner:Number(causal.activity_corner.toFixed(6))},
       interaction_target:target?{object_id:target.id||null,x:Number(target.x.toFixed(6)),y:Number(target.y.toFixed(6))}:null,object_placement:activePlacementState(f,now),
       ambient_classes:[f.weather==='rain'?'rain':f.weather==='mist'?'mist':null,'pixel-motes',c.pose==='sleep'?'breathing':moving?'walk-cycle':'quiet-breathing',causal.sleep_nook>0?'bedding-contact':null,causal.window>0?'window-contact':null,causal.activity_corner>0?'work-surface-contact':null].filter(Boolean),
@@ -363,54 +414,155 @@
     else if(c.activity==='place') pose='place';
     else if(c.activity==='look_outside') pose='window';
     else if(c.activity==='rest') pose='rest';
-    const phase=Math.floor(rs.walk_phase/Math.PI)%2;
-    const target=actionTargetPoint(f),targetY=target?px(target.y):baseY;
+
+    const walkFrame=rs.walk_keyframe||0;
+    const target=actionTargetPoint(f);
+    const localTargetX=target?clamp((px(target.x)-x)*flip,10,19):16;
+    const localTargetY=target?clamp(px(target.y)-baseY,-8,10):4;
+    const idleFrame=Math.floor(now/900)&1;
+    const inspectStage=authoredStage(ap,[.20,.46,.76]);
+    const pickupStage=authoredStage(ap,[.16,.34,.58,.80]);
+    const placeStage=authoredStage(ap,[.16,.34,.58,.78,.92]);
+    const windowStage=authoredStage(ap,[.18,.46,.78]);
+    const restStage=authoredStage(ap,[.22,.58,.84]);
+    const sleepStage=prior==='sleep'?4:authoredStage(ap,[.14,.34,.58,.82]);
+    const wakeStage=authoredStage(ap,[.16,.38,.68,.88]);
 
     ctx.save(); ctx.translate(x,baseY-bob); ctx.scale(flip,1);
+
+    function groundShadow(width=27,offset=0){ rect(-Math.floor(width/2),11+offset,width,3,p.shadow); rect(-Math.floor(width/2)+4,14+offset,width-8,1,p.shadow); }
+    function tail(kind='neutral',y=0){
+      if(kind==='rest'){ rect(-18,2+y,7,3,p.dogDark); rect(-22,4+y,6,3,p.dog); rect(-23,5+y,3,2,p.dogLight); return; }
+      const shift=kind==='up'?-2:kind==='down'?2:0;
+      rect(-18,-3+y,7,3,p.dogDark); rect(-22,-6+y+shift,6,3,p.dog); rect(-24,-8+y+shift,4,3,p.dogLight);
+    }
+    function body(crouch=0,lean=0,carryChest=false){
+      rect(-14,-4+crouch,25,11,p.dogDark);
+      rect(-12,-8+crouch,23,13,p.dog);
+      rect(-8,-9+crouch,16,4,p.dogLight);
+      rect(-9,-4+crouch,17,7,p.dogLight);
+      rect(-6,2+crouch,12,3,p.dogDark);
+      rect(5,-4+crouch,5,7,p.dogCream);
+      if(carryChest){ rect(7,-2+crouch,4,5,p.dogCream); rect(8,2+crouch,4,2,p.dogDark); }
+      if(lean>0){ rect(10,-4+crouch,2+lean,7,p.dog); }
+    }
+    function plantedLegs(crouch=0){
+      rect(-10,5+crouch,5,7,p.dogDark); rect(-11,11+crouch,7,2,p.dogDark);
+      rect(4,5+crouch,5,7,p.dogDark); rect(4,11+crouch,7,2,p.dogDark);
+      rect(-9,5+crouch,3,4,p.dog); rect(5,5+crouch,3,4,p.dog);
+    }
+    function walkLegs(frame){
+      if(frame===0){
+        rect(-11,4,5,8,p.dogDark); rect(-13,11,8,2,p.dogDark); rect(4,5,5,7,p.dogDark); rect(4,11,7,2,p.dogDark);
+      } else if(frame===1){
+        rect(-9,5,5,7,p.dogDark); rect(-10,11,7,2,p.dogDark); rect(2,5,5,6,p.dogDark); rect(5,10,6,2,p.dogDark);
+      } else if(frame===2){
+        rect(-9,5,5,7,p.dogDark); rect(-10,11,7,2,p.dogDark); rect(5,4,5,8,p.dogDark); rect(4,11,8,2,p.dogDark);
+      } else {
+        rect(-8,5,5,6,p.dogDark); rect(-11,10,6,2,p.dogDark); rect(4,5,5,7,p.dogDark); rect(4,11,7,2,p.dogDark);
+      }
+    }
+    function head(headX=6,headY=-15,earMode='neutral',gaze='forward'){
+      rect(headX-8,headY-4,14,11,p.dogDark);
+      rect(headX-6,headY-7,13,13,p.dog);
+      rect(headX-2,headY-6,9,7,p.dogLight);
+      rect(headX-1,headY-7,4,2,p.dogCream);
+      const nearEarY=earMode==='lift'?-2:earMode==='bounce'?1:0;
+      const farEarY=earMode==='lift'?-1:earMode==='bounce'?2:1;
+      rect(headX-9,headY-6+nearEarY,5,9,p.dogDark); rect(headX-11,headY-2+nearEarY,5,7,p.dogDark);
+      rect(headX+5,headY-5+farEarY,4,8,p.dogDark); rect(headX+7,headY-1+farEarY,4,6,p.dogDark);
+      rect(headX+2,headY,8,5,p.dogCream); rect(headX+7,headY+1,3,2,p.eye);
+      const eyeY=gaze==='down'?headY-1:gaze==='up'?headY-4:headY-3;
+      rect(headX+1,eyeY,2,gaze==='soft'?1:2,p.eye);
+      rect(headX+5,headY+4,3,1,p.dogDark);
+    }
+    function contactPaw(ex,ey,lower=false){
+      const shoulderY=lower?1:-1;
+      rect(7,shoulderY,4,4,p.dogDark);
+      const midX=Math.max(10,Math.round((10+ex)/2)),midY=Math.round((shoulderY+ey)/2);
+      drawPixelLine(9,shoulderY+2,midX,midY,p.dogDark,3);
+      drawPixelLine(midX,midY,ex,ey,p.dog,3);
+      rect(ex-1,ey,4,2,p.dogCream);
+    }
+    function chestPaws(crouch=0){
+      rect(7,-1+crouch,4,5,p.dogDark); rect(9,2+crouch,5,3,p.dog); rect(10,3+crouch,4,2,p.dogCream);
+      rect(4,0+crouch,3,5,p.dogDark); rect(6,3+crouch,4,2,p.dogLight);
+    }
+
     if(pose==='sleep'){
-      rect(-16,5,31,4,p.shadow); rect(-13,-3,25,9,p.dogDark); rect(-10,-7,22,12,p.dog); rect(2,-9,12,10,p.dogLight); rect(8,-7,7,6,p.dogCream);
-      rect(-15,-6,7,7,p.dogDark); rect(-17,-2,5,5,p.dog); rect(6,-13,5,6,p.dogDark); rect(10,-12,5,7,p.dogDark);
-      rect(11,-6,2,1,p.eye); rect(-4,1,9,2,p.dogLight); rect(-10,2,7,2,p.dogDark);
+      const settle=Math.min(4,sleepStage);
+      groundShadow(settle>=2?31:27,1);
+      if(settle===0){
+        tail('rest',2); body(3,0,false); plantedLegs(3); head(6,-11,'bounce','soft');
+      } else if(settle===1){
+        rect(-17,5,31,3,p.shadow); tail('rest',3); rect(-14,-2,25,10,p.dogDark); rect(-11,-5,22,11,p.dog); rect(-6,-6,15,5,p.dogLight); head(7,-10,'bounce','soft'); rect(-9,5,9,3,p.dogDark);
+      } else if(settle===2){
+        rect(-17,5,32,3,p.shadow); rect(-14,-3,27,10,p.dogDark); rect(-11,-7,23,13,p.dog); rect(-5,-8,15,6,p.dogLight); rect(-17,-5,8,7,p.dogDark); rect(-19,-2,7,5,p.dog); head(5,-10,'neutral','soft'); rect(-10,3,10,3,p.dogDark);
+      } else {
+        rect(-17,5,33,4,p.shadow); rect(-14,-3,27,10,p.dogDark); rect(-11,-7,23,13,p.dog); rect(-6,-8,16,6,p.dogLight);
+        rect(-18,-5,8,8,p.dogDark); rect(-20,-1,7,5,p.dog); rect(1,-10,13,10,p.dogDark); rect(3,-12,12,11,p.dog); rect(7,-9,9,7,p.dogCream);
+        rect(6,-14,5,6,p.dogDark); rect(11,-13,5,7,p.dogDark); rect(12,-7,2,1,p.eye); rect(-7,2,10,2,p.dogLight); rect(-11,3,8,2,p.dogDark);
+        if((Math.floor(now/650)&1)===1) rect(-2,-8,7,1,p.dogLight);
+      }
       ctx.restore(); return;
     }
 
-    const crouch=pose==='rest'?2:pose==='carry'?1:0;
-    const lean=(pose==='inspect'||pose==='place')?2:pose==='window'?1:0;
-    // Shadow is sparse and fully hard-edged.
-    rect(-13,10,26,3,p.shadow); rect(-9,13,18,1,p.shadow);
-    // Tail silhouette.
-    if(pose==='rest'){ rect(-18,1,6,3,p.dogDark); rect(-21,3,6,3,p.dog); }
-    else { rect(-18,-3+crouch,7,3,p.dogDark); rect(-21,-6+crouch,5,3,p.dog); rect(-22,-9+crouch,3,3,p.dogLight); }
-    // Compact body: 2-4 stepped shades.
-    rect(-13,-5+crouch,23,12,p.dogDark); rect(-11,-8+crouch,21,13,p.dog); rect(-7,-5+crouch,16,7,p.dogLight); rect(-5,1+crouch,11,3,p.dogDark);
-    // Planted short legs / walk keyframes.
-    if(pose==='walk'){
-      if(phase===0){ rect(-9,4+crouch,5,8,p.dogDark); rect(4,5+crouch,5,6,p.dogDark); rect(-11,11+crouch,7,2,p.dogDark); rect(4,10+crouch,7,2,p.dogDark); }
-      else { rect(-8,5+crouch,5,6,p.dogDark); rect(3,4+crouch,5,8,p.dogDark); rect(-9,10+crouch,7,2,p.dogDark); rect(3,11+crouch,7,2,p.dogDark); }
-    } else { rect(-9,5+crouch,5,7,p.dogDark); rect(4,5+crouch,5,7,p.dogDark); rect(-10,11+crouch,7,2,p.dogDark); rect(4,11+crouch,7,2,p.dogDark); }
-
-    // Slightly oversized head, side/three-quarter by default.
-    const hx=5+lean,hy=-14+crouch+(pose==='rest'?2:0)+(targetY>baseY&&pose==='inspect'?1:0);
-    rect(hx-7,hy-5,14,12,p.dogDark); rect(hx-6,hy-7,13,12,p.dog); rect(hx-3,hy-5,10,7,p.dogLight);
-    // Floppy ears, intentionally asymmetrical clusters.
-    const earDrop=(c.expression==='curious'||pose==='window')?-1:1;
-    rect(hx-8,hy-6+earDrop,5,9,p.dogDark); rect(hx-10,hy-2+earDrop,5,7,p.dogDark); rect(hx+5,hy-6+earDrop,4,8,p.dogDark); rect(hx+7,hy-2+earDrop,4,6,p.dogDark);
-    // Muzzle / minimal face; no accessory required for the core hero set.
-    rect(hx+2,hy,8,5,p.dogCream); rect(hx+7,hy+1,3,2,p.eye); rect(hx+1,hy-3,2,2,p.eye);
-    if(c.expression==='sleepy'){ rect(hx,hy-2,3,1,p.eye); }
-    else if(pose==='inspect'||pose==='window'){ rect(hx+1,hy-4,2,2,p.eye); }
-    rect(hx+5,hy+4,3,1,p.dogDark);
-    // Single highlight clusters keep the sprite lively without glossy rendering.
-    rect(hx-1,hy-5,3,1,p.dogCream); rect(-3,-6+crouch,5,1,p.dogLight);
-
-    // Interaction forepaw key poses. Contact remains target-owned.
-    if(['inspect','carry','place'].includes(pose)){
-      const reach=pose==='inspect'?smooth01((ap-.12)/.42):pose==='carry'?smooth01((ap-.12)/.54):smooth01((ap-.16)/.46)*(1-smooth01((ap-.9)/.1));
-      if(reach>.05){ const endX=target?clamp((px(target.x)-x)*flip,9,18):14; const endY=target?clamp(px(target.y)-baseY,-8,11):4; const ex=Math.round(mix(8,endX,reach)),ey=Math.round(mix(2,endY,reach)); drawPixelLine(7,0+crouch,ex,ey,p.dogDark,3); rect(ex-1,ey,4,2,p.dogLight); }
+    if(pose==='wake'){
+      groundShadow(wakeStage<2?31:27,1);
+      if(wakeStage===0){
+        rect(-14,-3,27,10,p.dogDark); rect(-11,-7,23,13,p.dog); rect(-5,-8,15,6,p.dogLight); tail('rest',2); head(5,-10,'bounce','soft');
+      } else if(wakeStage===1){
+        tail('rest',1); body(3,0,false); rect(-10,7,9,5,p.dogDark); rect(3,6,8,5,p.dogDark); head(7,-12,'bounce','soft');
+      } else if(wakeStage===2){
+        tail('down',1); body(2,0,false); plantedLegs(2); head(7,-14,'neutral','forward');
+      } else {
+        tail('neutral'); body(); plantedLegs(); head(7,-15,'lift','forward');
+      }
+      ctx.restore(); return;
     }
+
+    let crouch=0,lean=0,earMode='neutral',gaze='forward',tailMode='neutral',carryChest=false;
+    if(pose==='walk'){
+      earMode=walkFrame===1?'bounce':walkFrame===3?'lift':'neutral'; tailMode=walkFrame===1?'up':walkFrame===3?'down':'neutral';
+    } else if(pose==='inspect'){
+      lean=inspectStage>=1&&inspectStage<=2?2:0; earMode=inspectStage>=1?'lift':'neutral'; gaze=inspectStage>=1?'down':'forward';
+    } else if(pose==='carry'){
+      crouch=pickupStage<=2?1:0; lean=pickupStage===1||pickupStage===2?2:0; earMode=pickupStage===2?'lift':'neutral'; gaze=pickupStage<=2?'down':'forward'; carryChest=pickupStage>=3;
+    } else if(pose==='place'){
+      crouch=placeStage>=1&&placeStage<=3?2:0; lean=placeStage>=1&&placeStage<=3?2:0; earMode=placeStage===2?'lift':'neutral'; gaze=placeStage>=1&&placeStage<=3?'down':'forward'; carryChest=placeStage===0||placeStage===1;
+    } else if(pose==='window'){
+      crouch=windowStage===0?1:0; lean=windowStage>=1?1:0; earMode=windowStage>=1?'lift':'neutral'; gaze='up'; tailMode='rest';
+    } else if(pose==='rest'){
+      crouch=restStage>=1?3:2; earMode='bounce'; gaze='soft'; tailMode='rest';
+    } else if(idleFrame){ earMode='lift'; tailMode='down'; }
+
+    groundShadow(pose==='rest'?29:27,pose==='rest'?2:0);
+    tail(tailMode,crouch);
+    body(crouch,lean,carryChest);
+    if(pose==='walk') walkLegs(walkFrame); else plantedLegs(crouch);
+
+    let headX=6+lean,headY=-15+crouch;
+    if(pose==='inspect'&&inspectStage>=1){ headX+=2; headY+=1; }
+    if(pose==='window'&&windowStage>=1){ headX+=1; headY-=1; }
+    if(pose==='rest'){ headX=5; headY=-12+crouch; }
+    head(headX,headY,earMode,gaze);
+
+    if(pose==='inspect'&&(inspectStage===1||inspectStage===2)) contactPaw(localTargetX,localTargetY,localTargetY>4);
+    if(pose==='carry'){
+      if(pickupStage===1) contactPaw(Math.max(12,localTargetX-2),Math.max(-5,localTargetY-1),localTargetY>4);
+      else if(pickupStage===2) contactPaw(localTargetX,localTargetY,localTargetY>4);
+      else if(pickupStage>=3) chestPaws(crouch);
+    }
+    if(pose==='place'){
+      if(placeStage===0) chestPaws(crouch);
+      else if(placeStage===1) contactPaw(Math.max(11,localTargetX-2),Math.min(8,localTargetY-2),true);
+      else if(placeStage===2||placeStage===3) contactPaw(localTargetX,localTargetY,true);
+      else if(placeStage===4) contactPaw(11,2,false);
+    }
+    if(pose==='window'&&windowStage>=1){ rect(8,-1,4,5,p.dogDark); rect(10,2,5,2,p.dogCream); }
+
     ctx.restore();
   }
-
   function drawCreature(f,now,p){
     const rs=creatureRenderState(f,now); drawMossSprite(f,now,rs,p);
     if(f.creature.carrying){ const obj=f.objects.find(o=>o.id===f.creature.carrying)||previous?.objects?.find(o=>o.id===f.creature.carrying); if(obj&&rs.carried_rendered_x!==null) drawObject({...obj,state:'placed',x:rs.carried_rendered_x,y:rs.carried_rendered_y},p); }

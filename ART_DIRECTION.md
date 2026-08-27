@@ -151,3 +151,9 @@ Canonical behavior, target ownership, and pacing remain outside renderer authori
 ## Acceptance by human visual inspection
 
 A checkpoint should be rejected if the real 800×480 output feels filtered, smooth/vector-like, over-detailed, muddy, neon, glossy, visually noisy, compositionally confused, or if Moss stops being the focal character—even if automated tests pass.
+
+## Accepted Iteration 2 acting/detail refinement
+
+Pixel-Art Overhaul — Iteration 2 established a stricter authored-acting rule: meaningful actions use a small discrete pose vocabulary rather than continuous body deformation. Locomotion uses four authored contact/weight-shift keyframes with planted-foot readability and restrained ear/tail response. Inspect, pickup, carry, place, window watching, rest, sleep, and wake each have action-specific staging; renderer subposes may interpret canonical intent but never choose targets or mutate world state.
+
+Environmental craft follows the same hierarchy. Prefer recognizable top/front/recessed planes, shelf/sill/blanket lips, furniture supports, sparse material clusters, and hard contact shadows over broad primitive rectangles or surface noise. Persistent wear/aftermath may become visually richer only when authoritative frame state supports it. Human inspection remains the authority for silhouette, charm, composition, and material coherence; temporal auditors remain rejection gates for objective motion defects only.

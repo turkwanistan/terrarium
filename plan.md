@@ -111,6 +111,18 @@ For each meaningful user-visible iteration: implement → test/evaluate → run/
 
 Evidence: `history/2026-08-27-pixel-art-overhaul-iteration1.md`, `artifacts/pixel-art-overhaul-iteration1.json`, snapshot `20260827T183924459328Z-pixel-art-overhaul-iteration1`.
 
+## Completed normal product checkpoint — Pixel-Art Overhaul, Iteration 2
+
+- replaced generic/procedural Moss deformation with explicit authored key-pose acting for the existing action vocabulary;
+- established a four-frame planted-foot walk with ear/tail response and discrete target-contact poses;
+- strengthened window, bed, rug, shelf, desk, bowls, floor/wall materials, furniture supports, occlusion, and hard grounding shadows;
+- kept persistent-history marks authoritative and made rain/ambient detail sparser and more deliberate;
+- preserved semantic seed-1701/tick-698 frame SHA `7edb823cf657ff72ba96c6f6cf38fe45a547760b8bf4c5e0eb534372c6c4fa6c`;
+- passed 17-scenario/187-frame deterministic browser evaluation, 9/9 promoted grid-aware temporal audit, exact replay, behavior regression, RAF, and human 800×480 inspection;
+- no capability forge or Gen18 work was needed.
+
+Evidence: `history/2026-08-27-pixel-art-overhaul-iteration2.md`, `artifacts/pixel-art-overhaul-iteration2.json`, snapshot `20260827T192116263284Z-pixel-art-overhaul-iteration2`.
+
 ## Next product iteration
 
-Pixel-Art Overhaul, Iteration 2 should be driven by direct human UAT of the accepted first pass. Prefer craft over feature count: refine Moss silhouette/ears/legs/tail and key poses; improve room object silhouettes and material clusters; tune composition/negative space; strengthen furniture depth and foreground overlaps; refine environmental palettes and rain readability; and make each existing interaction legible at a glance. Preserve the exact 400×240 → 800×480 pipeline and the grid-aware temporal rejection gate.
+Choose the next normal Terrarium target from direct UAT. If the remaining objection is visual craft, continue art refinement within the accepted pixel contract. If Moss still enters furniture, traverses implausible surfaces, or chooses inappropriate rest/sleep locations, make that a separate **spatial navigation and habitat-affordance** iteration with explicit semantic evaluation rather than disguising behavior changes as renderer polish.

@@ -135,6 +135,21 @@
         "steps": 698
       },
       "tick": 698
+    },
+    {
+      "captured_at": "2026-08-27T19:21:16.264000Z",
+      "frame_path": "/snapshots/dev/20260827T192116263284Z-pixel-art-overhaul-iteration2/frame.json",
+      "meta_path": "/snapshots/dev/20260827T192116263284Z-pixel-art-overhaul-iteration2/meta.json",
+      "note": "Pixel-Art Overhaul \u2014 Iteration 2: authored Moss sprite acting, discrete interaction choreography, illustrated room depth/material detail, persistent-history polish, and restrained weather/lighting detail with semantic authority unchanged.",
+      "preview_path": "/snapshots/dev/20260827T192116263284Z-pixel-art-overhaul-iteration2/preview.svg",
+      "renderer_sha256": "7b03f5554d121fa8dec5481e8078547baac3f28589968a4da9570b3a0925e0e6",
+      "snapshot_id": "20260827T192116263284Z-pixel-art-overhaul-iteration2",
+      "source": {
+        "mode": "deterministic",
+        "seed": 1701,
+        "steps": 698
+      },
+      "tick": 698
     }
   ]
 }

@@ -1,0 +1,52 @@
+{
+  "schema": "terrarium.pixel-art-overhaul-iteration2.acceptance.v1",
+  "checkpoint": "Pixel-Art Overhaul — Iteration 2: Sprite Acting and Environmental Detail",
+  "accepted": true,
+  "semantic_change": false,
+  "snapshot": {
+    "id": "20260827T192116263284Z-pixel-art-overhaul-iteration2",
+    "seed": 1701,
+    "tick": 698,
+    "frame_sha256": "7edb823cf657ff72ba96c6f6cf38fe45a547760b8bf4c5e0eb534372c6c4fa6c",
+    "renderer_js_sha256": "7b03f5554d121fa8dec5481e8078547baac3f28589968a4da9570b3a0925e0e6",
+    "renderer_css_sha256": "3a24319be5a3e0c963b8e721b637f35aedfdc24b8bef8e779ae934dd09fd62d1",
+    "art_surface": {"width": 400, "height": 240, "integer_scale": 2, "smoothing": false}
+  },
+  "product": {
+    "moss": ["authored four-keyframe walk", "inspect acting", "pickup anticipation/contact/recovery", "carry posture", "place contact/release/recovery", "window gaze/settle", "rest", "sleep curl/settle", "wake unfold"],
+    "environment": ["deeper window/curtain/sill construction", "structured bed and blanket", "woven rug", "recessed shelf and contents", "constructed desk/activity corner", "stepped bowls", "sparse plaster/floor material clusters", "hard-edged grounding and overlaps"],
+    "history_authority_preserved": true,
+    "world_authority_preserved": true
+  },
+  "regression": {
+    "pytest": {"passed": true, "passed_count": 22, "failed_count": 0},
+    "python_3_10_grammar_guard": true,
+    "javascript_syntax": true,
+    "technical_evaluator": true,
+    "exact_replay": {"passed": true, "canonical_state_hash": "2009ab06dc65bcf72379766a8a5345b0ee70bb6b2f7f9a8674ec08ad35036a5c", "replayed_state_hash": "2009ab06dc65bcf72379766a8a5345b0ee70bb6b2f7f9a8674ec08ad35036a5c"},
+    "behavior": {"passed": true, "seed": 1701, "steps": 500, "decision_events": 186, "continuation_events": 314, "moved_objects": 6}
+  },
+  "browser": {
+    "scenario_count": 17,
+    "sample_count": 187,
+    "exact_2x_samples": 187,
+    "smoothing_off_samples": 187,
+    "scale_error_blocks": 0,
+    "observed_walk_keyframes": [0, 1, 2, 3],
+    "deterministic_repeat_sha256": "95a2f2c0f7bb551023ff0852302e316cb5d10403ea7b97f1489e9b0395348ddf",
+    "continuity_jump_px": 0,
+    "raf_ms": {"min": 16.5, "p50": 16.7, "p95": 16.8, "max": 16.8, "over_34ms": 0, "over_50ms": 0},
+    "human_visual_inspection": "accepted"
+  },
+  "grid_temporal_auditor": {
+    "capability": "grid-quantized-temporal-render-auditor-r1",
+    "content_hash": "57fe2065ca3cc984241bee2da545db3bb318fd8a07ae90402a1dd6bc9993e697",
+    "evaluator_hash": "3115517877e016d4b4867da15b3d5ef81045991d3bf890765c53dfdaa9a6782f",
+    "passed": 9,
+    "total": 9,
+    "grid_contract_mismatches": 0,
+    "scenarios": ["arrive_settle", "carried_walk", "left_walk", "object_pickup", "object_placement", "real_raf", "right_walk", "sleep_transition", "window_transition"]
+  },
+  "source_policy": {"gradients": false, "image_smoothing": false, "math_random": false, "ellipse": false, "round_rect": false, "tracked_runtime_database": false},
+  "sbc": {"new_capability_forged": false, "platform_changed": false, "gen18_warranted": false}
+}
