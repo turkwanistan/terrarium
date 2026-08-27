@@ -43,6 +43,7 @@ def compact(payload: dict[str, Any], *, block_x: int = 2, block_y: int = 2) -> d
         "interpolation_progress", "interpolation_ease", "semantic_distance", "moving",
         "facing", "pose", "activity", "carrying", "carried_rendered_x", "carried_rendered_y",
         "carried_relative_x", "carried_relative_y", "ambient_classes",
+        "causal_activity", "object_placement",
     }
     samples = []
     for sample in payload["samples"]:

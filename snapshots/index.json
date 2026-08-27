@@ -75,6 +75,21 @@
         "steps": 240
       },
       "tick": 240
+    },
+    {
+      "captured_at": "2026-08-27T14:21:12.546431Z",
+      "frame_path": "/snapshots/dev/20260827T142112545745Z-present-world-causality/frame.json",
+      "meta_path": "/snapshots/dev/20260827T142112545745Z-present-world-causality/meta.json",
+      "note": "Present activity now visibly engages accumulated habitat history: corrected window contact, responsive sleeping/activity surfaces, and settled object placement.",
+      "preview_path": "/snapshots/dev/20260827T142112545745Z-present-world-causality/preview.svg",
+      "renderer_sha256": "acf6dc6c5a08aed52f22810b951a3b797868d431546ee8cf632d41ba73c9472a",
+      "snapshot_id": "20260827T142112545745Z-present-world-causality",
+      "source": {
+        "mode": "deterministic",
+        "seed": 1701,
+        "steps": 97
+      },
+      "tick": 97
     }
   ]
 }

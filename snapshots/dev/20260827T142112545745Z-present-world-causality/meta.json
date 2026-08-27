@@ -1,0 +1,34 @@
+{
+  "captured_at": "2026-08-27T14:21:12.546431Z",
+  "frame": {
+    "logical_height": 480,
+    "logical_width": 800,
+    "path": "dev/20260827T142112545745Z-present-world-causality/frame.json",
+    "sha256": "90a1cbd808506362a9d43a21ba3a97cd09036bcfe6a5c8220e47582c5404849c",
+    "tick": 97
+  },
+  "git": {
+    "branch": "main",
+    "dirty": true,
+    "head": "899ece9733ab717b9fd854a1b07d7db178ba9dd0"
+  },
+  "note": "Present activity now visibly engages accumulated habitat history: corrected window contact, responsive sleeping/activity surfaces, and settled object placement.",
+  "preview": {
+    "path": "dev/20260827T142112545745Z-present-world-causality/preview.svg",
+    "sha256": "4c22fde3a4dc570198ad046b672b60cbec697ea85857d80987fb862700179d84"
+  },
+  "schema": "terrarium.dev-snapshot.v1",
+  "snapshot_id": "20260827T142112545745Z-present-world-causality",
+  "source": {
+    "mode": "deterministic",
+    "seed": 1701,
+    "steps": 97
+  },
+  "source_hashes": {
+    "engine": "c56a8761bcf0c25b319ab1d1a6df714fb44f9d692ae06c2c91b6d75edb597a96",
+    "frame_contract": "fe4401664e4b09b4ff8171b1bd73c9cbd0b3fff4091672ba732c69b01c27a956",
+    "renderer_css": "706070e63996d0ce2a9ccf19f9ed6dc29b91a8134195f3aee992b5e4cfe28268",
+    "renderer_js": "acf6dc6c5a08aed52f22810b951a3b797868d431546ee8cf632d41ba73c9472a"
+  },
+  "view_url": "/?snapshot=/snapshots/dev/20260827T142112545745Z-present-world-causality/frame.json"
+}

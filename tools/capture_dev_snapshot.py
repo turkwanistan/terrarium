@@ -168,12 +168,28 @@ def preview_svg(frame: dict) -> str:
         color = object_colors.get(obj["kind"], "#d8c3a8")
         parts.append(f'<circle cx="{obj["x"]}" cy="{obj["y"]}" r="8" fill="{color}" stroke="#302823" stroke-width="2"/>')
     c = frame["creature"]
+    # Snapshot thumbnails mirror the current semantic-contact cues at settled
+    # strength so the Git-friendly checkpoint remains representative of the
+    # real Canvas view without inventing separate world state.
+    if c["zone"] == "window" and c["activity"] == "look_outside":
+        contact_x = max(88, min(242, int(c["x"])))
+        parts.append(f'<ellipse cx="{contact_x}" cy="198" rx="25" ry="8" fill="#e8e4d3" opacity=".075"/>')
+        parts.append(f'<path d="M {contact_x-13} 216 Q {contact_x} 213 {contact_x+13} 216" fill="none" stroke="#e0d7c2" stroke-width="1.2" opacity=".14"/>')
+    if c["zone"] == "sleeping_nook" and c["activity"] == "sleep":
+        press_x = max(92, min(214, int(c["x"])+12))
+        parts.append(f'<ellipse cx="{press_x}" cy="398" rx="34" ry="11" fill="#3e2f28" opacity=".17"/>')
+    if c["zone"] == "activity_corner" and c["activity"] in {"inspect", "carry", "place"}:
+        hand_x = max(610, min(712, int(c["x"])-8))
+        parts.append(f'<path d="M {hand_x-12} 350 Q {hand_x} 346 {hand_x+12} 349" fill="none" stroke="#e1cda4" stroke-width="1.2" opacity=".18"/>')
     parts += [
         f'<ellipse cx="{c["x"]}" cy="{c["y"]+19}" rx="24" ry="7" fill="#1e1614" opacity=".24"/>',
         f'<ellipse cx="{c["x"]-2}" cy="{c["y"]+2}" rx="24" ry="20" fill="#60705a"/>',
         f'<ellipse cx="{c["x"]+9}" cy="{c["y"]-16}" rx="20" ry="18" fill="#718267"/>',
         f'<circle cx="{c["x"]+6}" cy="{c["y"]-20}" r="2.6" fill="#252923"/><circle cx="{c["x"]+23}" cy="{c["y"]-21}" r="2.6" fill="#252923"/>',
     ]
+    if c["zone"] == "sleeping_nook" and c["activity"] == "sleep":
+        x, y = int(c["x"]), int(c["y"])
+        parts.append(f'<path d="M {x-31} {y+9} Q {x-3} {y+18} {x+35} {y+12} L {x+35} {y+24} Q {x} {y+29} {x-31} {y+21} Z" fill="#b49974" opacity=".72"/>')
     if frame["weather"] == "rain":
         for i in range(14):
             x = 72 + (i * 14) % 188; y = 68 + (i * 23) % 125

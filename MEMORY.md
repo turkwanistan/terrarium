@@ -63,3 +63,13 @@ For checkpoint `2026-08-27-temporal-rendering-intelligence`, Terrarium exposed a
 The capability passed 6/6 independent Forge evaluation cases and 6/6 genuine Terrarium pre-promotion tasks (left/right walk, carried movement, idle control, rain control, and real RAF pacing). Gen14 Evaluator Mutation Nursery killed 10/10 dangerous mutants with zero survivors and accepted state unchanged. The capability uses only the Python standard library; no permanent MCP growth or SBC substrate change was required.
 
 Objective temporal correctness is now authoritative through the promoted capability, but subjective warmth/charm/artistic quality remains outside its scope. Do not reinterpret pixel/trajectory metrics as an aesthetic oracle. Repository/source/live evidence remains higher authority than procedural memory, and existing candidate procedural memories remain non-authoritative unless their existing activation gates pass.
+
+## Post-Gen17 present-world causality reuse
+
+For checkpoint `2026-08-27-present-world-causality`, the promoted `temporal-render-auditor-r1` was reused against ten current deterministic Canvas scenarios plus real RAF pacing. All current scenarios and RAF passed; sampled movement retained zero reversals/facing mismatches, carried attachment span 0, and endpoint speed ratio `0.034956`. The promoted auditor remains an objective temporal-correctness tool only; it is not an artistic-quality oracle.
+
+The checkpoint separately retained deterministic semantic-contact telemetry for the new present↔history interactions: sleeping-nook, window, and activity-corner engagement each rose monotonically from 0 to 1; representative red-thread placement settled from `(118,372)` to `(181,400)` with monotonic progress and zero final target error. These checks remain repository evidence rather than new permanent SBC capabilities.
+
+The promoted `simulation-behavior-auditor-r1` was independently reused on a checksummed deterministic 80-event slice and returned sequence integrity, 10 action classes, entropy `3.095341`, and 21 configured object interactions. The native 500-step behavior evaluator remained unchanged at entropy `3.151553` with the inherited action/object distribution.
+
+No new reusable capability gap was exposed, no new capability was forged, no activation gate was weakened, and no Gen18 substrate change is warranted. Existing candidate procedural memories remain non-authoritative.

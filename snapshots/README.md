@@ -2,6 +2,14 @@
 
 Git-friendly visual milestones. The SVG is a lightweight capture-time thumbnail; run Terrarium and open `/snapshots/` for the same stored frame through the real Canvas renderer.
 
+## 20260827T142112545745Z-present-world-causality
+
+Present activity now visibly engages accumulated habitat history: corrected window contact, responsive sleeping/activity surfaces, and settled object placement.
+
+![20260827T142112545745Z-present-world-causality](dev/20260827T142112545745Z-present-world-causality/preview.svg)
+
+Deterministic tick `97` · renderer `acf6dc6c5a08`
+
 ## 20260827T125248568567Z-temporal-rendering-intelligence
 
 Deterministic renderer clock, temporal Canvas capture, objective temporal auditing, real RAF probe, and smoother endpoint settling; no simulation/frame-contract/replay changes.

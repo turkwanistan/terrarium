@@ -1,0 +1,41 @@
+{
+  "checks": {
+    "action_diversity": true,
+    "multiple_objects_changed": true,
+    "no_impossible_carry_state": true,
+    "non_sleep_repeat_run_bounded": true,
+    "object_interaction_present": true,
+    "visible_environment_accumulated": true
+  },
+  "metrics": {
+    "action_counts": {
+      "carry": 28,
+      "explore": 75,
+      "idle": 43,
+      "inspect": 58,
+      "look_outside": 20,
+      "place": 28,
+      "rest": 75,
+      "sleep": 73,
+      "wake": 20,
+      "walk": 80
+    },
+    "action_diversity": 10,
+    "action_entropy_bits": 3.151553,
+    "events": 500,
+    "max_repeat_run": {
+      "action": "sleep",
+      "length": 12
+    },
+    "moved_objects": 6,
+    "object_inspections": 58,
+    "object_pickups": 28,
+    "object_placements": 28,
+    "persistent_marks": 10,
+    "shelf_count": 2
+  },
+  "passed": true,
+  "schema": "terrarium.behavior-evaluation.v1",
+  "seed": 1701,
+  "steps": 500
+}

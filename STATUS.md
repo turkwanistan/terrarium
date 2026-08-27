@@ -1,83 +1,67 @@
-# Terrarium Status
-
-Checkpoint: **POST-GEN17 PRODUCT CHECKPOINT — TEMPORAL RENDERING INTELLIGENCE**.
+# Terrarium status
 
 This is normal Terrarium development after the accepted Generation 17 pilot. It is **not Generation 18**.
 
-## Current product state
+## Current checkpoint
 
-Terrarium can now objectively prove rendered temporal correctness in addition to deterministic world state, exact replay, behavior, and static visual evidence. The production Canvas renderer still runs on ordinary `requestAnimationFrame`; development temporal mode can drive the same 800×480 drawing path at exact supplied timestamps and record machine-readable motion plus raster evidence.
+Latest product checkpoint: **Present-world causality** (`history/2026-08-27-present-world-causality.md`).
 
-Meaningful snapshot: `20260827T125248568567Z-temporal-rendering-intelligence` (seed 1701, tick 240). Evidence: `artifacts/temporal-rendering-intelligence.json` and `history/2026-08-27-temporal-rendering-intelligence.md`.
+Meaningful snapshot: `20260827T142112545745Z-present-world-causality` — deterministic seed **1701**, tick **97**; frame SHA256 `90a1cbd808506362a9d43a21ba3a97cd09036bcfe6a5c8220e47582c5404849c`; renderer SHA256 `acf6dc6c5a08aed52f22810b951a3b797868d431546ee8cf632d41ba73c9472a`.
 
-Inherited Gen17 guarantees remain intact: host-owned canonical creature/world state; deterministic simulation; append-only/hash-chained history; immutable snapshots + exact replay; disposable renderer; fixed hardware-neutral 800×480 `TerrariumFrame`; persistent objects/habitat wear/aftermath; canonical living state outside Git.
+Primary evidence: `artifacts/present-world-causality.json`, `artifacts/present-world-causality-technical.json`, `artifacts/present-world-causality-behavior.json`, compact Canvas captures under `artifacts/causal-temporal-compact/`, and deterministic fixtures in `artifacts/temporal-render-fixtures.json`.
 
-## Temporal rendering capability
+Inherited Gen17 guarantees remain intact: host-owned canonical world state; deterministic simulation; append-only/hash-chained history; immutable snapshots + exact replay; disposable renderer; fixed hardware-neutral 800×480 `TerrariumFrame`; persistent objects/habitat wear/aftermath; canonical living state outside Git.
 
-The renderer now exposes reusable render-state calculation separately from RAF scheduling. Development-only fixture mode can render a real semantic source→target transition at exact timestamps and records:
+## Product improvement
 
-- requested/render timestamp and source/target semantic tick;
-- semantic/source/rendered Moss position and interpolation progress/ease;
-- facing, pose/activity, carrying state, and carried-object rendered attachment;
-- expected ambient-motion classes;
-- actual 800×480 Canvas pixel identity plus regional luminance grids.
+Present activity now visibly engages accumulated habitat history instead of floating independently of it:
 
-Repeated deterministic `left_walk` capture is byte-identical: SHA256 `f204f15e6ba50e1126642aca3761795a64954f799d7141c5ff0a1b126d15b410` on both runs.
+- canonical window contact moved from `(168,132)` to `(168,277)`, aligning Moss with the sill-side authored contact region rather than inside the glass;
+- sleeping in the nook deterministically engages/compresses existing bedding and gains a foreground contact layer;
+- window watching activates the existing pane/sill contact area;
+- inspect/carry/place in the activity corner subtly engages the existing work surface/papers;
+- carried-object placement visually settles over 900 ms from Moss to the authoritative authored target instead of snapping.
 
-Separate real RAF evidence: 110 frames / 1816.6 ms; p50 16.7 ms; p95 16.7 ms; max 16.8 ms; zero gaps >34 ms or >50 ms.
+These are renderer/contact improvements, not a second state model. The simulation/event ledger remains authoritative.
 
-## Bounded renderer improvement
+## Objective temporal evidence
 
-Measured temporal evidence justified one presentation-only change: Moss translation now uses quintic smootherstep rather than cubic smoothstep. Full deterministic left-walk endpoint sampled speed fell from 13.2308% of peak to 2.3047% of peak, giving gentler departure/arrival settling. The simulation clock, semantic frame, behavior RNG, world authority, and replay did not change. Legacy easing is development-comparison only.
-
-## Objective reusable auditor
-
-Promoted `temporal-render-auditor-r1`:
+Promoted `temporal-render-auditor-r1` remains authoritative for temporal correctness:
 
 - content hash `5481ecd6e2e46d9b3a502fbabff5a24f27ffed9f925ab0868ed30a3ba13575b1`
 - evaluator hash `86b714f3871132ad3786f94fc81570dd569cb95ee09ced1d064737b5652a3b0c`
-- Forge evaluation: **6/6 PASS**
-- genuine Terrarium pre-promotion tasks: **6/6 PASS**, reuse count 5
-- dependencies: **none beyond Python standard library**
 
-Independent outcome fixtures: **10/10 correct**, covering smooth motion, teleport, frozen motion, whole-scene jitter, facing mismatch, RAF stall, ambient rain/idle motion, attached/detached carried objects, and legacy endpoint settling.
+Current genuine Canvas evidence: **10/10 deterministic scenarios PASS plus real RAF PASS**. Sampled movement has zero reversals/facing mismatches, carried attachment span 0, endpoint speed ratio `0.034956`. RAF: 109 intervals, max `16.8 ms`, zero >50 ms stalls.
 
-Gen14 Evaluator Mutation Nursery: **10/10 dangerous mutants KILLED**, kill rate **1.0**, dangerous survivors **0**, invalid runs **0**, accepted state unchanged. Detection-power semantic digest `e3742464b3e7a3bd6bd488dd78f4f5c2bc4816ec41ff1e597b8787750f152217`.
+Repeated raw deterministic `left_walk` capture is byte-identical at SHA256 `518b7909af6c5c20e2573ee12f30923ca15faff4a1153954098137019c0d3a8a`.
 
-Genuine renderer reuse: current left walk PASS; right walk PASS; carried walk PASS; idle control PASS; rain control PASS; real RAF PASS. Legacy left walk correctly FAILS `endpoint_settling`.
+The promoted auditor does **not** judge warmth/charm or directly score the new semantic-contact envelope. Separate deterministic telemetry proves sleep/window/activity-corner engagement rises monotonically `0 → 1`. Placement telemetry proves red thread `(118,372) → (181,400)` with monotonic settle progress and zero final target error.
 
 ## Regression
 
-- pytest: **17/17 PASS**
+- pytest: **18/18 PASS**
 - JavaScript syntax: **PASS**
-- Python 3.10 AST syntax compatibility: **PASS** across 22 project Python files
+- Python 3.10 syntax compatibility: **PASS**
 - technical evaluator: **PASS**
-- exact replay: **PASS**
+- exact replay: **PASS**, canonical/replayed hash `a7702ee51b4cb295cfb93b90ff295fcad38a31fc789a527609ea2f23606094c6`
 - behavior evaluator seed 1701 / 500: **PASS**
 - action entropy: **3.151553 bits**, unchanged
-- action distribution/object interaction metrics: unchanged
+- action counts/object metrics: unchanged from the inherited temporal-rendering checkpoint
 
-## Snapshot identity
-
-- snapshot `20260827T125248568567Z-temporal-rendering-intelligence`
-- deterministic seed **1701**, tick **240**
-- frame SHA256 `12624190b1759215a62d4ffa3af70aa5ac759940f32b7c8362301e0fb043334e`
-- renderer SHA256 `6d27df494be51bb7d8baa7c8683cbbd39893c1355eaf3785e194a860097e8578`
-
-The semantic frame hash is intentionally unchanged from Temporal aftermath polish because this checkpoint changes testability and renderer interpolation, not canonical world outcome.
+Promoted `simulation-behavior-auditor-r1` was independently reused on a checksummed deterministic 80-event slice: sequence integrity PASS, 10 action classes, entropy `3.095341`, 21 configured object interactions.
 
 ## SBC conclusion
 
-No reusable SBC substrate deficiency was found. Existing mediated browser capture, bounded project evidence transport, Gen16 capability packs, Capability Forge, isolated Lab execution, Gen13 nested isolation, and Gen14 mutation testing were sufficient. Permanent Optiplex_Lab MCP surface remains 10 tools. Frozen Optiplex_MCP was not modified. **No Gen18 proposal is warranted.**
+No reusable Self-Building Computer substrate deficiency was found. Existing mediated browser capture, bounded evidence transport, isolated Lab execution, `temporal-render-auditor-r1`, and `simulation-behavior-auditor-r1` were sufficient. No new capability was forged. Frozen Optiplex_MCP was not modified. **No Gen18 proposal is warranted.**
 
-The existing promoted `simulation-behavior-auditor-r1` remains authoritative for simulation behavior. Candidate procedural memories remain non-authoritative unless their existing activation gates are met.
+Candidate procedural memories remain non-authoritative unless their existing activation gates are met.
+
+## Runtime / remote
+
+Canonical living Moss state remains outside Git and outside the mediated development sandbox. The finished source was verified in a managed Optiplex_MCP development service at the exact 800×480 checkpoint view. That mediated service is not the canonical host-owned database and is not claimed as a canonical LAN deployment; the canonical user-owned runtime still requires independent host verification.
+
+`origin` is `git@github.com:turkwanistan/terrarium.git`; `main` tracks `origin/main`. Use the mediated project push path; do not embed or copy credentials.
 
 ## Highest-value next product improvement
 
-Use the new temporal proof system to make **present activity and accumulated aftermath feel causally connected**: subtle sleeping-nook, window, and activity-corner reactions while Moss is actually using those spaces, with explicit temporal checks preventing jitter/teleports/incorrect attachment. Do not claim those objective checks measure warmth or charm.
-
-## Canonical runtime / remote
-
-The canonical user-owned Moss runtime remains outside the available mediated development boundary and was not touched. The isolated development renderer was verified, but no canonical LAN URL is claimed.
-
-`origin` remains `git@github.com:turkwanistan/terrarium.git`; `main` tracks `origin/main`. Mediated push must use project-scoped credentials and must not bypass the credential boundary.
+Deepen **local action staging and object affordances**: let Moss's existing inspect/carry/place/look/sleep activities use clearer anticipation, contact, and recovery staging around the specific nearby object/surface, while preserving current state authority and using temporal checks for correctness rather than aesthetics.

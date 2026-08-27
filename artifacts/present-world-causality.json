@@ -1,0 +1,141 @@
+{
+  "causal_checks": {
+    "activity_corner_engagement": {
+      "end": 1,
+      "monotonic": true,
+      "start": 0
+    },
+    "object_placement": {
+      "end": [
+        181,
+        400
+      ],
+      "monotonic": true,
+      "object_id": "red_thread",
+      "progress": [
+        0,
+        0.011533,
+        0.134951,
+        0.603313,
+        0.964506,
+        1,
+        1,
+        1,
+        1,
+        1
+      ],
+      "start": [
+        118,
+        372
+      ],
+      "target": [
+        181,
+        400
+      ],
+      "target_error": 0.0
+    },
+    "sleep_nook_engagement": {
+      "end": 1,
+      "monotonic": true,
+      "start": 0
+    },
+    "window_engagement": {
+      "end": 1,
+      "monotonic": true,
+      "start": 0
+    }
+  },
+  "changes": {
+    "object_placement_settle_ms": 900,
+    "renderer_authority_unchanged": true,
+    "semantic_contact_envelopes": [
+      "sleeping_nook:sleep",
+      "window:look_outside",
+      "activity_corner:inspect/carry/place"
+    ],
+    "simulation_action_selection_changed": false,
+    "window_contact_anchor": {
+      "after": [
+        168,
+        277
+      ],
+      "before": [
+        168,
+        132
+      ]
+    }
+  },
+  "checkpoint": "Present-world causality",
+  "regression": {
+    "behavior_distribution_unchanged": true,
+    "behavior_entropy_bits": 3.151553,
+    "behavior_evaluator_500": "PASS",
+    "exact_replay": "PASS",
+    "javascript_syntax": "PASS",
+    "promoted_behavior_auditor_reuse": {
+      "action_diversity": 10,
+      "action_entropy_bits": 3.095341,
+      "events": 80,
+      "object_interactions": 21,
+      "sequence_ok": true
+    },
+    "pytest": "18/18 PASS",
+    "python_3_10_compat": "PASS",
+    "replay_state_hash": "a7702ee51b4cb295cfb93b90ff295fcad38a31fc789a527609ea2f23606094c6",
+    "technical_evaluator": "PASS"
+  },
+  "runtime": {
+    "canonical_lan_url_verified": false,
+    "canonical_user_owned_state_modified": false,
+    "mediated_development_service_verified": true,
+    "mediated_snapshot_view_verified": true
+  },
+  "sbc": {
+    "frozen_optiplex_mcp_modified": false,
+    "gen18_warranted": false,
+    "new_capability_forged": false,
+    "substrate_deficiency_found": false
+  },
+  "schema": "terrarium.present-world-causality.v1",
+  "snapshot": {
+    "frame_sha256": "90a1cbd808506362a9d43a21ba3a97cd09036bcfe6a5c8220e47582c5404849c",
+    "renderer_sha256": "acf6dc6c5a08aed52f22810b951a3b797868d431546ee8cf632d41ba73c9472a",
+    "seed": 1701,
+    "snapshot_id": "20260827T142112545745Z-present-world-causality",
+    "tick": 97
+  },
+  "temporal": {
+    "audited_current_scenarios": 10,
+    "compact_evidence_sha256": {
+      "activity_corner_transition-current.json": "f9cc1d89f8a7b0f5d5441059d6d7b5e78b6ddb87e42265f2aca0b4409b45f51d",
+      "arrive_settle-current.json": "ac647a78c7a790df1ef534eb438b01ef9ad5b8c25ead98d8006ae51d7bc173e2",
+      "carried_walk-current.json": "af17f6d4aa4ed3754df33e9656e667f20ab9c4408ca149836f052c5420639570",
+      "idle_control-current.json": "f14e3e747716c09fe5a4bec8acca9973fa05922f7e0c0c05906042a57a15f8a0",
+      "left_walk-current.json": "8b4839bc2f6ba1f3261c856da75e7cd78dfc356682ef7ea363eee412ed7cd8c6",
+      "left_walk-terrarium-raf-probe-v1.json": "7f2d1ca6d835c8e2ae593dc25456c95bbfd64734a04be4c24099dbc5f5e48102",
+      "object_placement-current.json": "eb2a9eb0fc5176feeabbf2171637655c85b335d4447c4f93cdcbdea505a20733",
+      "rain_control-current.json": "5143f47ecc9d28ddd9eead9bf60bee3d333de2872bac0ebec1fe10ff8af2ec9b",
+      "right_walk-current.json": "1d12fa79e52eb4012de5cb44995cb804c009f266bea634a0ccfe43a6315f3184",
+      "sleep_transition-current.json": "80ac72d918a7b40667f1e1fd119393caeba768eb7b257ea8f2f6796085dd023d",
+      "window_transition-current.json": "2b4d371f6c27b53071845015d14a4206517572edd9489fffb02d4003e1121800"
+    },
+    "current_scenarios_passed": 10,
+    "promoted_capability": {
+      "content_hash": "5481ecd6e2e46d9b3a502fbabff5a24f27ffed9f925ab0868ed30a3ba13575b1",
+      "evaluator_hash": "86b714f3871132ad3786f94fc81570dd569cb95ee09ced1d064737b5652a3b0c",
+      "name": "temporal-render-auditor-r1"
+    },
+    "raf_interval_count": 109,
+    "raf_max_interval_ms": 16.8,
+    "raf_probe_passed": true,
+    "raf_stall_count_gt50ms": 0,
+    "repeat_raw_left_walk_sha256": "518b7909af6c5c20e2573ee12f30923ca15faff4a1153954098137019c0d3a8a",
+    "sampled_motion": {
+      "carried_attachment_span": 0,
+      "endpoint_speed_ratio": 0.034956,
+      "facing_mismatch_count": 0,
+      "reversal_count": 0
+    },
+    "scope_note": "promoted auditor proves temporal correctness checks; new causal envelopes and placement trajectory are checked separately from telemetry, not treated as an artistic-quality oracle"
+  }
+}

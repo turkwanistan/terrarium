@@ -28,6 +28,8 @@ def _walk_scenarios(seed: int = 1701) -> dict[str, dict[str, Any]]:
         _, _, details, state = sim.step(state)
         old = before["creature"]
         new = state["creature"]
+        if new["activity"] == "walk" and (new["x"] != old["x"] or new["y"] != old["y"]) and "arrive_settle" not in found:
+            found["arrive_settle"] = _scenario("arrive_settle", before, state, details, "full semantic movement through endpoint settling")
         if new["activity"] == "walk" and new["x"] < old["x"] and "left_walk" not in found:
             found["left_walk"] = _scenario("left_walk", before, state, details, "semantic leftward walk")
         if new["activity"] == "walk" and new["x"] > old["x"] and "right_walk" not in found:
@@ -36,9 +38,18 @@ def _walk_scenarios(seed: int = 1701) -> dict[str, dict[str, Any]]:
             found["carried_walk"] = _scenario("carried_walk", before, state, details, "semantic movement while carrying")
         if new["x"] == old["x"] and new["y"] == old["y"] and new["activity"] in {"idle", "rest", "inspect"} and "idle_control" not in found:
             found["idle_control"] = _scenario("idle_control", before, state, details, "no semantic translation; ambient motion allowed")
-        if {"left_walk", "right_walk", "carried_walk", "idle_control"}.issubset(found):
+        if new["activity"] == "sleep" and new["zone"] == "sleeping_nook" and "sleep_transition" not in found:
+            found["sleep_transition"] = _scenario("sleep_transition", before, state, details, "sleeping-nook contact and breathing transition")
+        if new["activity"] == "look_outside" and new["zone"] == "window" and "window_transition" not in found:
+            found["window_transition"] = _scenario("window_transition", before, state, details, "window-use contact transition")
+        if new["zone"] == "activity_corner" and new["activity"] in {"inspect", "carry", "place"} and "activity_corner_transition" not in found:
+            found["activity_corner_transition"] = _scenario("activity_corner_transition", before, state, details, "activity-corner surface interaction transition")
+        if new["activity"] == "place" and "object_placement" not in found:
+            found["object_placement"] = _scenario("object_placement", before, state, details, "carried object settles into its canonical authored placement")
+        required={"arrive_settle", "left_walk", "right_walk", "carried_walk", "idle_control", "sleep_transition", "window_transition", "activity_corner_transition", "object_placement"}
+        if required.issubset(found):
             break
-    missing={"left_walk", "right_walk", "carried_walk", "idle_control"}-set(found)
+    missing={"arrive_settle", "left_walk", "right_walk", "carried_walk", "idle_control", "sleep_transition", "window_transition", "activity_corner_transition", "object_placement"}-set(found)
     if missing:
         raise RuntimeError(f"missing deterministic scenarios: {sorted(missing)}")
     return found

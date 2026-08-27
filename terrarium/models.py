@@ -14,7 +14,10 @@ EVENT_VERSION = 1
 
 ZONES: dict[str, dict[str, int]] = {
     "sleeping_nook": {"x": 118, "y": 372},
-    "window": {"x": 168, "y": 132},
+    # Moss stands below the pane among the sill-side objects. The previous
+    # y=132 anchor put the creature inside the glass instead of at the visible
+    # window contact point shared by object slots and habitat wear.
+    "window": {"x": 168, "y": 277},
     "open_space": {"x": 405, "y": 294},
     "collection_shelf": {"x": 682, "y": 150},
     "activity_corner": {"x": 655, "y": 372},

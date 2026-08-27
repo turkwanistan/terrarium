@@ -40,6 +40,21 @@
     const source=Number(previous.habitat?.activity_aftermath?.[key] || 0);
     return mix(source,target,smooth01((now-fetchedAt)/1800));
   }
+  function activityEngagement(f, now, zone, activities) {
+    const current = f.creature.zone === zone && activities.includes(f.creature.activity);
+    if (!previous || snapshotPath) return current ? 1 : 0;
+    const prior = previous.creature?.zone === zone && activities.includes(previous.creature?.activity);
+    if (current === prior) return current ? 1 : 0;
+    const t=smoother01((now-fetchedAt)/700);
+    return current ? t : 1-t;
+  }
+  function causalActivityState(f, now) {
+    return {
+      sleep_nook: activityEngagement(f,now,'sleeping_nook',['sleep']),
+      window: activityEngagement(f,now,'window',['look_outside']),
+      activity_corner: activityEngagement(f,now,'activity_corner',['inspect','carry','place']),
+    };
+  }
   function stableUnit(label, index) {
     let h=2166136261;
     const text=`${label}:${index}`;
@@ -97,6 +112,7 @@
 
   function drawBackground(f, now) {
     const p = palette(f.lighting);
+    const causal = causalActivityState(f, now);
     ctx.fillStyle = p.wall; ctx.fillRect(0, 0, 800, 315);
     ctx.fillStyle = p.floor; ctx.fillRect(0, 315, 800, 165);
     ctx.fillStyle = p.trim; ctx.fillRect(0, 307, 800, 12);
@@ -153,6 +169,19 @@
       }
     }
 
+    // Current window watching activates the same pane and sill where persistent
+    // traces accumulate. This response is grounded in canonical activity and
+    // position; it is not an independent decorative animation.
+    if (causal.window > 0) {
+      const contactX=Math.max(88,Math.min(242,Number(f.creature.x)));
+      const pulse=.86+.14*Math.sin(now*.0016);
+      const wet=f.weather==='rain' || f.weather==='mist';
+      ctx.fillStyle=`rgba(232,228,211,${(.075*causal.window*pulse*(wet?1.25:1)).toFixed(4)})`;
+      ctx.beginPath(); ctx.ellipse(contactX,198,20+5*causal.window,6+2*causal.window,-.08,0,Math.PI*2); ctx.fill();
+      ctx.strokeStyle=`rgba(224,215,194,${(.14*causal.window).toFixed(4)})`; ctx.lineWidth=1.2;
+      ctx.beginPath(); ctx.moveTo(contactX-13,216); ctx.quadraticCurveTo(contactX,213,contactX+13,216); ctx.stroke();
+    }
+
     // Sleeping nook compression, pillow drift and creases all grow as
     // continuous functions of actual accumulated sleep rather than popping at
     // integer renderer thresholds. A sub-pixel cloth drift keeps old wear
@@ -165,6 +194,18 @@
     if (nestStrength > 0) {
       ctx.fillStyle=`rgba(76,58,48,${(.235*nestStrength).toFixed(4)})`;
       ctx.beginPath(); ctx.ellipse(164,389,44+17*emergence(sleepBouts,0,5),15+8*nestStrength,-.08,0,Math.PI*2); ctx.fill();
+    }
+    // Existing sleep wear physically responds while Moss is asleep in the
+    // nook. The local pressure follows canonical x and breathing, while the
+    // accumulated nest strength remains history-owned.
+    if (causal.sleep_nook > 0) {
+      const breath=.5+.5*Math.sin(now*.002);
+      const pressX=Math.max(92,Math.min(214,Number(f.creature.x)+12));
+      ctx.fillStyle=`rgba(62,47,40,${(.17*causal.sleep_nook*(.82+.18*breath)).toFixed(4)})`;
+      ctx.beginPath(); ctx.ellipse(pressX,397+breath,31+5*breath,8+4*causal.sleep_nook,-.06,0,Math.PI*2); ctx.fill();
+      ctx.strokeStyle=`rgba(218,194,151,${(.12*causal.sleep_nook).toFixed(4)})`; ctx.lineWidth=1.1;
+      ctx.beginPath(); ctx.moveTo(pressX-33,390); ctx.quadraticCurveTo(pressX-18,397+2*breath,pressX-7,401); ctx.stroke();
+      ctx.beginPath(); ctx.moveTo(pressX+10,401); ctx.quadraticCurveTo(pressX+24,396+2*breath,pressX+36,391); ctx.stroke();
     }
     const pillowShift=13*emergence(sleepBouts,0,6);
     rounded(70+pillowShift,367+4*emergence(sleepBouts,0,5),72,29,9,'#d0b992');
@@ -201,7 +242,10 @@
       const x=607+i*25+(stableUnit('paper-x',i)-.5)*7;
       const y=337-(i%2)*5+(stableUnit('paper-y',i)-.5)*5;
       const drift=Math.sin(now*.00055+i*1.4)*.35*strength;
-      ctx.save();ctx.translate(x,y+drift);ctx.rotate((stableUnit('paper-r',i)-.5)*.18);
+      const side=x < Number(f.creature.x) ? -1 : 1;
+      const contactShift=causal.activity_corner*side*(.7+stableUnit('paper-contact',i)*2.2);
+      const contactLift=causal.activity_corner*(i%2 ? -1.2 : -.35);
+      ctx.save();ctx.translate(x+contactShift,y+drift+contactLift);ctx.rotate((stableUnit('paper-r',i)-.5)*.18 + side*.025*causal.activity_corner);
       ctx.fillStyle=`rgba(218,201,158,${(.82*strength).toFixed(4)})`;ctx.fillRect(-10,-5,22,11);
       ctx.strokeStyle=`rgba(108,82,58,${(.16*strength).toFixed(4)})`;ctx.lineWidth=.8;ctx.strokeRect(-10,-5,22,11);ctx.restore();
     }
@@ -210,6 +254,11 @@
       if(strength<=0) continue;
       ctx.strokeStyle=`rgba(75,54,43,${(.46*strength).toFixed(4)})`;ctx.lineWidth=1.1;
       const x=612+i*16; ctx.beginPath();ctx.moveTo(x,344);ctx.lineTo(x+8,340+(stableUnit('work-mark-y',i)-.5)*5);ctx.stroke();
+    }
+    if (causal.activity_corner > 0) {
+      const handX=Math.max(610,Math.min(712,Number(f.creature.x)-8));
+      ctx.strokeStyle=`rgba(225,205,164,${(.18*causal.activity_corner).toFixed(4)})`; ctx.lineWidth=1.2;
+      ctx.beginPath(); ctx.moveTo(handX-12,350); ctx.quadraticCurveTo(handX,346,handX+12,349); ctx.stroke();
     }
     ctx.fillStyle = '#70513e'; ctx.fillRect(748, 339, 28, 36); ctx.fillStyle = '#5f7555';
     for (let i=0;i<5;i++){ ctx.beginPath(); ctx.ellipse(762 + (i-2)*7, 331 - Math.abs(i-2)*7, 9, 17, (i-2)*.35, 0, Math.PI*2); ctx.fill(); }
@@ -237,6 +286,38 @@
     }
   }
 
+  function placedObjectRenderState(o, f, now) {
+    const source=previous?.objects?.find(item=>item.id===o.id);
+    if (!snapshotPath && source?.state === 'carried' && o.state === 'placed') {
+      const t=smoother01((now-fetchedAt)/900);
+      return {
+        x:mix(Number(previous.creature.x),Number(o.x),t),
+        y:mix(Number(previous.creature.y),Number(o.y),t),
+        progress:t,
+        transitioning:t < 1,
+      };
+    }
+    return {x:Number(o.x),y:Number(o.y),progress:1,transitioning:false};
+  }
+
+  function activePlacementState(f, now) {
+    if (!previous || snapshotPath) return null;
+    for (const o of f.objects || []) {
+      const source=previous.objects?.find(item=>item.id===o.id);
+      if (source?.state === 'carried' && o.state === 'placed') {
+        const rs=placedObjectRenderState(o,f,now);
+        return {object_id:o.id,rendered_x:Number(rs.x.toFixed(6)),rendered_y:Number(rs.y.toFixed(6)),target_x:Number(o.x),target_y:Number(o.y),progress:Number(rs.progress.toFixed(6))};
+      }
+    }
+    return null;
+  }
+
+  function drawWorldObject(o, f, now) {
+    if (o.state === 'carried') return;
+    const rs=placedObjectRenderState(o,f,now);
+    drawObject({...o,x:rs.x,y:rs.y});
+  }
+
   function drawObject(o) {
     if (o.state === 'carried') return; // carried prop is drawn with creature
     const x=o.x, y=o.y;
@@ -260,6 +341,7 @@
     const moving = semanticDistance > 2 && elapsed < 1;
     const bob = c.pose === 'sleep' ? Math.sin(now*.002)*1.2 : moving ? Math.abs(Math.sin(now*.013))*5 : Math.sin(now*.004)*1.8;
     const y = baseY - bob;
+    const causal=causalActivityState(f,now);
     return {
       requested_timestamp_ms: now,
       source_tick: previous?.tick ?? f.tick,
@@ -277,7 +359,13 @@
       carried_rendered_y: c.carrying ? Number(y.toFixed(6)) : null,
       carried_relative_x: c.carrying ? 0 : null,
       carried_relative_y: c.carrying ? 0 : null,
-      ambient_classes: [f.weather === 'rain' ? 'rain' : f.weather === 'mist' ? 'mist' : null, 'dust', c.pose === 'sleep' ? 'breathing' : moving ? 'walk-bob' : 'idle-bob'].filter(Boolean),
+      causal_activity: {
+        sleep_nook: Number(causal.sleep_nook.toFixed(6)),
+        window: Number(causal.window.toFixed(6)),
+        activity_corner: Number(causal.activity_corner.toFixed(6)),
+      },
+      object_placement: activePlacementState(f,now),
+      ambient_classes: [f.weather === 'rain' ? 'rain' : f.weather === 'mist' ? 'mist' : null, 'dust', c.pose === 'sleep' ? 'breathing' : moving ? 'walk-bob' : 'idle-bob', causal.sleep_nook>0?'bedding-contact':null, causal.window>0?'window-contact':null, causal.activity_corner>0?'work-surface-contact':null].filter(Boolean),
     };
   }
 
@@ -309,14 +397,30 @@
     return rs;
   }
 
+  function drawForegroundCausality(f, now, rs) {
+    const causal=causalActivityState(f,now);
+    // A shallow blanket lip crosses Moss's lower body only while sleeping in
+    // the nook, providing a foreground contact/depth cue without new state.
+    if (causal.sleep_nook > 0) {
+      const x=rs.rendered_x, y=rs.rendered_base_y;
+      ctx.save();
+      ctx.fillStyle=`rgba(180,153,116,${(.72*causal.sleep_nook).toFixed(4)})`;
+      ctx.beginPath(); ctx.moveTo(x-31,y+9); ctx.quadraticCurveTo(x-3,y+18,x+35,y+12); ctx.lineTo(x+35,y+24); ctx.quadraticCurveTo(x,y+29,x-31,y+21); ctx.closePath(); ctx.fill();
+      ctx.strokeStyle=`rgba(94,72,57,${(.28*causal.sleep_nook).toFixed(4)})`; ctx.lineWidth=1.2;
+      ctx.beginPath(); ctx.moveTo(x-27,y+14); ctx.quadraticCurveTo(x+1,y+20,x+31,y+15); ctx.stroke();
+      ctx.restore();
+    }
+  }
+
   function render(now, scheduleNext = true) {
     if (!frame) {
       ctx.fillStyle='#25242b';ctx.fillRect(0,0,800,480);
       if (scheduleNext) requestAnimationFrame(render); return null;
     }
     drawBackground(frame, now);
-    for (const o of frame.objects) drawObject(o);
+    for (const o of frame.objects) drawWorldObject(o,frame,now);
     const renderState = drawCreature(frame, now);
+    drawForegroundCausality(frame, now, renderState);
     if (debugVisible) {
       debug.hidden=false;
       debug.textContent = JSON.stringify({mode:snapshotPath?'snapshot':'live', connected, tick:frame.tick, lighting:frame.lighting, weather:frame.weather, creature:frame.creature, shelf_count:frame.habitat.shelf_count, marks:frame.habitat.marks, last_event:frame.last_event, poll_error:lastPollError}, null, 2);
