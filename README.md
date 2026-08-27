@@ -30,7 +30,7 @@ Snapshots are **development milestones**, not copies of the high-churn creature 
 python tools/capture_dev_snapshot.py cozy-object-storytelling-r1 --note "Objects and wear now tell a clearer story."
 ```
 
-Each checkpoint stores a small `frame.json`, metadata, renderer/source hashes, and a note under `snapshots/dev/`. The gallery renders those frames through the real browser renderer. Git history preserves the exact renderer version associated with each checkpoint. Use deterministic seed `1701` / step `240` by default so visual evolution is comparable over time.
+Each checkpoint stores a small `frame.json`, metadata, renderer/source hashes, a GitHub-friendly `preview.svg`, and a note under `snapshots/dev/`. `snapshots/README.md` becomes the browsable visual timeline, while the local gallery renders those frames through the real browser renderer. Git history preserves the exact renderer version associated with each checkpoint. Use deterministic seed `1701` / step `240` by default so visual evolution is comparable over time.
 
 ## Git history
 

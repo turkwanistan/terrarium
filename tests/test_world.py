@@ -90,6 +90,7 @@ def test_snapshot_tool_direct_entrypoint(tmp_path):
     snapshot_dir = Path(__file__).resolve().parents[1] / payload["directory"]
     assert (snapshot_dir / "frame.json").is_file()
     assert (snapshot_dir / "meta.json").is_file()
+    assert (snapshot_dir / "preview.svg").is_file()
     # Tests must not leave fake development milestones behind.
     import shutil
     shutil.rmtree(snapshot_dir)

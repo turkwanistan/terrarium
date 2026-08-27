@@ -13,6 +13,10 @@
     "head": null
   },
   "note": "Accepted Gen17 Phase 0\u20132 visual baseline before normal product iterations.",
+  "preview": {
+    "path": "dev/20260827T041252779231Z-gen17-accepted-baseline/preview.svg",
+    "sha256": "001f49078bcfd8d5700ca6e0a8e70cda430634976231fa6dfce6a0beca9ececd"
+  },
   "schema": "terrarium.dev-snapshot.v1",
   "snapshot_id": "20260827T041252779231Z-gen17-accepted-baseline",
   "source": {

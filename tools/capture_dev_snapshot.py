@@ -65,6 +65,55 @@ def live_frame(data_dir: str) -> tuple[dict, dict]:
     return frame, source
 
 
+def preview_svg(frame: dict) -> str:
+    palettes = {
+        "night": ("#27313d", "#3b342f", "#162238"),
+        "dawn": ("#75665e", "#5b493b", "#c78373"),
+        "dusk": ("#665957", "#594438", "#8e5e76"),
+        "day": ("#8b806f", "#6e5946", "#82a6a1"),
+    }
+    wall, floor, sky = palettes.get(frame["lighting"], palettes["day"])
+    object_colors = {"stone":"#557487","leaf":"#b8773f","seed":"#87633d","shell":"#d0b6a0","thread":"#9f564b","trinket":"#d8c3a8"}
+    parts = [
+        '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 480" width="800" height="480">',
+        f'<rect width="800" height="315" fill="{wall}"/><rect y="315" width="800" height="165" fill="{floor}"/>',
+        '<rect x="54" y="48" width="225" height="172" rx="5" fill="#392f31"/>',
+        f'<rect x="65" y="58" width="203" height="151" rx="2" fill="{sky}"/>',
+        '<rect x="52" y="353" width="210" height="74" rx="8" fill="#463a34"/><rect x="62" y="362" width="188" height="53" rx="8" fill="#a28c70"/>',
+        '<rect x="296" y="333" width="224" height="91" rx="30" fill="#73806a" opacity=".9"/>',
+        '<rect x="595" y="61" width="157" height="17" fill="#4c372d"/><rect x="603" y="78" width="8" height="158" fill="#4c372d"/><rect x="736" y="78" width="8" height="158" fill="#4c372d"/>',
+        '<rect x="590" y="351" width="145" height="12" fill="#4b352c"/><rect x="604" y="363" width="9" height="48" fill="#4b352c"/><rect x="712" y="363" width="9" height="48" fill="#4b352c"/>',
+    ]
+    for zone, wear in (frame.get("habitat", {}).get("path_wear") or {}).items():
+        if wear < 6: continue
+        pos = {"sleeping_nook":(118,427),"window":(168,277),"open_space":(405,429),"collection_shelf":(682,246),"activity_corner":(655,427)}.get(zone)
+        if pos: parts.append(f'<ellipse cx="{pos[0]}" cy="{pos[1]}" rx="{33+min(18,wear)}" ry="7" fill="#2a1f19" opacity=".18"/>')
+    for obj in frame["objects"]:
+        if obj["state"] == "carried": continue
+        color = object_colors.get(obj["kind"], "#d8c3a8")
+        parts.append(f'<circle cx="{obj["x"]}" cy="{obj["y"]}" r="8" fill="{color}" stroke="#302823" stroke-width="2"/>')
+    c = frame["creature"]
+    parts += [
+        f'<ellipse cx="{c["x"]}" cy="{c["y"]+19}" rx="24" ry="7" fill="#1e1614" opacity=".24"/>',
+        f'<ellipse cx="{c["x"]-2}" cy="{c["y"]+2}" rx="24" ry="20" fill="#60705a"/>',
+        f'<ellipse cx="{c["x"]+9}" cy="{c["y"]-16}" rx="20" ry="18" fill="#718267"/>',
+        f'<circle cx="{c["x"]+6}" cy="{c["y"]-20}" r="2.6" fill="#252923"/><circle cx="{c["x"]+23}" cy="{c["y"]-21}" r="2.6" fill="#252923"/>',
+    ]
+    if frame["weather"] == "rain":
+        for i in range(14):
+            x = 72 + (i * 14) % 188; y = 68 + (i * 23) % 125
+            parts.append(f'<line x1="{x}" y1="{y}" x2="{x-5}" y2="{y+11}" stroke="#bed6da" stroke-width="2" opacity=".55"/>')
+    parts.append('</svg>')
+    return ''.join(parts) + '\n'
+
+
+def rebuild_snapshot_readme(index: dict) -> None:
+    lines = ["# Terrarium development snapshots", "", "Git-friendly visual milestones. The SVG is a lightweight capture-time thumbnail; run Terrarium and open `/snapshots/` for the same stored frame through the real Canvas renderer.", ""]
+    for item in reversed(index.get("snapshots", [])):
+        lines += [f"## {item['snapshot_id']}", "", item["note"], "", f"![{item['snapshot_id']}](dev/{item['snapshot_id']}/preview.svg)", "", f"Deterministic tick `{item['tick']}` · renderer `{item['renderer_sha256'][:12]}`", ""]
+    (ROOT / "snapshots" / "README.md").write_text("\n".join(lines) + "\n", encoding="utf-8")
+
+
 def safe_slug(value: str) -> str:
     value = re.sub(r"[^a-z0-9]+", "-", value.lower()).strip("-")
     if not value:
@@ -91,6 +140,8 @@ def main() -> int:
 
     frame_path = out / "frame.json"
     frame_path.write_text(json.dumps(frame, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+    preview_path = out / "preview.svg"
+    preview_path.write_text(preview_svg(frame), encoding="utf-8")
     source_hashes = {
         "renderer_js": sha_file(ROOT / "display/web/app.js"),
         "renderer_css": sha_file(ROOT / "display/web/style.css"),
@@ -102,6 +153,7 @@ def main() -> int:
         "snapshot_id": snapshot_id,
         "captured_at": utc_now(),
         "note": args.note,
+        "preview": {"path": f"dev/{snapshot_id}/preview.svg", "sha256": sha_file(preview_path)},
         "frame": {
             "path": f"dev/{snapshot_id}/frame.json",
             "sha256": sha_json(frame),
@@ -120,6 +172,7 @@ def main() -> int:
         f"- frame: `{source['mode']}` seed `{source.get('seed')}`, step/tick `{frame['tick']}`\n"
         f"- renderer SHA256: `{source_hashes['renderer_js']}`\n"
         f"- frame SHA256: `{meta['frame']['sha256']}`\n"
+        f"- GitHub-friendly preview: `preview.svg`\n"
         f"- local view: `{meta['view_url']}`\n\n"
         "This checkpoint stores semantic frame data, not canonical runtime state. The exact renderer source is pinned by hash and Git history.\n",
         encoding="utf-8",
@@ -138,8 +191,10 @@ def main() -> int:
         "tick": frame["tick"],
         "source": source,
         "renderer_sha256": source_hashes["renderer_js"],
+        "preview_path": f"/snapshots/dev/{snapshot_id}/preview.svg",
     })
     INDEX.write_text(json.dumps(index, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+    rebuild_snapshot_readme(index)
     print(json.dumps({"snapshot_id": snapshot_id, "directory": str(out.relative_to(ROOT)), "frame_sha256": meta["frame"]["sha256"]}, indent=2))
     return 0
 
