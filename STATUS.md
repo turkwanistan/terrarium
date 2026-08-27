@@ -35,6 +35,7 @@ No commit or push has been performed.
 - milestone snapshots live under `snapshots/dev/`; default comparison scene is deterministic seed 1701 / step 240
 - local gallery: `/snapshots/`; exact historical renderer identity is pinned by Git + renderer SHA
 - Windows local launch: `scripts/run_windows.ps1`
+- trusted-LAN launch from OptiPlex: `scripts/run_lan.sh` (read-only API/renderer, no auth; do not internet-expose)
 - runtime `data/live/` is intentionally not version controlled
 - target remote: `git@github.com:turkwanistan/terrarium.git`
 - procedural memory policy: `MEMORY.md`; Gen17 behavior-auditor memory is intentionally CANDIDATE pending held-out/reuse evidence

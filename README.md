@@ -22,6 +22,8 @@ On Windows, from the repository root:
 
 This starts the persistent local world, opens `http://127.0.0.1:8080/`, and keeps canonical state under `data/live/`. The development snapshot gallery is at `http://127.0.0.1:8080/snapshots/`. On Linux/macOS use `./scripts/run_local.sh`.
 
+To keep the canonical world on the OptiPlex but view it from your PC on the same trusted LAN, run `./scripts/run_lan.sh` on the OptiPlex. It prints the LAN URL to open from your PC. This is intentionally unauthenticated and should not be exposed to the public internet.
+
 ## Progressive development snapshots
 
 Snapshots are **development milestones**, not copies of the high-churn creature database. Capture a fixed deterministic comparison scene after a meaningful visible/product change:

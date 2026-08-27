@@ -98,3 +98,7 @@ def test_snapshot_tool_direct_entrypoint(tmp_path):
     data = json.loads(index.read_text())
     data["snapshots"] = [x for x in data["snapshots"] if x["snapshot_id"] != payload["snapshot_id"]]
     index.write_text(json.dumps(data, indent=2, sort_keys=True) + "\n")
+    import importlib.util
+    spec = importlib.util.spec_from_file_location("snapshot_tool", Path(__file__).resolve().parents[1] / "tools/capture_dev_snapshot.py")
+    module = importlib.util.module_from_spec(spec); spec.loader.exec_module(module)
+    module.rebuild_snapshot_readme(data)
