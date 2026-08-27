@@ -6,11 +6,15 @@ Gen17 implements the first product-building checkpoint from `terrarium.md`: Phas
 
 ## Run
 
+For normal host use, prefer the launch scripts rather than invoking the server with a repo-local database:
+
 ```bash
-python -m terrarium.api.server --host 0.0.0.0 --port 8080 --data-dir data/live --seed 1701 --tick-seconds 1
+./scripts/run_local.sh
+# or, for another device on the trusted LAN:
+./scripts/run_lan.sh
 ```
 
-Open `http://localhost:8080/`. Closing the browser does not stop the world process. Restarting the process against the same data directory resumes canonical state.
+Linux launchers store the living canonical world under `${XDG_STATE_HOME:-$HOME/.local/state}/terrarium/live` by default. On first launch they safely migrate any legacy repo-local `data/live` database using SQLite backup and verify that canonical state matches before starting. Closing the browser does not stop the world process. Restarting the process against the same runtime directory resumes canonical state.
 
 ## See it yourself
 
@@ -20,7 +24,7 @@ On Windows, from the repository root:
 .\scripts\run_windows.ps1
 ```
 
-This starts the persistent local world, opens `http://127.0.0.1:8080/`, and keeps canonical state under `data/live/`. The development snapshot gallery is at `http://127.0.0.1:8080/snapshots/`. On Linux/macOS use `./scripts/run_local.sh`.
+This starts the persistent local world and opens `http://127.0.0.1:8080/`. The development snapshot gallery is at `http://127.0.0.1:8080/snapshots/`. On Linux/macOS use `./scripts/run_local.sh`.
 
 To keep the canonical world on the OptiPlex but view it from your PC on the same trusted LAN, run `./scripts/run_lan.sh` on the OptiPlex. It prints the LAN URL to open from your PC. This is intentionally unauthenticated and should not be exposed to the public internet.
 
@@ -36,7 +40,7 @@ Each checkpoint stores a small `frame.json`, metadata, renderer/source hashes, a
 
 ## Git history
 
-The intended remote is `git@github.com:turkwanistan/terrarium.git`. Make one commit/push per meaningful, tested checkpoint rather than per tiny edit. A good checkpoint contains code + tests/evaluation + snapshot + concise status/history update. Runtime `data/live/` is deliberately excluded from Git.
+The intended remote is `git@github.com:turkwanistan/terrarium.git`. Make one commit/push per meaningful, tested checkpoint rather than per tiny edit. A good checkpoint contains code + tests/evaluation + snapshot + concise status/history update. Runtime world state is deliberately excluded from Git whether it lives in the XDG state directory or a custom `TERRARIUM_DATA_DIR`.
 
 See `MEMORY.md` for the evidence-backed memory policy.
 
@@ -65,6 +69,6 @@ The technical evaluator proves fixed 800×480 framing, append-only/hash-chained 
 
 ## Authority
 
-`terrarium.md` is product/design intent. Source and tests define the implemented contracts. Generated artifacts are evidence, not authority over source. Live state under `data/live/` is runtime state and is intentionally not source control.
+`terrarium.md` is product/design intent. Source and tests define the implemented contracts. Generated artifacts are evidence, not authority over source. Live runtime state is intentionally outside source control and, on Linux, outside the repository by default.
 
 The eventual hardware fork must consume the same TerrariumFrame/state/history rather than creating a second creature.

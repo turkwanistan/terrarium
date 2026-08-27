@@ -33,3 +33,7 @@ The candidate behavior-auditor memory was queried with its exact task kind, appl
 ## Runtime compatibility regression
 
 The canonical always-on OptiPlex Terrarium runtime is currently Python 3.10. Project source must remain Python-3.10-syntax compatible until that host runtime is deliberately upgraded. `tests/test_python_compat.py` parses every project Python source using the Python 3.10 grammar so a newer development sandbox cannot silently introduce newer-only syntax.
+
+## Runtime ownership regression
+
+The persistent Terrarium database must be owned by the account that runs the world service. Mediated development services may create repo-local files as another UID, so Linux launchers must not depend on repository file ownership for the living database. They default to `${XDG_STATE_HOME:-$HOME/.local/state}/terrarium/live` and migrate legacy repo-local state with a verified SQLite backup. Source control stores product history; the user-owned runtime directory stores Moss's living state.
