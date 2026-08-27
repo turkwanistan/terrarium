@@ -51,7 +51,8 @@
     activity_ms: 1300, contact_ms: 1200, placement_ms: 2200, history_ms: 1800, engagement_ms: 1200, environment_ms: 3000,
   });
   const ACTION_DURATION = Object.freeze({
-    idle: 950, rest: 1450, inspect: 1800, carry: 1900, place: 2200,
+    idle: 950, rest: 1450, loaf: 2300, groom: 2300, stretch: 2100, react: 1800,
+    inspect: 1800, nudge: 2100, carry: 1900, place: 2200,
     look_outside: 1700, sleep: 2200, wake: 2000, walk: 1300,
   });
 
@@ -125,7 +126,7 @@
     return {
       sleep_nook:activityEngagement(f,now,'sleeping_nook',['sleep']),
       window:activityEngagement(f,now,'window',['look_outside']),
-      activity_corner:activityEngagement(f,now,'activity_corner',['inspect','carry','place']),
+      activity_corner:activityEngagement(f,now,'activity_corner',['inspect','nudge','carry','place','loaf','groom','stretch']),
     };
   }
 
@@ -339,11 +340,20 @@
       const originX=(transitionSource?.x??Number(previous.creature.x))+facing*22, originY=(transitionSource?.y??Number(previous.creature.y))-4;
       return {x:mix(originX,Number(o.x),t),y:mix(originY,Number(o.y),t),progress:t,phase:raw<.34?'prepare':t<1?'lower-contact':'settled',transitioning:t<1};
     }
+    const displaced=!snapshotPath&&source?.state==='placed'&&o.state==='placed'&&(Number(source.x)!==Number(o.x)||Number(source.y)!==Number(o.y));
+    if(displaced&&f.creature?.activity==='nudge'&&f.last_event?.object_id===o.id){
+      const raw=clamp01((now-fetchedAt)/(ACTION_DURATION.nudge||MOTION.activity_ms)),t=smoother01((raw-.30)/.48);
+      return {x:mix(Number(source.x),Number(o.x),t),y:mix(Number(source.y),Number(o.y),t),progress:t,phase:raw<.30?'paw-contact':t<1?'nudge-slide':'settled',transitioning:t<1};
+    }
     return {x:Number(o.x),y:Number(o.y),progress:1,phase:'settled',transitioning:false};
   }
   function activePlacementState(f,now){
     if(!previous||snapshotPath) return null;
-    for(const o of f.objects||[]){ const source=previous.objects?.find(item=>item.id===o.id); if(source?.state==='carried'&&o.state==='placed'){ const rs=placedObjectRenderState(o,f,now); return {object_id:o.id,rendered_x:Number(rs.x.toFixed(6)),rendered_y:Number(rs.y.toFixed(6)),target_x:Number(o.x),target_y:Number(o.y),progress:Number(rs.progress.toFixed(6)),phase:rs.phase}; } }
+    for(const o of f.objects||[]){
+      const source=previous.objects?.find(item=>item.id===o.id);
+      const changed=source?.state==='carried'&&o.state==='placed'||(source?.state==='placed'&&o.state==='placed'&&(Number(source.x)!==Number(o.x)||Number(source.y)!==Number(o.y)));
+      if(changed){ const rs=placedObjectRenderState(o,f,now); return {object_id:o.id,rendered_x:Number(rs.x.toFixed(6)),rendered_y:Number(rs.y.toFixed(6)),target_x:Number(o.x),target_y:Number(o.y),progress:Number(rs.progress.toFixed(6)),phase:rs.phase}; }
+    }
     return null;
   }
 
@@ -407,7 +417,7 @@
     const activityProgress=actionEnvelope(now,c.activity),target=actionTargetPoint(f);
     let renderedFacing=c.facing;
     if(moving&&Math.abs(routeState.segment_dx)>3) renderedFacing=routeState.segment_dx>0?'right':'left';
-    else if(!moving&&target&&['inspect','carry','place'].includes(c.activity)&&Math.abs(Number(target.x)-continuousX)>3) renderedFacing=Number(target.x)>=continuousX?'right':'left';
+    else if(!moving&&target&&['inspect','nudge','carry','place'].includes(c.activity)&&Math.abs(Number(target.x)-continuousX)>3) renderedFacing=Number(target.x)>=continuousX?'right':'left';
     const direction=renderedFacing==='left'?-1:1,strideCount=Math.max(2,Math.round(routeTotal/58)),walkPhase=travel*Math.PI*2*strideCount;
     let carryDirection=direction,turningCarry=false;
     if(moving&&c.carrying&&routeState.segment_index>0){
@@ -444,10 +454,15 @@
     else if(c.activity==='wake') pose='wake';
     else if(rs.moving) pose='walk';
     else if(c.activity==='inspect') pose='inspect';
+    else if(c.activity==='nudge') pose='nudge';
     else if(c.activity==='carry') pose='carry';
     else if(c.activity==='place') pose='place';
     else if(c.activity==='look_outside') pose='window';
     else if(c.activity==='rest') pose='rest';
+    else if(c.activity==='loaf') pose='loaf';
+    else if(c.activity==='groom') pose='groom';
+    else if(c.activity==='stretch') pose='stretch';
+    else if(c.activity==='react') pose='react';
 
     const walkFrame=rs.walk_keyframe||0;
     const target=actionTargetPoint(f);
@@ -455,6 +470,9 @@
     const localTargetY=target?clamp(px(target.y)-baseY,-14,10):4;
     const idleFrame=Math.floor(now/900)&1;
     const inspectStage=authoredStage(ap,[.20,.46,.76]);
+    const nudgeStage=authoredStage(ap,[.18,.36,.58,.78]);
+    const groomStage=authoredStage(ap,[.18,.42,.72,.88]);
+    const stretchStage=authoredStage(ap,[.18,.38,.68,.88]);
     const pickupStage=authoredStage(ap,[.16,.34,.58,.80]);
     const placeStage=authoredStage(ap,[.16,.34,.58,.78,.92]);
     const windowStage=authoredStage(ap,[.18,.46,.78]);
@@ -555,11 +573,33 @@
       ctx.restore(); return;
     }
 
+    if(pose==='loaf'){
+      groundShadow(31,2);
+      rect(-16,1,31,8,p.dogDark); rect(-13,-4,27,11,p.dog); rect(-8,-6,18,6,p.dogLight);
+      rect(-13,6,10,3,p.dogDark); rect(3,6,10,3,p.dogDark); tail('rest',3);
+      head(6,-11,'bounce','soft');
+      if((Math.floor(now/850)&1)===1) rect(-4,-5,8,1,p.dogLight);
+      ctx.restore(); return;
+    }
+
+    if(pose==='stretch'){
+      groundShadow(34,1); tail(stretchStage<2?'up':'neutral',1);
+      rect(-14,-2,25,10,p.dogDark); rect(-12,-6,23,12,p.dog); rect(-7,-7,16,4,p.dogLight);
+      rect(-10,6,5,6,p.dogDark); rect(-11,11,7,2,p.dogDark);
+      const reach=stretchStage>=1&&stretchStage<=2?8:3;
+      drawPixelLine(5,4,12+reach,9,p.dogDark,3); drawPixelLine(3,5,10+reach,11,p.dog,3);
+      rect(11+reach,9,6,2,p.dogCream); rect(9+reach,11,6,2,p.dogCream);
+      head(7+Math.min(3,reach/3),-11+(stretchStage===2?2:0),'lift',stretchStage===2?'down':'forward');
+      ctx.restore(); return;
+    }
+
     let crouch=0,lean=0,earMode='neutral',gaze='forward',tailMode='neutral',carryChest=false;
     if(pose==='walk'){
       earMode=walkFrame===1?'bounce':walkFrame===3?'lift':'neutral'; tailMode=walkFrame===1?'up':walkFrame===3?'down':'neutral';
     } else if(pose==='inspect'){
       lean=inspectStage>=1&&inspectStage<=2?2:0; earMode=inspectStage>=1?'lift':'neutral'; gaze=inspectStage>=1?'down':'forward';
+    } else if(pose==='nudge'){
+      crouch=nudgeStage>=1&&nudgeStage<=2?2:0; lean=nudgeStage>=1&&nudgeStage<=2?3:1; earMode='lift'; gaze='down'; tailMode=nudgeStage===2?'up':'neutral';
     } else if(pose==='carry'){
       crouch=pickupStage<=2?1:0; lean=pickupStage===1||pickupStage===2?2:0; earMode=pickupStage===2?'lift':'neutral'; gaze=pickupStage<=2?'down':'forward'; carryChest=pickupStage>=3;
     } else if(pose==='place'){
@@ -568,20 +608,28 @@
       crouch=windowStage===0?1:0; lean=windowStage>=1?1:0; earMode=windowStage>=1?'lift':'neutral'; gaze='up'; tailMode='rest';
     } else if(pose==='rest'){
       crouch=restStage>=1?3:2; earMode='bounce'; gaze='soft'; tailMode='rest';
+    } else if(pose==='groom'){
+      crouch=3; earMode=groomStage>=2?'bounce':'neutral'; gaze='down'; tailMode='rest';
+    } else if(pose==='react'){
+      crouch=0; lean=1; earMode='lift'; gaze='up'; tailMode='up';
     } else if(idleFrame){ earMode='lift'; tailMode='down'; }
 
-    groundShadow(pose==='rest'?29:27,pose==='rest'?2:0);
+    groundShadow(['rest','groom'].includes(pose)?29:27,['rest','groom'].includes(pose)?2:0);
     tail(tailMode,crouch);
     body(crouch,lean,carryChest);
     if(pose==='walk') walkLegs(walkFrame); else plantedLegs(crouch);
 
     let headX=6+lean,headY=-15+crouch;
     if(pose==='inspect'&&inspectStage>=1){ headX+=2; headY+=1; }
+    if(pose==='nudge'){ headX+=2; headY+=1; }
     if(pose==='window'&&windowStage>=1){ headX+=1; headY-=1; }
-    if(pose==='rest'){ headX=5; headY=-12+crouch; }
+    if(pose==='rest'||pose==='groom'){ headX=5; headY=-12+crouch; }
+    if(pose==='react'){ headX=7; headY=-17; }
     head(headX,headY,earMode,gaze);
 
     if(pose==='inspect'&&(inspectStage===1||inspectStage===2)) contactPaw(localTargetX,localTargetY,localTargetY>4);
+    if(pose==='nudge'&&nudgeStage>=1&&nudgeStage<=3) contactPaw(localTargetX,localTargetY,true);
+    if(pose==='groom'&&groomStage>=1&&groomStage<=3){ contactPaw(8,-10,false); rect(8,-11,4,2,p.dogCream); }
     if(pose==='carry'){
       if(pickupStage===1) contactPaw(Math.max(12,localTargetX-2),Math.max(-5,localTargetY-1),localTargetY>4);
       else if(pickupStage===2) contactPaw(localTargetX,localTargetY,localTargetY>4);

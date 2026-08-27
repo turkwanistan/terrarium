@@ -1,0 +1,761 @@
+{
+  "all_passed": true,
+  "baseline": {
+    "meaningful_family_mapping": {
+      "carry": "arrange",
+      "explore": "travel",
+      "idle": "idle",
+      "inspect": "investigate",
+      "look_outside": "observe",
+      "place": "arrange",
+      "rest": "comfort",
+      "sleep": "sleep",
+      "wake": "sleep",
+      "walk": "travel"
+    },
+    "schema": "terrarium.iteration6-variety-baseline.v1",
+    "seeds": {
+      "1701": {
+        "action_counts": {
+          "carry": 214,
+          "explore": 178,
+          "idle": 558,
+          "inspect": 220,
+          "look_outside": 152,
+          "place": 214,
+          "rest": 627,
+          "sleep": 263,
+          "wake": 106,
+          "walk": 371
+        },
+        "decision_events": 2903,
+        "family_counts": {
+          "arrange": 428,
+          "comfort": 627,
+          "idle": 558,
+          "investigate": 220,
+          "observe": 152,
+          "sleep": 369,
+          "travel": 549
+        },
+        "family_entropy_bits": 2.679567,
+        "meaningful_activity_families": 7,
+        "old_generic_decision_share": 0.724423
+      },
+      "1702": {
+        "action_counts": {
+          "carry": 220,
+          "explore": 175,
+          "idle": 537,
+          "inspect": 238,
+          "look_outside": 145,
+          "place": 219,
+          "rest": 588,
+          "sleep": 292,
+          "wake": 104,
+          "walk": 365
+        },
+        "decision_events": 2883,
+        "family_counts": {
+          "arrange": 439,
+          "comfort": 588,
+          "idle": 537,
+          "investigate": 238,
+          "observe": 145,
+          "sleep": 396,
+          "travel": 540
+        },
+        "family_entropy_bits": 2.692912,
+        "meaningful_activity_families": 7,
+        "old_generic_decision_share": 0.71488
+      },
+      "42": {
+        "action_counts": {
+          "carry": 207,
+          "explore": 210,
+          "idle": 568,
+          "inspect": 193,
+          "look_outside": 167,
+          "place": 207,
+          "rest": 661,
+          "sleep": 235,
+          "wake": 106,
+          "walk": 369
+        },
+        "decision_events": 2923,
+        "family_counts": {
+          "arrange": 414,
+          "comfort": 661,
+          "idle": 568,
+          "investigate": 193,
+          "observe": 167,
+          "sleep": 341,
+          "travel": 579
+        },
+        "family_entropy_bits": 2.662759,
+        "meaningful_activity_families": 7,
+        "old_generic_decision_share": 0.735204
+      },
+      "999": {
+        "action_counts": {
+          "carry": 218,
+          "explore": 166,
+          "idle": 545,
+          "inspect": 239,
+          "look_outside": 154,
+          "place": 218,
+          "rest": 598,
+          "sleep": 281,
+          "wake": 105,
+          "walk": 354
+        },
+        "decision_events": 2878,
+        "family_counts": {
+          "arrange": 436,
+          "comfort": 598,
+          "idle": 545,
+          "investigate": 239,
+          "observe": 154,
+          "sleep": 386,
+          "travel": 520
+        },
+        "family_entropy_bits": 2.696999,
+        "meaningful_activity_families": 7,
+        "old_generic_decision_share": 0.711953
+      }
+    },
+    "source_artifact": "artifacts/pixel-art-overhaul-iteration5-evaluation.json",
+    "source_checkpoint": "Pixel-Art Overhaul \u2014 Iteration 5: Long-Horizon Preferences and Habit Formation",
+    "source_commit": "9bd5f96"
+  },
+  "controlled_checks": {
+    "controlled_worlds_start_physically_equal": true,
+    "histories_change_arrangement_patterns": true,
+    "histories_change_new_comfort_patterns": true,
+    "histories_create_different_world_arrangements": true,
+    "same_history_is_deterministic": true
+  },
+  "controlled_history_divergence": {
+    "comfort_cross_advantage": 0.154522,
+    "final_object_arrangements_diverge": true,
+    "history_a": {
+      "comfort_counts": {
+        "activity_corner": 25,
+        "collection_shelf": 22,
+        "open_space": 20,
+        "sleeping_nook": 47,
+        "window": 45
+      },
+      "favorite_object": "amber_leaf",
+      "favorite_object_nudge_share": 0.222222,
+      "favorite_zone": "window",
+      "favorite_zone_comfort_share": 0.283019,
+      "favorite_zone_loaf_share": 0.363636,
+      "favorite_zone_placement_share": 0.3,
+      "loaf_counts": {
+        "activity_corner": 7,
+        "open_space": 6,
+        "sleeping_nook": 8,
+        "window": 12
+      },
+      "nudge_counts": {
+        "acorn": 3,
+        "amber_leaf": 6,
+        "blue_stone": 4,
+        "red_thread": 6,
+        "shell": 8
+      },
+      "placement_counts": {
+        "activity_corner": 12,
+        "collection_shelf": 10,
+        "open_space": 9,
+        "sleeping_nook": 11,
+        "window": 18
+      }
+    },
+    "history_a_deterministic": true,
+    "history_a_final_object_signature": [
+      [
+        "blue_stone",
+        "activity_corner",
+        612,
+        354,
+        4
+      ],
+      [
+        "amber_leaf",
+        "window",
+        146,
+        312,
+        6
+      ],
+      [
+        "acorn",
+        "activity_corner",
+        634,
+        342,
+        3
+      ],
+      [
+        "shell",
+        "collection_shelf",
+        640,
+        294,
+        8
+      ],
+      [
+        "red_thread",
+        "window",
+        118,
+        279,
+        6
+      ],
+      [
+        "glass_star",
+        "window",
+        252,
+        281,
+        0
+      ]
+    ],
+    "history_b": {
+      "comfort_counts": {
+        "activity_corner": 32,
+        "collection_shelf": 22,
+        "open_space": 30,
+        "sleeping_nook": 63,
+        "window": 27
+      },
+      "favorite_object": "acorn",
+      "favorite_object_nudge_share": 0.043478,
+      "favorite_zone": "activity_corner",
+      "favorite_zone_comfort_share": 0.183908,
+      "favorite_zone_loaf_share": 0.25641,
+      "favorite_zone_placement_share": 0.351852,
+      "loaf_counts": {
+        "activity_corner": 10,
+        "open_space": 9,
+        "sleeping_nook": 15,
+        "window": 5
+      },
+      "nudge_counts": {
+        "acorn": 1,
+        "amber_leaf": 3,
+        "blue_stone": 4,
+        "glass_star": 2,
+        "red_thread": 9,
+        "shell": 4
+      },
+      "placement_counts": {
+        "activity_corner": 19,
+        "collection_shelf": 14,
+        "open_space": 8,
+        "sleeping_nook": 7,
+        "window": 6
+      }
+    },
+    "history_b_deterministic": true,
+    "history_b_final_object_signature": [
+      [
+        "blue_stone",
+        "open_space",
+        326,
+        365,
+        4
+      ],
+      [
+        "amber_leaf",
+        "collection_shelf",
+        620,
+        292,
+        3
+      ],
+      [
+        "acorn",
+        "collection_shelf",
+        660,
+        292,
+        1
+      ],
+      [
+        "shell",
+        "activity_corner",
+        634,
+        342,
+        4
+      ],
+      [
+        "red_thread",
+        "collection_shelf",
+        680,
+        294,
+        9
+      ],
+      [
+        "glass_star",
+        "activity_corner",
+        620,
+        338,
+        2
+      ]
+    ],
+    "loaf_cross_advantage": 0.27972,
+    "physical_state_equal_before_run": true,
+    "placement_cross_advantage": 0.340741,
+    "steps": 3000
+  },
+  "results": {
+    "1701": {
+      "checks": {
+        "all_meaningful_families_reached": true,
+        "arrangements_span_world": true,
+        "comfort_spans_world": true,
+        "family_transition_space_expanded": true,
+        "generic_behavior_share_reduced": true,
+        "inspect_manipulate_sequences_are_common": true,
+        "new_actions_are_ordinary_but_bounded": true,
+        "no_family_dominates": true,
+        "nudge_has_causal_followup": true,
+        "object_manipulation_has_consequences": true,
+        "old_repertoire_remains_present": true,
+        "repetition_stays_bounded": true,
+        "semantic_family_entropy_increased": true,
+        "weather_reactions_have_followup": true,
+        "zone_activity_space_is_broad": true
+      },
+      "metrics": {
+        "action_counts": {
+          "carry": 157,
+          "explore": 132,
+          "groom": 73,
+          "idle": 346,
+          "inspect": 229,
+          "loaf": 148,
+          "look_outside": 160,
+          "nudge": 55,
+          "place": 157,
+          "react": 17,
+          "rest": 405,
+          "sleep": 326,
+          "stretch": 72,
+          "wake": 124,
+          "walk": 259
+        },
+        "average_activity_ticks": 3.790147,
+        "completed_family_history": {
+          "arrange": 314,
+          "comfort": 625,
+          "idle": 346,
+          "investigate": 229,
+          "observe": 160,
+          "play": 55,
+          "react": 17,
+          "self_care": 73,
+          "sleep": 450,
+          "travel": 391
+        },
+        "decision_events": 2660,
+        "distinct_arrangement_patterns": 30,
+        "distinct_family_transitions": 66,
+        "distinct_nudge_patterns": 54,
+        "distinct_zone_family_combinations": 40,
+        "family_counts": {
+          "arrange": 314,
+          "comfort": 625,
+          "idle": 346,
+          "investigate": 229,
+          "observe": 160,
+          "play": 55,
+          "react": 17,
+          "self_care": 73,
+          "sleep": 450,
+          "travel": 391
+        },
+        "family_entropy_bits": 2.931034,
+        "final_arrangement_zones": {
+          "activity_corner": 1,
+          "collection_shelf": 2,
+          "window": 3
+        },
+        "inspect_sessions": 229,
+        "inspect_to_manipulation_within_two_rate": 0.742358,
+        "max_non_sleep_family_streak": 6,
+        "meaningful_activity_families": 10,
+        "new_action_decision_share": 0.137218,
+        "new_actions_seen": [
+          "groom",
+          "loaf",
+          "nudge",
+          "react",
+          "stretch"
+        ],
+        "nudge_sessions": 55,
+        "nudge_to_reinspect_within_two_rate": 1.0,
+        "object_moves": 212,
+        "object_nudges": 55,
+        "objects_moved": 6,
+        "objects_nudged": 6,
+        "old_actions_seen": [
+          "carry",
+          "explore",
+          "idle",
+          "inspect",
+          "look_outside",
+          "place",
+          "rest",
+          "sleep",
+          "wake",
+          "walk"
+        ],
+        "old_generic_decision_share": 0.598496,
+        "top_family_share": 0.234962,
+        "weather_reaction_to_window_within_two_rate": 0.941176,
+        "weather_reactions": 17,
+        "zones_with_arrangement_history": 5,
+        "zones_with_comfort_history": 5
+      },
+      "passed": true
+    },
+    "1702": {
+      "checks": {
+        "all_meaningful_families_reached": true,
+        "arrangements_span_world": true,
+        "comfort_spans_world": true,
+        "family_transition_space_expanded": true,
+        "generic_behavior_share_reduced": true,
+        "inspect_manipulate_sequences_are_common": true,
+        "new_actions_are_ordinary_but_bounded": true,
+        "no_family_dominates": true,
+        "nudge_has_causal_followup": true,
+        "object_manipulation_has_consequences": true,
+        "old_repertoire_remains_present": true,
+        "repetition_stays_bounded": true,
+        "semantic_family_entropy_increased": true,
+        "weather_reactions_have_followup": true,
+        "zone_activity_space_is_broad": true
+      },
+      "metrics": {
+        "action_counts": {
+          "carry": 178,
+          "explore": 120,
+          "groom": 54,
+          "idle": 337,
+          "inspect": 258,
+          "loaf": 99,
+          "look_outside": 171,
+          "nudge": 59,
+          "place": 177,
+          "react": 20,
+          "rest": 405,
+          "sleep": 331,
+          "stretch": 86,
+          "wake": 126,
+          "walk": 274
+        },
+        "average_activity_ticks": 3.741277,
+        "completed_family_history": {
+          "arrange": 355,
+          "comfort": 590,
+          "idle": 337,
+          "investigate": 258,
+          "observe": 171,
+          "play": 59,
+          "react": 20,
+          "self_care": 54,
+          "sleep": 457,
+          "travel": 394
+        },
+        "decision_events": 2695,
+        "distinct_arrangement_patterns": 30,
+        "distinct_family_transitions": 63,
+        "distinct_nudge_patterns": 54,
+        "distinct_zone_family_combinations": 41,
+        "family_counts": {
+          "arrange": 355,
+          "comfort": 590,
+          "idle": 337,
+          "investigate": 258,
+          "observe": 171,
+          "play": 59,
+          "react": 20,
+          "self_care": 54,
+          "sleep": 457,
+          "travel": 394
+        },
+        "family_entropy_bits": 2.942419,
+        "final_arrangement_zones": {
+          "activity_corner": 1,
+          "open_space": 3,
+          "sleeping_nook": 1,
+          "window": 1
+        },
+        "inspect_sessions": 258,
+        "inspect_to_manipulation_within_two_rate": 0.728682,
+        "max_non_sleep_family_streak": 4,
+        "meaningful_activity_families": 10,
+        "new_action_decision_share": 0.117996,
+        "new_actions_seen": [
+          "groom",
+          "loaf",
+          "nudge",
+          "react",
+          "stretch"
+        ],
+        "nudge_sessions": 59,
+        "nudge_to_reinspect_within_two_rate": 0.949153,
+        "object_moves": 236,
+        "object_nudges": 59,
+        "objects_moved": 6,
+        "objects_nudged": 6,
+        "old_actions_seen": [
+          "carry",
+          "explore",
+          "idle",
+          "inspect",
+          "look_outside",
+          "place",
+          "rest",
+          "sleep",
+          "wake",
+          "walk"
+        ],
+        "old_generic_decision_share": 0.591095,
+        "top_family_share": 0.218924,
+        "weather_reaction_to_window_within_two_rate": 1.0,
+        "weather_reactions": 20,
+        "zones_with_arrangement_history": 5,
+        "zones_with_comfort_history": 5
+      },
+      "passed": true
+    },
+    "42": {
+      "checks": {
+        "all_meaningful_families_reached": true,
+        "arrangements_span_world": true,
+        "comfort_spans_world": true,
+        "family_transition_space_expanded": true,
+        "generic_behavior_share_reduced": true,
+        "inspect_manipulate_sequences_are_common": true,
+        "new_actions_are_ordinary_but_bounded": true,
+        "no_family_dominates": true,
+        "nudge_has_causal_followup": true,
+        "object_manipulation_has_consequences": true,
+        "old_repertoire_remains_present": true,
+        "repetition_stays_bounded": true,
+        "semantic_family_entropy_increased": true,
+        "weather_reactions_have_followup": true,
+        "zone_activity_space_is_broad": true
+      },
+      "metrics": {
+        "action_counts": {
+          "carry": 163,
+          "explore": 124,
+          "groom": 61,
+          "idle": 374,
+          "inspect": 260,
+          "loaf": 116,
+          "look_outside": 149,
+          "nudge": 69,
+          "place": 163,
+          "react": 21,
+          "rest": 421,
+          "sleep": 316,
+          "stretch": 71,
+          "wake": 126,
+          "walk": 280
+        },
+        "average_activity_ticks": 3.71397,
+        "completed_family_history": {
+          "arrange": 326,
+          "comfort": 608,
+          "idle": 374,
+          "investigate": 260,
+          "observe": 149,
+          "play": 69,
+          "react": 21,
+          "self_care": 61,
+          "sleep": 442,
+          "travel": 404
+        },
+        "decision_events": 2714,
+        "distinct_arrangement_patterns": 30,
+        "distinct_family_transitions": 66,
+        "distinct_nudge_patterns": 65,
+        "distinct_zone_family_combinations": 41,
+        "family_counts": {
+          "arrange": 326,
+          "comfort": 608,
+          "idle": 374,
+          "investigate": 260,
+          "observe": 149,
+          "play": 69,
+          "react": 21,
+          "self_care": 61,
+          "sleep": 442,
+          "travel": 404
+        },
+        "family_entropy_bits": 2.946327,
+        "final_arrangement_zones": {
+          "open_space": 5,
+          "window": 1
+        },
+        "inspect_sessions": 260,
+        "inspect_to_manipulation_within_two_rate": 0.765385,
+        "max_non_sleep_family_streak": 5,
+        "meaningful_activity_families": 10,
+        "new_action_decision_share": 0.124539,
+        "new_actions_seen": [
+          "groom",
+          "loaf",
+          "nudge",
+          "react",
+          "stretch"
+        ],
+        "nudge_sessions": 69,
+        "nudge_to_reinspect_within_two_rate": 0.913043,
+        "object_moves": 232,
+        "object_nudges": 69,
+        "objects_moved": 6,
+        "objects_nudged": 6,
+        "old_actions_seen": [
+          "carry",
+          "explore",
+          "idle",
+          "inspect",
+          "look_outside",
+          "place",
+          "rest",
+          "sleep",
+          "wake",
+          "walk"
+        ],
+        "old_generic_decision_share": 0.604643,
+        "top_family_share": 0.224024,
+        "weather_reaction_to_window_within_two_rate": 1.0,
+        "weather_reactions": 21,
+        "zones_with_arrangement_history": 5,
+        "zones_with_comfort_history": 5
+      },
+      "passed": true
+    },
+    "999": {
+      "checks": {
+        "all_meaningful_families_reached": true,
+        "arrangements_span_world": true,
+        "comfort_spans_world": true,
+        "family_transition_space_expanded": true,
+        "generic_behavior_share_reduced": true,
+        "inspect_manipulate_sequences_are_common": true,
+        "new_actions_are_ordinary_but_bounded": true,
+        "no_family_dominates": true,
+        "nudge_has_causal_followup": true,
+        "object_manipulation_has_consequences": true,
+        "old_repertoire_remains_present": true,
+        "repetition_stays_bounded": true,
+        "semantic_family_entropy_increased": true,
+        "weather_reactions_have_followup": true,
+        "zone_activity_space_is_broad": true
+      },
+      "metrics": {
+        "action_counts": {
+          "carry": 202,
+          "explore": 103,
+          "groom": 56,
+          "idle": 360,
+          "inspect": 282,
+          "loaf": 140,
+          "look_outside": 116,
+          "nudge": 63,
+          "place": 202,
+          "react": 16,
+          "rest": 392,
+          "sleep": 324,
+          "stretch": 70,
+          "wake": 128,
+          "walk": 290
+        },
+        "average_activity_ticks": 3.674079,
+        "completed_family_history": {
+          "arrange": 404,
+          "comfort": 602,
+          "idle": 360,
+          "investigate": 282,
+          "observe": 116,
+          "play": 63,
+          "react": 16,
+          "self_care": 56,
+          "sleep": 452,
+          "travel": 393
+        },
+        "decision_events": 2744,
+        "distinct_arrangement_patterns": 30,
+        "distinct_family_transitions": 63,
+        "distinct_nudge_patterns": 62,
+        "distinct_zone_family_combinations": 40,
+        "family_counts": {
+          "arrange": 404,
+          "comfort": 602,
+          "idle": 360,
+          "investigate": 282,
+          "observe": 116,
+          "play": 63,
+          "react": 16,
+          "self_care": 56,
+          "sleep": 452,
+          "travel": 393
+        },
+        "family_entropy_bits": 2.914765,
+        "final_arrangement_zones": {
+          "activity_corner": 2,
+          "open_space": 3,
+          "window": 1
+        },
+        "inspect_sessions": 282,
+        "inspect_to_manipulation_within_two_rate": 0.741135,
+        "max_non_sleep_family_streak": 5,
+        "meaningful_activity_families": 10,
+        "new_action_decision_share": 0.125729,
+        "new_actions_seen": [
+          "groom",
+          "loaf",
+          "nudge",
+          "react",
+          "stretch"
+        ],
+        "nudge_sessions": 63,
+        "nudge_to_reinspect_within_two_rate": 0.984127,
+        "object_moves": 265,
+        "object_nudges": 63,
+        "objects_moved": 6,
+        "objects_nudged": 6,
+        "old_actions_seen": [
+          "carry",
+          "explore",
+          "idle",
+          "inspect",
+          "look_outside",
+          "place",
+          "rest",
+          "sleep",
+          "wake",
+          "walk"
+        ],
+        "old_generic_decision_share": 0.581997,
+        "top_family_share": 0.219388,
+        "weather_reaction_to_window_within_two_rate": 1.0,
+        "weather_reactions": 16,
+        "zones_with_arrangement_history": 5,
+        "zones_with_comfort_history": 5
+      },
+      "passed": true
+    }
+  },
+  "schema": "terrarium.behavioral-repertoire-evaluation.v1",
+  "seeds": [
+    1701,
+    1702,
+    42,
+    999
+  ],
+  "steps_per_seed": 10080
+}

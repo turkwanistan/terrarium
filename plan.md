@@ -174,3 +174,23 @@ Evidence: `history/2026-08-27-pixel-art-overhaul-iteration5.md`, `artifacts/pixe
 ## Next product iteration
 
 Choose from direct canonical-runtime UAT after deployment. Let actual observation decide whether the next maturity target is richer expression of learned habits, longer-lived environmental consequences, or another concrete product weakness. Do not invent a new generation or generic planning layer by cadence.
+
+
+## Completed normal product checkpoint — Pixel-Art Overhaul, Iteration 6
+
+- audited ten action labels down to seven genuinely distinct Iteration-5 semantic families before adding new behavior;
+- added authoritative object `nudge` with persistent displacement, causal re-inspection, and readable paw-contact→slide→settle rendering;
+- added bounded `loaf`, `groom`, `stretch`, and environmental `react` activities with calm commitments rather than fidget loops;
+- expanded carry/place into habit-shaped personal-space arrangement across plausible authored zones instead of a mostly shelf-directed loop;
+- added additive `terrarium.affordances.v1` completion/nudge/comfort/arrangement history with neutral migration and no fabricated pre-upgrade activity;
+- repaired the deterministic weather function so canonical seed 1701 actually experiences clear/rain/mist opportunities;
+- increased meaningful families **7→10**, long-run family entropy to **2.915–2.946 bits**, and cut generic-behavior share to **58.2–60.5%** across seeds 1701/1702/42/999;
+- proved controlled histories deterministically diverge through the new affordance space, including loaf patterns and persistent object arrangements;
+- passed 39/39 tests, Python-3.10 grammar, JS syntax, technical/behavior/spatial gates, four-seed coherence/habit/repertoire matrices, and real 800×480 temporal UAT;
+- no SBC platform change, Capability Forge work, MCP growth, or Gen18 was required.
+
+Evidence: `history/2026-08-27-pixel-art-overhaul-iteration6.md`, `artifacts/pixel-art-overhaul-iteration6.json`, snapshot `20260827T233841118223Z-pixel-art-overhaul-iteration6`.
+
+## Next product iteration
+
+Choose from direct canonical-runtime UAT after deployment. The highest-value next work should make the expanded repertoire **compose into richer longer-lived situations**, not merely add more verbs: e.g. revisit/maintain arrangements, react to changes produced by prior activity, and let environmental/object history create occasional multi-stage opportunities. Keep it bounded and product-specific; only introduce a more general planning substrate if concrete Terrarium implementation evidence proves the current intent/session model can no longer express coherent activities cleanly.

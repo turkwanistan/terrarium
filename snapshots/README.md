@@ -2,6 +2,14 @@
 
 Git-friendly visual milestones. The SVG is a lightweight capture-time thumbnail; run Terrarium and open `/snapshots/` for the same stored frame through the real Canvas renderer.
 
+## 20260827T233841118223Z-pixel-art-overhaul-iteration6
+
+Accepted Iteration 6 behavioral repertoire and world affordances after full validation
+
+![20260827T233841118223Z-pixel-art-overhaul-iteration6](dev/20260827T233841118223Z-pixel-art-overhaul-iteration6/preview.svg)
+
+Deterministic tick `10080` · renderer `66a80f9e86d3`
+
 ## 20260827T222822886488Z-pixel-art-overhaul-iteration5
 
 Accepted Iteration 5 long-horizon habits: persistent bounded learned zone/object/context preferences with deterministic exploration and history-dependent divergence.

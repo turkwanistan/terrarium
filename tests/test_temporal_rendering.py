@@ -26,13 +26,14 @@ def test_temporal_fixture_pack_is_deterministic_and_800x480():
     assert set(first["scenarios"]) == {
         "arrive_settle", "left_walk", "right_walk", "carried_walk", "idle_control",
         "sleep_transition", "waking", "wake_exit", "window_transition", "activity_corner_transition",
-        "activity_corner_approach", "shelf_approach", "inspect_object", "object_pickup", "object_placement", "rain_window",
+        "activity_corner_approach", "shelf_approach", "inspect_object", "object_nudge", "object_pickup", "object_placement", "rain_window",
+        "loaf", "groom", "stretch", "weather_reaction",
         "populated_room", "dawn_light_transition", "dusk_light_transition", "rain_control",
     }
     assert first["hero_reel"] == [
         "left_walk", "right_walk", "arrive_settle", "idle_control", "window_transition",
-        "rain_window", "inspect_object", "object_pickup", "carried_walk", "object_placement",
-        "sleep_transition", "waking", "wake_exit", "activity_corner_approach", "activity_corner_transition",
+        "rain_window", "weather_reaction", "inspect_object", "object_nudge", "object_pickup", "carried_walk", "object_placement",
+        "loaf", "groom", "stretch", "sleep_transition", "waking", "wake_exit", "activity_corner_approach", "activity_corner_transition",
         "shelf_approach", "populated_room", "dawn_light_transition", "dusk_light_transition", "rain_control",
     ]
     probe = first["continuity_probe"]
@@ -95,6 +96,7 @@ def test_moss_pixel_sprite_is_brown_and_default_has_no_glasses():
     assert "dog:'#8b5d3b'" in source
     assert "function drawMossSprite" in source
     assert "pose==='walk'" in source and "pose==='sleep'" in source
-    assert "pose==='inspect'" in source and "pose==='carry'" in source and "pose==='place'" in source
+    assert "pose==='inspect'" in source and "pose==='nudge'" in source and "pose==='carry'" in source and "pose==='place'" in source
+    assert "pose==='loaf'" in source and "pose==='groom'" in source and "pose==='stretch'" in source and "pose==='react'" in source
     assert "pose==='window'" in source and "c.activity==='wake'" in source
     assert "glasses" not in source.lower()

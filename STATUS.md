@@ -1,63 +1,67 @@
 # Terrarium status
 
-Terrarium is normal product development after the accepted Generation 17 pilot. The current checkpoint is **Pixel-Art Overhaul — Iteration 5: Long-Horizon Preferences and Habit Formation**. This is **not Generation 18**.
+Terrarium is normal product development after the accepted Generation 17 pilot. The current checkpoint is **Pixel-Art Overhaul — Iteration 6: Behavioral Repertoire and World Affordances**. This is **not Generation 18**.
 
 ## Current checkpoint
 
-- history: `history/2026-08-27-pixel-art-overhaul-iteration5.md`
-- bounded evidence: `artifacts/pixel-art-overhaul-iteration5.json`
-- long-horizon evaluation: `artifacts/pixel-art-overhaul-iteration5-evaluation.json`
-- accepted snapshot: `20260827T222822886488Z-pixel-art-overhaul-iteration5`
+- history: `history/2026-08-27-pixel-art-overhaul-iteration6.md`
+- bounded evidence: `artifacts/pixel-art-overhaul-iteration6.json`
+- multi-seed repertoire evaluation: `artifacts/pixel-art-overhaul-iteration6-evaluation.json`
+- regression matrix: `artifacts/pixel-art-overhaul-iteration6-regression-matrix.json`
+- real-renderer UAT: `artifacts/pixel-art-overhaul-iteration6-renderer-uat.json`
+- accepted snapshot: `20260827T233841118223Z-pixel-art-overhaul-iteration6`
 - deterministic seed/tick: **1701 / 10080**
-- semantic frame SHA256: `a275783dc04234b1da10d8bb6dd1b8a2bcaaeba134ee5ae07f0062687cf51290`
-- renderer JS SHA256: `96bd0eb952cf40b8b5099b1b7ab47ca376bc46339c01ebd0556ed440f1f8115d`
-- behavior rules: `terrarium-rules-v4-long-horizon-habits`
+- semantic frame SHA256: `0a759f58fa022f3dcbf7dd4de33c632bb9ee9366b82e0b077d71eacd6314102e`
+- renderer JS SHA256: `66a80f9e86d3242a2c99903956faa39873dd7dbfc0233869af8c2952bb56cd19`
+- behavior rules: `terrarium-rules-v5-behavioral-repertoire`
 - deterministic RNG stream: `terrarium-rules-v3-routine-coherence`
 - short-horizon context: `terrarium.behavior-context.v1`
 - long-horizon habit profile: `terrarium.habits.v1`
+- affordance history: `terrarium.affordances.v1`
 - spatial schema: `terrarium.spatial.v1`
 
-## What Iteration 5 established
+## What Iteration 6 established
 
-Moss now accumulates a deliberately small persistent preference profile from lived experience: zone affinity, object affinity, and zone affinity conditioned on dawn/day/dusk/night. Preference is not a needs system, personality score, schedule, dialogue layer, quest system, planner, or LLM interpretation. It changes future weighted choices only after substantial experience.
+Iteration 5 had ten decision labels but only seven meaningfully different semantic activity families; travel, idle/rest, and one inspect→carry→place object loop still dominated what a viewer could actually see. Iteration 6 expands the reachable life-space without adding a planner, needs system, personality stats, dialogue logic, or LLM decision-making.
 
-Reinforcement is saturating and accompanied by slight decay. Choice influence is normalized against competing affinities, bounded, phased in slowly, and retains exploration floors. Iteration-4 recent-zone/recent-object inhibition remains active, so long-horizon familiarity cannot override immediate anti-repetition behavior. Lifetime object novelty pressure is capped so it no longer makes durable favorites mathematically impossible.
+Moss can now **nudge** placed objects authoritatively and remain to inspect the result; **loaf**, **groom**, and **stretch** as distinct calm activities; react to deterministic rain/mist and carry that reaction through to a window session; and arrange carried objects across plausible personal spaces rather than treating the collection shelf as the universal destination. `terrarium.affordances.v1` records only real post-upgrade activity: semantic family completions, object nudges, zone comfort, and zone arrangements. Existing worlds migrate neutrally and no pre-Iteration-6 affordance history is fabricated.
 
-Existing worlds migrate conservatively to a neutral habit profile on their next ordinary transition while preserving Moss, current possessions, object positions/counts, short-horizon routine context, and the append-only historical ledger. The system does not fabricate exact preferences from pre-Iteration-5 history.
+The weather cycle was also corrected: the previous arithmetic generator made canonical seed 1701 effectively clear forever. Weather is now deterministic per three-hour world block but actually varies across clear/rain/mist, giving environmental reactions a real causal opportunity while remaining independent of action RNG.
 
 ## Acceptance evidence
 
-Across seeds **1701 / 1702 / 42 / 999**, seven-day 10,080-tick habit evaluation is **PASS**. Learned zone-affinity ranges are **0.149–0.238** and object-affinity ranges **0.099–0.194**. The top autonomous non-delivery destination remains only **24.0–25.2%** and the top selected object **19.0–20.7%**; every seed still uses all five zones and all ten action classes.
+The Iteration-5 baseline has **7 meaningful families**, family entropy **2.663–2.697 bits**, and generic idle/rest/travel/sleep behavior at **71.2–73.5%** of decisions. Across seeds **1701 / 1702 / 42 / 999**, Iteration 6 reaches **all 10 meaningful families**. Family entropy rises to **2.915–2.946 bits**, generic share falls to **58.2–60.5%**, and no family exceeds **23.5%** of decisions. Every seed reaches **40–41 zone×family combinations**, **63–66 distinct family transitions**, all six objects are nudged, and arrangement/comfort history reaches all five zones.
 
-Controlled opportunity probes show the learned profile itself causes future selection change: learned favorite-zone uplift **+2.25 to +4.29 percentage points**, learned favorite-object uplift **+1.96 to +3.58 points**. Equivalent-present-state worlds with different mature histories remain deterministic individually but diverge in future tendencies, with combined favorite-zone cross-advantage **0.177–0.324**.
+New activities remain bounded rather than taking over: `loaf + groom + stretch + nudge + react` account for roughly **11.8–13.7%** of decisions. Inspect sessions lead to manipulation within two decisions **72.9–76.5%** of the time. Nudge→same-object re-inspection succeeds **91.3–100%** of the time, and weather reaction→window follow-through succeeds **94.1–100%**.
 
-Seed 1701 / 2,000 ticks retains accepted short-horizon coherence: purposeful movement **100%**, direct delivery **100%**, post-arrival linger **98.2%**, inspect→same-object carry **80.0%**, window continuation **90.9%**, post-place linger **100%**, wake recovery **100%**, and average dwell **14.93 ticks**.
+Equivalent-present-state controlled histories remain exactly deterministic individually but now diverge through the new affordance space. A window/amber-leaf history versus activity-corner/acorn history produces **0.280 loaf-pattern cross-advantage** and **0.341 placement-pattern cross-advantage**, with different final authoritative object arrangements after 3,000 ticks.
 
-Real 800×480 Canvas UAT rendered deterministic day-2/day-5/day-7 habit checkpoints. All were `Temporal ready`; day 7 retained exact 400×240→800×480 integer scaling with smoothing disabled and zero 2× scale errors. The renderer source is byte-identical to Iteration 4.
+## Renderer / pacing / persistence
+
+The actual 800×480 Canvas renderer has authored poses for nudge, loaf, groom, stretch, and react. Browser temporal UAT sampled 11 frames per new scenario with exact 400×240→800×480 2× scaling and smoothing disabled. Each activity produced **5–8 distinct raster states**. Nudge visibly holds paw contact before displacement, then moves monotonically at ~3.7% → 43.7% → 91.1% and settles by **1.7 s**, rather than teleporting the object.
+
+Iteration-4 pacing remains intact. In the final reference coherence run, purposeful movement is **100%**, window-session continuation **100%**, wake recovery **100%**, post-place linger **100%**, and the calm visible timeline is **74.6%**. Existing habits remain bounded and all four robustness seeds pass the original long-horizon habit evaluator.
+
+Persistence remains event-authoritative: exact snapshot+event replay, restart preservation, append-only hash-chain integrity, valid spatial endpoints, and blocker avoidance all pass. Canonical Moss was not reset or replaced during development or UAT.
 
 ## Validation
 
-- pytest: **33/33 PASS**;
-- Python 3.10 grammar guard: **PASS**;
+- pytest: **39/39 PASS**;
+- Python 3.10 grammar parse: **30 source files PASS**;
 - JavaScript syntax: **PASS**;
-- technical evaluator: **PASS**, including append-only hash chain, restart persistence, and exact snapshot+event replay;
-- behavior evaluator seed 1701 / 2000: **PASS**, all 10 action classes;
-- spatial evaluator seed 1701 / 2000: **PASS**, **0 blocker intersections**, **0 invalid awake endpoints**;
-- Iteration-4 coherence robustness: **1701 / 1702 / 42 / 999 all PASS**;
-- Iteration-5 long-horizon robustness: **1701 / 1702 / 42 / 999 all PASS**;
-- temporal rendering tests: **6/6 PASS**;
-- browser integer-scale telemetry: **PASS**.
-
-An intentionally extreme disposable 0.01-second development service exposed a shared-store event-extension race under concurrent debug access at tick 623. It was stopped, excluded from acceptance evidence, never touched canonical Moss, and does not justify changing the normal three-second product runtime or SBC substrate within this iteration.
-
-## Pixel-art / pacing invariants
-
-`ART_DIRECTION.md` remains visual authority. Internal art stays **400×240**, presented as exact **2× nearest-neighbor 800×480** with smoothing off. The product heartbeat remains **3 real seconds**, world advance **1 minute/heartbeat**, full day ~**72 real minutes**. Host state owns behavior/preferences/routes; the renderer only shows their consequences.
+- technical evaluator: **PASS**;
+- behavior evaluator: **PASS**;
+- spatial evaluator: **PASS**;
+- Iteration-4 coherence robustness, seeds 1701/1702/42/999: **all PASS**;
+- Iteration-5 long-horizon habit robustness, seeds 1701/1702/42/999: **all PASS**;
+- Iteration-6 repertoire evaluation, seeds 1701/1702/42/999: **all PASS**;
+- real browser Iteration-6 temporal UAT: **PASS**;
+- combined Iteration-6 regression matrix: **PASS**.
 
 ## SBC conclusion
 
-No reusable substrate deficiency was exposed. `terrarium.habits.v1`, migration, history-divergence evaluation, and habit UAT are product-specific Terrarium work using existing promoted capabilities. No SBC files, Capability Forge capability, or frozen MCP surface changed. **Gen18 is not warranted.**
+No reusable substrate deficiency was exposed. The new affordance state, causal activity chains, renderer poses, long-run variety evaluation, migration, and history-divergence evidence are Terrarium product concerns and fit the existing SBC/project/evaluation/temporal substrate. Self-Building Computer, Capability Forge, and the frozen Optiplex MCP surface were not modified. **Gen18 decision: NO — existing SBC substrate remains sufficient.**
 
 ## Runtime / Git safety
 
-Canonical Moss remains user-owned outside Git. Runtime databases/event ledgers remain ignored. The mediated project boundary cannot inspect or restart the actual user-owned OptiPlex Moss process; deployment must preserve `${XDG_STATE_HOME:-$HOME/.local/state}/terrarium/live` (or the explicit `TERRARIUM_DATA_DIR`) and must not substitute a disposable development world.
+Canonical Moss remains user-owned outside Git. Runtime databases/event ledgers remain ignored. Any host deployment must preserve `${XDG_STATE_HOME:-$HOME/.local/state}/terrarium/live` (or the explicit `TERRARIUM_DATA_DIR`) and must not substitute a disposable development world.

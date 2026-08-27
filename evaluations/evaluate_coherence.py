@@ -19,8 +19,8 @@ from terrarium.spatial import FAVORITE_SPOTS, point_is_walkable
 
 FIXED = "2026-01-01T00:00:00Z"
 MOVEMENT = {"walk", "explore"}
-LOCAL_SETTLE = {"idle", "rest"}
-OBJECT_ACTIONS = {"inspect", "carry", "place"}
+LOCAL_SETTLE = {"idle", "rest", "loaf", "groom", "stretch"}
+OBJECT_ACTIONS = {"inspect", "nudge", "carry", "place"}
 
 
 def _run(seed: int, steps: int) -> tuple[dict, list[dict]]:
@@ -93,7 +93,7 @@ def evaluate(seed: int, steps: int) -> dict:
     inspect_continuations = 0
     for i, row in inspect_sessions:
         if any(
-            candidate["action"] == "carry" and candidate["object_id"] == row["object_id"]
+            candidate["action"] in {"carry", "nudge"} and candidate["object_id"] == row["object_id"]
             for candidate in decisions[i + 1 : i + 3]
         ):
             inspect_continuations += 1
@@ -156,7 +156,7 @@ def evaluate(seed: int, steps: int) -> dict:
     )
     long_moves = sum(row["route_length"] >= 300.0 for row in movement)
     simulated_hours = max(steps / 60.0, 1e-9)
-    calm_visible = sum(row["visible"] in {"idle", "rest", "sleep", "look_outside"} for row in rows)
+    calm_visible = sum(row["visible"] in {"idle", "rest", "loaf", "groom", "stretch", "sleep", "look_outside"} for row in rows)
 
     metrics = {
         "decision_events": len(decisions),
@@ -170,7 +170,7 @@ def evaluate(seed: int, steps: int) -> dict:
         "non_delivery_reversals": non_delivery_reversals,
         "non_delivery_reversal_rate": round(_rate(non_delivery_reversals, len(non_delivery) - 1), 6),
         "post_arrival_linger_rate": round(_rate(post_arrival_lingers, len(arrivals)), 6),
-        "inspect_to_same_object_carry_within_two_decisions_rate": round(_rate(inspect_continuations, len(inspect_sessions)), 6),
+        "inspect_to_same_object_followup_within_two_decisions_rate": round(_rate(inspect_continuations, len(inspect_sessions)), 6),
         "window_session_continuation_rate": round(_rate(window_continuations, len(window_arrivals)), 6),
         "post_place_linger_rate": round(_rate(post_place_lingers, len(places)), 6),
         "wake_recovery_rate": round(_rate(wake_recoveries, len(wakes)), 6),
@@ -191,7 +191,7 @@ def evaluate(seed: int, steps: int) -> dict:
         "movement_has_readable_purpose": metrics["purposeful_movement_rate"] >= 0.95,
         "non_delivery_ping_pong_is_rare": metrics["non_delivery_reversal_rate"] <= 0.08,
         "arrivals_usually_linger": metrics["post_arrival_linger_rate"] >= 0.93,
-        "object_inspection_often_continues": metrics["inspect_to_same_object_carry_within_two_decisions_rate"] >= 0.70,
+        "object_inspection_often_continues": metrics["inspect_to_same_object_followup_within_two_decisions_rate"] >= 0.70,
         "window_arrivals_become_sessions": metrics["window_session_continuation_rate"] >= 0.80,
         "placed_objects_get_settle_time": metrics["post_place_linger_rate"] >= 0.90,
         "wake_has_recovery_before_travel": metrics["wake_recovery_rate"] >= 0.90,

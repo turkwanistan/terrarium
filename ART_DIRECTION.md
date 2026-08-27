@@ -178,3 +178,12 @@ Favorite spots are authored physical affordances, not renderer inventions. Any f
 Pixel-Art Overhaul — Iteration 5 makes **repetition across days part of character readability** without giving the renderer any memory or behavioral authority. A viewer should be able to infer a favorite only from Moss repeatedly choosing a place, object, or context over time. Do not add labels, badges, meters, glow, UI callouts, or renderer-only decoration that declares a preference.
 
 Habits must remain visually alive rather than choreographed. Familiar places may recur, favorite objects may receive more attention, and time-of-day tendencies may become recognizable, but individual days still need variation and environmental responsiveness. The acting question expands from “does this pose continue the last action?” to **“over many visits, does this still look like the same creature making characteristic choices?”**
+
+
+## Accepted Iteration 6 affordance acting conventions
+
+Pixel-Art Overhaul — Iteration 6 makes **consequence part of action readability**. A new pose is not enough by itself: object play, arrangement, comfort, and environmental reaction should visibly belong to a short causal activity with a reason to begin, a readable middle, an authoritative consequence where applicable, and a calm recovery.
+
+Nudge must read as approach/contact **before** displacement, followed by a brief regard of the changed object position. Carry/place should communicate a chosen arrangement rather than generic shuffling. Loaf, groom, and stretch are distinct quiet silhouettes and should not be exaggerated into constant fidgeting. Environmental `react` is an attention shift that may lead into an existing window-watch session; it must remain quieter than the weather itself and must not become alarm animation.
+
+Habits may become visible through where these affordances recur: favorite zones can attract more loafing or arrangements and favored objects may participate somewhat more often. The renderer still never declares a favorite with UI, glow, labels, or hidden memory. Persistent arrangements and object displacement are canonical world history; the renderer only makes their consequences legible.

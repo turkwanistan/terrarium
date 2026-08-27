@@ -52,6 +52,9 @@ def evaluate(seed: int, steps: int) -> dict:
         moved_objects = sum(int(o["times_moved"]) > 0 for o in engine.state["objects"])
         marks = len(engine.state["habitat"]["marks"])
         shelf = int(engine.state["habitat"]["shelf_count"])
+        affordance = engine.state["habitat"].get("affordance_history") or {}
+        object_nudges = sum(int(o.get("times_nudged", 0)) for o in engine.state["objects"])
+        arrangement_places = int((engine.state["habitat"].get("activity_aftermath") or {}).get("arrangement_places", 0))
         presentation = _presentation_metrics(decision_events)
         visible_intent_changes = sum(1 for i in range(1, len(timeline_actions)) if timeline_actions[i] != timeline_actions[i-1])
         checks = {
@@ -62,7 +65,9 @@ def evaluate(seed: int, steps: int) -> dict:
             "object_manipulation_burst_bounded": presentation["max_consecutive_object_manipulations"] <= 3,
             "object_interaction_present": object_placements >= max(2, len(decision_events) // 20),
             "multiple_objects_changed": moved_objects >= 3,
-            "visible_environment_accumulated": marks >= max(1, len(decision_events) // 80) or shelf >= 2,
+            "visible_environment_accumulated": (
+                marks >= max(1, len(decision_events) // 80) or shelf >= 2 or object_nudges >= 1 or arrangement_places >= 2
+            ),
             "no_impossible_carry_state": _carry_consistent(engine.state),
         }
         result = {
@@ -87,6 +92,9 @@ def evaluate(seed: int, steps: int) -> dict:
                 "moved_objects": moved_objects,
                 "shelf_count": shelf,
                 "persistent_marks": marks,
+                "object_nudges": object_nudges,
+                "arrangement_places": arrangement_places,
+                "affordance_families_recorded": len((affordance.get("completed_families") or {})),
                 "events": len(events),
                 **presentation,
             },
@@ -98,7 +106,7 @@ def evaluate(seed: int, steps: int) -> dict:
 
 def _presentation_metrics(events: list[dict]) -> dict:
     movement = {"walk", "explore"}
-    manipulation = {"carry", "place"}
+    manipulation = {"carry", "place", "nudge"}
     move_pairs = reversals = adjacent_manip = 0
     move_run = manip_run = max_move = max_manip = 0
     for i, event in enumerate(events):

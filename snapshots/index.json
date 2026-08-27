@@ -195,6 +195,21 @@
         "steps": 10080
       },
       "tick": 10080
+    },
+    {
+      "captured_at": "2026-08-27T23:38:41.124186Z",
+      "frame_path": "/snapshots/dev/20260827T233841118223Z-pixel-art-overhaul-iteration6/frame.json",
+      "meta_path": "/snapshots/dev/20260827T233841118223Z-pixel-art-overhaul-iteration6/meta.json",
+      "note": "Accepted Iteration 6 behavioral repertoire and world affordances after full validation",
+      "preview_path": "/snapshots/dev/20260827T233841118223Z-pixel-art-overhaul-iteration6/preview.svg",
+      "renderer_sha256": "66a80f9e86d3242a2c99903956faa39873dd7dbfc0233869af8c2952bb56cd19",
+      "snapshot_id": "20260827T233841118223Z-pixel-art-overhaul-iteration6",
+      "source": {
+        "mode": "deterministic",
+        "seed": 1701,
+        "steps": 10080
+      },
+      "tick": 10080
     }
   ]
 }

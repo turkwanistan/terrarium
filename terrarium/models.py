@@ -11,12 +11,14 @@ from .spatial import ZONE_ANCHORS
 FRAME_WIDTH = 800
 FRAME_HEIGHT = 480
 STATE_SCHEMA_VERSION = 1
-RULES_VERSION = "terrarium-rules-v4-long-horizon-habits"
+RULES_VERSION = "terrarium-rules-v5-behavioral-repertoire"
 BEHAVIOR_CONTEXT_SCHEMA = "terrarium.behavior-context.v1"
 HABIT_PROFILE_SCHEMA = "terrarium.habits.v1"
+AFFORDANCE_HISTORY_SCHEMA = "terrarium.affordances.v1"
 HABIT_CONTEXTS = ("dawn", "day", "dusk", "night")
 RNG_STREAM_VERSION = "terrarium-rules-v3-routine-coherence"
 EVENT_VERSION = 1
+WEATHER_STREAM_VERSION = "terrarium.weather.v2"
 
 ZONES: dict[str, dict[str, int]] = {name: dict(anchor) for name, anchor in ZONE_ANCHORS.items()}
 
@@ -66,10 +68,12 @@ def lighting_for(world_minutes: int) -> str:
 
 
 def weather_for(world_minutes: int, seed: int) -> str:
-    # Pure, deterministic ambient cycle; action RNG never affects weather.
-    block = world_minutes // 180
-    v = (seed * 1103515245 + block * 12345) & 0x7FFFFFFF
-    bucket = v % 10
+    # Pure deterministic ambient cycle independent from action RNG. Hashing the
+    # three-hour block avoids low-bit LCG aliasing (canonical seed 1701 used to
+    # remain clear indefinitely) while keeping weather calm and replay-exact.
+    block = int(world_minutes) // 180
+    material = f"{int(seed)}:{WEATHER_STREAM_VERSION}:{block}".encode("utf-8")
+    bucket = int.from_bytes(hashlib.sha256(material).digest()[:2], "big") % 10
     if bucket <= 1:
         return "rain"
     if bucket == 2:
@@ -93,6 +97,7 @@ def initial_state(seed: int, *, created_at: str | None = None) -> dict[str, Any]
                 "carried_by": None,
                 "times_inspected": 0,
                 "times_moved": 0,
+                "times_nudged": 0,
             }
         )
     return {
@@ -148,6 +153,20 @@ def initial_state(seed: int, *, created_at: str | None = None) -> dict[str, Any]
                 "window_watches": 0,
                 "wet_window_watches": 0,
                 "activity_corner_uses": 0,
+                "loaf_sessions": 0,
+                "groom_sessions": 0,
+                "stretch_sessions": 0,
+                "object_nudges": 0,
+                "arrangement_places": 0,
+                "weather_reactions": 0,
+            },
+            "affordance_history": {
+                "schema": AFFORDANCE_HISTORY_SCHEMA,
+                "completed_families": {},
+                "object_nudges": {},
+                "zone_comfort": {name: 0 for name in ZONES},
+                "zone_arrangements": {name: 0 for name in ZONES},
+                "last_weather_reaction_block": -1,
             },
         },
         "objects": objects,

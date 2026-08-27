@@ -1,0 +1,128 @@
+{
+  "meaningful_family_mapping": {
+    "carry": "arrange",
+    "explore": "travel",
+    "idle": "idle",
+    "inspect": "investigate",
+    "look_outside": "observe",
+    "place": "arrange",
+    "rest": "comfort",
+    "sleep": "sleep",
+    "wake": "sleep",
+    "walk": "travel"
+  },
+  "schema": "terrarium.iteration6-variety-baseline.v1",
+  "seeds": {
+    "1701": {
+      "action_counts": {
+        "carry": 214,
+        "explore": 178,
+        "idle": 558,
+        "inspect": 220,
+        "look_outside": 152,
+        "place": 214,
+        "rest": 627,
+        "sleep": 263,
+        "wake": 106,
+        "walk": 371
+      },
+      "decision_events": 2903,
+      "family_counts": {
+        "arrange": 428,
+        "comfort": 627,
+        "idle": 558,
+        "investigate": 220,
+        "observe": 152,
+        "sleep": 369,
+        "travel": 549
+      },
+      "family_entropy_bits": 2.679567,
+      "meaningful_activity_families": 7,
+      "old_generic_decision_share": 0.724423
+    },
+    "1702": {
+      "action_counts": {
+        "carry": 220,
+        "explore": 175,
+        "idle": 537,
+        "inspect": 238,
+        "look_outside": 145,
+        "place": 219,
+        "rest": 588,
+        "sleep": 292,
+        "wake": 104,
+        "walk": 365
+      },
+      "decision_events": 2883,
+      "family_counts": {
+        "arrange": 439,
+        "comfort": 588,
+        "idle": 537,
+        "investigate": 238,
+        "observe": 145,
+        "sleep": 396,
+        "travel": 540
+      },
+      "family_entropy_bits": 2.692912,
+      "meaningful_activity_families": 7,
+      "old_generic_decision_share": 0.71488
+    },
+    "42": {
+      "action_counts": {
+        "carry": 207,
+        "explore": 210,
+        "idle": 568,
+        "inspect": 193,
+        "look_outside": 167,
+        "place": 207,
+        "rest": 661,
+        "sleep": 235,
+        "wake": 106,
+        "walk": 369
+      },
+      "decision_events": 2923,
+      "family_counts": {
+        "arrange": 414,
+        "comfort": 661,
+        "idle": 568,
+        "investigate": 193,
+        "observe": 167,
+        "sleep": 341,
+        "travel": 579
+      },
+      "family_entropy_bits": 2.662759,
+      "meaningful_activity_families": 7,
+      "old_generic_decision_share": 0.735204
+    },
+    "999": {
+      "action_counts": {
+        "carry": 218,
+        "explore": 166,
+        "idle": 545,
+        "inspect": 239,
+        "look_outside": 154,
+        "place": 218,
+        "rest": 598,
+        "sleep": 281,
+        "wake": 105,
+        "walk": 354
+      },
+      "decision_events": 2878,
+      "family_counts": {
+        "arrange": 436,
+        "comfort": 598,
+        "idle": 545,
+        "investigate": 239,
+        "observe": 154,
+        "sleep": 386,
+        "travel": 520
+      },
+      "family_entropy_bits": 2.696999,
+      "meaningful_activity_families": 7,
+      "old_generic_decision_share": 0.711953
+    }
+  },
+  "source_artifact": "artifacts/pixel-art-overhaul-iteration5-evaluation.json",
+  "source_checkpoint": "Pixel-Art Overhaul \u2014 Iteration 5: Long-Horizon Preferences and Habit Formation",
+  "source_commit": "9bd5f96"
+}

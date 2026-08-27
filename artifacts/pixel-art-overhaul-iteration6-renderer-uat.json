@@ -1,0 +1,136 @@
+{
+  "all_scale2x_exact": true,
+  "art_surface": [
+    400,
+    240
+  ],
+  "manual_browser_checks": [
+    "object_nudge keyframe screenshot captured at 800x480",
+    "loaf keyframe screenshot captured at 800x480",
+    "mediated browser reported zero page errors while loading all new-affordance temporal sequences"
+  ],
+  "nudge": {
+    "phases": [
+      [
+        0,
+        "paw-contact",
+        0
+      ],
+      [
+        100,
+        "paw-contact",
+        0
+      ],
+      [
+        250,
+        "paw-contact",
+        0
+      ],
+      [
+        500,
+        "paw-contact",
+        0
+      ],
+      [
+        800,
+        "nudge-slide",
+        0.036653
+      ],
+      [
+        1100,
+        "nudge-slide",
+        0.436948
+      ],
+      [
+        1400,
+        "nudge-slide",
+        0.910587
+      ],
+      [
+        1700,
+        "settled",
+        1
+      ],
+      [
+        2000,
+        "settled",
+        1
+      ],
+      [
+        2300,
+        "settled",
+        1
+      ],
+      [
+        2600,
+        "settled",
+        1
+      ]
+    ],
+    "placement_progress_monotonic": true,
+    "settles_by_ms": 1700
+  },
+  "passed": true,
+  "scenarios": {
+    "groom": {
+      "distinct_raster_hashes": 6,
+      "facings": [
+        "right"
+      ],
+      "poses": [
+        "groom"
+      ],
+      "samples": 11,
+      "scale2x_exact": true
+    },
+    "loaf": {
+      "distinct_raster_hashes": 5,
+      "facings": [
+        "left"
+      ],
+      "poses": [
+        "loaf"
+      ],
+      "samples": 11,
+      "scale2x_exact": true
+    },
+    "object_nudge": {
+      "distinct_raster_hashes": 7,
+      "facings": [
+        "right"
+      ],
+      "poses": [
+        "nudge"
+      ],
+      "samples": 11,
+      "scale2x_exact": true
+    },
+    "stretch": {
+      "distinct_raster_hashes": 8,
+      "facings": [
+        "right"
+      ],
+      "poses": [
+        "stretch"
+      ],
+      "samples": 11,
+      "scale2x_exact": true
+    },
+    "weather_reaction": {
+      "distinct_raster_hashes": 5,
+      "facings": [
+        "left"
+      ],
+      "poses": [
+        "react"
+      ],
+      "samples": 11,
+      "scale2x_exact": true
+    }
+  },
+  "schema": "terrarium.iteration6-renderer-uat.v1",
+  "viewport": [
+    800,
+    480
+  ]
+}

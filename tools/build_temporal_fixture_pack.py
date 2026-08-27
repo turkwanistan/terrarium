@@ -27,9 +27,10 @@ def _walk_scenarios(seed: int = 1701) -> dict[str, dict[str, Any]]:
     required = {
         "arrive_settle", "left_walk", "right_walk", "carried_walk", "idle_control",
         "sleep_transition", "waking", "wake_exit", "window_transition", "activity_corner_transition",
-        "activity_corner_approach", "shelf_approach", "inspect_object", "object_pickup", "object_placement",
+        "activity_corner_approach", "shelf_approach", "inspect_object", "object_nudge", "object_pickup", "object_placement",
+        "loaf", "groom", "stretch", "weather_reaction",
     }
-    for _ in range(1200):
+    for _ in range(1800):
         before = state
         _, _, details, state = sim.step(state)
         old = before["creature"]
@@ -57,10 +58,20 @@ def _walk_scenarios(seed: int = 1701) -> dict[str, dict[str, Any]]:
             found["shelf_approach"] = _scenario("shelf_approach", before, state, details, "approach the low collection tray from the open left/front side")
         if new["activity"] == "look_outside" and new["zone"] == "window" and "window_transition" not in found:
             found["window_transition"] = _scenario("window_transition", before, state, details, "window-use settle and observation transition")
-        if new["zone"] == "activity_corner" and new["activity"] in {"inspect", "carry", "place"} and "activity_corner_transition" not in found:
+        if new["zone"] == "activity_corner" and new["activity"] in {"inspect", "nudge", "carry", "place", "loaf", "groom", "stretch"} and "activity_corner_transition" not in found:
             found["activity_corner_transition"] = _scenario("activity_corner_transition", before, state, details, "activity-corner surface interaction transition")
         if details.get("action") == "inspect" and details.get("object_id") and "inspect_object" not in found:
             found["inspect_object"] = _scenario("inspect_object", before, state, details, "targeted object inspection with face/lean/contact staging")
+        if details.get("action") == "nudge" and details.get("object_id") and "object_nudge" not in found:
+            found["object_nudge"] = _scenario("object_nudge", before, state, details, "paw contact visibly displaces an authoritative object before Moss re-inspects the result")
+        if details.get("action") == "loaf" and "loaf" not in found:
+            found["loaf"] = _scenario("loaf", before, state, details, "Moss settles into a distinct tucked comfort pose")
+        if details.get("action") == "groom" and "groom" not in found:
+            found["groom"] = _scenario("groom", before, state, details, "Moss performs a restrained self-directed grooming activity")
+        if details.get("action") == "stretch" and "stretch" not in found:
+            found["stretch"] = _scenario("stretch", before, state, details, "Moss performs a readable full-body stretch before settling")
+        if details.get("action") == "react" and "weather_reaction" not in found:
+            found["weather_reaction"] = _scenario("weather_reaction", before, state, details, "Moss notices non-clear weather and visibly orients toward the window")
         if details.get("action") == "carry" and details.get("object_id") and not old.get("carrying") and "object_pickup" not in found:
             found["object_pickup"] = _scenario("object_pickup", before, state, details, "object reach/contact/attachment transition")
         if new["activity"] == "place" and "object_placement" not in found:
@@ -74,13 +85,13 @@ def _walk_scenarios(seed: int = 1701) -> dict[str, dict[str, Any]]:
 
 
 def _rain_scenario() -> dict[str, Any]:
-    state = initial_state(7, created_at=CREATED_AT)
+    state = initial_state(0, created_at=CREATED_AT)
     if state["habitat"]["weather"] != "rain":
-        raise RuntimeError("seed 7 no longer starts in rain")
+        raise RuntimeError("seed 0 no longer starts in rain")
     frame = make_frame(state)
     return {
         "id": "rain_control",
-        "seed": 7,
+        "seed": 0,
         "source_tick": frame["tick"],
         "target_tick": frame["tick"],
         "source": frame,
@@ -93,7 +104,7 @@ def _rain_scenario() -> dict[str, Any]:
 def _rain_window_scenario() -> dict[str, Any]:
     state = initial_state(1, created_at=CREATED_AT)
     sim = Simulation()
-    for _ in range(500):
+    for _ in range(900):
         before = state
         _, _, details, state = sim.step(state)
         if details.get("action") == "look_outside" and details.get("weather") == "rain" and state["creature"]["zone"] == "window":
@@ -213,8 +224,8 @@ def build() -> dict[str, Any]:
     scenarios["rain_control"] = _rain_scenario()
     hero_reel = [
         "left_walk", "right_walk", "arrive_settle", "idle_control", "window_transition",
-        "rain_window", "inspect_object", "object_pickup", "carried_walk", "object_placement",
-        "sleep_transition", "waking", "wake_exit", "activity_corner_approach", "activity_corner_transition",
+        "rain_window", "weather_reaction", "inspect_object", "object_nudge", "object_pickup", "carried_walk", "object_placement",
+        "loaf", "groom", "stretch", "sleep_transition", "waking", "wake_exit", "activity_corner_approach", "activity_corner_transition",
         "shelf_approach", "populated_room",
         "dawn_light_transition", "dusk_light_transition", "rain_control",
     ]

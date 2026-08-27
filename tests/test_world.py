@@ -65,7 +65,10 @@ def test_world_is_autonomous_and_habitat_accumulates(tmp_path):
     assert sum(e['type']=='object_placed' for e in events)>=4
     assert sum(o['times_moved']>0 for o in engine.current_state()['objects'])>=3
     # Calmer routine-aware behavior intentionally creates path wear more slowly.
-    assert len(engine.current_state()['habitat']['marks'])>=2
+    state=engine.current_state()
+    assert sum(state['habitat']['path_wear'].values()) >= 15
+    assert sum(state['habitat']['affordance_history']['completed_families'].values()) >= 80
+    assert state['habitat']['activity_aftermath']['object_nudges'] >= 2
     store.close()
 
 
@@ -93,7 +96,9 @@ def test_activity_specific_aftermath_accumulates_deterministically(tmp_path):
     assert aftermath['activity_corner_uses'] >= 8
     frame=make_frame(state,last_event=store.last_event())
     assert frame['habitat']['activity_aftermath'] == aftermath
-    assert len({e['details']['action'] for e in events}) == 10
+    actions={e['details']['action'] for e in events}
+    assert {'loaf','groom','stretch','nudge','react'} <= actions
+    assert len(actions) >= 15
     assert frame['last_event']['action'] == store.last_event()['details']['action']
     assert frame['last_event']['object_id'] == store.last_event()['details'].get('object_id')
     assert 'intent_action' in frame['creature'] and 'target_object_id' in frame['creature']

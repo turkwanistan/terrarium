@@ -1,0 +1,40 @@
+{
+  "art_surface": {
+    "height": 240,
+    "integer_scale": 2,
+    "smoothing": false,
+    "width": 400
+  },
+  "captured_at": "2026-08-27T23:38:41.124186Z",
+  "frame": {
+    "logical_height": 480,
+    "logical_width": 800,
+    "path": "dev/20260827T233841118223Z-pixel-art-overhaul-iteration6/frame.json",
+    "sha256": "0a759f58fa022f3dcbf7dd4de33c632bb9ee9366b82e0b077d71eacd6314102e",
+    "tick": 10080
+  },
+  "git": {
+    "branch": "main",
+    "dirty": true,
+    "head": "9bd5f96c1ab2219b5dcdc97d39d742366554fbae"
+  },
+  "note": "Accepted Iteration 6 behavioral repertoire and world affordances after full validation",
+  "preview": {
+    "path": "dev/20260827T233841118223Z-pixel-art-overhaul-iteration6/preview.svg",
+    "sha256": "f855b45f659cea851b4b9f6b5dbf122e96feef2f63a182c56dd3ef86067011ee"
+  },
+  "schema": "terrarium.dev-snapshot.v1",
+  "snapshot_id": "20260827T233841118223Z-pixel-art-overhaul-iteration6",
+  "source": {
+    "mode": "deterministic",
+    "seed": 1701,
+    "steps": 10080
+  },
+  "source_hashes": {
+    "engine": "ed0b0e146431ae3c4ae286f032f2edea107a3104b67c9e6bbf72386ecaf19082",
+    "frame_contract": "c769d0a8d7a982db0b961f50adedcb0030db83497f0f2612e6ca55697abd44ac",
+    "renderer_css": "3a24319be5a3e0c963b8e721b637f35aedfdc24b8bef8e779ae934dd09fd62d1",
+    "renderer_js": "66a80f9e86d3242a2c99903956faa39873dd7dbfc0233869af8c2952bb56cd19"
+  },
+  "view_url": "/?snapshot=/snapshots/dev/20260827T233841118223Z-pixel-art-overhaul-iteration6/frame.json"
+}

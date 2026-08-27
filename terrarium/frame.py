@@ -37,7 +37,7 @@ def make_frame(state: dict[str, Any], *, last_event: dict[str, Any] | None = Non
             "target_object_id": creature.get("focus_object_id"),
         },
         "objects": [
-            {k: obj[k] for k in ("id", "name", "kind", "x", "y", "zone", "state", "carried_by", "times_moved", "times_inspected")}
+            {k: obj[k] for k in ("id", "name", "kind", "x", "y", "zone", "state", "carried_by", "times_moved", "times_inspected", "times_nudged")}
             for obj in state["objects"]
         ],
         "habitat": {
@@ -46,7 +46,7 @@ def make_frame(state: dict[str, Any], *, last_event: dict[str, Any] | None = Non
             "marks": list(state["habitat"]["marks"]),
             "activity_aftermath": {
                 key: int(aftermath.get(key, 0))
-                for key in ("sleep_nook_ticks", "sleep_nook_bouts", "window_watches", "wet_window_watches", "activity_corner_uses")
+                for key in ("sleep_nook_ticks", "sleep_nook_bouts", "window_watches", "wet_window_watches", "activity_corner_uses", "loaf_sessions", "groom_sessions", "stretch_sessions", "object_nudges", "arrangement_places", "weather_reactions")
             },
         },
         "last_event": None
@@ -73,6 +73,9 @@ def make_frame(state: dict[str, Any], *, last_event: dict[str, Any] | None = Non
             "route_length": (last_event.get("details") or {}).get("route_length"),
             "route": [dict(point) for point in ((last_event.get("details") or {}).get("route") or [])],
             "supported_action": (last_event.get("details") or {}).get("supported_action"),
+            "activity_family": (last_event.get("details") or {}).get("activity_family"),
+            "result_x": (last_event.get("details") or {}).get("result_x"),
+            "result_y": (last_event.get("details") or {}).get("result_y"),
         },
         "spatial": {"schema": SPATIAL_SCHEMA},
     }

@@ -1,0 +1,432 @@
+{
+  "accepted": true,
+  "baseline": {
+    "meaningful_family_mapping": {
+      "carry": "arrange",
+      "explore": "travel",
+      "idle": "idle",
+      "inspect": "investigate",
+      "look_outside": "observe",
+      "place": "arrange",
+      "rest": "comfort",
+      "sleep": "sleep",
+      "wake": "sleep",
+      "walk": "travel"
+    },
+    "schema": "terrarium.iteration6-variety-baseline.v1",
+    "seeds": {
+      "1701": {
+        "action_counts": {
+          "carry": 214,
+          "explore": 178,
+          "idle": 558,
+          "inspect": 220,
+          "look_outside": 152,
+          "place": 214,
+          "rest": 627,
+          "sleep": 263,
+          "wake": 106,
+          "walk": 371
+        },
+        "decision_events": 2903,
+        "family_counts": {
+          "arrange": 428,
+          "comfort": 627,
+          "idle": 558,
+          "investigate": 220,
+          "observe": 152,
+          "sleep": 369,
+          "travel": 549
+        },
+        "family_entropy_bits": 2.679567,
+        "meaningful_activity_families": 7,
+        "old_generic_decision_share": 0.724423
+      },
+      "1702": {
+        "action_counts": {
+          "carry": 220,
+          "explore": 175,
+          "idle": 537,
+          "inspect": 238,
+          "look_outside": 145,
+          "place": 219,
+          "rest": 588,
+          "sleep": 292,
+          "wake": 104,
+          "walk": 365
+        },
+        "decision_events": 2883,
+        "family_counts": {
+          "arrange": 439,
+          "comfort": 588,
+          "idle": 537,
+          "investigate": 238,
+          "observe": 145,
+          "sleep": 396,
+          "travel": 540
+        },
+        "family_entropy_bits": 2.692912,
+        "meaningful_activity_families": 7,
+        "old_generic_decision_share": 0.71488
+      },
+      "42": {
+        "action_counts": {
+          "carry": 207,
+          "explore": 210,
+          "idle": 568,
+          "inspect": 193,
+          "look_outside": 167,
+          "place": 207,
+          "rest": 661,
+          "sleep": 235,
+          "wake": 106,
+          "walk": 369
+        },
+        "decision_events": 2923,
+        "family_counts": {
+          "arrange": 414,
+          "comfort": 661,
+          "idle": 568,
+          "investigate": 193,
+          "observe": 167,
+          "sleep": 341,
+          "travel": 579
+        },
+        "family_entropy_bits": 2.662759,
+        "meaningful_activity_families": 7,
+        "old_generic_decision_share": 0.735204
+      },
+      "999": {
+        "action_counts": {
+          "carry": 218,
+          "explore": 166,
+          "idle": 545,
+          "inspect": 239,
+          "look_outside": 154,
+          "place": 218,
+          "rest": 598,
+          "sleep": 281,
+          "wake": 105,
+          "walk": 354
+        },
+        "decision_events": 2878,
+        "family_counts": {
+          "arrange": 436,
+          "comfort": 598,
+          "idle": 545,
+          "investigate": 239,
+          "observe": 154,
+          "sleep": 386,
+          "travel": 520
+        },
+        "family_entropy_bits": 2.696999,
+        "meaningful_activity_families": 7,
+        "old_generic_decision_share": 0.711953
+      }
+    },
+    "source_artifact": "artifacts/pixel-art-overhaul-iteration5-evaluation.json",
+    "source_checkpoint": "Pixel-Art Overhaul \u2014 Iteration 5: Long-Horizon Preferences and Habit Formation",
+    "source_commit": "9bd5f96"
+  },
+  "behavior": {
+    "affordance_history_schema": "terrarium.affordances.v1",
+    "behavior_context_schema": "terrarium.behavior-context.v1",
+    "habit_schema": "terrarium.habits.v1",
+    "meaningful_families": [
+      "travel",
+      "idle",
+      "comfort",
+      "self_care",
+      "investigate",
+      "play",
+      "arrange",
+      "observe",
+      "react",
+      "sleep"
+    ],
+    "new_actions": [
+      "nudge",
+      "loaf",
+      "groom",
+      "stretch",
+      "react"
+    ],
+    "rng_stream_version": "terrarium-rules-v3-routine-coherence",
+    "rules_version": "terrarium-rules-v5-behavioral-repertoire"
+  },
+  "checkpoint": "Pixel-Art Overhaul \u2014 Iteration 6: Behavioral Repertoire and World Affordances",
+  "controlled_history_divergence": {
+    "comfort_cross_advantage": 0.154522,
+    "final_object_arrangements_diverge": true,
+    "loaf_cross_advantage": 0.27972,
+    "physical_state_equal_before_run": true,
+    "placement_cross_advantage": 0.340741,
+    "same_history_deterministic": true
+  },
+  "migration": {
+    "affordance_history": "neutral-empty on next ordinary transition for existing worlds",
+    "fabricates_pre_upgrade_activity": false,
+    "preserves": [
+      "canonical Moss identity/state",
+      "objects/positions/possession",
+      "behavior_context",
+      "terrarium.habits.v1",
+      "append-only event/snapshot history"
+    ]
+  },
+  "multi_seed_repertoire": {
+    "all_passed": true,
+    "results": {
+      "1701": {
+        "distinct_family_transitions": 66,
+        "distinct_zone_family_combinations": 40,
+        "family_entropy_bits": 2.931034,
+        "meaningful_activity_families": 10,
+        "new_action_decision_share": 0.137218,
+        "nudge_to_reinspect_within_two_rate": 1.0,
+        "object_nudges": 55,
+        "objects_nudged": 6,
+        "old_generic_decision_share": 0.598496,
+        "passed": true,
+        "top_family_share": 0.234962,
+        "weather_reaction_to_window_within_two_rate": 0.941176
+      },
+      "1702": {
+        "distinct_family_transitions": 63,
+        "distinct_zone_family_combinations": 41,
+        "family_entropy_bits": 2.942419,
+        "meaningful_activity_families": 10,
+        "new_action_decision_share": 0.117996,
+        "nudge_to_reinspect_within_two_rate": 0.949153,
+        "object_nudges": 59,
+        "objects_nudged": 6,
+        "old_generic_decision_share": 0.591095,
+        "passed": true,
+        "top_family_share": 0.218924,
+        "weather_reaction_to_window_within_two_rate": 1.0
+      },
+      "42": {
+        "distinct_family_transitions": 66,
+        "distinct_zone_family_combinations": 41,
+        "family_entropy_bits": 2.946327,
+        "meaningful_activity_families": 10,
+        "new_action_decision_share": 0.124539,
+        "nudge_to_reinspect_within_two_rate": 0.913043,
+        "object_nudges": 69,
+        "objects_nudged": 6,
+        "old_generic_decision_share": 0.604643,
+        "passed": true,
+        "top_family_share": 0.224024,
+        "weather_reaction_to_window_within_two_rate": 1.0
+      },
+      "999": {
+        "distinct_family_transitions": 63,
+        "distinct_zone_family_combinations": 40,
+        "family_entropy_bits": 2.914765,
+        "meaningful_activity_families": 10,
+        "new_action_decision_share": 0.125729,
+        "nudge_to_reinspect_within_two_rate": 0.984127,
+        "object_nudges": 63,
+        "objects_nudged": 6,
+        "old_generic_decision_share": 0.581997,
+        "passed": true,
+        "top_family_share": 0.219388,
+        "weather_reaction_to_window_within_two_rate": 1.0
+      }
+    },
+    "steps": 10080
+  },
+  "sbc": {
+    "decision": "NO \u2014 existing SBC substrate remains sufficient",
+    "gen18_warranted": false,
+    "modified": false,
+    "new_capability_forged": false
+  },
+  "schema": "terrarium.pixel-art-overhaul-iteration6-evidence.v1",
+  "snapshot": {
+    "id": "20260827T233841118223Z-pixel-art-overhaul-iteration6",
+    "renderer_js_sha256": "66a80f9e86d3242a2c99903956faa39873dd7dbfc0233869af8c2952bb56cd19",
+    "seed": 1701,
+    "semantic_frame_sha256": "0a759f58fa022f3dcbf7dd4de33c632bb9ee9366b82e0b077d71eacd6314102e",
+    "tick": 10080
+  },
+  "source_parent_commit": "9bd5f96c1ab2219b5dcdc97d39d742366554fbae",
+  "validation": {
+    "behavior": true,
+    "coherence_robustness": {
+      "passed": true,
+      "seeds": [
+        1701,
+        1702,
+        42,
+        999
+      ]
+    },
+    "combined_regression_matrix": true,
+    "habit_robustness": {
+      "passed": true,
+      "seeds": [
+        1701,
+        1702,
+        42,
+        999
+      ]
+    },
+    "javascript_syntax": true,
+    "pytest": {
+      "count": 39,
+      "passed": true
+    },
+    "python310_grammar": {
+      "passed": true,
+      "source_files": 30
+    },
+    "renderer_uat": {
+      "all_scale2x_exact": true,
+      "art_surface": [
+        400,
+        240
+      ],
+      "manual_browser_checks": [
+        "object_nudge keyframe screenshot captured at 800x480",
+        "loaf keyframe screenshot captured at 800x480",
+        "mediated browser reported zero page errors while loading all new-affordance temporal sequences"
+      ],
+      "nudge": {
+        "phases": [
+          [
+            0,
+            "paw-contact",
+            0
+          ],
+          [
+            100,
+            "paw-contact",
+            0
+          ],
+          [
+            250,
+            "paw-contact",
+            0
+          ],
+          [
+            500,
+            "paw-contact",
+            0
+          ],
+          [
+            800,
+            "nudge-slide",
+            0.036653
+          ],
+          [
+            1100,
+            "nudge-slide",
+            0.436948
+          ],
+          [
+            1400,
+            "nudge-slide",
+            0.910587
+          ],
+          [
+            1700,
+            "settled",
+            1
+          ],
+          [
+            2000,
+            "settled",
+            1
+          ],
+          [
+            2300,
+            "settled",
+            1
+          ],
+          [
+            2600,
+            "settled",
+            1
+          ]
+        ],
+        "placement_progress_monotonic": true,
+        "settles_by_ms": 1700
+      },
+      "passed": true,
+      "scenarios": {
+        "groom": {
+          "distinct_raster_hashes": 6,
+          "facings": [
+            "right"
+          ],
+          "poses": [
+            "groom"
+          ],
+          "samples": 11,
+          "scale2x_exact": true
+        },
+        "loaf": {
+          "distinct_raster_hashes": 5,
+          "facings": [
+            "left"
+          ],
+          "poses": [
+            "loaf"
+          ],
+          "samples": 11,
+          "scale2x_exact": true
+        },
+        "object_nudge": {
+          "distinct_raster_hashes": 7,
+          "facings": [
+            "right"
+          ],
+          "poses": [
+            "nudge"
+          ],
+          "samples": 11,
+          "scale2x_exact": true
+        },
+        "stretch": {
+          "distinct_raster_hashes": 8,
+          "facings": [
+            "right"
+          ],
+          "poses": [
+            "stretch"
+          ],
+          "samples": 11,
+          "scale2x_exact": true
+        },
+        "weather_reaction": {
+          "distinct_raster_hashes": 5,
+          "facings": [
+            "left"
+          ],
+          "poses": [
+            "react"
+          ],
+          "samples": 11,
+          "scale2x_exact": true
+        }
+      },
+      "schema": "terrarium.iteration6-renderer-uat.v1",
+      "viewport": [
+        800,
+        480
+      ]
+    },
+    "repertoire_robustness": {
+      "passed": true,
+      "seeds": [
+        1701,
+        1702,
+        42,
+        999
+      ]
+    },
+    "spatial": true,
+    "technical": true
+  }
+}
