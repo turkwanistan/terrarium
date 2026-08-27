@@ -25,12 +25,17 @@
   let previous = null;
   let transitionSource = null;
   let fetchedAt = performance.now();
+  let activityStartedAt = fetchedAt;
   let connected = false;
   let debugVisible = false;
   let lastPollError = null;
   const MOTION = Object.freeze({
     locomotion_min_ms: 1500, locomotion_max_ms: 2300, locomotion_base_ms: 1400, locomotion_px_ms: 1.4,
-    activity_ms: 1250, contact_ms: 1000, placement_ms: 1450, history_ms: 1800, engagement_ms: 900,
+    activity_ms: 1300, contact_ms: 1200, placement_ms: 2200, history_ms: 1800, engagement_ms: 1200, environment_ms: 3000,
+  });
+  const ACTION_DURATION = Object.freeze({
+    idle: 950, rest: 1450, inspect: 1800, carry: 1900, place: 2200,
+    look_outside: 1700, sleep: 2200, wake: 2000, walk: 1300,
   });
   const rain = Array.from({length: 28}, (_, i) => ({x: (i * 67) % 800, y: (i * 41) % 250, speed: 0.40 + (i % 4) * 0.10}));
   const dust = Array.from({length: 8}, (_, i) => ({x: 92 + (i * 59) % 286, y: 88 + (i * 47) % 214, phase: i * 1.7}));
@@ -40,10 +45,11 @@
   function clamp01(v) { return clamp(v, 0, 1); }
   function smooth01(v) { const t=clamp01(v); return t*t*(3-2*t); }
   function smoother01(v) { const t=clamp01(v); return t*t*t*(t*(t*6-15)+10); }
-  function transitionEase(v) { return temporalEasing === 'legacy' ? smooth01(v) : smoother01(v); }
+  function settled01(v) { const t=clamp01(v); return t*t*t*t*(35 - 84*t + 70*t*t - 20*t*t*t); }
+  function transitionEase(v) { return temporalEasing === 'legacy' ? smooth01(v) : settled01(v); }
   function locomotionDuration(distance) { return clamp(MOTION.locomotion_base_ms + distance * MOTION.locomotion_px_ms, MOTION.locomotion_min_ms, MOTION.locomotion_max_ms); }
   function stagedTravel(raw) { return transitionEase((raw - .08) / .80); }
-  function actionEnvelope(now, duration=MOTION.activity_ms) { if (!previous) return 1; return transitionEase((now-fetchedAt)/duration); }
+  function actionEnvelope(now, activity) { if (!previous) return 1; const duration=ACTION_DURATION[activity] || MOTION.activity_ms; return transitionEase((now-activityStartedAt)/duration); }
   function emergence(value, start, span) { return smooth01((value-start)/Math.max(.001,span)); }
   function historyValue(f, key, now) {
     const target=Number(f.habitat.activity_aftermath?.[key] || 0);
@@ -84,6 +90,41 @@
     if (lighting === 'dawn') return {...common, wall:'#766961', floor:'#5a493c', trim:'#765b46', glow:'#efbc77', sky:'#c48073', rug:'#63705b', ambient:'#efcf98'};
     if (lighting === 'dusk') return {...common, wall:'#665a58', floor:'#574438', trim:'#705541', glow:'#e8a662', sky:'#8a6075', rug:'#626b59', ambient:'#dfb47e'};
     return {...common, wall:'#867c6b', floor:'#665240', trim:'#745845', glow:'#edc77e', sky:'#81a39e', rug:'#6c7964', ambient:'#ead6a8'};
+  }
+  function hexRgb(value) {
+    const v=value.replace('#',''); return [parseInt(v.slice(0,2),16),parseInt(v.slice(2,4),16),parseInt(v.slice(4,6),16)];
+  }
+  function blendHex(a,b,t) {
+    const aa=hexRgb(a), bb=hexRgb(b);
+    const cc=aa.map((v,i)=>Math.round(mix(v,bb[i],clamp01(t))));
+    return `#${cc.map(v=>v.toString(16).padStart(2,'0')).join('')}`;
+  }
+  function blendPalette(a,b,t) {
+    const out={...a};
+    for (const key of Object.keys(a)) if (typeof a[key]==='string' && a[key].startsWith('#') && typeof b[key]==='string' && b[key].startsWith('#')) out[key]=blendHex(a[key],b[key],t);
+    return out;
+  }
+  function worldMinuteAt(f, now) {
+    const target=Number(f.world_minutes || 0);
+    if (!previous || snapshotPath) return target;
+    const source=Number(previous.world_minutes ?? target);
+    let delta=target-source;
+    if (delta < -720) delta += 1440;
+    if (delta > 720) delta -= 1440;
+    return source + delta*smoother01((now-fetchedAt)/MOTION.environment_ms);
+  }
+  function visualLighting(f, now) {
+    const minute=((worldMinuteAt(f,now)%1440)+1440)%1440;
+    const transitions=[
+      [360,'night','dawn'], [480,'dawn','day'], [1050,'day','dusk'], [1170,'dusk','night'],
+    ];
+    for (const [center,from,to] of transitions) {
+      if (minute >= center-30 && minute < center+30) {
+        const t=smoother01((minute-(center-30))/60);
+        return {palette:blendPalette(palette(from),palette(to),t), night:from==='night' ? 1-t : to==='night' ? t : 0, minute};
+      }
+    }
+    return {palette:palette(f.lighting), night:f.lighting==='night'?1:0, minute};
   }
 
   function drawPersistentHistory(f) {
@@ -126,7 +167,8 @@
   }
 
   function drawBackground(f, now) {
-    const p = palette(f.lighting);
+    const visual = visualLighting(f, now);
+    const p = visual.palette, nightAmount=visual.night, daylight=1-nightAmount;
     const causal = causalActivityState(f, now);
     ctx.fillStyle = p.wall; ctx.fillRect(0, 0, 800, 315);
     ctx.fillStyle = p.floor; ctx.fillRect(0, 315, 800, 165);
@@ -136,8 +178,9 @@
     ctx.fillStyle = p.trim; ctx.fillRect(0, 306, 800, 5);
     ctx.strokeStyle='rgba(42,31,25,.10)'; ctx.lineWidth=2;
     for (const y of [357,405,453]) { ctx.beginPath(); ctx.moveTo(0,y); ctx.lineTo(800,y); ctx.stroke(); }
-    if (f.lighting !== 'night') {
-      ctx.fillStyle = f.lighting === 'dusk' ? 'rgba(231,165,101,.035)' : 'rgba(239,210,156,.055)';
+    if (daylight > .01) {
+      const beamAlpha=(f.lighting === 'dusk' ? .035 : .055)*daylight;
+      ctx.fillStyle = `rgba(239,210,156,${beamAlpha.toFixed(4)})`;
       ctx.beginPath(); ctx.moveTo(92,210); ctx.lineTo(245,210); ctx.lineTo(410,480); ctx.lineTo(176,480); ctx.closePath(); ctx.fill();
     }
 
@@ -145,9 +188,8 @@
     ctx.fillStyle='rgba(31,23,20,.16)'; ctx.fillRect(49,53,235,176);
     rounded(54, 48, 225, 172, 5, p.woodDark);
     rounded(65, 58, 203, 151, 2, p.sky);
-    ctx.fillStyle = f.lighting === 'night' ? '#ddd2a8' : '#f5d293';
-    if (f.lighting === 'night') { ctx.beginPath(); ctx.arc(224, 91, 14, 0, Math.PI*2); ctx.fill(); }
-    else { ctx.beginPath(); ctx.arc(215, 92, 18, 0, Math.PI*2); ctx.fill(); }
+    if (daylight > .01) { ctx.save(); ctx.globalAlpha=daylight; ctx.fillStyle='#f5d293'; ctx.beginPath(); ctx.arc(215,92,18,0,Math.PI*2); ctx.fill(); ctx.restore(); }
+    if (nightAmount > .01) { ctx.save(); ctx.globalAlpha=nightAmount; ctx.fillStyle='#ddd2a8'; ctx.beginPath(); ctx.arc(224,91,14,0,Math.PI*2); ctx.fill(); ctx.restore(); }
     ctx.fillStyle = 'rgba(35,45,55,.33)'; ctx.fillRect(163,58,7,151); ctx.fillRect(65,130,203,7);
     if (f.weather === 'rain') {
       ctx.strokeStyle = 'rgba(190,214,218,.65)'; ctx.lineWidth = 2;
@@ -303,9 +345,9 @@
       ctx.beginPath(); ctx.ellipse(pos[0], pos[1], 33 + Math.min(18,wear), 7, 0, 0, Math.PI*2); ctx.fill();
     }
 
-    if (f.lighting === 'night') {
+    if (nightAmount > .01) {
       const glow = ctx.createRadialGradient(425,265,30,425,265,340);
-      glow.addColorStop(0,'rgba(244,181,93,.16)'); glow.addColorStop(1,'rgba(10,16,30,.36)');
+      glow.addColorStop(0,`rgba(244,181,93,${(.16*nightAmount).toFixed(4)})`); glow.addColorStop(1,`rgba(10,16,30,${(.36*nightAmount).toFixed(4)})`);
       ctx.fillStyle = glow; ctx.fillRect(0,0,800,480);
     }
     for (const d of dust) {
@@ -318,7 +360,7 @@
     const source=previous?.objects?.find(item=>item.id===o.id);
     if (!snapshotPath && source?.state === 'carried' && o.state === 'placed') {
       const raw=clamp01((now-fetchedAt)/MOTION.placement_ms);
-      const t=smoother01((raw-.14)/.68);
+      const t=smoother01((raw-.34)/.58);
       const facing=previous?.creature?.facing === 'left' ? -1 : 1;
       const originX=(transitionSource?.x ?? Number(previous.creature.x)) + facing*22;
       const originY=(transitionSource?.y ?? Number(previous.creature.y)) - 4;
@@ -326,7 +368,7 @@
         x:mix(originX,Number(o.x),t),
         y:mix(originY,Number(o.y),t),
         progress:t,
-        phase:raw < .14 ? 'prepare' : t < 1 ? 'lower-contact' : 'settled',
+        phase:raw < .34 ? 'prepare' : t < 1 ? 'lower-contact' : 'settled',
         transitioning:t < 1,
       };
     }
@@ -369,9 +411,17 @@
   }
 
   function actionTargetObject(f) {
-    const id=f.last_event?.object_id;
+    const id=f.creature?.target_object_id || f.last_event?.object_id;
     if (!id) return null;
-    return f.objects?.find(o=>o.id===id) || previous?.objects?.find(o=>o.id===id) || null;
+    const prior=previous?.objects?.find(o=>o.id===id);
+    if (f.creature.activity==='carry' && prior?.state==='placed') return prior;
+    return f.objects?.find(o=>o.id===id) || prior || null;
+  }
+  function actionTargetPoint(f) {
+    const lx=Number(f.last_event?.target_x), ly=Number(f.last_event?.target_y);
+    if (Number.isFinite(lx) && Number.isFinite(ly)) return {x:lx,y:ly,id:f.last_event?.object_id || f.creature?.target_object_id};
+    const obj=actionTargetObject(f);
+    return obj ? {x:Number(obj.x),y:Number(obj.y),id:obj.id} : null;
   }
 
   function phaseName(moving, raw, activityProgress) {
@@ -398,8 +448,8 @@
     const travel = semanticDistance > 2 ? stagedTravel(raw) : 1;
     const x = mix(sourceX, Number(c.x), travel), baseY = mix(sourceY, Number(c.y), travel);
     const moving = semanticDistance > 2 && travel < 1;
-    const activityProgress=actionEnvelope(now);
-    const target=actionTargetObject(f);
+    const activityProgress=actionEnvelope(now,c.activity);
+    const target=actionTargetPoint(f);
     let renderedFacing=c.facing;
     if (!moving && target && ['inspect','carry','place'].includes(c.activity) && Math.abs(Number(target.x)-x)>3) renderedFacing=Number(target.x)>=x?'right':'left';
     const direction=renderedFacing==='left'?-1:1;
@@ -449,6 +499,7 @@
         window: Number(causal.window.toFixed(6)),
         activity_corner: Number(causal.activity_corner.toFixed(6)),
       },
+      interaction_target: target ? {object_id:target.id||null,x:Number(target.x.toFixed(6)),y:Number(target.y.toFixed(6))} : null,
       object_placement: activePlacementState(f,now),
       ambient_classes: [f.weather === 'rain' ? 'rain' : f.weather === 'mist' ? 'mist' : null, 'window-motes', c.pose === 'sleep' ? 'breathing' : moving ? 'walk-cycle' : 'quiet-breathing', causal.sleep_nook>0?'bedding-contact':null, causal.window>0?'window-contact':null, causal.activity_corner>0?'work-surface-contact':null].filter(Boolean),
     };
@@ -457,23 +508,27 @@
   function drawCreature(f, now) {
     const c=f.creature;
     const rs=creatureRenderState(f,now);
-    const p=palette(f.lighting);
+    const p=visualLighting(f,now).palette;
     const x=rs.rendered_x, y=rs.rendered_y, moving=rs.moving;
     const flip=rs.facing==='left'?-1:1;
     const ap=rs.activity_progress;
     const prior=previous?.creature?.activity;
+    const target=actionTargetPoint(f);
     let sleepBlend=0;
     if (c.activity==='sleep') sleepBlend=prior==='sleep' ? 1 : smoother01((ap-.12)/.58);
     else if (prior==='sleep') sleepBlend=1-smoother01((ap-.10)/.68);
-    const inspectBlend=c.activity==='inspect' ? smoother01((ap-.10)/.42) : prior==='inspect' ? 1-smoother01(ap/.34) : 0;
+    const actionGate=rs.moving ? smoother01((rs.interpolation_progress-.52)/.38) : 1;
+    const inspectBlend=(c.activity==='inspect' ? smoother01((ap-.10)/.42)*actionGate : prior==='inspect' ? 1-smoother01(ap/.34) : 0);
     const windowBlend=c.activity==='look_outside' ? smoother01((ap-.12)/.48) : prior==='look_outside' ? 1-smoother01(ap/.38) : 0;
-    const carryReach=c.activity==='carry' ? smoother01((ap-.08)/.50) : 0;
-    const placeReach=c.activity==='place' ? smoother01((ap-.08)/.42) * (1-smoother01((ap-.78)/.22)) : 0;
+    const carryReach=c.activity==='carry' ? smoother01((ap-.12)/.54)*actionGate : 0;
+    const placeReach=c.activity==='place' ? smoother01((ap-.16)/.46)*actionGate * (1-smoother01((ap-.88)/.12)) : 0;
     const restBlend=['idle','rest'].includes(c.activity) && !moving ? .55 : 0;
-    const lean=inspectBlend*.08 + windowBlend*.06 + carryReach*.035;
-    const bodyDrop=restBlend*2 + sleepBlend*8;
+    const targetDy=target ? clamp((Number(target.y)-y)/70,-1,1) : 0;
+    const lean=inspectBlend*.09 + windowBlend*.055 + carryReach*.04;
+    const bodyDrop=restBlend*2 + sleepBlend*8 + (c.activity==='carry'?1.2:0);
     const headX=9 + inspectBlend*4 + windowBlend*3 + sleepBlend*6;
-    const headY=-16 + bodyDrop + sleepBlend*8;
+    const headY=-16 + bodyDrop + sleepBlend*8 + targetDy*inspectBlend*3;
+    const tailMood=(c.activity==='carry'? -4 : c.activity==='look_outside'?2 : restBlend*3);
 
     ctx.save(); ctx.translate(x,y); ctx.scale(flip,1);
     ctx.fillStyle='rgba(28,21,18,.25)';
@@ -482,10 +537,10 @@
     // Tail is the strongest silhouette cue. It curls lower and forward during sleep.
     ctx.strokeStyle='#465642'; ctx.lineWidth=12; ctx.lineCap='round';
     ctx.beginPath(); ctx.moveTo(-18,4+bodyDrop*.25);
-    ctx.quadraticCurveTo(-38,-4+sleepBlend*16,-30,-24+sleepBlend*29);
+    ctx.quadraticCurveTo(-38,-4+sleepBlend*16+tailMood,-30,-24+sleepBlend*29+tailMood);
     ctx.stroke();
     ctx.strokeStyle='#64765e'; ctx.lineWidth=4;
-    ctx.beginPath(); ctx.moveTo(-23,1+bodyDrop*.25); ctx.quadraticCurveTo(-35,-4+sleepBlend*15,-30,-19+sleepBlend*26); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(-23,1+bodyDrop*.25); ctx.quadraticCurveTo(-35,-4+sleepBlend*15+tailMood,-30,-19+sleepBlend*26+tailMood); ctx.stroke();
 
     ctx.save(); ctx.translate(0,bodyDrop); ctx.rotate(lean-.075*sleepBlend);
     ctx.fillStyle=p.moss;
@@ -494,20 +549,21 @@
     ctx.beginPath(); ctx.ellipse(7,7,12+sleepBlend*5,8,0,0,Math.PI*2); ctx.fill();
     ctx.restore();
 
-    ctx.save(); ctx.translate(headX,headY); ctx.rotate(lean*.45-.05*sleepBlend);
+    ctx.save(); ctx.translate(headX,headY); ctx.rotate(lean*.45-.05*sleepBlend+targetDy*inspectBlend*.07);
     ctx.fillStyle=p.mossLight;
     ctx.beginPath(); ctx.ellipse(0,0,20+sleepBlend*1.5,18-sleepBlend*1.5,-.06,0,Math.PI*2); ctx.fill();
     ctx.fillStyle=p.mossLight;
-    ctx.beginPath(); ctx.moveTo(-13,-11+sleepBlend*4); ctx.lineTo(-8,-30+sleepBlend*10); ctx.lineTo(-1,-13+sleepBlend*3); ctx.closePath(); ctx.fill();
-    ctx.beginPath(); ctx.moveTo(7,-13+sleepBlend*4); ctx.lineTo(18,-29+sleepBlend*10); ctx.lineTo(18,-9+sleepBlend*3); ctx.closePath(); ctx.fill();
+    const earLift=(c.expression==='curious' || c.activity==='look_outside') ? -2 : 0;
+    ctx.beginPath(); ctx.moveTo(-13,-11+sleepBlend*4); ctx.lineTo(-8,-30+sleepBlend*10+earLift); ctx.lineTo(-1,-13+sleepBlend*3); ctx.closePath(); ctx.fill();
+    ctx.beginPath(); ctx.moveTo(7,-13+sleepBlend*4); ctx.lineTo(18,-29+sleepBlend*10+earLift); ctx.lineTo(18,-9+sleepBlend*3); ctx.closePath(); ctx.fill();
     ctx.fillStyle='#d6c59d';
     ctx.beginPath(); ctx.ellipse(10,6,9,7,0,0,Math.PI*2); ctx.fill();
     ctx.fillStyle='#252923';
     if (sleepBlend>.45 || c.expression==='sleepy') {
       ctx.fillRect(-6,-3,7,2); ctx.fillRect(7,-4,7,2);
     } else {
-      const gaze=actionTargetObject(f) ? 1.0 : 0;
-      ctx.beginPath(); ctx.arc(-2+gaze,-4,2.6,0,Math.PI*2); ctx.arc(11+gaze,-5,2.6,0,Math.PI*2); ctx.fill();
+      const gaze=target ? 1.0 : 0, gazeY=target ? clamp(targetDy*1.6,-1.5,1.5) : 0;
+      ctx.beginPath(); ctx.arc(-2+gaze,-4+gazeY,2.6,0,Math.PI*2); ctx.arc(11+gaze,-5+gazeY,2.6,0,Math.PI*2); ctx.fill();
     }
     ctx.fillStyle='#3c332d'; ctx.fillRect(17,6,4,3);
     ctx.restore();
@@ -524,10 +580,14 @@
         ctx.moveTo(8,15+bodyDrop*.35); ctx.lineTo(10,26-bodyDrop*.15);
       }
       ctx.stroke();
-      const reach=Math.max(inspectBlend*.75,carryReach,placeReach);
+      const reach=Math.max(inspectBlend*.72,carryReach,placeReach);
       if (reach>.02) {
+        const localTargetX=target ? (Number(target.x)-x)*flip : 26;
+        const localTargetY=target ? Number(target.y)-y : 8;
+        const endX=target ? clamp(localTargetX,17,34) : 25;
+        const endY=target ? clamp(localTargetY,-21,22) : 8+placeReach*8;
         ctx.strokeStyle='#566650'; ctx.lineWidth=5; ctx.beginPath();
-        ctx.moveTo(10,5+bodyDrop*.35); ctx.lineTo(18+reach*7,8+placeReach*11); ctx.stroke();
+        ctx.moveTo(10,5+bodyDrop*.35); ctx.lineTo(mix(18,endX,reach),mix(8,endY,reach)); ctx.stroke();
       }
     }
     ctx.restore();
@@ -537,6 +597,17 @@
       if (obj && rs.carried_rendered_x!==null) drawObject({...obj,state:'placed',x:rs.carried_rendered_x,y:rs.carried_rendered_y});
     }
     return rs;
+  }
+
+  function drawForegroundFurniture(f, now) {
+    const p=visualLighting(f,now).palette;
+    // Thin front lips provide real occlusion without turning furniture into a
+    // wall in front of Moss. Shelf objects/legs can disappear behind these
+    // edges; the activity desk similarly owns its front edge.
+    ctx.fillStyle=p.woodDark;
+    for (const y of [125,176,227]) ctx.fillRect(603,y,141,3);
+    ctx.fillStyle='rgba(47,33,26,.70)'; ctx.fillRect(590,359,145,5);
+    ctx.fillStyle=p.woodTop; ctx.fillRect(590,359,145,2);
   }
 
   function drawForegroundCausality(f, now, rs) {
@@ -562,6 +633,7 @@
     drawBackground(frame, now);
     for (const o of frame.objects) drawWorldObject(o,frame,now);
     const renderState = drawCreature(frame, now);
+    drawForegroundFurniture(frame, now);
     drawForegroundCausality(frame, now, renderState);
     if (debugVisible) {
       debug.hidden=false;
@@ -608,11 +680,13 @@
   }
 
   function acceptFrame(next, now) {
-    if (!frame) { frame=next; previous=null; transitionSource=null; fetchedAt=now; return; }
+    if (!frame) { frame=next; previous=null; transitionSource=null; fetchedAt=now; activityStartedAt=now; return; }
     if (next.tick === frame.tick) return;
     const current=creatureRenderState(frame,now);
     const source=temporalContinuity==='legacy' ? null : {x:current.rendered_x,y:current.rendered_base_y};
+    const continuesIntent=next.last_event?.decision===false && next.creature?.intent_action && next.creature.intent_action===frame.creature?.intent_action;
     previous=frame; frame=next; transitionSource=source; fetchedAt=now;
+    if (!continuesIntent) activityStartedAt=now;
   }
 
   async function poll() {
@@ -635,7 +709,7 @@
       if (!response.ok) throw new Error(`HTTP ${response.status}`);
       const next = await response.json();
       if (next.logical_width !== 800 || next.logical_height !== 480) throw new Error('snapshot frame contract mismatch');
-      frame=next; previous=null; transitionSource=null; fetchedAt=performance.now(); connected=true; lastPollError=null;
+      frame=next; previous=null; transitionSource=null; fetchedAt=performance.now(); activityStartedAt=fetchedAt; connected=true; lastPollError=null;
     } catch (err) { connected=false; lastPollError=String(err); }
   }
 
@@ -647,7 +721,7 @@
       if (temporalContinuityProbe) {
         const probe=pack.continuity_probe;
         if (!probe) throw new Error('continuity probe fixture is missing');
-        previous=probe.source; frame=probe.middle; transitionSource=null; fetchedAt=0; connected=true; lastPollError=null;
+        previous=probe.source; frame=probe.middle; transitionSource=null; fetchedAt=0; activityStartedAt=0; connected=true; lastPollError=null;
         const interrupt=Number(probe.interrupt_ms || 1000);
         const before=await captureTemporalSample(interrupt);
         acceptFrame(probe.followup,interrupt);
@@ -662,7 +736,7 @@
       }
       const scenario = pack.scenarios?.[temporalScenario];
       if (!scenario) throw new Error(`unknown temporal scenario: ${temporalScenario}`);
-      previous=scenario.source; frame=scenario.target; transitionSource=null; fetchedAt=0; connected=true; lastPollError=null;
+      previous=scenario.source; frame=scenario.target; transitionSource=null; fetchedAt=0; activityStartedAt=0; connected=true; lastPollError=null;
       if (frame.logical_width !== 800 || frame.logical_height !== 480 || previous.logical_width !== 800 || previous.logical_height !== 480) throw new Error('temporal fixture frame contract mismatch');
       if (temporalRafProbe) {
         const intervals=[]; let last=null; let start=null; let frames=0;

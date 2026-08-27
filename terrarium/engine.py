@@ -20,12 +20,20 @@ def _event_timestamp(state: dict[str, Any]) -> str:
 
 
 class Simulation:
+    # Number of continuation ticks after the decision tick. The world still
+    # advances every three-second heartbeat, but visible intent is allowed to
+    # persist long enough to read as acting rather than constant resampling.
+    COMMITMENT_TICKS = {
+        "idle": 1, "rest": 2, "walk": 1, "explore": 1, "inspect": 2,
+        "carry": 1, "place": 1, "look_outside": 3, "sleep": 4, "wake": 1,
+    }
+
     """Pure deterministic world transition logic.
 
     The only entropy source is the PRNG state stored in canonical world state.
     """
 
-    def __init__(self, *, minutes_per_tick: int = 8):
+    def __init__(self, *, minutes_per_tick: int = 1):
         self.minutes_per_tick = int(minutes_per_tick)
 
     def _rng(self, state: dict[str, Any]) -> random.Random:
@@ -38,6 +46,16 @@ class Simulation:
     @staticmethod
     def _object_in_zone(state: dict[str, Any], zone: str) -> list[dict[str, Any]]:
         return [o for o in state["objects"] if o["zone"] == zone and o["state"] == "placed"]
+
+    @staticmethod
+    def _interaction_x(creature: dict[str, Any], target_x: int, *, gap: int = 34) -> int:
+        """Return a bounded authoritative stance near an interaction target."""
+        current = int(creature["x"])
+        delta = int(target_x) - current
+        if abs(delta) <= gap:
+            return current
+        stance = int(target_x) - (gap if delta > 0 else -gap)
+        return max(52, min(748, stance))
 
     @staticmethod
     def _placement_position(state: dict[str, Any], obj: dict[str, Any], zone: str) -> tuple[int, int]:
@@ -61,11 +79,79 @@ class Simulation:
                 return x, y
         return slots[start]
 
+    def _continue_committed_action(self, state: dict[str, Any]) -> tuple[str, str, dict[str, Any], dict[str, Any]]:
+        creature = state["creature"]
+        habitat = state["habitat"]
+        commitment = dict(creature.get("behavior_commitment") or {})
+        intent = str(commitment.get("action") or "idle")
+        remaining = max(0, int(commitment.get("ticks_remaining", 0)) - 1)
+        object_id = commitment.get("object_id")
+        commitment["ticks_remaining"] = remaining
+        creature["behavior_commitment"] = commitment
+        creature["focus_object_id"] = object_id
+
+        # Locomotion/wake recover into a quiet planted stance. Manipulation and
+        # observation hold their readable contact pose for the commitment.
+        visible = "idle" if intent in {"walk", "explore", "wake"} else intent
+        if visible == "sleep":
+            creature["activity"] = "sleep"
+            creature["expression"] = "sleepy"
+        elif visible == "rest":
+            creature["activity"] = "rest"
+            creature["expression"] = "content"
+            creature["energy"] = min(1.0, float(creature["energy"]) + 0.034)
+        elif visible == "look_outside":
+            creature["activity"] = "look_outside"
+            creature["expression"] = "content" if habitat["weather"] == "rain" else "curious"
+        elif visible == "inspect":
+            creature["activity"] = "inspect"
+            creature["expression"] = "curious"
+        elif visible == "carry":
+            creature["activity"] = "carry"
+            creature["expression"] = "content"
+        elif visible == "place":
+            creature["activity"] = "place"
+            creature["expression"] = "content"
+        else:
+            creature["activity"] = "idle"
+            creature["expression"] = "content" if intent in {"walk", "explore", "wake"} else "neutral"
+
+        details: dict[str, Any] = {
+            "from_zone": creature["zone"],
+            "lighting": habitat["lighting"],
+            "weather": habitat["weather"],
+            "action": visible,
+            "intent_action": intent,
+            "decision": False,
+            "commitment_ticks_remaining": remaining,
+        }
+        if object_id:
+            details["object_id"] = object_id
+            obj = next((o for o in state["objects"] if o["id"] == object_id), None)
+            if obj is not None:
+                details["target_x"] = int(obj["x"])
+                details["target_y"] = int(obj["y"])
+        summary = {
+            "sleep": "Moss remained curled up asleep.",
+            "rest": "Moss stayed settled and rested quietly.",
+            "look_outside": "Moss kept watching the world beyond the window.",
+            "inspect": "Moss lingered over the object, still studying it.",
+            "carry": "Moss steadied the object against its chest before moving on.",
+            "place": "Moss let the placed object settle before pulling back.",
+            "idle": "Moss paused, planted and quiet, before choosing what to do next.",
+        }.get(visible, "Moss stayed with the current activity.")
+        return "creature_activity", summary, details, state
+
     def step(self, state: dict[str, Any]) -> tuple[str, str, dict[str, Any], dict[str, Any]]:
         before = state
         state = clone_state(state)
+        # Existing canonical worlds migrate forward through an ordinary hashed
+        # state patch on their next tick; snapshots/events remain replayable.
+        state["rules_version"] = "terrarium-rules-v2-action-pacing"
         rng = self._rng(before)
         creature = state["creature"]
+        creature.setdefault("focus_object_id", None)
+        creature.setdefault("behavior_commitment", {"action": None, "ticks_remaining": 0, "object_id": None})
         habitat = state["habitat"]
         aftermath = habitat.setdefault(
             "activity_aftermath",
@@ -84,13 +170,22 @@ class Simulation:
         habitat["lighting"] = lighting_for(int(state["world_minutes"]))
         habitat["weather"] = weather_for(int(state["world_minutes"]), int(state["seed"]))
 
-        # Drives change slowly. Sleep restores energy; activity spends it.
+        # Drives change every heartbeat even when a behavioral intent is held.
         if creature["activity"] == "sleep":
             creature["energy"] = min(1.0, float(creature["energy"]) + 0.075)
             creature["comfort"] = min(1.0, float(creature["comfort"]) + 0.02)
         else:
             creature["energy"] = max(0.0, float(creature["energy"]) - 0.018)
             creature["curiosity"] = min(1.0, float(creature["curiosity"]) + 0.012)
+
+        commitment = creature.get("behavior_commitment") or {}
+        if int(commitment.get("ticks_remaining", 0)) > 0:
+            event_type, summary, details, state = self._continue_committed_action(state)
+            if state["creature"]["zone"] == "sleeping_nook" and state["creature"]["activity"] == "sleep":
+                aftermath["sleep_nook_ticks"] = int(aftermath["sleep_nook_ticks"]) + 1
+            habitat["shelf_count"] = sum(1 for o in state["objects"] if o["zone"] == "collection_shelf" and o["state"] == "placed")
+            details["energy_after"] = round(float(state["creature"]["energy"]), 6)
+            return event_type, summary, details, state
 
         zone = creature["zone"]
         recent = list(creature.get("recent_actions", []))
@@ -107,25 +202,23 @@ class Simulation:
                 candidates.append(("sleep", 1.5))
             candidates.extend(
                 [
-                    ("idle", 0.33),
-                    ("rest", 0.45 + (1.0 - float(creature["energy"])) * 0.45),
-                    ("walk", 0.66),
-                    ("explore", 0.50 + float(creature["curiosity"]) * 0.30),
+                    ("idle", 0.42),
+                    ("rest", 0.58 + (1.0 - float(creature["energy"])) * 0.48),
+                    ("walk", 0.58),
+                    ("explore", 0.42 + float(creature["curiosity"]) * 0.26),
                 ]
             )
             if zone == "window":
-                candidates.append(("look_outside", 0.78 + (0.22 if habitat["weather"] != "clear" else 0.0)))
+                candidates.append(("look_outside", 0.92 + (0.24 if habitat["weather"] != "clear" else 0.0)))
             if nearby and not carrying:
-                candidates.append(("inspect", 0.72 + float(creature["curiosity"]) * 0.24))
-                candidates.append(("carry", 0.36 + float(creature["curiosity"]) * 0.18))
+                candidates.append(("inspect", 0.68 + float(creature["curiosity"]) * 0.22))
+                candidates.append(("carry", 0.30 + float(creature["curiosity"]) * 0.16))
             if carrying:
-                candidates.append(("place", 1.15 if zone == "collection_shelf" else 0.55))
-                candidates.append(("walk", 1.0))
+                candidates.append(("place", 1.05 if zone == "collection_shelf" else 0.46))
+                candidates.append(("walk", 0.86))
 
-        # Cool down obvious loops while still allowing sustained sleep. Treat
-        # locomotion and object manipulation as semantic families as well as
-        # individual actions: alternating walk/explore or carry/place should
-        # not bypass repetition suppression and read as visual indecision.
+        # Recent-action suppression is decision-level: continuation ticks do not
+        # pretend to be new choices and therefore cannot game cooldowns.
         adjusted: list[tuple[str, float]] = []
         movement_recent = sum(1 for a in recent[-3:] if a in {"walk", "explore"})
         manipulation_recent = sum(1 for a in recent[-4:] if a in {"carry", "place"})
@@ -147,9 +240,13 @@ class Simulation:
                 action = name
                 break
 
-        details: dict[str, Any] = {"from_zone": zone, "lighting": lighting, "weather": habitat["weather"]}
+        details: dict[str, Any] = {
+            "from_zone": zone, "lighting": lighting, "weather": habitat["weather"],
+            "decision": True, "intent_action": action,
+        }
         event_type = "creature_activity"
         summary = "Moss is quietly awake."
+        focus_object_id = None
 
         if action in {"walk", "explore"}:
             options = [z for z in ZONES if z != zone]
@@ -179,43 +276,58 @@ class Simulation:
             summary = f"Moss wandered from {zone.replace('_', ' ')} to {target.replace('_', ' ')}."
         elif action == "inspect" and nearby:
             obj = rng.choice(nearby)
+            target_x, target_y = int(obj["x"]), int(obj["y"])
+            creature["x"] = self._interaction_x(creature, target_x)
+            creature["facing"] = "right" if target_x >= int(creature["x"]) else "left"
             obj["times_inspected"] = int(obj["times_inspected"]) + 1
             creature["activity"] = "inspect"
             creature["expression"] = "curious"
             creature["curiosity"] = max(0.0, float(creature["curiosity"]) - 0.09)
-            details["object_id"] = obj["id"]
+            details.update({"object_id": obj["id"], "target_x": target_x, "target_y": target_y})
+            focus_object_id = obj["id"]
             event_type = "object_inspected"
             summary = f"Moss stopped to inspect the {obj['name'].lower()}."
         elif action == "carry" and nearby:
             obj = rng.choice(nearby)
+            target_x, target_y = int(obj["x"]), int(obj["y"])
+            creature["x"] = self._interaction_x(creature, target_x)
+            creature["facing"] = "right" if target_x >= int(creature["x"]) else "left"
             creature["carrying"] = obj["id"]
             creature["activity"] = "carry"
             creature["expression"] = "excited"
             obj["state"] = "carried"
             obj["carried_by"] = creature["id"]
-            obj["x"] = int(creature["x"]) + 14
-            obj["y"] = int(creature["y"]) - 22
-            details["object_id"] = obj["id"]
+            obj["x"] = int(creature["x"]) + (-22 if creature["facing"] == "left" else 22)
+            obj["y"] = int(creature["y"]) - 4
+            details.update({"object_id": obj["id"], "target_x": target_x, "target_y": target_y})
+            focus_object_id = obj["id"]
             event_type = "object_picked_up"
             summary = f"Moss picked up the {obj['name'].lower()}."
         elif action == "place" and carrying:
             obj = next(o for o in state["objects"] if o["id"] == carrying)
+            target_x, target_y = self._placement_position(state, obj, zone)
+            creature["x"] = self._interaction_x(creature, target_x)
+            creature["facing"] = "right" if target_x >= int(creature["x"]) else "left"
             obj["state"] = "placed"
             obj["carried_by"] = None
             obj["zone"] = zone
-            obj["x"], obj["y"] = self._placement_position(state, obj, zone)
+            obj["x"], obj["y"] = target_x, target_y
             obj["times_moved"] = int(obj["times_moved"]) + 1
             creature["carrying"] = None
             creature["activity"] = "place"
             creature["expression"] = "content"
-            details.update({"object_id": obj["id"], "to_zone": zone, "x": obj["x"], "y": obj["y"]})
+            details.update({"object_id": obj["id"], "to_zone": zone, "x": obj["x"], "y": obj["y"], "target_x": target_x, "target_y": target_y})
+            focus_object_id = obj["id"]
             event_type = "object_placed"
             summary = f"Moss placed the {obj['name'].lower()} in the {zone.replace('_', ' ')}."
         elif action == "sleep":
             if zone != "sleeping_nook" and float(creature["energy"]) < 0.18:
+                old_x = int(creature["x"])
                 creature["zone"] = "sleeping_nook"
                 creature["x"] = ZONES["sleeping_nook"]["x"]
                 creature["y"] = ZONES["sleeping_nook"]["y"]
+                creature["facing"] = "right" if int(creature["x"]) >= old_x else "left"
+                details["to_zone"] = "sleeping_nook"
             creature["activity"] = "sleep"
             creature["expression"] = "sleepy"
             if creature["zone"] == "sleeping_nook":
@@ -253,6 +365,13 @@ class Simulation:
         if zone == "activity_corner" and action in {"idle", "rest", "inspect", "carry", "place"}:
             aftermath["activity_corner_uses"] = int(aftermath["activity_corner_uses"]) + 1
         creature["recent_actions"] = (recent + [action])[-8:]
+        creature["focus_object_id"] = focus_object_id
+        creature["behavior_commitment"] = {
+            "action": action,
+            "ticks_remaining": int(self.COMMITMENT_TICKS.get(action, 1)),
+            "object_id": focus_object_id,
+        }
+        details["commitment_ticks_remaining"] = creature["behavior_commitment"]["ticks_remaining"]
         habitat["shelf_count"] = sum(1 for o in state["objects"] if o["zone"] == "collection_shelf" and o["state"] == "placed")
         details["action"] = action
         details["energy_after"] = round(float(creature["energy"]), 6)
@@ -260,7 +379,7 @@ class Simulation:
 
 
 class WorldEngine:
-    def __init__(self, store: WorldStore, *, seed: int = 1701, minutes_per_tick: int = 8, snapshot_every: int = 20):
+    def __init__(self, store: WorldStore, *, seed: int = 1701, minutes_per_tick: int = 1, snapshot_every: int = 20):
         self.store = store
         self.state = store.initialize(seed)
         self.simulation = Simulation(minutes_per_tick=minutes_per_tick)

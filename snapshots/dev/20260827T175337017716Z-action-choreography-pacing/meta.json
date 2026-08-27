@@ -1,0 +1,34 @@
+{
+  "captured_at": "2026-08-27T17:53:37.018555Z",
+  "frame": {
+    "logical_height": 480,
+    "logical_width": 800,
+    "path": "dev/20260827T175337017716Z-action-choreography-pacing/frame.json",
+    "sha256": "7edb823cf657ff72ba96c6f6cf38fe45a547760b8bf4c5e0eb534372c6c4fa6c",
+    "tick": 698
+  },
+  "git": {
+    "branch": "main",
+    "dirty": true,
+    "head": "9a0168cbdd555e22e4ec18a7389acae09173b793"
+  },
+  "note": "Moss now acts at authoritative targets with deliberate contact and recovery, calmer multi-tick behavior commitments, physical furniture occlusion, and a persistent 72-minute day whose dusk lighting changes gradually rather than time-lapsing.",
+  "preview": {
+    "path": "dev/20260827T175337017716Z-action-choreography-pacing/preview.svg",
+    "sha256": "e0064d6fbe6fe07646eec0939278fdd7d69b11042cbb38b68e23edbfff4fc988"
+  },
+  "schema": "terrarium.dev-snapshot.v1",
+  "snapshot_id": "20260827T175337017716Z-action-choreography-pacing",
+  "source": {
+    "mode": "deterministic",
+    "seed": 1701,
+    "steps": 698
+  },
+  "source_hashes": {
+    "engine": "9c1d6be9938b17f950fc620b9b6ee7c6523db02fb854fb3ded52df930c8d48a5",
+    "frame_contract": "a80279c5e471dd808086f3a03c00775d469e07398fb688c7b3d45b0e158810d0",
+    "renderer_css": "706070e63996d0ce2a9ccf19f9ed6dc29b91a8134195f3aee992b5e4cfe28268",
+    "renderer_js": "17feafe5e5c0c6327df0bef5aa00f5617847949dbd0e23e41516a37240f8a61a"
+  },
+  "view_url": "/?snapshot=/snapshots/dev/20260827T175337017716Z-action-choreography-pacing/frame.json"
+}

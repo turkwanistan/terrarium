@@ -149,7 +149,7 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--data-dir", default=str(PROJECT_ROOT / "data"))
     parser.add_argument("--seed", type=int, default=1701)
     parser.add_argument("--tick-seconds", type=float, default=3.0)
-    parser.add_argument("--minutes-per-tick", type=int, default=8)
+    parser.add_argument("--minutes-per-tick", type=int, default=1)
     parser.add_argument("--snapshot-every", type=int, default=20)
     parser.add_argument(
         "--dev-temporal-fixtures",

@@ -9,7 +9,7 @@ from typing import Any
 FRAME_WIDTH = 800
 FRAME_HEIGHT = 480
 STATE_SCHEMA_VERSION = 1
-RULES_VERSION = "gen17-rules-v1"
+RULES_VERSION = "terrarium-rules-v2-action-pacing"
 EVENT_VERSION = 1
 
 ZONES: dict[str, dict[str, int]] = {
@@ -119,6 +119,8 @@ def initial_state(seed: int, *, created_at: str | None = None) -> dict[str, Any]
             "curiosity": 0.58,
             "carrying": None,
             "recent_actions": [],
+            "focus_object_id": None,
+            "behavior_commitment": {"action": None, "ticks_remaining": 0, "object_id": None},
         },
         "habitat": {
             "lighting": lighting_for(420),

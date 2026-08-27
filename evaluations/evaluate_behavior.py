@@ -40,25 +40,29 @@ def evaluate(seed: int, steps: int) -> dict:
         store.initialize(seed, created_at="2026-01-01T00:00:00Z")
         engine = WorldEngine(store, seed=seed)
         events = engine.run_steps(steps)
-        actions = [e["details"]["action"] for e in events]
+        timeline_actions = [e["details"]["action"] for e in events]
+        decision_events = [e for e in events if e["details"].get("decision", True)]
+        actions = [e["details"].get("intent_action", e["details"]["action"]) for e in decision_events]
         counts = collections.Counter(actions)
-        run_action, run_length = max_run(actions)
+        timeline_counts = collections.Counter(timeline_actions)
+        run_action, run_length = max_run(timeline_actions)
         object_placements = sum(e["type"] == "object_placed" for e in events)
         object_inspections = sum(e["type"] == "object_inspected" for e in events)
         object_pickups = sum(e["type"] == "object_picked_up" for e in events)
         moved_objects = sum(int(o["times_moved"]) > 0 for o in engine.state["objects"])
         marks = len(engine.state["habitat"]["marks"])
         shelf = int(engine.state["habitat"]["shelf_count"])
-        presentation = _presentation_metrics(events)
+        presentation = _presentation_metrics(decision_events)
+        visible_intent_changes = sum(1 for i in range(1, len(timeline_actions)) if timeline_actions[i] != timeline_actions[i-1])
         checks = {
             "action_diversity": len(counts) >= 8,
             "non_sleep_repeat_run_bounded": max((n for a,n in _runs(actions) if a != "sleep"), default=0) <= 4,
             "movement_commitment_bounded": presentation["max_consecutive_movement_actions"] <= 3,
             "immediate_zone_reversals_bounded": presentation["immediate_zone_reversals"] <= max(2, steps // 75),
             "object_manipulation_burst_bounded": presentation["max_consecutive_object_manipulations"] <= 3,
-            "object_interaction_present": object_placements >= max(2, steps // 40),
+            "object_interaction_present": object_placements >= max(2, len(decision_events) // 20),
             "multiple_objects_changed": moved_objects >= 3,
-            "visible_environment_accumulated": marks >= 3 or shelf >= 2,
+            "visible_environment_accumulated": marks >= max(1, len(decision_events) // 80) or shelf >= 2,
             "no_impossible_carry_state": _carry_consistent(engine.state),
         }
         result = {
@@ -69,8 +73,13 @@ def evaluate(seed: int, steps: int) -> dict:
             "checks": checks,
             "metrics": {
                 "action_counts": dict(sorted(counts.items())),
+                "timeline_action_counts": dict(sorted(timeline_counts.items())),
+                "decision_events": len(decision_events),
+                "continuation_events": len(events) - len(decision_events),
+                "visible_intent_changes": visible_intent_changes,
                 "action_diversity": len(counts),
                 "action_entropy_bits": round(entropy(actions), 6),
+                "timeline_action_entropy_bits": round(entropy(timeline_actions), 6),
                 "max_repeat_run": {"action": run_action, "length": run_length},
                 "object_placements": object_placements,
                 "object_pickups": object_pickups,

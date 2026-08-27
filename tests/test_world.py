@@ -9,7 +9,7 @@ import pytest
 from terrarium.engine import WorldEngine
 from terrarium.events import verify_chain
 from terrarium.frame import make_frame
-from terrarium.models import PLACEMENT_SLOTS, canonical_json
+from terrarium.models import PLACEMENT_SLOTS, RULES_VERSION, canonical_json
 from terrarium.replay import assert_exact_replay
 from terrarium.store import WorldStore
 
@@ -59,7 +59,7 @@ def test_events_are_ordered_hashed_jsonl_and_sqlite_append_only(tmp_path):
 
 
 def test_world_is_autonomous_and_habitat_accumulates(tmp_path):
-    store,engine=engine_at(tmp_path); events=engine.run_steps(240)
+    store,engine=engine_at(tmp_path); events=engine.run_steps(500)
     actions={e['details']['action'] for e in events}
     assert len(actions)>=8
     assert sum(e['type']=='object_placed' for e in events)>=4
@@ -94,6 +94,7 @@ def test_activity_specific_aftermath_accumulates_deterministically(tmp_path):
     assert len({e['details']['action'] for e in events}) == 10
     assert frame['last_event']['action'] == store.last_event()['details']['action']
     assert frame['last_event']['object_id'] == store.last_event()['details'].get('object_id')
+    assert 'intent_action' in frame['creature'] and 'target_object_id' in frame['creature']
     store.close()
 
 def test_frame_contract_is_exact_and_renderer_not_canonical(tmp_path):
@@ -110,6 +111,28 @@ def test_frame_contract_is_exact_and_renderer_not_canonical(tmp_path):
     assert 'Math.floor(windowWatches' not in js and 'Math.floor(cornerUses' not in js and 'Math.floor(sleepTicks' not in js
     store.close()
 
+
+
+def test_action_commitment_reduces_decision_frequency_without_freezing(tmp_path):
+    store,engine=engine_at(tmp_path)
+    events=engine.run_steps(120)
+    decisions=[e for e in events if e["details"].get("decision", True)]
+    continuations=[e for e in events if not e["details"].get("decision", True)]
+    assert 20 < len(decisions) < 80
+    assert len(continuations) > len(decisions)
+    assert len({e["details"].get("intent_action", e["details"]["action"]) for e in decisions}) >= 8
+    assert engine.current_state()["rules_version"] == RULES_VERSION
+    store.close()
+
+
+def test_default_world_clock_is_slow_persistent_display_cadence(tmp_path):
+    store,engine=engine_at(tmp_path)
+    before=engine.current_state()["world_minutes"]
+    engine.run_steps(20)
+    assert engine.current_state()["world_minutes"] - before == 20
+    # 3 real seconds/tick * 1440 ticks/day = 72 real minutes/day.
+    assert 3 * 1440 / 60 == 72
+    store.close()
 
 def test_snapshot_tool_direct_entrypoint(tmp_path):
     import subprocess, sys

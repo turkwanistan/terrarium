@@ -9,6 +9,7 @@ FRAME_SCHEMA = "terrarium.frame.v1"
 
 def make_frame(state: dict[str, Any], *, last_event: dict[str, Any] | None = None) -> dict[str, Any]:
     creature = state["creature"]
+    commitment = creature.get("behavior_commitment") or {}
     aftermath = state["habitat"].get("activity_aftermath") or {}
     return {
         "schema": FRAME_SCHEMA,
@@ -30,6 +31,9 @@ def make_frame(state: dict[str, Any], *, last_event: dict[str, Any] | None = Non
             "activity": creature["activity"],
             "expression": creature["expression"],
             "carrying": creature["carrying"],
+            "intent_action": commitment.get("action"),
+            "intent_ticks_remaining": int(commitment.get("ticks_remaining", 0)),
+            "target_object_id": creature.get("focus_object_id"),
         },
         "objects": [
             {k: obj[k] for k in ("id", "name", "kind", "x", "y", "zone", "state", "carried_by", "times_moved", "times_inspected")}
@@ -54,5 +58,9 @@ def make_frame(state: dict[str, Any], *, last_event: dict[str, Any] | None = Non
             "object_id": (last_event.get("details") or {}).get("object_id"),
             "from_zone": (last_event.get("details") or {}).get("from_zone"),
             "to_zone": (last_event.get("details") or {}).get("to_zone"),
+            "decision": bool((last_event.get("details") or {}).get("decision", True)),
+            "intent_action": (last_event.get("details") or {}).get("intent_action", (last_event.get("details") or {}).get("action")),
+            "target_x": (last_event.get("details") or {}).get("target_x"),
+            "target_y": (last_event.get("details") or {}).get("target_y"),
         },
     }

@@ -1,0 +1,215 @@
+{
+  "schema": "terrarium.action-choreography-pacing-evaluation.v1",
+  "accepted": true,
+  "checkpoint": "Action choreography, composition, and pacing",
+  "starting_commit": "9a0168cbdd555e22e4ec18a7389acae09173b793",
+  "ranked_weaknesses": [
+    "Object interactions were staged near a zone rather than physically around the authoritative object or destination.",
+    "Every three-second heartbeat also resampled behavior and restarted presentation timing, making valid autonomy feel mechanically busy and fidgety.",
+    "Eight world minutes per three-second heartbeat produced a nine-real-minute day, so dawn/day/dusk/night read as a time-lapse instead of persistent environmental states.",
+    "Short pickup/place approaches shared a generic locomotion curve and could finish with a visible last nudge rather than a complete settle.",
+    "Shelf and activity-desk depth were mostly painted behind Moss, weakening surface ownership and occlusion.",
+    "Sleep travel could face opposite the actual movement direction; the promoted temporal auditor exposed this before acceptance."
+  ],
+  "character_pacing": {
+    "heartbeat_seconds": 3.0,
+    "rule": "Canonical behavior decisions are separated from heartbeat/world advancement by deterministic multi-tick action commitments; continuation ticks preserve readable intent without creating a new decision.",
+    "commitment_continuation_ticks": {
+      "idle": 1,
+      "rest": 2,
+      "walk": 1,
+      "explore": 1,
+      "inspect": 2,
+      "carry": 1,
+      "place": 1,
+      "look_outside": 3,
+      "sleep": 4,
+      "wake": 1
+    },
+    "effective_canonical_action_windows_seconds": {
+      "idle": 6,
+      "rest": 9,
+      "walk": 6,
+      "explore": 6,
+      "inspect": 9,
+      "carry": 6,
+      "place": 6,
+      "look_outside": 12,
+      "sleep": 15,
+      "wake": 6
+    },
+    "renderer_rule": "Visual interpolation remains presentation-only and faster than semantic commitment; incoming continuation frames do not restart the action clock."
+  },
+  "pacing_scales": {
+    "moment_to_moment": "Canvas animation/interpolation at real RAF cadence; locomotion is approximately 1.5-2.3 seconds with contact, pose and settle changes over fractions of seconds to a few seconds.",
+    "action": "Canonical inspect/carry/place/window/rest/sleep intents persist across multiple three-second heartbeats, approximately 6-15 seconds depending on action.",
+    "behavioral": "Seed 1701 / 500 heartbeats produced 186 new decisions and 314 continuation ticks: about one new decision every 8.06 real seconds on average, with deterministic probabilistic autonomy preserved.",
+    "environmental": "World clock advances one world minute per three real seconds; weather blocks last about nine real minutes and the full day lasts 72 real minutes."
+  },
+  "world_time": {
+    "old": {
+      "tick_seconds": 3.0,
+      "minutes_per_tick": 8,
+      "real_day_minutes": 9.0,
+      "phase_real_minutes": {"dawn": 0.75, "day": 3.5625, "dusk": 0.75, "night": 3.9375},
+      "weather_block_real_minutes": 1.125
+    },
+    "new": {
+      "tick_seconds": 3.0,
+      "minutes_per_tick": 1,
+      "real_day_minutes": 72.0,
+      "phase_real_minutes": {"dawn": 6.0, "day": 28.5, "dusk": 6.0, "night": 31.5},
+      "weather_block_real_minutes": 9.0,
+      "lighting_boundaries_world_minutes": {"dawn": 360, "day": 480, "dusk": 1050, "night": 1170},
+      "presentation": "Renderer blends authoritative world_minutes through bounded environmental palette/daylight/night-glow transitions instead of a binary phase palette swap."
+    },
+    "real_clock_sync": "Deferred; repository evidence did not justify adding nondeterministic wall-clock authority."
+  },
+  "behavior": {
+    "before_seed_1701_500": {
+      "events": 500,
+      "action_counts": {"carry": 22, "explore": 51, "idle": 72, "inspect": 53, "look_outside": 33, "place": 22, "rest": 111, "sleep": 57, "wake": 14, "walk": 65},
+      "action_diversity": 10,
+      "action_entropy_bits": 3.103385,
+      "consecutive_movement_pairs": 19,
+      "immediate_zone_reversals": 5,
+      "max_consecutive_movement_actions": 2,
+      "adjacent_object_manipulation_pairs": 7,
+      "max_consecutive_object_manipulations": 3,
+      "moved_objects": 6,
+      "persistent_marks": 10
+    },
+    "after_seed_1701_500": {
+      "events": 500,
+      "decision_events": 186,
+      "continuation_events": 314,
+      "action_counts": {"carry": 12, "explore": 20, "idle": 24, "inspect": 29, "look_outside": 10, "place": 11, "rest": 35, "sleep": 15, "wake": 7, "walk": 23},
+      "action_diversity": 10,
+      "action_entropy_bits": 3.165646,
+      "timeline_action_entropy_bits": 2.953598,
+      "consecutive_movement_pairs": 6,
+      "immediate_zone_reversals": 3,
+      "max_consecutive_movement_actions": 2,
+      "adjacent_object_manipulation_pairs": 1,
+      "max_consecutive_object_manipulations": 2,
+      "moved_objects": 6,
+      "object_inspections": 29,
+      "object_pickups": 12,
+      "object_placements": 11,
+      "persistent_marks": 4,
+      "shelf_count": 4,
+      "visible_intent_changes": 207,
+      "passed": true
+    },
+    "promoted_auditor": {
+      "name": "simulation-behavior-auditor-r1",
+      "content_hash": "932573954fdf126bd4ec4f4d5a1f79a50b48b994bf374ed0cfa3415120dd093f",
+      "execution_environment": "isolated Optiplex_Lab",
+      "input_scope": "186 canonical decision events derived from the 500-heartbeat run; continuation ticks intentionally excluded from decision repetition metrics.",
+      "event_count": 186,
+      "action_diversity": 10,
+      "action_entropy_bits": 3.165646,
+      "max_repeat_run": {"action": "sleep", "length": 4},
+      "object_interactions": 52,
+      "sequence_ok": true,
+      "passed": true
+    }
+  },
+  "action_choreography": {
+    "target_authority": "Canonical frame/event metadata supplies target_object_id/target coordinates; the renderer owns no interaction target state.",
+    "inspect": "Authoritative near-target stance, target-facing orientation, target-relative head/gaze/paw lean, readable hold and recovery.",
+    "pickup": "Approach, reach/contact, transfer from surface, rigid paw/chest attachment, then locomotion.",
+    "carry": "Stable rigid prop attachment with lower/steadier body posture and carried locomotion.",
+    "place": "Stop/prepare, lower to authoritative destination, contact, release, object settle, retract/recovery.",
+    "window": "Sill-side planted observation with sparse fidgeting and restrained environment response.",
+    "sleep_wake": "Travel direction/facing agree; Moss settles into supported nook curl and unfolds deliberately on wake."
+  },
+  "composition_depth": {
+    "changes": [
+      "Collection-shelf front lips now provide foreground occlusion for Moss and props.",
+      "Activity desk owns a foreground front edge so contact reads as a physical surface.",
+      "Existing blanket/nook overlap remains a supported sleep-depth cue.",
+      "No clutter was added merely to simulate detail; Moss remains the focal hierarchy."
+    ]
+  },
+  "temporal": {
+    "promoted_auditor": {
+      "name": "temporal-render-auditor-r1",
+      "content_hash": "5481ecd6e2e46d9b3a502fbabff5a24f27ffed9f925ab0868ed30a3ba13575b1",
+      "execution_environment": "isolated Optiplex_Lab",
+      "task_count": 9,
+      "passed": true,
+      "selected_metrics": {
+        "left_walk": {"endpoint_speed_ratio": 0.016821, "facing_mismatch_count": 0, "failures": []},
+        "right_walk": {"endpoint_speed_ratio": 0.020577, "facing_mismatch_count": 0, "failures": []},
+        "arrive_settle": {"endpoint_speed_ratio": 0.020577, "facing_mismatch_count": 0, "failures": []},
+        "carried_walk": {"endpoint_speed_ratio": 0.026764, "facing_mismatch_count": 0, "carried_attachment_span": 0.0, "failures": []},
+        "object_pickup": {"endpoint_speed_ratio": 0.04986, "facing_mismatch_count": 0, "carried_attachment_span": 0.0, "failures": []},
+        "object_placement": {"endpoint_speed_ratio": 0.04986, "facing_mismatch_count": 0, "failures": []},
+        "sleep_transition": {"endpoint_speed_ratio": 0.095074, "facing_mismatch_count": 0, "failures": []},
+        "window_transition": {"endpoint_speed_ratio": 0.0, "facing_mismatch_count": 0, "failures": []},
+        "real_raf": {"raf_interval_count": 157, "raf_max_interval_ms": 16.8, "raf_stall_count": 0, "failures": []}
+      },
+      "iteration_note": "The first post-change audit correctly rejected short pickup/place settling at 0.104904 and sleep facing/settling; those defects were fixed and fresh evidence was recaptured before this accepted run."
+    },
+    "continuity_probe": {"interrupt_ms": 1000, "jump_px": 0.0, "passed": true},
+    "deterministic_repeat": {
+      "scenario": "left_walk",
+      "capture_sha256_first": "c25fa97c9870a5bc476f45f38ce2683b7fc9b0503e3675d3a9500688cb9a5a9f",
+      "capture_sha256_repeat": "c25fa97c9870a5bc476f45f38ce2683b7fc9b0503e3675d3a9500688cb9a5a9f",
+      "equal": true
+    }
+  },
+  "subjective_hero_review": {
+    "method": "Human/visual inspection of the real 800x480 Canvas after the final temporal corrections; no automated beauty score.",
+    "scenes_reviewed": ["inspect_object", "object_pickup", "object_placement", "sleep_transition", "waking", "window_transition", "activity_corner_transition", "populated_room", "dawn_light_transition", "dusk_light_transition", "accepted snapshot tick 698"],
+    "conclusions": [
+      "Target interactions read through approach, orientation, gaze, paw/body mechanics and contact rather than particles or text.",
+      "Placement reads stop -> lower/contact -> release -> settle; pickup and carry preserve visible prop ownership.",
+      "Sleep/wake remain supported by the nook and no longer read as a snap between upright and curled silhouettes.",
+      "Window watching stays quiet; activity-corner interaction reads against a physical surface rather than floating.",
+      "Shelf/desk foreground edges improve depth without hiding Moss, and accumulated history remains readable without clutter.",
+      "Dawn/dusk are recognizable intermediate environmental states without competing with Moss for attention."
+    ],
+    "obvious_defects_remaining": false
+  },
+  "objective_subjective_boundary": "Automated temporal/behavior checks establish determinism, trajectory, facing, attachment, settling, continuity, RAF and sequence/distribution correctness. They do not judge charm, composition, warmth, personality or beauty; those remain real-Canvas visual-review judgments governed by ART_DIRECTION.md.",
+  "regression": {
+    "pytest": {"passed": true, "tests": 20},
+    "javascript_syntax": {"passed": true},
+    "python_3_10_syntax": {"passed": true, "files": 22, "method": "Python ast.parse with feature_version=(3,10); isolated Lab independently reports Python 3.10.12 available."},
+    "technical_evaluator": {
+      "passed": true,
+      "exact_replay": true,
+      "event_count": 80,
+      "canonical_state_hash": "2009ab06dc65bcf72379766a8a5345b0ee70bb6b2f7f9a8674ec08ad35036a5c",
+      "replayed_state_hash": "2009ab06dc65bcf72379766a8a5345b0ee70bb6b2f7f9a8674ec08ad35036a5c"
+    },
+    "behavior_evaluator": {"passed": true, "seed": 1701, "steps": 500},
+    "promoted_behavior_auditor": true,
+    "promoted_temporal_auditor": true,
+    "real_raf_probe": true,
+    "deterministic_repeated_capture": true,
+    "real_visual_inspection": true
+  },
+  "snapshot": {
+    "snapshot_id": "20260827T175337017716Z-action-choreography-pacing",
+    "seed": 1701,
+    "tick": 698,
+    "world_minutes": 1118,
+    "lighting": "dusk",
+    "action": "inspect",
+    "zone": "collection_shelf",
+    "target_object": "amber_leaf",
+    "frame_sha256": "7edb823cf657ff72ba96c6f6cf38fe45a547760b8bf4c5e0eb534372c6c4fa6c",
+    "renderer_sha256": "17feafe5e5c0c6327df0bef5aa00f5617847949dbd0e23e41516a37240f8a61a",
+    "canvas_inspected_at_800x480": true,
+    "selection_reason": "All six objects have moved and seven persistent marks exist; Moss is inspecting a real shelf target during dusk, simultaneously demonstrating target staging, depth, accumulated history and slower environmental pacing."
+  },
+  "sbc_conclusion": {
+    "new_capability_forged": false,
+    "permanent_mcp_growth": false,
+    "gen18_warranted": false,
+    "statement": "No Gen18 warranted. Existing promoted behavior/temporal auditors, isolated Lab, mediated browser and project-safe lifecycle covered the iteration."
+  }
+}

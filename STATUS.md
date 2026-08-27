@@ -4,73 +4,100 @@ Terrarium is normal product development after the accepted Generation 17 pilot. 
 
 ## Current checkpoint
 
-Latest product checkpoint: **Visual maturity: art direction + motion coherence** (`history/2026-08-27-visual-maturity.md`).
+Latest product checkpoint: **Action choreography, composition, and pacing** (`history/2026-08-27-action-choreography-pacing.md`).
 
-Meaningful snapshot: `20260827T165449319827Z-visual-maturity` — seed **1701**, tick **180**; frame SHA256 `9a422b0de25ffa7311a1b86e315379189ae485485edc79bc02e948d0959a1487`; renderer SHA256 `a523186cab91e614034eb6593e3ea3db4b558ac448ca5d1c640cd43fb7362807`.
+Meaningful snapshot: `20260827T175337017716Z-action-choreography-pacing` — deterministic seed **1701**, tick **698**; dusk collection-shelf inspection of `amber_leaf`; frame SHA256 `7edb823cf657ff72ba96c6f6cf38fe45a547760b8bf4c5e0eb534372c6c4fa6c`; renderer SHA256 `17feafe5e5c0c6327df0bef5aa00f5617847949dbd0e23e41516a37240f8a61a`.
 
-Primary evidence: `artifacts/visual-maturity.json`, `artifacts/visual-maturity-technical.json`, `artifacts/visual-maturity-behavior.json`, compact genuine Canvas evidence under `artifacts/visual-maturity-compact/`, and deterministic fixtures in `artifacts/temporal-render-fixtures.json`.
+Primary evidence: `artifacts/action-choreography-pacing.json`. Deterministic Canvas fixtures remain in `artifacts/temporal-render-fixtures.json`.
 
-Inherited guarantees remain intact: host-owned canonical world state; deterministic seeded simulation; append-only/hash-chained event history; immutable snapshots + exact subsequent-event replay; disposable renderer; fixed hardware-neutral 800×480 `TerrariumFrame`; persistent objects/habitat wear/aftermath; canonical living state outside Git.
+Inherited guarantees remain intact: host-owned canonical state; deterministic seeded simulation; append-only/hash-chained event history; immutable snapshots + exact subsequent-event replay; disposable presentation-only renderer; fixed hardware-neutral 800×480 `TerrariumFrame`; persistent objects/habitat wear/aftermath; canonical living state outside Git.
 
-## Art direction / presentation
+## Pacing model — do not collapse these scales
 
-`ART_DIRECTION.md` now governs the reference renderer as a **cozy low-resolution storybook diorama**. Moss is the primary focal element; bedding/papers/local reactions are secondary; rain/light/motes are ambient and must not compete with Moss. Materials, palette, shape language, depth/contact, and motion grammar are explicitly defined.
+The authoritative runtime heartbeat remains **3 real seconds**. It no longer means “choose a new action every three seconds.” Canonical deterministic action commitments allow Moss to hold one readable intention across multiple heartbeats:
 
-Accepted presentation changes include:
+- 6 seconds: idle, walk/explore, carry, place, wake;
+- 9 seconds: rest, inspect;
+- 12 seconds: window watching;
+- 15 seconds: sleep.
 
-- stronger Moss silhouette, proportions, grounding, carry posture, sleep curl, and restrained breathing/walk motion;
-- distance-aware locomotion with anticipation/travel/settle/recovery rather than one generic transition;
-- target-aware inspect/contact posing;
-- staged pickup → attachment → carried locomotion → lower/contact/release/settle;
-- live canonical-frame transitions rebased from Moss's exact currently rendered position;
-- unified wood/cloth/paper/foliage/floor material language with quieter structural depth/contact shadows;
-- reduced rain/mote density and contrast;
-- normal world cadence restored to 3 seconds instead of launcher-forced 1 second.
+These are semantic commitment windows, not animation durations. Renderer locomotion/contact interpolation stays faster (roughly 1.5–2.3 seconds for travel, with pose/contact/settle changes over fractions of seconds to a few seconds) and remains non-authoritative. Continuation frames preserve the current action clock rather than restarting it.
 
-The renderer remains non-authoritative and contains no second behavior engine.
+Seed 1701 / 500 heartbeats now produces **186 new decisions + 314 continuation/settle ticks**, approximately one new decision every **8.06 real seconds** on average while retaining all 10 action classes.
 
-## Objective motion evidence
+Environmental time is deliberately slower again:
 
-The promoted `temporal-render-auditor-r1` remains authoritative for objective temporal correctness:
+- `tick_seconds`: **3.0**;
+- `minutes_per_tick`: **1** (previously 8);
+- full 24-hour day: **72 real minutes** (previously 9);
+- dawn: ~**6 min** real;
+- day: ~**28.5 min**;
+- dusk: ~**6 min**;
+- night: ~**31.5 min**;
+- deterministic 180-world-minute weather block: ~**9 real minutes**.
 
-- content hash `5481ecd6e2e46d9b3a502fbabff5a24f27ffed9f925ab0868ed30a3ba13575b1`;
-- evaluator hash `86b714f3871132ad3786f94fc81570dd569cb95ee09ced1d064737b5652a3b0c`.
+The renderer gradually blends authoritative `world_minutes` through dawn/day/dusk/night transitions. Real-clock synchronization remains deferred; deterministic canonical time is still authoritative.
 
-Independent isolated-Lab reuse: **15 deterministic real-Canvas hero sequences + real RAF = 16/16 PASS**. Sampled traversals have final progress 1.0, zero reversals/facing mismatches, endpoint-speed ratios `0.016818–0.037951`, and carried attachment span 0. RAF: 156 intervals, median 16.7 ms, max 16.8 ms, zero >50 ms stalls.
+## Action choreography / composition
 
-A dedicated consecutive-update continuity probe proves the fixed live defect: **352.907594 px legacy instantaneous jump → 0 px accepted jump**. Repeated raw deterministic `left_walk` capture is byte-identical at SHA256 `8853ad450bb5cac36ea5273b24de069b8ec9656ede77d7787574d1b7063992d5`.
+Interactions now use authoritative target metadata rather than renderer-invented targets. Moss adopts a bounded near-target stance, faces/gazes toward the target, and uses restrained head/ear/tail/body/paw changes to make actions distinct.
 
-These metrics are not a beauty score. Human inspection of the real 800×480 Canvas is the authority for charm, composition, warmth, and art-direction consistency.
+Accepted staging includes:
 
-## Behavioral presentation regression
+- inspect: approach/orient → target-relative lean/gaze → readable hold → recovery;
+- pickup: approach/reach → contact → surface-to-Moss transfer → rigid paw/chest attachment;
+- carry: stable attachment with a lower, steadier carrying posture;
+- place: stop/prepare → lower → surface contact → release → settle → retract;
+- window: sill-side planted observation with sparse fidgeting;
+- sleep/wake: supported nook curl/unfold with facing consistent with travel.
 
-One bounded authoritative simulation change groups recent-action suppression into semantic movement (`walk`/`explore`) and manipulation (`carry`/`place`) families so alternating actions cannot evade cooldowns and look indecisive.
+Foreground shelf lips and the activity-desk front edge now provide intentional occlusion; the existing blanket lip continues to overlap supported sleep poses. No clutter, random camera motion, random zoom, or uncontrolled rendering entropy was added. `ART_DIRECTION.md` already contained the reusable contact/depth/motion rules needed, so it did not require revision.
 
-Seed 1701 / 500 before → after:
+## Behavior regression
+
+Visual Maturity baseline → current seed-1701/500 decision behavior:
 
 - action classes: **10 → 10**;
-- entropy: **3.151553 → 3.103385 bits**;
-- consecutive movement pairs: **50 → 19**;
-- immediate zone reversals: **9 → 5**;
-- max movement burst: **4 → 2**;
-- adjacent manipulation pairs: **10 → 7**;
-- max manipulation burst: **4 → 3**;
+- decision entropy: **3.103385 → 3.165646 bits**;
+- consecutive movement pairs: **19 → 6**;
+- immediate zone reversals: **5 → 3**;
+- max movement burst: **2 → 2**;
+- adjacent manipulation pairs: **7 → 1**;
+- max manipulation burst: **3 → 2**;
 - moved objects: **6 → 6**.
 
-Current object interactions remain substantial: 53 inspections, 22 pickups, 22 placements. The promoted `simulation-behavior-auditor-r1` independently passed the fresh 500-event stream with sequence integrity, 10 action classes, entropy `3.103385`, and 97 configured object interactions.
+Current decisions include 29 inspections, 12 pickups and 11 placements. The promoted `simulation-behavior-auditor-r1` (`932573954fdf126bd4ec4f4d5a1f79a50b48b994bf374ed0cfa3415120dd093f`) passed the 186 decision-event stream with 10 action classes, entropy `3.165646`, max decision repeat run 4 sleeps, 52 object interactions, and sequence integrity.
+
+## Objective temporal evidence
+
+The promoted `temporal-render-auditor-r1` (`5481ecd6e2e46d9b3a502fbabff5a24f27ffed9f925ab0868ed30a3ba13575b1`) remains the objective temporal authority.
+
+The first post-change run correctly rejected pickup/place endpoint settling (`0.104904`) and a sleep facing/settling defect. Acceptance was withheld. After stronger endpoint easing and authoritative sleep-facing correction, fresh real-Canvas evidence passed all representative tasks:
+
+- left/right/arrival endpoint-speed ratios: `0.016821–0.020577`;
+- carried walk: `0.026764`, attachment span **0**;
+- pickup/place: `0.04986`;
+- sleep: `0.095074`, facing mismatch **0**;
+- continuity interruption jump: **0 px**;
+- RAF: 157 intervals, max **16.8 ms**, **0** stalls over 50 ms.
+
+Repeated deterministic `left_walk` capture is byte-identical at SHA256 `c25fa97c9870a5bc476f45f38ce2683b7fc9b0503e3675d3a9500688cb9a5a9f`.
+
+These metrics are not a beauty score. Human inspection of the actual 800×480 Canvas governs interaction readability, silhouette/personality, composition, depth, calmness and environmental distraction.
 
 ## Regression
 
-- pytest: **18/18 PASS**;
+- pytest: **20/20 PASS**;
 - JavaScript syntax: **PASS**;
-- Python 3.10 syntax compatibility: **PASS**;
+- Python 3.10 syntax grammar: **PASS**, 22 files;
 - technical evaluator: **PASS**;
-- exact replay: **PASS**, canonical/replayed hash `5d3503fac94f66642ed338045a9f9ee15db83fbae47fcee29c94995067691fd0`;
+- exact replay: **PASS**, canonical/replayed hash `2009ab06dc65bcf72379766a8a5345b0ee70bb6b2f7f9a8674ec08ad35036a5c`;
 - behavior evaluator seed 1701 / 500: **PASS**;
-- deterministic repeat capture: **PASS**;
-- real RAF pacing: **PASS**;
+- promoted behavior auditor: **PASS**;
 - promoted temporal auditor: **PASS**;
-- promoted behavior auditor: **PASS**.
+- real RAF probe: **PASS**;
+- deterministic repeat capture: **PASS**;
+- real hero-scene visual inspection: **PASS**.
 
 ## SBC conclusion
 
@@ -84,4 +111,4 @@ A development service or snapshot view is not a canonical LAN deployment. Report
 
 ## Highest-value next product work
 
-Use the art bible and hero reel as guardrails while deepening only a few high-value authored interactions or environmental compositions at a time. Prefer stronger contact/recovery and scene storytelling over more effects or more action types; preserve the same simulation/renderer authority boundary.
+Let real human UAT drive the next normal Terrarium iteration. Prefer high-impact visible shortcomings in acting, composition, persistence and world believability over feature count. Keep moment/action/behavior/environment scales distinct, and only propose Gen18 when a concrete project need demonstrates a reusable SBC substrate deficiency.

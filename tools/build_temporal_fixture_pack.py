@@ -13,7 +13,7 @@ if str(PROJECT_ROOT) not in sys.path:
 
 from terrarium.engine import Simulation
 from terrarium.frame import make_frame
-from terrarium.models import initial_state
+from terrarium.models import initial_state, lighting_for
 
 SCHEMA = "terrarium.temporal-fixtures.v1"
 CREATED_AT = "2026-01-01T00:00:00Z"
@@ -144,50 +144,66 @@ def _scenario(name: str, before: dict[str, Any], after: dict[str, Any], details:
 
 
 
+
+def _lighting_transition(name: str, start_minute: int, end_minute: int, purpose: str) -> dict[str, Any]:
+    source_state = initial_state(1701, created_at=CREATED_AT)
+    source_state["world_minutes"] = start_minute
+    source_state["habitat"]["lighting"] = lighting_for(start_minute)
+    source_state["habitat"]["weather"] = "clear"
+    source_state["creature"]["activity"] = "idle"
+    target_state = deepcopy(source_state)
+    target_state["tick"] += 1
+    target_state["world_minutes"] = end_minute
+    target_state["habitat"]["lighting"] = lighting_for(end_minute)
+    details = {
+        "action": "environment_transition", "intent_action": "environment_transition", "decision": False,
+        "from_zone": target_state["creature"]["zone"], "to_zone": target_state["creature"]["zone"],
+    }
+    return _scenario(name, source_state, target_state, details, purpose)
+
 def _continuity_probe(seed: int = 1701) -> dict[str, Any]:
+    # Action commitments intentionally prevent natural back-to-back movement
+    # decisions. Keep the renderer interruption regression as a deterministic
+    # synthetic canonical update chain: source -> first authored zone endpoint
+    # -> second authored endpoint. This tests presentation rebasing, not the
+    # behavior policy.
     state = initial_state(seed, created_at=CREATED_AT)
-    sim = Simulation()
-    prior: dict[str, Any] | None = None
-    movement = {"walk", "explore"}
-    for _ in range(1200):
-        before = state
-        _, _, details, state = sim.step(state)
-        if details.get("action") in movement and prior and prior["details"].get("action") in movement:
-            middle = make_frame(before, last_event={
-                "event_id": "fixture-continuity-middle",
-                "type": "fixture",
-                "summary": "First movement in a consecutive canonical update chain.",
-                "details": prior["details"],
-            })
-            followup = make_frame(state, last_event={
-                "event_id": "fixture-continuity-followup",
-                "type": "fixture",
-                "summary": "Second movement in a consecutive canonical update chain.",
-                "details": details,
-            })
-            return {
-                "id": "continuity_probe",
-                "seed": seed,
-                "source": make_frame(prior["before"]),
-                "middle": middle,
-                "followup": followup,
-                "first_event": prior["details"],
-                "second_event": details,
-                "interrupt_ms": 1000,
-                "purpose": "measure renderer discontinuity when a new canonical tick arrives before the prior visual transition finishes",
-            }
-        prior = {"before": before, "details": details} if details.get("action") in movement else None
-    raise RuntimeError("unable to build deterministic continuity probe")
+    source = deepcopy(state)
+    middle = deepcopy(state)
+    middle["tick"] = 1
+    middle["world_minutes"] += 1
+    middle["creature"].update({"zone": "activity_corner", "x": 655, "y": 372, "facing": "right", "activity": "walk"})
+    followup = deepcopy(middle)
+    followup["tick"] = 2
+    followup["world_minutes"] += 1
+    followup["creature"].update({"zone": "window", "x": 168, "y": 277, "facing": "left", "activity": "walk"})
+    first = {"action": "walk", "intent_action": "walk", "decision": True, "from_zone": "sleeping_nook", "to_zone": "activity_corner"}
+    second = {"action": "walk", "intent_action": "walk", "decision": True, "from_zone": "activity_corner", "to_zone": "window"}
+    return {
+        "id": "continuity_probe",
+        "seed": seed,
+        "source": make_frame(source),
+        "middle": make_frame(middle, last_event={"event_id":"fixture-continuity-middle","type":"fixture","summary":"Synthetic first canonical movement.","details":first}),
+        "followup": make_frame(followup, last_event={"event_id":"fixture-continuity-followup","type":"fixture","summary":"Synthetic interrupted follow-up movement.","details":second}),
+        "first_event": first,
+        "second_event": second,
+        "interrupt_ms": 1000,
+        "purpose": "measure renderer discontinuity when a canonical movement update interrupts an in-flight visual transition",
+    }
+
 
 def build() -> dict[str, Any]:
     scenarios = _walk_scenarios()
     scenarios["rain_window"] = _rain_window_scenario()
     scenarios["populated_room"] = _populated_room_scenario()
+    scenarios["dawn_light_transition"] = _lighting_transition("dawn_light_transition", 330, 390, "gradual night-to-dawn environmental lighting transition")
+    scenarios["dusk_light_transition"] = _lighting_transition("dusk_light_transition", 1140, 1200, "gradual dusk-to-night environmental lighting transition")
     scenarios["rain_control"] = _rain_scenario()
     hero_reel = [
         "left_walk", "right_walk", "arrive_settle", "idle_control", "window_transition",
         "rain_window", "inspect_object", "object_pickup", "carried_walk", "object_placement",
-        "sleep_transition", "waking", "activity_corner_transition", "populated_room", "rain_control",
+        "sleep_transition", "waking", "activity_corner_transition", "populated_room",
+        "dawn_light_transition", "dusk_light_transition", "rain_control",
     ]
     return {
         "schema": SCHEMA,
