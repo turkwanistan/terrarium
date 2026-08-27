@@ -2,6 +2,14 @@
 
 Git-friendly visual milestones. The SVG is a lightweight capture-time thumbnail; run Terrarium and open `/snapshots/` for the same stored frame through the real Canvas renderer.
 
+## 20260827T165449319827Z-visual-maturity
+
+Art-directed storybook diorama with calmer motion hierarchy, stronger Moss silhouette and grounding, staged object handling, and behavior presentation that commits rather than ping-pongs.
+
+![20260827T165449319827Z-visual-maturity](dev/20260827T165449319827Z-visual-maturity/preview.svg)
+
+Deterministic tick `180` · renderer `a523186cab91`
+
 ## 20260827T142112545745Z-present-world-causality
 
 Present activity now visibly engages accumulated habitat history: corrected window contact, responsive sleeping/activity surfaces, and settled object placement.

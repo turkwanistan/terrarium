@@ -50,5 +50,9 @@ def make_frame(state: dict[str, Any], *, last_event: dict[str, Any] | None = Non
             "event_id": last_event["event_id"],
             "type": last_event["type"],
             "summary": last_event["summary"],
+            "action": (last_event.get("details") or {}).get("action"),
+            "object_id": (last_event.get("details") or {}).get("object_id"),
+            "from_zone": (last_event.get("details") or {}).get("from_zone"),
+            "to_zone": (last_event.get("details") or {}).get("to_zone"),
         },
     }

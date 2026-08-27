@@ -122,11 +122,20 @@ class Simulation:
                 candidates.append(("place", 1.15 if zone == "collection_shelf" else 0.55))
                 candidates.append(("walk", 1.0))
 
-        # Cool down obvious loops while still allowing sustained sleep.
+        # Cool down obvious loops while still allowing sustained sleep. Treat
+        # locomotion and object manipulation as semantic families as well as
+        # individual actions: alternating walk/explore or carry/place should
+        # not bypass repetition suppression and read as visual indecision.
         adjusted: list[tuple[str, float]] = []
+        movement_recent = sum(1 for a in recent[-3:] if a in {"walk", "explore"})
+        manipulation_recent = sum(1 for a in recent[-4:] if a in {"carry", "place"})
         for action, weight in candidates:
             repeats = sum(1 for a in recent[-4:] if a == action)
             penalty = 1.0 if action == "sleep" else 0.46 ** repeats
+            if action in {"walk", "explore"}:
+                penalty *= 0.25 ** movement_recent
+            if action in {"carry", "place"}:
+                penalty *= 0.45 ** manipulation_recent
             adjusted.append((action, max(0.015, weight * penalty)))
         total = sum(w for _, w in adjusted)
         pick = rng.random() * total

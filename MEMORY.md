@@ -73,3 +73,14 @@ The checkpoint separately retained deterministic semantic-contact telemetry for 
 The promoted `simulation-behavior-auditor-r1` was independently reused on a checksummed deterministic 80-event slice and returned sequence integrity, 10 action classes, entropy `3.095341`, and 21 configured object interactions. The native 500-step behavior evaluator remained unchanged at entropy `3.151553` with the inherited action/object distribution.
 
 No new reusable capability gap was exposed, no new capability was forged, no activation gate was weakened, and no Gen18 substrate change is warranted. Existing candidate procedural memories remain non-authoritative.
+## Post-Gen17 visual-maturity lessons
+
+Checkpoint `2026-08-27-visual-maturity` established three reusable project lessons with direct evidence.
+
+**Rendered-position continuity:** when a new canonical frame arrives while the disposable renderer is still interpolating the previous transition, presentation must begin the next interpolation from the creature's *currently rendered* position, not blindly from the prior canonical endpoint. The deterministic consecutive-update probe measured `352.907594 px` of instantaneous legacy discontinuity and `0 px` after rendered-position rebasing. This is a renderer continuity rule only; canonical state remains authoritative.
+
+**Semantic-family suppression can improve presentation without scripting behavior:** treating `walk`/`explore` as one recent-action family and `carry`/`place` as another reduced seed-1701/500 consecutive movement pairs `50 → 19`, immediate zone reversals `9 → 5`, max movement burst `4 → 2`, and max manipulation burst `4 → 3`, while retaining all 10 action classes, 6 moved objects, and entropy `3.103385`. Any future change of this kind must compare before/after distributions and use the promoted behavior auditor; do not hide behavior changes in JavaScript.
+
+**Temporal correctness is not aesthetic authority:** `temporal-render-auditor-r1` independently passed 15 deterministic real-Canvas sequences plus RAF pacing (16/16), proving trajectory/facing/attachment/settling/scene-stability correctness. `ART_DIRECTION.md` and human inspection of the actual 800×480 Canvas govern charm, warmth, composition, focal hierarchy, and material consistency. Do not add a synthetic beauty score merely to automate a subjective judgment.
+
+Existing promoted capabilities were sufficient; no new capability was forged, no permanent MCP surface grew, and **No Gen18 warranted**.

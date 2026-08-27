@@ -1,0 +1,1 @@
+{"after":{"raster_hash":"fnv1a32:825ad303","rendered_base_y":150,"rendered_x":682},"before":{"raster_hash":"fnv1a32:7b9fc34d","rendered_base_y":279.25764,"rendered_x":353.615724},"continuity":"legacy","interrupt_ms":1000,"jump_px":352.907594,"mode":"continuity","provenance":{"scenario":"continuity_probe","source_schema":"terrarium.continuity-probe.v1"}}

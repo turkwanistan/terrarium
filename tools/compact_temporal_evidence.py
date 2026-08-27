@@ -35,6 +35,26 @@ def compact(payload: dict[str, Any], *, block_x: int = 2, block_y: int = 2) -> d
             "raf_intervals_ms": payload["intervals_ms"],
             "provenance": {"scenario": payload.get("scenario"), "source_schema": schema},
         }
+    if schema == "terrarium.continuity-probe.v1":
+        before = payload["before"]
+        after = payload["after"]
+        return {
+            "mode": "continuity",
+            "jump_px": payload["jump_px"],
+            "interrupt_ms": payload["interrupt_ms"],
+            "continuity": payload.get("continuity"),
+            "before": {
+                "rendered_x": before["rendered_x"],
+                "rendered_base_y": before["rendered_base_y"],
+                "raster_hash": before.get("raster", {}).get("pixel_hash"),
+            },
+            "after": {
+                "rendered_x": after["rendered_x"],
+                "rendered_base_y": after["rendered_base_y"],
+                "raster_hash": after.get("raster", {}).get("pixel_hash"),
+            },
+            "provenance": {"scenario": payload.get("scenario"), "source_schema": schema},
+        }
     if schema != "terrarium.temporal-capture.v1":
         raise ValueError(f"unsupported evidence schema: {schema}")
     keep = {

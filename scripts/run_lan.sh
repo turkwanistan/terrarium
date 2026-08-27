@@ -101,4 +101,4 @@ if [[ -n "$ip" ]]; then
   echo "From another PC on this LAN: ${lan_url}/"
   echo "Snapshot gallery: ${lan_url}/snapshots/"
 fi
-exec "$python_bin" -m terrarium.api.server --host 0.0.0.0 --port "$port" --data-dir "$data_dir" --seed 1701 --tick-seconds 1
+exec "$python_bin" -m terrarium.api.server --host 0.0.0.0 --port "$port" --data-dir "$data_dir" --seed 1701 --tick-seconds 3

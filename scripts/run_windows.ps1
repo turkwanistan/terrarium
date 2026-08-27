@@ -2,7 +2,7 @@ $ErrorActionPreference = "Stop"
 $Repo = Split-Path -Parent $PSScriptRoot
 Set-Location $Repo
 $Python = (Get-Command python).Source
-$Args = @("-m", "terrarium.api.server", "--host", "127.0.0.1", "--port", "8080", "--data-dir", "data/live", "--seed", "1701", "--tick-seconds", "1")
+$Args = @("-m", "terrarium.api.server", "--host", "127.0.0.1", "--port", "8080", "--data-dir", "data/live", "--seed", "1701", "--tick-seconds", "3")
 $Process = Start-Process -FilePath $Python -ArgumentList $Args -WorkingDirectory $Repo -PassThru
 try {
   for ($i = 0; $i -lt 30; $i++) {

@@ -1,49 +1,48 @@
 # START HERE
 
-This repository is the authoritative Terrarium project created during the accepted Self-Building Computer Generation 17 pilot and now developed as a normal product. Read `STATUS.md`, `plan.md`, `terrarium.md`, and `MEMORY.md` before changing behavior or architecture. Do not invent a new Self-Building Computer generation merely because a Terrarium checkpoint completes.
+This repository is the authoritative Terrarium project created during the accepted Self-Building Computer Generation 17 pilot and now developed as a normal product. Read `STATUS.md`, `plan.md`, `terrarium.md`, `MEMORY.md`, `ART_DIRECTION.md`, and the latest history checkpoint before changing behavior or renderer architecture. Do not invent a new Self-Building Computer generation merely because a Terrarium checkpoint completes.
 
 ## Current checkpoint
 
-Gen17 Phase 0–2 remains the accepted architectural/runtime baseline: deterministic persistent host-owned world state, exact replay, disposable 800×480 renderer, autonomous behavior, persistent objects, and habitat wear.
+Latest normal product checkpoint: **Visual maturity: art direction + motion coherence** (`history/2026-08-27-visual-maturity.md`).
 
-The latest normal product checkpoint is **Present-world causality** (`history/2026-08-27-present-world-causality.md`). Current activity now visibly engages accumulated bedding/window/work-surface history, the canonical window contact point is physically aligned to the sill-side habitat, and object placement visibly settles rather than snapping. The simulation/event ledger remains authoritative.
+Meaningful snapshot: `snapshots/dev/20260827T165449319827Z-visual-maturity` — deterministic seed 1701 / tick 180; frame SHA256 `9a422b0de25ffa7311a1b86e315379189ae485485edc79bc02e948d0959a1487`; renderer SHA256 `a523186cab91e614034eb6593e3ea3db4b558ac448ca5d1c640cd43fb7362807`.
 
-Meaningful snapshot: `snapshots/dev/20260827T142112545745Z-present-world-causality` (seed 1701 / tick 97).
+The reference renderer now follows `ART_DIRECTION.md`: cozy low-resolution storybook diorama, Moss-first focal hierarchy, governed material/palette/depth language, primary→secondary→ambient motion hierarchy, and anticipation→movement→contact→settle→recovery action grammar.
 
 ## Fresh-session procedure
 
 1. Inspect `git status`, log, remote/tracking state, and active jobs/services; preserve unrelated work.
-2. Read `STATUS.md`, `plan.md`, `terrarium.md`, `MEMORY.md`, `history/GEN17.md`, and the latest checkpoint history file.
+2. Read `STATUS.md`, `plan.md`, `terrarium.md`, `MEMORY.md`, `ART_DIRECTION.md`, `history/GEN17.md`, and `history/2026-08-27-visual-maturity.md`.
 3. Run `python -m pytest -q`.
-4. Run `python evaluations/evaluate_technical.py` and `python evaluations/evaluate_behavior.py --seed 1701 --steps 500`.
-5. Inspect `artifacts/present-world-causality.json`, compact causal temporal evidence, the latest snapshot, and inherited replay evidence when validating persistence/replay claims.
-6. Resolve reusable capabilities only after reading repository authority. `temporal-render-auditor-r1` is promoted at content hash `5481ecd6e2e46d9b3a502fbabff5a24f27ffed9f925ab0868ed30a3ba13575b1`, evaluator hash `86b714f3871132ad3786f94fc81570dd569cb95ee09ced1d064737b5652a3b0c`. `simulation-behavior-auditor-r1` remains promoted for behavior analysis. Candidate procedural memory is never source authority.
-7. For normal live viewing, prefer the canonical OptiPlex world via `./scripts/run_lan.sh`; the browser is disposable. For isolated development comparisons, use an ignored development data directory and never confuse it with canonical Moss.
+4. Run `node --check display/web/app.js`, `python evaluations/evaluate_technical.py`, and `python evaluations/evaluate_behavior.py --seed 1701 --steps 500`.
+5. Inspect `artifacts/visual-maturity.json`, compact genuine Canvas evidence under `artifacts/visual-maturity-compact/`, the latest snapshot, and inherited replay evidence when validating persistence/replay claims.
+6. Resolve reusable capabilities only after reading repository authority. `temporal-render-auditor-r1` is promoted at content hash `5481ecd6e2e46d9b3a502fbabff5a24f27ffed9f925ab0868ed30a3ba13575b1`, evaluator hash `86b714f3871132ad3786f94fc81570dd569cb95ee09ced1d064737b5652a3b0c`. `simulation-behavior-auditor-r1` is promoted at content hash `932573954fdf126bd4ec4f4d5a1f79a50b48b994bf374ed0cfa3415120dd093f`. Candidate procedural memory is never source authority.
+7. For normal live viewing, prefer the canonical OptiPlex world via `./scripts/run_lan.sh`; the browser is disposable. For isolated development comparisons, use a temporary/ignored data directory and never confuse it with canonical Moss.
 8. Temporal development endpoints are disabled by default. Enable fixture/output flags only on a development service; never add those flags to canonical runtime launchers.
-9. After a meaningful visible/product improvement: test/evaluate → run the actual renderer → visually inspect → capture exactly one meaningful deterministic development snapshot → update status/history → commit → attempt the mediated push.
+9. Use objective temporal checks for teleport/jitter/facing/attachment/settling/RAF correctness, **not** for aesthetic scoring. Visually inspect the actual 800×480 Canvas for warmth, composition, readability, and art-direction coherence.
+10. After a meaningful visible/product improvement: test/evaluate → run actual renderer → visually inspect → capture exactly one meaningful deterministic development snapshot → update status/history → create one meaningful commit → attempt the mediated push.
 
 ## Current evidence
 
-`artifacts/present-world-causality.json` is the compact checkpoint summary. `artifacts/causal-temporal-compact/` retains bounded genuine Canvas evidence; `artifacts/temporal-render-fixtures.json` retains deterministic source/target fixtures; larger raw browser sequences are intentionally discarded after compaction.
+`artifacts/visual-maturity.json` is the primary compact checkpoint summary. `artifacts/visual-maturity-compact/` retains bounded real Canvas telemetry/raster evidence; larger raw browser sequences and Lab transports were intentionally discarded after compaction. `artifacts/temporal-render-fixtures.json` retains deterministic source/target fixtures.
 
-Current Canvas matrix: 10/10 deterministic scenarios PASS under the promoted temporal auditor plus real RAF PASS. Repeated raw deterministic `left_walk` SHA256: `518b7909af6c5c20e2573ee12f30923ca15faff4a1153954098137019c0d3a8a`. RAF: 109 intervals, max 16.8 ms, zero >50 ms stalls.
+Current temporal matrix: **15 deterministic hero sequences plus real RAF = 16/16 PASS** under the promoted temporal auditor in isolated Lab. A separate consecutive-update probe proves the principal live defect improved from `352.907594 px` instantaneous legacy jump to `0 px`. Repeated deterministic `left_walk` raw capture SHA256 is `8853ad450bb5cac36ea5273b24de069b8ec9656ede77d7787574d1b7063992d5`. RAF: 156 intervals, median 16.7 ms, max 16.8 ms, zero >50 ms stalls.
 
-Separate deterministic telemetry—not an artistic score—proves sleep/window/activity-corner contact envelopes rise monotonically `0 → 1`, and the representative red-thread placement settles from `(118,372)` to `(181,400)` with zero final target error.
+Current seed-1701/500 behavior remains diverse but visually calmer: 10 action classes, entropy `3.103385`, 19 consecutive movement pairs, 5 immediate zone reversals, max movement burst 2, 97 configured object interactions under the promoted behavior auditor.
 
 ## Self-Building Computer state
 
-Promoted temporal capability: `temporal-render-auditor-r1`, content hash `5481ecd6e2e46d9b3a502fbabff5a24f27ffed9f925ab0868ed30a3ba13575b1`, evaluator hash `86b714f3871132ad3786f94fc81570dd569cb95ee09ced1d064737b5652a3b0c`.
+No new capability was required for this checkpoint. Existing promoted temporal and simulation behavior auditors, isolated Lab, browser mediation, deterministic evidence, exact replay, and snapshots were sufficient. Permanent Lab MCP surface did not grow. Frozen Optiplex_MCP must not be modified.
 
-Promoted behavior capability: `simulation-behavior-auditor-r1`, content hash `932573954fdf126bd4ec4f4d5a1f79a50b48b994bf374ed0cfa3415120dd093f`.
-
-No reusable SBC substrate deficiency was exposed; permanent Lab MCP surface remains 10. Frozen Optiplex_MCP must not be modified. No Gen18 is warranted by this checkpoint.
+**No Gen18 warranted.**
 
 ## Highest-value next work
 
-Deepen **local action staging and object affordances**: clearer anticipation/contact/recovery around the specific nearby object or surface while Moss inspects, carries, places, looks out, or sleeps. Preserve the same world authority and use temporal checks for correctness, not subjective quality.
+Continue normal product work under the art bible. Prefer a few high-impact authored interaction/composition improvements over feature count, effects, or new action types. Any future simulation change must remain deterministic, authoritative on the host, and behavior-regression-tested rather than hidden in JavaScript.
 
-## Git / remote safety
+## Git / runtime safety
 
 Canonical runtime state lives outside Git under the user-owned Terrarium state directory. Never commit SQLite/WAL/SHM files or runtime event ledgers. Development snapshots are intentionally versioned product history.
 
-`origin` is `git@github.com:turkwanistan/terrarium.git`; `main` tracks `origin/main`. Use the mediated project push path when authorized. Do not embed or copy credentials into the repository or bypass the credential boundary.
+`origin` is `git@github.com:turkwanistan/terrarium.git`; `main` tracks `origin/main`. Use the mediated project push path when authorized. Do not embed/copy credentials into the repository or bypass the credential boundary. A development service is not a canonical LAN deployment; report a LAN URL only after actual host-owned runtime verification.

@@ -90,6 +90,21 @@
         "steps": 97
       },
       "tick": 97
+    },
+    {
+      "captured_at": "2026-08-27T16:54:49.321538Z",
+      "frame_path": "/snapshots/dev/20260827T165449319827Z-visual-maturity/frame.json",
+      "meta_path": "/snapshots/dev/20260827T165449319827Z-visual-maturity/meta.json",
+      "note": "Art-directed storybook diorama with calmer motion hierarchy, stronger Moss silhouette and grounding, staged object handling, and behavior presentation that commits rather than ping-pongs.",
+      "preview_path": "/snapshots/dev/20260827T165449319827Z-visual-maturity/preview.svg",
+      "renderer_sha256": "a523186cab91e614034eb6593e3ea3db4b558ac448ca5d1c640cd43fb7362807",
+      "snapshot_id": "20260827T165449319827Z-visual-maturity",
+      "source": {
+        "mode": "deterministic",
+        "seed": 1701,
+        "steps": 180
+      },
+      "tick": 180
     }
   ]
 }

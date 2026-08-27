@@ -49,9 +49,13 @@ def evaluate(seed: int, steps: int) -> dict:
         moved_objects = sum(int(o["times_moved"]) > 0 for o in engine.state["objects"])
         marks = len(engine.state["habitat"]["marks"])
         shelf = int(engine.state["habitat"]["shelf_count"])
+        presentation = _presentation_metrics(events)
         checks = {
             "action_diversity": len(counts) >= 8,
             "non_sleep_repeat_run_bounded": max((n for a,n in _runs(actions) if a != "sleep"), default=0) <= 4,
+            "movement_commitment_bounded": presentation["max_consecutive_movement_actions"] <= 3,
+            "immediate_zone_reversals_bounded": presentation["immediate_zone_reversals"] <= max(2, steps // 75),
+            "object_manipulation_burst_bounded": presentation["max_consecutive_object_manipulations"] <= 3,
             "object_interaction_present": object_placements >= max(2, steps // 40),
             "multiple_objects_changed": moved_objects >= 3,
             "visible_environment_accumulated": marks >= 3 or shelf >= 2,
@@ -75,11 +79,49 @@ def evaluate(seed: int, steps: int) -> dict:
                 "shelf_count": shelf,
                 "persistent_marks": marks,
                 "events": len(events),
+                **presentation,
             },
         }
         store.close()
         return result
 
+
+
+def _presentation_metrics(events: list[dict]) -> dict:
+    movement = {"walk", "explore"}
+    manipulation = {"carry", "place"}
+    move_pairs = reversals = adjacent_manip = 0
+    move_run = manip_run = max_move = max_manip = 0
+    for i, event in enumerate(events):
+        details = event["details"]
+        action = details["action"]
+        if action in movement:
+            move_run += 1
+            max_move = max(max_move, move_run)
+        else:
+            move_run = 0
+        if action in manipulation:
+            manip_run += 1
+            max_manip = max(max_manip, manip_run)
+        else:
+            manip_run = 0
+        if i:
+            prior = events[i - 1]["details"]
+            if prior["action"] in movement and action in movement:
+                move_pairs += 1
+                prior_to = prior.get("to_zone", prior.get("from_zone"))
+                current_to = details.get("to_zone", details.get("from_zone"))
+                if prior.get("from_zone") == current_to and prior_to == details.get("from_zone"):
+                    reversals += 1
+            if prior["action"] in manipulation and action in manipulation:
+                adjacent_manip += 1
+    return {
+        "consecutive_movement_pairs": move_pairs,
+        "immediate_zone_reversals": reversals,
+        "max_consecutive_movement_actions": max_move,
+        "adjacent_object_manipulation_pairs": adjacent_manip,
+        "max_consecutive_object_manipulations": max_manip,
+    }
 
 def _runs(values):
     current=None; n=0

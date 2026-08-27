@@ -25,9 +25,17 @@ def test_temporal_fixture_pack_is_deterministic_and_800x480():
     assert first == second
     assert set(first["scenarios"]) == {
         "arrive_settle", "left_walk", "right_walk", "carried_walk", "idle_control",
-        "sleep_transition", "window_transition", "activity_corner_transition",
-        "object_placement", "rain_control",
+        "sleep_transition", "waking", "window_transition", "activity_corner_transition",
+        "inspect_object", "object_pickup", "object_placement", "rain_window",
+        "populated_room", "rain_control",
     }
+    assert first["hero_reel"] == [
+        "left_walk", "right_walk", "arrive_settle", "idle_control", "window_transition",
+        "rain_window", "inspect_object", "object_pickup", "carried_walk", "object_placement",
+        "sleep_transition", "waking", "activity_corner_transition", "populated_room", "rain_control",
+    ]
+    probe = first["continuity_probe"]
+    assert probe["source"]["tick"] < probe["middle"]["tick"] < probe["followup"]["tick"]
     for scenario in first["scenarios"].values():
         for frame in (scenario["source"], scenario["target"]):
             assert (frame["logical_width"], frame["logical_height"]) == (800, 480)
@@ -56,4 +64,6 @@ def test_renderer_has_manual_clock_path_and_production_raf_path():
     assert "smoother01" in source and "temporalRafProbe" in source
     assert "function causalActivityState(f, now)" in source
     assert "function placedObjectRenderState(o, f, now)" in source
+    assert "function acceptFrame(next, now)" in source
+    assert "transitionSource" in source and "temporalContinuityProbe" in source
     assert "drawForegroundCausality(frame, now, renderState)" in source

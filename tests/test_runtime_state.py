@@ -46,3 +46,4 @@ def test_launchers_use_user_owned_runtime_state():
         assert "XDG_STATE_HOME" in text
         assert "tools/migrate_runtime_state.py" in text
         assert '--data-dir "$data_dir"' in text
+        assert '--tick-seconds 3' in text
