@@ -127,7 +127,7 @@ Preserve the persistent Terrarium habitat rather than replacing it with a decora
 - **Rug / open space:** calm visual rest, navigation/acting field, subtle wear.
 - **Collection shelf:** memory, accumulation, persistent arrangements, top/front/recessed planes, foreground lips.
 - **Activity corner:** curiosity, papers/tools/plant/clutter, repeated-use marks, stronger controlled detail.
-- **Bowls and persistent objects:** readable category silhouettes with later state-specific visual variants.
+- **Bowls and persistent objects:** readable category silhouettes with authored state-specific visual variants.
 
 Persistent history remains visible in pixel language: worn routes, object scuffs, sleep compression/creases, window smudges/wet traces, activity papers/marks, object arrangements, and future supported causal aftermath. These marks must derive from canonical history/state; renderer presentation may not invent history.
 
@@ -174,6 +174,15 @@ Accepted Iteration 8C implementation:
 - four locomotion sprites carry the visible weight shift while semantic movement stays continuous;
 - exact target-dependent forepaw reach is the only bounded procedural Moss detail retained for canonical contact alignment;
 - whole-sprite idle/sleep bobbing is removed; final quiet/sleep holds may remain completely still.
+
+Accepted Iteration 8D object-state implementation:
+
+- object art now follows canonical `terrarium.object-affordances.v1` archetype/state rather than a renderer-only kind recipe;
+- rolling objects visibly distinguish `settled` and `rolled`; soft thread distinguishes `loose`, `rumpled`, and `nested`; keepsakes distinguish handled/displayed; the leaf distinguishes fresh/handled;
+- state variants remain presentation only: the world decides archetype, interaction state, available affordances, transitions, zone and position;
+- soft-object nest presentation is only valid where canonical affordances permit it (`open_space` / `sleeping_nook`); do not decorate a shelf/desk/window object as a nest merely for composition;
+- object-specific arrangement should read as a tendency shaped by identity + learned habit, not as fixed prop placement or scripted set dressing;
+- carried attachment and transition interpolation may stage canonical state, but must not create a visual state transition before the authoritative object event supports it.
 
 ## Depth and occlusion
 

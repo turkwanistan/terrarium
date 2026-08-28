@@ -174,8 +174,12 @@ def evaluate(seed: int = 1701, steps: int = 10080) -> dict[str, Any]:
     day_vectors = [tuple(counter.get(zone, 0) for zone in ZONES) for _, counter in sorted(day_destinations.items())]
 
     base = initial_state(seed, created_at=FIXED)
+    # Hold object preference constant in this full-world zone-history probe.
+    # Since 8D object archetypes now causally shape delivery destinations, using
+    # different favorite object classes here would confound the zone-habit test.
+    # Object preference itself is isolated by the controlled choice probe above.
     history_a = _controlled_profile(base, zone="window", object_id="amber_leaf")
-    history_b = _controlled_profile(base, zone="activity_corner", object_id="acorn")
+    history_b = _controlled_profile(base, zone="activity_corner", object_id="amber_leaf")
     physical_equivalent = _physical_signature(history_a) == _physical_signature(history_b)
     a1, a_rows1 = _run(seed, 2400, state=history_a)
     a2, a_rows2 = _run(seed, 2400, state=history_a)
@@ -197,8 +201,8 @@ def evaluate(seed: int = 1701, steps: int = 10080) -> dict[str, Any]:
         "history_b": {
             "favorite_zone": "activity_corner",
             "favorite_zone_future_share": round(_share(b_dest, "activity_corner"), 6),
-            "favorite_object": "acorn",
-            "favorite_object_future_share": round(_share(b_obj, "acorn"), 6),
+            "favorite_object": "amber_leaf",
+            "favorite_object_future_share": round(_share(b_obj, "amber_leaf"), 6),
             "destination_counts": dict(sorted(b_dest.items())),
             "object_counts": dict(sorted(b_obj.items())),
         },

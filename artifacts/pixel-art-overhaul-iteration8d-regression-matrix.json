@@ -1,0 +1,73 @@
+{
+  "browser_uat": "artifacts/pixel-art-overhaul-iteration8d-browser-uat.json",
+  "checks": {
+    "authored_assets_73_pass": true,
+    "behavior_four_seed_pass": true,
+    "coherence_four_seed_pass": true,
+    "git_diff_check_pass": true,
+    "habits_four_seed_pass": true,
+    "iteration6_repertoire_pass": true,
+    "iteration7_situations_pass": true,
+    "iteration8d_object_affordances_pass": true,
+    "javascript_syntax_pass": true,
+    "moss_assets_46_preserved": true,
+    "object_state_assets_13_pass": true,
+    "production_browser_uat_pass": true,
+    "pytest_49_pass": true,
+    "python310_grammar_36_sources": true,
+    "spatial_four_seed_pass": true,
+    "technical_10080_pass": true
+  },
+  "note": "A managed heavy-job attempt at the 10,080-step technical evaluator exhausted that job container temporary disk; the exact evaluator was rerun directly in the project sandbox and passed with a 33.4 MB SQLite ledger and 16.4 MB JSONL ledger. This was an evaluation-container capacity boundary, not a Terrarium failure.",
+  "object_affordances": "artifacts/pixel-art-overhaul-iteration8d-object-affordances.json",
+  "passed": true,
+  "per_seed": {
+    "behavior": {
+      "1701": true,
+      "1702": true,
+      "42": true,
+      "999": true
+    },
+    "coherence": {
+      "1701": true,
+      "1702": true,
+      "42": true,
+      "999": true
+    },
+    "habits": {
+      "1701": true,
+      "1702": true,
+      "42": true,
+      "999": true
+    },
+    "spatial": {
+      "1701": true,
+      "1702": true,
+      "42": true,
+      "999": true
+    }
+  },
+  "repertoire": "artifacts/pixel-art-overhaul-iteration8d-repertoire.json",
+  "schema": "terrarium.pixel-art-overhaul-iteration8d-regression-matrix.v1",
+  "seeds": [
+    1701,
+    1702,
+    42,
+    999
+  ],
+  "situations": "artifacts/pixel-art-overhaul-iteration8d-situations.json",
+  "steps_per_long_run": 10080,
+  "technical": {
+    "checks": {
+      "append_only_sqlite_enforced": true,
+      "event_chain_valid": true,
+      "jsonl_matches_event_count": true,
+      "logical_viewport_exact": true,
+      "renderer_frame_is_semantic": true,
+      "restart_preserves_state": true,
+      "snapshot_event_replay_exact": true
+    },
+    "events": 10080,
+    "path": "artifacts/pixel-art-overhaul-iteration8d-technical.json"
+  }
+}

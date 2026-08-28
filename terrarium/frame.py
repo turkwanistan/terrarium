@@ -2,6 +2,8 @@ from __future__ import annotations
 
 from typing import Any
 
+from .models import OBJECT_AFFORDANCE_SCHEMA, object_affordances
+
 from .models import FRAME_HEIGHT, FRAME_WIDTH
 from .spatial import SPATIAL_SCHEMA
 from .situations import event_frame
@@ -39,7 +41,14 @@ def make_frame(state: dict[str, Any], *, last_event: dict[str, Any] | None = Non
             "target_object_id": creature.get("focus_object_id"),
         },
         "objects": [
-            {k: obj[k] for k in ("id", "name", "kind", "x", "y", "zone", "state", "carried_by", "times_moved", "times_inspected", "times_nudged")}
+            {
+                **{k: obj[k] for k in ("id", "name", "kind", "x", "y", "zone", "state", "carried_by", "times_moved", "times_inspected", "times_nudged")},
+                "affordance_schema": OBJECT_AFFORDANCE_SCHEMA,
+                "archetype": obj["archetype"],
+                "interaction_state": obj["interaction_state"],
+                "state_transitions": int(obj.get("state_transitions", 0)),
+                "available_affordances": list(object_affordances(obj)),
+            }
             for obj in state["objects"]
         ],
         "habitat": {
@@ -78,6 +87,11 @@ def make_frame(state: dict[str, Any], *, last_event: dict[str, Any] | None = Non
             "activity_family": (last_event.get("details") or {}).get("activity_family"),
             "result_x": (last_event.get("details") or {}).get("result_x"),
             "result_y": (last_event.get("details") or {}).get("result_y"),
+            "object_affordance_schema": (last_event.get("details") or {}).get("object_affordance_schema"),
+            "object_archetype": (last_event.get("details") or {}).get("object_archetype"),
+            "object_affordance": (last_event.get("details") or {}).get("object_affordance"),
+            "object_state_before": (last_event.get("details") or {}).get("object_state_before"),
+            "object_state_after": (last_event.get("details") or {}).get("object_state_after"),
             "world_event_id": (last_event.get("details") or {}).get("world_event_id"),
             "world_event_type": (last_event.get("details") or {}).get("world_event_type"),
             "world_event_role": (last_event.get("details") or {}).get("world_event_role"),

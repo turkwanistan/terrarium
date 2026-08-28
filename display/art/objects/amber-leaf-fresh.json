@@ -1,0 +1,59 @@
+{
+  "schema": "terrarium.pixel-asset.v1",
+  "id": "object.amber-leaf.fresh",
+  "width": 16,
+  "height": 14,
+  "anchor": [
+    8,
+    9
+  ],
+  "meta": {
+    "object_id": "amber_leaf",
+    "archetype": "delicate",
+    "interaction_state": "fresh"
+  },
+  "runs": [
+    [
+      3,
+      10,
+      10,
+      1,
+      "shadow"
+    ],
+    [
+      3,
+      6,
+      9,
+      3,
+      "amber"
+    ],
+    [
+      5,
+      4,
+      7,
+      3,
+      "amber"
+    ],
+    [
+      7,
+      3,
+      4,
+      2,
+      "woodGold"
+    ],
+    [
+      7,
+      8,
+      2,
+      3,
+      "walnutDark"
+    ],
+    [
+      4,
+      8,
+      7,
+      1,
+      "walnutDark"
+    ]
+  ]
+}

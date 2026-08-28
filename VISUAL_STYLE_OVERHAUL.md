@@ -231,7 +231,7 @@ Identity: **memory, arrangement, accumulation**.
 - strong silhouette and top/front/recessed planes;
 - persistent items should read as a changing composition rather than identical tokens;
 - foreground lips support real occlusion;
-- future object-state art should make collections tell history.
+- authored object-state variants should make collections tell history.
 
 ### Activity corner
 
@@ -452,13 +452,17 @@ Accepted 8C uses 46 palette-addressed Moss assets, four authored walk frames, di
 
 ### Iteration 8D — Object Identity and Stateful Affordances
 
-**Status: NEXT.**
+**Status: ACCEPTED.**
 
-Resume the previously planned behavior milestone, now paired with unique authored object sprites and state variants.
+The six persistent objects now have canonical archetypes and interaction state. Rolling, soft-nesting, delicate, and keepsake identities expose different affordance subsets; stateful chains alter later possibilities; and 13 authored object-state variants make those consequences visible. Object identity remains subordinate to the existing habit/exploration architecture rather than becoming a planner or inventory system.
 
-Success means object identity changes both what Moss can do and what the viewer can see afterward.
+Accepted evidence: `history/2026-08-28-pixel-art-overhaul-iteration8d.md`; snapshot `20260828T112207258140Z-pixel-art-overhaul-iteration8d`; semantic frame `e191850f3c454b926e9b4fe4355298be3ff5eb4ea351be6975fe7d45ab010f9d`.
+
+Success criterion met: object identity now changes both what Moss can do and what the viewer can see afterward.
 
 ### Iteration 8E — Atmospheric World
+
+**Status: NEXT.**
 
 Add persistent non-commanding environmental motion, richer window life, placed local lighting, and stronger whole-scene weather mood.
 

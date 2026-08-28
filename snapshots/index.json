@@ -270,6 +270,21 @@
         "steps": 10080
       },
       "tick": 10080
+    },
+    {
+      "captured_at": "2026-08-28T11:22:07.266348Z",
+      "frame_path": "/snapshots/dev/20260828T112207258140Z-pixel-art-overhaul-iteration8d/frame.json",
+      "meta_path": "/snapshots/dev/20260828T112207258140Z-pixel-art-overhaul-iteration8d/meta.json",
+      "note": "Pixel-Art Overhaul Iteration 8D accepted: object identity, persistent stateful affordances, and authored object-state variants.",
+      "preview_path": "/snapshots/dev/20260828T112207258140Z-pixel-art-overhaul-iteration8d/preview.svg",
+      "renderer_sha256": "f8e12181a18c2616fdeb8dae1ee5a0453fab6ba3a5ab88912782e497e35cb701",
+      "snapshot_id": "20260828T112207258140Z-pixel-art-overhaul-iteration8d",
+      "source": {
+        "mode": "deterministic",
+        "seed": 1701,
+        "steps": 10080
+      },
+      "tick": 10080
     }
   ]
 }

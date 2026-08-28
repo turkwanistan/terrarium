@@ -1,0 +1,41 @@
+{
+  "art_surface": {
+    "height": 240,
+    "integer_scale": 2,
+    "smoothing": false,
+    "width": 400
+  },
+  "captured_at": "2026-08-28T11:22:07.266348Z",
+  "frame": {
+    "logical_height": 480,
+    "logical_width": 800,
+    "path": "dev/20260828T112207258140Z-pixel-art-overhaul-iteration8d/frame.json",
+    "sha256": "e191850f3c454b926e9b4fe4355298be3ff5eb4ea351be6975fe7d45ab010f9d",
+    "tick": 10080
+  },
+  "git": {
+    "branch": "main",
+    "dirty": true,
+    "head": "06dea58d8e25e337405c89e576db539f3c19bbf0"
+  },
+  "note": "Pixel-Art Overhaul Iteration 8D accepted: object identity, persistent stateful affordances, and authored object-state variants.",
+  "preview": {
+    "path": "dev/20260828T112207258140Z-pixel-art-overhaul-iteration8d/preview.svg",
+    "sha256": "835aab7113c18c8c237fc3f0f0ebb7463e92b394588e594292b03218f5da4fe0"
+  },
+  "schema": "terrarium.dev-snapshot.v1",
+  "snapshot_id": "20260828T112207258140Z-pixel-art-overhaul-iteration8d",
+  "source": {
+    "mode": "deterministic",
+    "seed": 1701,
+    "steps": 10080
+  },
+  "source_hashes": {
+    "authored_art": "ed1fee4cd060519267d131837ab45772754108c1c2eaa4c9a9c65322bce08d9a",
+    "engine": "5a9b66bb020490b86cef9d3da6b0d538b3f457d65aa558c7bab824a65d4eb0be",
+    "frame_contract": "4811664e040a06219b887ca24abe4920982cb34536340e9e29b697301edf4bde",
+    "renderer_css": "3a24319be5a3e0c963b8e721b637f35aedfdc24b8bef8e779ae934dd09fd62d1",
+    "renderer_js": "f8e12181a18c2616fdeb8dae1ee5a0453fab6ba3a5ab88912782e497e35cb701"
+  },
+  "view_url": "/?snapshot=/snapshots/dev/20260828T112207258140Z-pixel-art-overhaul-iteration8d/frame.json"
+}

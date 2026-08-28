@@ -1,0 +1,144 @@
+{
+  "acceptance": {
+    "all_regressions_pass": true,
+    "delicate_and_keepsake_objects_reject_play_nudge": true,
+    "iteration6_repertoire_preserved": true,
+    "iteration7_situations_preserved": true,
+    "iteration8b_room_and_iteration8c_moss_presentation_preserved": true,
+    "learned_habits_remain_causal_without_lock_in": true,
+    "migration_restart_replay_and_append_only_authority_preserved": true,
+    "object_identity_changes_available_affordances": true,
+    "persistent_object_state_changes_later_possibilities": true,
+    "pixel_native_deterministic_temporal_contracts_intact": true,
+    "rolling_retrieve_chain_is_causal": true,
+    "soft_tug_nest_chain_is_causal_and_zone_valid": true,
+    "state_changes_have_authored_visual_variants": true
+  },
+  "authored_art_sha256": "ed1fee4cd060519267d131837ab45772754108c1c2eaa4c9a9c65322bce08d9a",
+  "authored_asset_count": 73,
+  "behavior_rules": "terrarium-rules-v7-object-identity",
+  "browser": {
+    "console_errors": 0,
+    "continuity_jump_px": 0,
+    "deterministic_repeat": true,
+    "raf": {
+      "duration_ms": 1800,
+      "frames": 109,
+      "interval_ms": {
+        "max": 16.8,
+        "min": 16.5,
+        "over_34ms": 0,
+        "over_50ms": 0,
+        "p50": 16.7,
+        "p95": 16.7
+      },
+      "passed": true
+    }
+  },
+  "checkpoint": "Pixel-Art Overhaul \u2014 Iteration 8D: Object Identity and Stateful Affordances",
+  "engine_sha256": "5a9b66bb020490b86cef9d3da6b0d538b3f457d65aa558c7bab824a65d4eb0be",
+  "evidence": {
+    "art_direction_fixtures": "artifacts/iteration8d-art-direction-fixtures.json",
+    "art_direction_matrix": "artifacts/iteration8d-art-direction-matrix.json",
+    "browser_uat": "artifacts/pixel-art-overhaul-iteration8d-browser-uat.json",
+    "object_affordances": "artifacts/pixel-art-overhaul-iteration8d-object-affordances.json",
+    "regression_matrix": "artifacts/pixel-art-overhaul-iteration8d-regression-matrix.json",
+    "repertoire": "artifacts/pixel-art-overhaul-iteration8d-repertoire.json",
+    "situations": "artifacts/pixel-art-overhaul-iteration8d-situations.json",
+    "technical": "artifacts/pixel-art-overhaul-iteration8d-technical.json"
+  },
+  "frame_contract_sha256": "4811664e040a06219b887ca24abe4920982cb34536340e9e29b697301edf4bde",
+  "gen18": "NO",
+  "habit_schema": "terrarium.habits.v1",
+  "moss_authored_asset_count": 46,
+  "next": "Iteration 8E \u2014 Atmospheric World",
+  "object_affordance_metrics": {
+    "1701": {
+      "affordance_counts": {
+        "carry": 195,
+        "display": 14,
+        "inspect": 179,
+        "nest": 7,
+        "place": 181,
+        "retrieve": 14,
+        "roll": 14,
+        "tug": 7
+      },
+      "illegal_nudges": 0,
+      "roll_retrieve_within_two_rate": 1.0,
+      "tug_nest_within_two_rate": 0.857143
+    },
+    "1702": {
+      "affordance_counts": {
+        "carry": 185,
+        "display": 18,
+        "inspect": 178,
+        "nest": 6,
+        "place": 166,
+        "retrieve": 23,
+        "roll": 23,
+        "tug": 6
+      },
+      "illegal_nudges": 0,
+      "roll_retrieve_within_two_rate": 1.0,
+      "tug_nest_within_two_rate": 1.0
+    },
+    "42": {
+      "affordance_counts": {
+        "carry": 188,
+        "display": 20,
+        "inspect": 193,
+        "nest": 7,
+        "place": 168,
+        "retrieve": 25,
+        "roll": 26,
+        "tug": 7
+      },
+      "illegal_nudges": 0,
+      "roll_retrieve_within_two_rate": 0.961538,
+      "tug_nest_within_two_rate": 1.0
+    },
+    "999": {
+      "affordance_counts": {
+        "carry": 207,
+        "display": 19,
+        "inspect": 179,
+        "nest": 5,
+        "place": 188,
+        "retrieve": 20,
+        "roll": 20,
+        "tug": 5
+      },
+      "illegal_nudges": 0,
+      "roll_retrieve_within_two_rate": 1.0,
+      "tug_nest_within_two_rate": 1.0
+    }
+  },
+  "object_affordance_schema": "terrarium.object-affordances.v1",
+  "object_archetypes": {
+    "delicate": [
+      "amber_leaf"
+    ],
+    "keepsake": [
+      "shell",
+      "glass_star"
+    ],
+    "rolling": [
+      "blue_stone",
+      "acorn"
+    ],
+    "soft_nesting": [
+      "red_thread"
+    ]
+  },
+  "object_authored_asset_count": 13,
+  "renderer_js_sha256": "f8e12181a18c2616fdeb8dae1ee5a0453fab6ba3a5ab88912782e497e35cb701",
+  "schema": "terrarium.pixel-art-overhaul-iteration8d.v1",
+  "seed": 1701,
+  "semantic_frame_sha256": "e191850f3c454b926e9b4fe4355298be3ff5eb4ea351be6975fe7d45ab010f9d",
+  "situational_event_schema": "terrarium.situational-events.v1",
+  "snapshot": "20260828T112207258140Z-pixel-art-overhaul-iteration8d",
+  "spatial_schema": "terrarium.spatial.v1",
+  "status": "ACCEPTED",
+  "tick": 10080
+}

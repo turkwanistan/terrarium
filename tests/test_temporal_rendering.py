@@ -28,13 +28,15 @@ def test_temporal_fixture_pack_is_deterministic_and_800x480():
         "arrive_settle", "left_walk", "right_walk", "carried_walk", "idle_control",
         "sleep_transition", "waking", "wake_exit", "window_transition", "activity_corner_transition",
         "activity_corner_approach", "shelf_approach", "inspect_object", "object_nudge", "object_pickup", "object_placement", "rain_window",
+        "object_roll", "object_retrieve", "object_tug", "object_nest", "object_display",
         "loaf", "groom", "stretch", "weather_reaction",
         "populated_room", "event_sunlight_engage", "event_bird_engage", "event_thunder_react", "event_moth_engage", "event_ignored",
         "dawn_light_transition", "dusk_light_transition", "rain_control",
     }
     assert first["hero_reel"] == [
         "left_walk", "right_walk", "arrive_settle", "idle_control", "window_transition",
-        "rain_window", "weather_reaction", "inspect_object", "object_nudge", "object_pickup", "carried_walk", "object_placement",
+        "rain_window", "weather_reaction", "inspect_object", "object_roll", "object_retrieve", "object_tug", "object_nest",
+        "object_pickup", "carried_walk", "object_placement", "object_display",
         "loaf", "groom", "stretch", "sleep_transition", "waking", "wake_exit", "activity_corner_approach", "activity_corner_transition",
         "shelf_approach", "populated_room", "event_sunlight_engage", "event_bird_engage", "event_thunder_react", "event_moth_engage", "event_ignored",
         "dawn_light_transition", "dusk_light_transition", "rain_control",

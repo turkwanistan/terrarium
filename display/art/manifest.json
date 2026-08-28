@@ -370,6 +370,84 @@
       "kind": "moss",
       "path": "moss/wake-3.json",
       "layer": "ACTORS"
+    },
+    {
+      "id": "object.blue-stone.settled",
+      "kind": "object",
+      "path": "objects/blue-stone-settled.json",
+      "layer": "WORLD"
+    },
+    {
+      "id": "object.blue-stone.rolled",
+      "kind": "object",
+      "path": "objects/blue-stone-rolled.json",
+      "layer": "WORLD"
+    },
+    {
+      "id": "object.acorn.settled",
+      "kind": "object",
+      "path": "objects/acorn-settled.json",
+      "layer": "WORLD"
+    },
+    {
+      "id": "object.acorn.rolled",
+      "kind": "object",
+      "path": "objects/acorn-rolled.json",
+      "layer": "WORLD"
+    },
+    {
+      "id": "object.red-thread.loose",
+      "kind": "object",
+      "path": "objects/red-thread-loose.json",
+      "layer": "WORLD"
+    },
+    {
+      "id": "object.red-thread.rumpled",
+      "kind": "object",
+      "path": "objects/red-thread-rumpled.json",
+      "layer": "WORLD"
+    },
+    {
+      "id": "object.red-thread.nested",
+      "kind": "object",
+      "path": "objects/red-thread-nested.json",
+      "layer": "WORLD"
+    },
+    {
+      "id": "object.amber-leaf.fresh",
+      "kind": "object",
+      "path": "objects/amber-leaf-fresh.json",
+      "layer": "WORLD"
+    },
+    {
+      "id": "object.amber-leaf.handled",
+      "kind": "object",
+      "path": "objects/amber-leaf-handled.json",
+      "layer": "WORLD"
+    },
+    {
+      "id": "object.shell.handled",
+      "kind": "object",
+      "path": "objects/shell-handled.json",
+      "layer": "WORLD"
+    },
+    {
+      "id": "object.shell.displayed",
+      "kind": "object",
+      "path": "objects/shell-displayed.json",
+      "layer": "WORLD"
+    },
+    {
+      "id": "object.glass-star.handled",
+      "kind": "object",
+      "path": "objects/glass-star-handled.json",
+      "layer": "WORLD"
+    },
+    {
+      "id": "object.glass-star.displayed",
+      "kind": "object",
+      "path": "objects/glass-star-displayed.json",
+      "layer": "WORLD"
     }
   ]
 }

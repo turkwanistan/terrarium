@@ -256,7 +256,10 @@ def evaluate(steps: int = 10080, seeds: tuple[int, ...] = SEEDS) -> dict[str, An
             "zone_activity_space_is_broad": summary["distinct_zone_family_combinations"] >= 34,
             "repetition_stays_bounded": summary["max_non_sleep_family_streak"] <= 8,
             "no_family_dominates": summary["top_family_share"] <= 0.34,
-            "object_manipulation_has_consequences": summary["objects_nudged"] >= 4 and summary["object_nudges"] >= 20 and summary["distinct_nudge_patterns"] >= 15,
+            # 8D intentionally restricts nudge/play to the two rolling objects
+            # plus the soft-nesting thread. Require consequences across every
+            # eligible object instead of the pre-8D universal-object count.
+            "object_manipulation_has_consequences": summary["objects_nudged"] >= 3 and summary["object_nudges"] >= 20 and summary["distinct_nudge_patterns"] >= 15,
             "arrangements_span_world": summary["zones_with_arrangement_history"] >= 4 and summary["distinct_arrangement_patterns"] >= 15,
             "comfort_spans_world": summary["zones_with_comfort_history"] == len(ZONES),
             "inspect_manipulate_sequences_are_common": summary["inspect_to_manipulation_within_two_rate"] >= 0.68,

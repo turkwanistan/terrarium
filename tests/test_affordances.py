@@ -5,7 +5,7 @@ from collections import Counter
 from copy import deepcopy
 
 from terrarium.engine import Simulation, WorldEngine
-from terrarium.models import AFFORDANCE_HISTORY_SCHEMA, HABIT_CONTEXTS, PLACEMENT_SLOTS, canonical_json, initial_state, weather_for
+from terrarium.models import AFFORDANCE_HISTORY_SCHEMA, HABIT_CONTEXTS, OBJECT_AFFORDANCE_SCHEMA, PLACEMENT_SLOTS, canonical_json, initial_state, object_affordances, weather_for
 from terrarium.replay import assert_exact_replay
 from terrarium.store import WorldStore
 
@@ -75,17 +75,51 @@ def test_nudge_changes_authoritative_object_state_in_authored_slot():
     assert after["habitat"]["activity_aftermath"]["object_nudges"] >= 1
 
 
-def test_nudges_have_same_object_reinspection_followup():
+def test_object_specific_play_chains_roll_retrieve_and_tug_nest():
     state = initial_state(1701, created_at=FIXED)
     sim = Simulation(); decisions = []
-    for _ in range(2400):
+    for _ in range(3200):
         _, _, details, state = sim.step(state)
         if details.get("decision"):
-            decisions.append((details.get("action"), details.get("object_id")))
-    nudges = [(i, oid) for i, (action, oid) in enumerate(decisions) if action == "nudge" and oid]
-    assert len(nudges) >= 8
-    followed = sum(any(action == "inspect" and candidate == oid for action, candidate in decisions[i + 1:i + 3]) for i, oid in nudges)
-    assert followed / len(nudges) >= 0.90
+            decisions.append(details)
+
+    rolls = [(i, row) for i, row in enumerate(decisions) if row.get("object_affordance") == "roll"]
+    assert len(rolls) >= 3
+    recovered = sum(
+        any(candidate.get("object_id") == row.get("object_id") and candidate.get("object_affordance") == "retrieve"
+            for candidate in decisions[i + 1:i + 3])
+        for i, row in rolls
+    )
+    assert recovered / len(rolls) >= 0.90
+
+    tugs = [(i, row) for i, row in enumerate(decisions) if row.get("object_affordance") == "tug"]
+    assert tugs
+    nested = sum(
+        any(candidate.get("object_id") == row.get("object_id") and candidate.get("object_affordance") == "nest"
+            for candidate in decisions[i + 1:i + 3])
+        for i, row in tugs
+    )
+    # Genuine exhaustion may still interrupt an unlocked nesting opportunity;
+    # the long-run 8D evaluator uses the same bounded causal threshold.
+    assert nested / len(tugs) >= 0.75
+    assert all(row.get("object_archetype") in {"rolling", "soft_nesting"} for row in decisions if row.get("action") == "nudge")
+
+
+def test_object_archetypes_expose_materially_different_stateful_affordances():
+    state = initial_state(1701, created_at=FIXED)
+    objects = {obj["id"]: obj for obj in state["objects"]}
+    assert objects["blue_stone"]["affordance_schema"] == OBJECT_AFFORDANCE_SCHEMA
+    assert set(object_affordances(objects["blue_stone"])) == {"inspect", "carry", "nudge"}
+    assert set(object_affordances(objects["amber_leaf"])) == {"inspect", "carry"}
+    assert set(object_affordances(objects["shell"])) == {"inspect", "carry"}
+    assert set(object_affordances(objects["red_thread"])) == {"inspect", "carry", "nudge"}
+
+    objects["blue_stone"]["interaction_state"] = "rolled"
+    assert set(object_affordances(objects["blue_stone"])) == {"inspect", "carry"}
+    objects["red_thread"]["interaction_state"] = "rumpled"
+    assert set(object_affordances(objects["red_thread"])) == {"inspect", "carry", "nest"}
+    objects["red_thread"]["interaction_state"] = "nested"
+    assert set(object_affordances(objects["red_thread"])) == {"inspect", "carry"}
 
 
 def test_weather_stream_is_deterministic_calm_and_non_degenerate():
@@ -127,6 +161,8 @@ def test_affordance_history_persists_restart_and_replay(tmp_path):
     before = engine.current_state()
     assert before["habitat"]["activity_aftermath"]["object_nudges"] > 0
     assert before["habitat"]["affordance_history"]["completed_families"].get("play", 0) > 0
+    assert sum(int(obj.get("state_transitions", 0)) for obj in before["objects"]) > 0
+    assert all(obj.get("affordance_schema") == OBJECT_AFFORDANCE_SCHEMA for obj in before["objects"])
     replay = assert_exact_replay(store)
     assert replay["ok"]
     store.close()

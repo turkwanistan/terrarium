@@ -2,6 +2,14 @@
 
 Git-friendly visual milestones. The SVG is a lightweight capture-time thumbnail; run Terrarium and open `/snapshots/` for the same stored frame through the real Canvas renderer.
 
+## 20260828T112207258140Z-pixel-art-overhaul-iteration8d
+
+Pixel-Art Overhaul Iteration 8D accepted: object identity, persistent stateful affordances, and authored object-state variants.
+
+![20260828T112207258140Z-pixel-art-overhaul-iteration8d](dev/20260828T112207258140Z-pixel-art-overhaul-iteration8d/preview.svg)
+
+Deterministic tick `10080` · renderer `f8e12181a18c`
+
 ## 20260828T030258821895Z-pixel-art-overhaul-iteration8c
 
 Iteration 8C replaces Moss's procedural finished silhouette with authored low-frame pixel sprites while preserving simulation, contact, possession, routes, habits, events, and room authority.

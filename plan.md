@@ -296,6 +296,22 @@ Evidence: `history/2026-08-27-pixel-art-overhaul-iteration8b.md`, `artifacts/pix
 
 Evidence: `history/2026-08-27-pixel-art-overhaul-iteration8c.md`, `artifacts/pixel-art-overhaul-iteration8c.json`, `artifacts/pixel-art-overhaul-iteration8c-regression-matrix.json`, snapshot `20260828T030258821895Z-pixel-art-overhaul-iteration8c`.
 
-## Next product iteration after Iteration 8C
+## Completed normal product checkpoint — Pixel-Art Overhaul, Iteration 8D
 
-**Iteration 8D — Object Identity and Stateful Affordances.** With both habitat and protagonist now authored, resume the postponed behavior/state milestone: give small object archetypes materially different affordance subsets and persistent canonical state transitions, then make those states visible through authored object variants. Preserve replay, spatial authority, habits, and renderer/world boundaries.
+- added canonical `terrarium.object-affordances.v1` identity/state for four compact archetypes across the six existing movable objects;
+- made roll→retrieve, tug→rumple→nest, and handled/displayed consequences persistent and capable of changing later affordances;
+- restricted soft nesting play to plausible open-floor/bed zones and removed generic play/nudge from delicate/keepsake objects;
+- layered object-aware arrangement tendencies underneath existing learned habits without adding a planner or fixed destination script;
+- added conservative additive migration, transition counters, available-affordance frame projection, and exact restart/replay preservation;
+- added 13 authored object-state assets and replaced procedural movable-object drawing with canonical asset selection;
+- repaired rumpled-thread nest-stage preservation and completed object-session cleanup found during UAT;
+- updated controlled/coherence/repertoire evaluations where 8D made old confounded/generic-object assumptions invalid, without weakening the underlying causal or anti-lock-in requirements;
+- passed **49/49 tests**, 36-source Python-3.10 grammar, JS syntax, 73-asset validation, 10,080-event technical/replay, four-seed 10,080-step behavior/spatial/coherence/habit matrices, repertoire/situations/object-affordance evaluators, deterministic browser UAT, **0 px** continuity, and clean RAF pacing;
+- accepted semantic frame SHA256 `e191850f3c454b926e9b4fe4355298be3ff5eb4ea351be6975fe7d45ab010f9d` at seed/tick 1701/10080;
+- no SBC substrate change, Capability Forge work, frozen MCP change, or Gen18 was required.
+
+Evidence: `history/2026-08-28-pixel-art-overhaul-iteration8d.md`, `artifacts/pixel-art-overhaul-iteration8d.json`, `artifacts/pixel-art-overhaul-iteration8d-regression-matrix.json`, snapshot `20260828T112207258140Z-pixel-art-overhaul-iteration8d`.
+
+## Next product iteration after Iteration 8D
+
+**Iteration 8E — Atmospheric World.** Make the accepted room feel alive while Moss is still through deterministic non-commanding ambient motion, richer exterior/window life, hard-edged placed local lighting, and stronger whole-scene weather mood. Keep ambient presentation normally outside behavior authority; do not turn atmosphere into constant events or particle noise.

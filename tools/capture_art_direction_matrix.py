@@ -87,7 +87,8 @@ def build_matrix() -> tuple[dict[str, Any], dict[str, Any]]:
         "art_night_rain_lived_idle": _static_scenario("art_night_rain_lived_idle", minute=1230, weather="rain", lived_steps=480),
     }
     borrowed = [
-        "left_walk", "right_walk", "inspect_object", "object_nudge", "object_pickup", "carried_walk", "object_placement",
+        "left_walk", "right_walk", "inspect_object", "object_nudge", "object_roll", "object_retrieve", "object_tug", "object_nest",
+        "object_pickup", "carried_walk", "object_placement", "object_display",
         "loaf", "groom", "stretch", "weather_reaction", "window_transition", "sleep_transition", "waking", "wake_exit",
         "event_sunlight_engage", "event_bird_engage", "event_thunder_react", "event_moth_engage",
     ]
@@ -107,6 +108,7 @@ def build_matrix() -> tuple[dict[str, Any], dict[str, Any]]:
         {"group": "history", "scenarios": ["art_day_clear_fresh_idle", "art_day_clear_lived_idle", "art_night_rain_fresh_idle", "art_night_rain_lived_idle"]},
         {"group": "moss-locomotion", "scenarios": ["art_day_clear_fresh_idle", "left_walk", "right_walk", "carried_walk"]},
         {"group": "moss-object-acting", "scenarios": ["inspect_object", "object_nudge", "object_pickup", "object_placement"]},
+        {"group": "object-state", "scenarios": ["object_roll", "object_retrieve", "object_tug", "object_nest", "object_display"]},
         {"group": "moss-quiet-acting", "scenarios": ["loaf", "groom", "stretch", "window_transition", "sleep_transition", "waking", "wake_exit"]},
         {"group": "situations", "scenarios": ["weather_reaction", "event_sunlight_engage", "event_bird_engage", "event_thunder_react", "event_moth_engage"]},
     ]

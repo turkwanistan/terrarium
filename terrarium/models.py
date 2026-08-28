@@ -11,10 +11,11 @@ from .spatial import ZONE_ANCHORS
 FRAME_WIDTH = 800
 FRAME_HEIGHT = 480
 STATE_SCHEMA_VERSION = 1
-RULES_VERSION = "terrarium-rules-v6-situational-attention"
+RULES_VERSION = "terrarium-rules-v7-object-identity"
 BEHAVIOR_CONTEXT_SCHEMA = "terrarium.behavior-context.v1"
 HABIT_PROFILE_SCHEMA = "terrarium.habits.v1"
 AFFORDANCE_HISTORY_SCHEMA = "terrarium.affordances.v1"
+OBJECT_AFFORDANCE_SCHEMA = "terrarium.object-affordances.v1"
 SITUATIONAL_EVENTS_SCHEMA = "terrarium.situational-events.v1"
 HABIT_CONTEXTS = ("dawn", "day", "dusk", "night")
 RNG_STREAM_VERSION = "terrarium-rules-v3-routine-coherence"
@@ -43,6 +44,64 @@ OBJECT_BLUEPRINTS = [
     ("red_thread", "Red thread", "thread", "sleeping_nook", 150, 392),
     ("glass_star", "Glass star", "trinket", "activity_corner", 704, 338),
 ]
+
+# Iteration 8D gives the six persistent objects explicit identities instead of
+# routing every object through the same inspect -> nudge/carry graph. These
+# archetypes are canonical world facts; the renderer only visualizes them.
+OBJECT_IDENTITIES: dict[str, dict[str, str]] = {
+    "blue_stone": {"archetype": "rolling", "default_state": "settled"},
+    "acorn": {"archetype": "rolling", "default_state": "settled"},
+    "red_thread": {"archetype": "soft_nesting", "default_state": "loose"},
+    "amber_leaf": {"archetype": "delicate", "default_state": "fresh"},
+    "shell": {"archetype": "keepsake", "default_state": "handled"},
+    "glass_star": {"archetype": "keepsake", "default_state": "handled"},
+}
+
+OBJECT_ARCHETYPE_AFFORDANCES: dict[str, tuple[str, ...]] = {
+    "rolling": ("inspect", "carry", "nudge"),
+    "soft_nesting": ("inspect", "carry", "nudge"),
+    "delicate": ("inspect", "carry"),
+    "keepsake": ("inspect", "carry"),
+}
+
+def normalize_object_identity(obj: dict[str, Any]) -> dict[str, Any]:
+    """Add/repair additive 8D identity fields without resetting legacy state."""
+    identity = OBJECT_IDENTITIES.get(str(obj.get("id")))
+    if identity is None:
+        identity = {"archetype": "keepsake", "default_state": "handled"}
+    obj["affordance_schema"] = OBJECT_AFFORDANCE_SCHEMA
+    obj["archetype"] = str(identity["archetype"])
+    valid_states = {
+        "rolling": {"settled", "rolled"},
+        "soft_nesting": {"loose", "rumpled", "nested"},
+        "delicate": {"fresh", "handled"},
+        "keepsake": {"handled", "displayed"},
+    }[obj["archetype"]]
+    current = str(obj.get("interaction_state") or identity["default_state"])
+    obj["interaction_state"] = current if current in valid_states else str(identity["default_state"])
+    obj["state_transitions"] = max(0, int(obj.get("state_transitions", 0)))
+    return obj
+
+
+def object_affordances(obj: dict[str, Any]) -> tuple[str, ...]:
+    """Return the currently available object-specific affordances."""
+    normalize_object_identity(obj)
+    archetype = str(obj["archetype"])
+    state = str(obj["interaction_state"])
+    available = list(OBJECT_ARCHETYPE_AFFORDANCES[archetype])
+    if archetype == "rolling" and state == "rolled":
+        available = [name for name in available if name != "nudge"]
+    elif archetype == "soft_nesting":
+        nestable_zone = str(obj.get("zone")) in {"open_space", "sleeping_nook"}
+        if state == "loose" and not nestable_zone:
+            available = [name for name in available if name != "nudge"]
+        elif state == "rumpled":
+            available = [name for name in available if name != "nudge"]
+            if nestable_zone:
+                available.append("nest")
+        elif state == "nested":
+            available = [name for name in available if name != "nudge"]
+    return tuple(available)
 
 
 def utc_now() -> str:
@@ -86,21 +145,20 @@ def initial_state(seed: int, *, created_at: str | None = None) -> dict[str, Any]
     created = created_at or utc_now()
     objects = []
     for oid, name, kind, zone, x, y in OBJECT_BLUEPRINTS:
-        objects.append(
-            {
-                "id": oid,
-                "name": name,
-                "kind": kind,
-                "zone": zone,
-                "x": x,
-                "y": y,
-                "state": "placed",
-                "carried_by": None,
-                "times_inspected": 0,
-                "times_moved": 0,
-                "times_nudged": 0,
-            }
-        )
+        obj = {
+            "id": oid,
+            "name": name,
+            "kind": kind,
+            "zone": zone,
+            "x": x,
+            "y": y,
+            "state": "placed",
+            "carried_by": None,
+            "times_inspected": 0,
+            "times_moved": 0,
+            "times_nudged": 0,
+        }
+        objects.append(normalize_object_identity(obj))
     return {
         "schema_version": STATE_SCHEMA_VERSION,
         "rules_version": RULES_VERSION,

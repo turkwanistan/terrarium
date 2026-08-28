@@ -28,9 +28,10 @@ def _walk_scenarios(seed: int = 1701) -> dict[str, dict[str, Any]]:
         "arrive_settle", "left_walk", "right_walk", "carried_walk", "idle_control",
         "sleep_transition", "waking", "wake_exit", "window_transition", "activity_corner_transition",
         "activity_corner_approach", "shelf_approach", "inspect_object", "object_nudge", "object_pickup", "object_placement",
+        "object_roll", "object_retrieve", "object_tug", "object_nest", "object_display",
         "loaf", "groom", "stretch", "weather_reaction",
     }
-    for _ in range(1800):
+    for _ in range(2100):
         before = state
         _, _, details, state = sim.step(state)
         old = before["creature"]
@@ -63,7 +64,17 @@ def _walk_scenarios(seed: int = 1701) -> dict[str, dict[str, Any]]:
         if details.get("action") == "inspect" and details.get("object_id") and "inspect_object" not in found:
             found["inspect_object"] = _scenario("inspect_object", before, state, details, "targeted object inspection with face/lean/contact staging")
         if details.get("action") == "nudge" and details.get("object_id") and "object_nudge" not in found:
-            found["object_nudge"] = _scenario("object_nudge", before, state, details, "paw contact visibly displaces an authoritative object before Moss re-inspects the result")
+            found["object_nudge"] = _scenario("object_nudge", before, state, details, "object-specific paw contact visibly changes authoritative object state")
+        if details.get("object_affordance") == "roll" and "object_roll" not in found:
+            found["object_roll"] = _scenario("object_roll", before, state, details, "rollable object changes from settled to rolled and moves to a new authoritative position")
+        if details.get("object_affordance") == "retrieve" and "object_retrieve" not in found:
+            found["object_retrieve"] = _scenario("object_retrieve", before, state, details, "Moss chases and recovers a previously rolled object, restoring its settled state")
+        if details.get("object_affordance") == "tug" and "object_tug" not in found:
+            found["object_tug"] = _scenario("object_tug", before, state, details, "soft object changes from loose to rumpled after a bounded tug")
+        if details.get("object_affordance") == "nest" and "object_nest" not in found:
+            found["object_nest"] = _scenario("object_nest", before, state, details, "rumpled soft object becomes a persistent nested comfort state under Moss")
+        if details.get("object_affordance") == "display" and "object_display" not in found:
+            found["object_display"] = _scenario("object_display", before, state, details, "keepsake placement on the collection shelf becomes a visible displayed state")
         if details.get("action") == "loaf" and "loaf" not in found:
             found["loaf"] = _scenario("loaf", before, state, details, "Moss settles into a distinct tucked comfort pose")
         if details.get("action") == "groom" and "groom" not in found:
@@ -184,6 +195,10 @@ def _scenario(name: str, before: dict[str, Any], after: dict[str, Any], details:
             "from_zone": details.get("from_zone"),
             "to_zone": details.get("to_zone", target["creature"]["zone"]),
             "object_id": details.get("object_id"),
+            "object_archetype": details.get("object_archetype"),
+            "object_affordance": details.get("object_affordance"),
+            "object_state_before": details.get("object_state_before"),
+            "object_state_after": details.get("object_state_after"),
         },
         "purpose": purpose,
     }
@@ -253,7 +268,8 @@ def build() -> dict[str, Any]:
     scenarios.update(_situational_scenarios())
     hero_reel = [
         "left_walk", "right_walk", "arrive_settle", "idle_control", "window_transition",
-        "rain_window", "weather_reaction", "inspect_object", "object_nudge", "object_pickup", "carried_walk", "object_placement",
+        "rain_window", "weather_reaction", "inspect_object", "object_roll", "object_retrieve", "object_tug", "object_nest",
+        "object_pickup", "carried_walk", "object_placement", "object_display",
         "loaf", "groom", "stretch", "sleep_transition", "waking", "wake_exit", "activity_corner_approach", "activity_corner_transition",
         "shelf_approach", "populated_room",
         "event_sunlight_engage", "event_bird_engage", "event_thunder_react", "event_moth_engage", "event_ignored",

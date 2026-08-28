@@ -1,0 +1,52 @@
+{
+  "schema": "terrarium.pixel-asset.v1",
+  "id": "object.acorn.settled",
+  "width": 16,
+  "height": 14,
+  "anchor": [
+    8,
+    9
+  ],
+  "meta": {
+    "object_id": "acorn",
+    "archetype": "rolling",
+    "interaction_state": "settled"
+  },
+  "runs": [
+    [
+      4,
+      10,
+      8,
+      2,
+      "shadow"
+    ],
+    [
+      4,
+      5,
+      8,
+      5,
+      "walnutLight"
+    ],
+    [
+      5,
+      3,
+      6,
+      3,
+      "walnut"
+    ],
+    [
+      6,
+      6,
+      4,
+      2,
+      "amber"
+    ],
+    [
+      7,
+      2,
+      2,
+      2,
+      "walnutDark"
+    ]
+  ]
+}

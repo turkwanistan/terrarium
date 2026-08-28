@@ -1,0 +1,66 @@
+{
+  "schema": "terrarium.pixel-asset.v1",
+  "id": "object.red-thread.nested",
+  "width": 16,
+  "height": 14,
+  "anchor": [
+    8,
+    9
+  ],
+  "meta": {
+    "object_id": "red_thread",
+    "archetype": "soft_nesting",
+    "interaction_state": "nested"
+  },
+  "runs": [
+    [
+      2,
+      10,
+      12,
+      2,
+      "shadow"
+    ],
+    [
+      2,
+      6,
+      12,
+      4,
+      "terracotta"
+    ],
+    [
+      4,
+      4,
+      8,
+      3,
+      "flower"
+    ],
+    [
+      5,
+      6,
+      6,
+      2,
+      "shadow"
+    ],
+    [
+      6,
+      5,
+      4,
+      1,
+      "creamShade"
+    ],
+    [
+      3,
+      8,
+      2,
+      1,
+      "flower"
+    ],
+    [
+      11,
+      7,
+      2,
+      1,
+      "flower"
+    ]
+  ]
+}

@@ -374,18 +374,23 @@
     return null;
   }
 
-  function drawObject(o,paletteOverride=null){
-    if(o.state==='carried') return;
-    const p=paletteOverride||PALETTES.day,x=px(o.x),y=px(o.y);
-    rect(x-5,y+3,10,2,p.shadow);
-    if(o.kind==='stone'){ rect(x-5,y-2,10,5,p.dustyBlue); rect(x-3,y-4,6,2,p.dustyBlue); rect(x-2,y-3,3,1,p.rain); rect(x+3,y,2,1,p.skyDark); }
-    else if(o.kind==='leaf'){ rect(x-5,y-1,9,3,p.amber); rect(x-3,y-3,7,2,p.amber); rect(x-1,y+2,2,2,p.walnutDark); drawPixelLine(x-4,y+3,x+4,y-3,p.walnutDark,1); }
-    else if(o.kind==='seed'){ rect(x-4,y-3,8,6,p.walnutLight); rect(x-3,y-4,6,2,p.walnut); rect(x-2,y-1,4,2,p.amber); }
-    else if(o.kind==='shell'){ rect(x-4,y-3,8,6,p.cream); rect(x-5,y-1,10,3,p.cream); rect(x-2,y-2,4,1,p.creamShade); rect(x-1,y,3,1,p.walnutLight); }
-    else if(o.kind==='thread'){ rect(x-5,y-2,8,2,'#a85c4d'); rect(x-3,y,7,2,'#a85c4d'); rect(x+2,y-1,3,1,p.creamShade); }
-    else { rect(x-5,y-1,11,3,p.cream); rect(x-3,y-4,6,9,p.cream); rect(x-1,y-2,2,5,p.amber); }
+  const OBJECT_ART = Object.freeze({
+    blue_stone:{default:'settled',settled:'object.blue-stone.settled',rolled:'object.blue-stone.rolled'},
+    acorn:{default:'settled',settled:'object.acorn.settled',rolled:'object.acorn.rolled'},
+    red_thread:{default:'loose',loose:'object.red-thread.loose',rumpled:'object.red-thread.rumpled',nested:'object.red-thread.nested'},
+    amber_leaf:{default:'fresh',fresh:'object.amber-leaf.fresh',handled:'object.amber-leaf.handled'},
+    shell:{default:'handled',handled:'object.shell.handled',displayed:'object.shell.displayed'},
+    glass_star:{default:'handled',handled:'object.glass-star.handled',displayed:'object.glass-star.displayed'},
+  });
+  function objectAssetId(o){
+    const variants=OBJECT_ART[o.id]; if(!variants) throw new Error(`unknown authored object: ${o.id}`);
+    const state=String(o.interaction_state||variants.default); return variants[state]||variants[variants.default];
   }
-  function drawWorldObject(o,f,now,p){ if(o.state==='carried') return; const rs=placedObjectRenderState(o,f,now); drawObject({...o,x:rs.x,y:rs.y},p); }
+  function drawObject(o,paletteName){
+    if(o.state==='carried') return;
+    drawAuthoredAsset(objectAssetId(o),px(o.x),px(o.y),paletteName);
+  }
+  function drawWorldObject(o,f,now,paletteName){ if(o.state==='carried') return; const rs=placedObjectRenderState(o,f,now); drawObject({...o,x:rs.x,y:rs.y},paletteName); }
 
   function actionTargetObject(f){
     const id=f.creature?.target_object_id||f.last_event?.object_id; if(!id) return null;
@@ -536,7 +541,7 @@
   }
   function drawCreature(f,now,p,rs,paletteName){
     rs=rs||creatureRenderState(f,now); drawMossSprite(f,now,rs,p,paletteName);
-    if(f.creature.carrying){ const obj=f.objects.find(o=>o.id===f.creature.carrying)||previous?.objects?.find(o=>o.id===f.creature.carrying); if(obj&&rs.carried_rendered_x!==null) drawObject({...obj,state:'placed',x:rs.carried_rendered_x,y:rs.carried_rendered_y},p); }
+    if(f.creature.carrying){ const obj=f.objects.find(o=>o.id===f.creature.carrying)||previous?.objects?.find(o=>o.id===f.creature.carrying); if(obj&&rs.carried_rendered_x!==null) drawObject({...obj,state:'placed',x:rs.carried_rendered_x,y:rs.carried_rendered_y},paletteName); }
     return rs;
   }
 
@@ -566,7 +571,7 @@
     scene.add('SURFACE',160,'room-surface-and-history',()=>drawSurfaceLayer(frame,now,p,paletteName));
     scene.add('WORLD',0,'world-atmosphere',()=>drawWorldAtmosphere(frame,now,p));
     scene.add('WORLD',210,'room-bowls',()=>drawBowls(p,paletteName));
-    for(const o of frame.objects) scene.add('WORLD',px(o.y),`object:${o.id}`,()=>drawWorldObject(o,frame,now,p));
+    for(const o of frame.objects) scene.add('WORLD',px(o.y),`object:${o.id}`,()=>drawWorldObject(o,frame,now,paletteName));
     scene.add('ACTORS',px(renderState.rendered_base_y),'actor:moss',()=>drawCreature(frame,now,p,renderState,paletteName));
     scene.add('FRONT',px(renderState.rendered_base_y)+1,'room-foreground',()=>{ drawForegroundFurniture(frame,now,p,paletteName); drawForegroundCausality(frame,now,renderState,p); });
     scene.flush();

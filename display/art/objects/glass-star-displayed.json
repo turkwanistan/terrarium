@@ -1,0 +1,66 @@
+{
+  "schema": "terrarium.pixel-asset.v1",
+  "id": "object.glass-star.displayed",
+  "width": 16,
+  "height": 14,
+  "anchor": [
+    8,
+    9
+  ],
+  "meta": {
+    "object_id": "glass_star",
+    "archetype": "keepsake",
+    "interaction_state": "displayed"
+  },
+  "runs": [
+    [
+      3,
+      10,
+      10,
+      2,
+      "shadow"
+    ],
+    [
+      7,
+      2,
+      2,
+      8,
+      "glassLight"
+    ],
+    [
+      3,
+      5,
+      10,
+      2,
+      "glassLight"
+    ],
+    [
+      5,
+      8,
+      6,
+      2,
+      "glassLight"
+    ],
+    [
+      5,
+      4,
+      6,
+      5,
+      "cream"
+    ],
+    [
+      7,
+      5,
+      2,
+      3,
+      "amber"
+    ],
+    [
+      11,
+      3,
+      2,
+      1,
+      "brass"
+    ]
+  ]
+}

@@ -1,0 +1,52 @@
+{
+  "schema": "terrarium.pixel-asset.v1",
+  "id": "object.blue-stone.rolled",
+  "width": 16,
+  "height": 14,
+  "anchor": [
+    8,
+    9
+  ],
+  "meta": {
+    "object_id": "blue_stone",
+    "archetype": "rolling",
+    "interaction_state": "rolled"
+  },
+  "runs": [
+    [
+      4,
+      10,
+      9,
+      2,
+      "shadow"
+    ],
+    [
+      4,
+      5,
+      8,
+      5,
+      "dustyBlue"
+    ],
+    [
+      6,
+      3,
+      5,
+      3,
+      "dustyBlue"
+    ],
+    [
+      5,
+      5,
+      2,
+      2,
+      "rain"
+    ],
+    [
+      10,
+      7,
+      2,
+      1,
+      "skyDark"
+    ]
+  ]
+}

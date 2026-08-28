@@ -74,24 +74,19 @@ The seed-1701/tick-10080 semantic frame remains `e64af0693418973eab51a4f154c3753
 
 Accepted evidence: `history/2026-08-27-pixel-art-overhaul-iteration8c.md`, `artifacts/pixel-art-overhaul-iteration8c.json`, `artifacts/pixel-art-overhaul-iteration8c-regression-matrix.json`, and snapshot `20260828T030258821895Z-pixel-art-overhaul-iteration8c`.
 
-## Next: Iteration 8D — Object Identity and Stateful Affordances
+## Accepted Iteration 8D — Object Identity and Stateful Affordances
 
-This is the previously planned Iteration 8, deliberately postponed until the visual system can make state differences meaningful.
+**Status: ACCEPTED.** The six persistent movable objects now use canonical `terrarium.object-affordances.v1` identity/state rather than one generic interaction graph. Rolling, soft-nesting, delicate, and keepsake archetypes expose different affordance subsets; roll→retrieve, tug→rumple→nest, and handled→displayed produce persistent consequences that change later possibilities.
 
-Requirements:
+Object identity remains compact and interpretable: blue stone/acorn are rolling, red thread is soft-nesting, amber leaf is delicate, and shell/glass star are keepsakes. Soft-object tug/nesting is constrained to floor/bed-compatible zones. Object-aware arrangement is a bounded tendency underneath `terrarium.habits.v1`, not a hard destination or new planner.
 
-- define a small set of object classes/archetypes whose available affordances differ materially;
-- object-specific affordance subsets replace a universal interaction graph;
-- interactions produce authoritative persistent state transitions that affect later possibilities;
-- pair those states with authored visual variants so object history is visible rather than only stored;
-- candidate archetypes include rolling/chaseable objects, cloth/cushion nesting objects, paper/scatter objects, containers/hiding objects, and plant/reactive environmental objects;
-- candidate chains include paw→roll→chase→lost/retrieved, tug→drag→rumple→sleep-on, scatter→pile, peer-into→hide/store, or sniff/watch→fallen-leaf reaction;
-- preserve spatial authority, object identity, replay, migration safety, habits, and renderer authority boundaries;
-- evaluate combinatorial affordance breadth, state-transition validity, object-class differentiation, long-run persistence, and absence of generic-object collapse.
+The renderer now selects **13 authored object-state variants** from canonical state. The full authored manifest is **73 assets**, preserving the accepted 8B room and 46-asset 8C Moss vocabulary. The seed-1701/tick-10080 semantic frame is `e191850f3c454b926e9b4fe4355298be3ff5eb4ea351be6975fe7d45ab010f9d`; unlike 8A–8C, this hash intentionally changes because object archetype/state/available affordances are authoritative frame data.
 
-Success means object identity materially changes both what situations are possible and what the habitat visibly remembers.
+Acceptance: **49/49 tests**, 36-source Python-3.10 grammar, 73/73 asset validation, 10,080-event technical exact replay, four-seed 10,080-step behavior/spatial/coherence/habit matrices, Iteration-6 repertoire, Iteration-7 situations, dedicated 8D object-affordance evaluation, exact-repeat production-browser UAT, **0 px** continuity, and healthy RAF pacing all pass. Roll→retrieve is 96.15–100%; tug→nest is 85.71–100%; illegal delicate/keepsake nudges are zero.
 
-## Iteration 8E — Atmospheric World
+Accepted evidence: `history/2026-08-28-pixel-art-overhaul-iteration8d.md`, `artifacts/pixel-art-overhaul-iteration8d.json`, `artifacts/pixel-art-overhaul-iteration8d-regression-matrix.json`, and snapshot `20260828T112207258140Z-pixel-art-overhaul-iteration8d`.
+
+## Next: Iteration 8E — Atmospheric World
 
 Make the habitat visibly alive even when Moss is still, without turning the screen into a particle show or making every environmental motion behaviorally significant.
 

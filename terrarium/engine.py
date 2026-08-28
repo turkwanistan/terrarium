@@ -10,8 +10,9 @@ from typing import Any
 
 from .events import make_event, state_patch
 from .models import (
-    AFFORDANCE_HISTORY_SCHEMA, BEHAVIOR_CONTEXT_SCHEMA, HABIT_CONTEXTS, HABIT_PROFILE_SCHEMA, PLACEMENT_SLOTS, RNG_STREAM_VERSION, RULES_VERSION, ZONES,
-    clone_state, lighting_for, weather_for,
+    AFFORDANCE_HISTORY_SCHEMA, BEHAVIOR_CONTEXT_SCHEMA, HABIT_CONTEXTS, HABIT_PROFILE_SCHEMA, OBJECT_AFFORDANCE_SCHEMA,
+    PLACEMENT_SLOTS, RNG_STREAM_VERSION, RULES_VERSION, ZONES, clone_state, lighting_for, normalize_object_identity,
+    object_affordances, weather_for,
 )
 from .spatial import (
     FAVORITE_SPOTS, SLEEP_SUPPORT_ANCHOR, SPATIAL_SCHEMA, interaction_approach, interaction_contact, point_is_walkable, route_between,
@@ -168,6 +169,16 @@ class Simulation:
         return history
 
     @staticmethod
+    def _set_object_interaction_state(obj: dict[str, Any], new_state: str) -> bool:
+        normalize_object_identity(obj)
+        new_state = str(new_state)
+        if str(obj.get("interaction_state")) == new_state:
+            return False
+        obj["interaction_state"] = new_state
+        obj["state_transitions"] = int(obj.get("state_transitions", 0)) + 1
+        return True
+
+    @staticmethod
     def _activity_family(action: str) -> str:
         return {
             "idle": "idle", "rest": "comfort", "loaf": "comfort", "stretch": "comfort",
@@ -263,17 +274,24 @@ class Simulation:
         *,
         habit_profile: dict[str, Any] | None = None,
         preferred_id: str | None = None,
+        required_affordance: str | None = None,
     ) -> dict[str, Any]:
+        candidates = [
+            o for o in nearby
+            if o["state"] == "placed" and (required_affordance is None or required_affordance in object_affordances(o))
+        ]
+        if not candidates:
+            raise ValueError(f"no nearby object supports affordance {required_affordance!r}")
         if preferred_id:
-            preferred = next((o for o in nearby if o["id"] == preferred_id and o["state"] == "placed"), None)
+            preferred = next((o for o in candidates if o["id"] == preferred_id), None)
             if preferred is not None:
                 return preferred
         recent = list(context.get("recent_objects", []))
         weighted: list[tuple[str, float]] = []
-        by_id = {str(o["id"]): o for o in nearby}
+        by_id = {str(o["id"]): o for o in candidates}
         last_object_id = recent[-1] if recent else None
-        alternatives_exist = bool(last_object_id) and any(str(o["id"]) != last_object_id for o in nearby)
-        for obj in nearby:
+        alternatives_exist = bool(last_object_id) and any(str(o["id"]) != last_object_id for o in candidates)
+        for obj in candidates:
             object_id = str(obj["id"])
             # A completed object session gets a short, deterministic "done with
             # this for now" inhibition whenever another local object exists.
@@ -425,6 +443,8 @@ class Simulation:
         self, rng: random.Random, state: dict[str, Any], *, zone: str, object_id: str, habit_profile: dict[str, Any]
     ) -> str:
         profile_maturity = self._habit_maturity(habit_profile)
+        obj = next((item for item in state["objects"] if str(item["id"]) == str(object_id)), None)
+        archetype = str((obj or {}).get("archetype") or "keepsake")
         object_values = habit_profile.get("object_affinity", {})
         object_mean = sum(float(v) for v in object_values.values()) / max(1, len(object_values))
         object_bias = max(-0.25, min(0.35, float(object_values.get(object_id, 0.0)) - object_mean)) * profile_maturity
@@ -439,6 +459,16 @@ class Simulation:
         for target, weight in base.items():
             if target == zone:
                 continue
+            # Object identity shapes plausible arrangements before learned habit
+            # nudges them further. This remains a tendency, not a hard destination.
+            if archetype == "rolling":
+                weight *= {"open_space": 1.50, "activity_corner": 1.08, "collection_shelf": 0.72, "window": 0.78, "sleeping_nook": 0.82}.get(target, 1.0)
+            elif archetype == "soft_nesting":
+                weight *= {"sleeping_nook": 1.75, "open_space": 1.45, "activity_corner": 0.82, "window": 0.68, "collection_shelf": 0.52}.get(target, 1.0)
+            elif archetype == "delicate":
+                weight *= {"window": 1.35, "collection_shelf": 1.05, "open_space": 0.90, "activity_corner": 0.86, "sleeping_nook": 0.84}.get(target, 1.0)
+            elif archetype == "keepsake":
+                weight *= {"collection_shelf": 1.55, "activity_corner": 1.05, "open_space": 0.90, "window": 0.84, "sleeping_nook": 0.82}.get(target, 1.0)
             habit = self._relative_affinity(habit_profile.get("zone_affinity", {}), target, strength=1.60 * profile_maturity)
             contextual = self._relative_affinity(context_values, target, strength=1.10 * profile_maturity)
             if target != "collection_shelf":
@@ -592,6 +622,8 @@ class Simulation:
         context = self._behavior_context(creature)
         habit_profile = self._habit_profile(state)
         self._affordance_history(state)
+        for obj in state["objects"]:
+            normalize_object_identity(obj)
         if creature.get("carrying") and not context.get("intent"):
             # Legacy/live worlds may upgrade while Moss is already holding an
             # object.  Continue that possession through normal state evolution
@@ -658,6 +690,9 @@ class Simulation:
         zone = creature["zone"]
         recent = list(creature.get("recent_actions", []))
         nearby = self._object_in_zone(state, zone)
+        inspectable = [o for o in nearby if "inspect" in object_affordances(o)]
+        carryable = [o for o in nearby if "carry" in object_affordances(o)]
+        nudgeable = [o for o in nearby if "nudge" in object_affordances(o)]
         carrying = creature.get("carrying")
         lighting = habitat["lighting"]
         intent = dict(context.get("intent") or {})
@@ -758,8 +793,9 @@ class Simulation:
             add("explore", 0.30 + float(creature["curiosity"]) * 0.18)
             if zone == "window":
                 add("look_outside", 0.95 + (0.28 if habitat["weather"] != "clear" else 0.0))
-            if nearby:
+            if inspectable:
                 add("inspect", 0.70 + float(creature["curiosity"]) * 0.22)
+            if carryable:
                 add("carry", 0.24 + float(creature["curiosity"]) * 0.12)
 
         # A tiny routine context shapes only the next few choices.  It is not a
@@ -789,17 +825,32 @@ class Simulation:
         elif intent_kind == "object_session" and intent_stage == "inspected" and not carrying:
             preferred = next((o for o in nearby if o["id"] == intent_object_id and o["state"] == "placed"), None)
             if preferred is not None:
-                add("carry", 3.10)
-                add("nudge", 1.75)
+                affordances = set(object_affordances(preferred))
+                if "carry" in affordances:
+                    add("carry", 3.10)
+                if "nudge" in affordances:
+                    add("nudge", 1.75)
+                if "nest" in affordances:
+                    add("loaf", 2.80)
                 add("inspect", 0.12)
+                if "carry" not in affordances and "nudge" not in affordances and "nest" not in affordances:
+                    add("idle", 1.20); add("rest", 0.85)
                 movement_context_penalty = 0.045
-        elif intent_kind == "object_session" and intent_stage == "nudged" and not carrying:
+        elif intent_kind == "object_session" and intent_stage == "rolled" and not carrying:
             preferred = next((o for o in nearby if o["id"] == intent_object_id and o["state"] == "placed"), None)
             if preferred is not None:
-                add("inspect", 2.80)
-                add("idle", 0.95)
-                add("rest", 0.65)
-                movement_context_penalty = 0.025
+                add("inspect", 4.60)
+                movement_context_penalty = 0.02
+        elif intent_kind == "object_session" and intent_stage == "rumpled" and not carrying:
+            preferred = next((o for o in nearby if o["id"] == intent_object_id and o["state"] == "placed"), None)
+            if preferred is not None and "nest" in object_affordances(preferred):
+                add("loaf", 5.20)
+                add("inspect", 0.35)
+                movement_context_penalty = 0.02
+        elif intent_kind == "object_session" and intent_stage in {"recovered", "nested"} and not carrying:
+            add("idle", 1.80)
+            add("rest", 1.25)
+            movement_context_penalty = 0.025
         elif intent_kind == "post_place":
             add("idle", 2.10)
             add("rest", 1.55)
@@ -835,13 +886,44 @@ class Simulation:
                 if name != "look_outside":
                     weights[name] *= 0.06
             weights["look_outside"] = weights.get("look_outside", 0.0) + 5.20
-        elif intent_kind == "object_session" and intent_stage == "nudged" and not carrying:
+        elif intent_kind == "object_session" and intent_stage == "inspected" and not carrying:
+            preferred = next((o for o in nearby if o["id"] == intent_object_id and o["state"] == "placed"), None)
+            if preferred is not None:
+                affordances = set(object_affordances(preferred))
+                allowed = {"inspect"}
+                if "carry" in affordances:
+                    allowed.add("carry")
+                if "nudge" in affordances:
+                    allowed.add("nudge")
+                if "nest" in affordances:
+                    allowed.add("loaf")
+                for name in list(weights):
+                    if name not in allowed and name != "sleep":
+                        weights[name] *= 0.06
+                if "carry" in allowed:
+                    weights["carry"] = weights.get("carry", 0.0) + 3.20
+                if "nudge" in allowed:
+                    weights["nudge"] = weights.get("nudge", 0.0) + 2.20
+                if "loaf" in allowed:
+                    weights["loaf"] = weights.get("loaf", 0.0) + 3.00
+                weights["inspect"] = weights.get("inspect", 0.0) * 0.22
+                weights["sleep"] = weights.get("sleep", 0.0) * 0.20
+        elif intent_kind == "object_session" and intent_stage == "rolled" and not carrying:
             for name in list(weights):
-                if name not in {"inspect", "idle", "rest"}:
-                    weights[name] *= 0.035
-            weights["inspect"] = weights.get("inspect", 0.0) + 6.40
-            weights["idle"] = weights.get("idle", 0.0) * 0.35
-            weights["rest"] = weights.get("rest", 0.0) * 0.30
+                if name != "inspect":
+                    weights[name] *= 0.025
+            weights["inspect"] = weights.get("inspect", 0.0) + 7.20
+        elif intent_kind == "object_session" and intent_stage == "rumpled" and not carrying:
+            for name in list(weights):
+                if name not in {"loaf", "inspect"}:
+                    weights[name] *= 0.025
+            weights["loaf"] = weights.get("loaf", 0.0) + 7.00
+        elif intent_kind == "object_session" and intent_stage in {"recovered", "nested"} and not carrying:
+            for name in list(weights):
+                if name not in {"idle", "rest", "loaf"}:
+                    weights[name] *= 0.04
+            weights["idle"] = weights.get("idle", 0.0) + 2.10
+            weights["rest"] = weights.get("rest", 0.0) + 1.40
         elif intent_kind == "weather_reaction" and zone != "window":
             for name in list(weights):
                 if name not in {"walk", "explore", "sleep"}:
@@ -934,8 +1016,13 @@ class Simulation:
             details.update({"to_zone": target, "travel_purpose": travel_purpose})
             event_type = "creature_moved"
             summary = f"Moss headed from {zone.replace('_', ' ')} to {target.replace('_', ' ')} and settled in."
-        elif action == "inspect" and nearby:
-            obj = self._choose_object(rng, nearby, context, habit_profile=habit_profile, preferred_id=(str(intent_object_id) if intent_kind == "object_session" and intent_stage in {"inspected", "nudged"} and intent_object_id else None))
+        elif action == "inspect" and inspectable:
+            obj = self._choose_object(
+                rng, inspectable, context, habit_profile=habit_profile,
+                preferred_id=(str(intent_object_id) if intent_kind == "object_session" and intent_stage in {"inspected", "rolled", "rumpled"} and intent_object_id else None),
+                required_affordance="inspect",
+            )
+            state_before = str(obj["interaction_state"])
             target_x, target_y = int(obj["x"]), int(obj["y"])
             approach = interaction_approach(zone=zone, target_x=target_x, target_y=target_y, current_x=int(creature["x"]), current_y=int(creature["y"]))
             self._route_creature(creature, details, destination=approach, destination_zone=zone)
@@ -946,14 +1033,33 @@ class Simulation:
             creature["activity"] = "inspect"
             creature["expression"] = "curious"
             creature["curiosity"] = max(0.0, float(creature["curiosity"]) - 0.09)
-            details.update({"object_id": obj["id"], "target_x": target_x, "target_y": target_y})
+            recovered = str(obj["archetype"]) == "rolling" and state_before == "rolled"
+            if recovered:
+                self._set_object_interaction_state(obj, "settled")
+            details.update({
+                "object_id": obj["id"], "target_x": target_x, "target_y": target_y,
+                "object_archetype": obj["archetype"], "object_affordance_schema": OBJECT_AFFORDANCE_SCHEMA,
+                "object_affordance": "retrieve" if recovered else "inspect",
+                "object_state_before": state_before, "object_state_after": obj["interaction_state"],
+            })
             focus_object_id = obj["id"]
             self._remember_object(context, obj["id"])
-            context["intent"] = {"kind": "object_session", "stage": "inspected", "object_id": obj["id"]}
-            event_type = "object_inspected"
-            summary = f"Moss stopped to inspect the {obj['name'].lower()}."
-        elif action == "carry" and nearby:
-            obj = self._choose_object(rng, nearby, context, habit_profile=habit_profile, preferred_id=(str(intent_object_id) if intent_kind == "object_session" and intent_stage in {"inspected", "nudged"} and intent_object_id else None))
+            next_stage = "recovered" if recovered else (
+                "rumpled" if obj["archetype"] == "soft_nesting" and obj["interaction_state"] == "rumpled" else "inspected"
+            )
+            context["intent"] = {"kind": "object_session", "stage": next_stage, "object_id": obj["id"]}
+            event_type = "object_retrieved" if recovered else "object_inspected"
+            summary = (
+                f"Moss chased down the {obj['name'].lower()} after its roll and recovered it."
+                if recovered else f"Moss stopped to inspect the {obj['name'].lower()}."
+            )
+        elif action == "carry" and carryable:
+            obj = self._choose_object(
+                rng, carryable, context, habit_profile=habit_profile,
+                preferred_id=(str(intent_object_id) if intent_kind == "object_session" and intent_stage == "inspected" and intent_object_id else None),
+                required_affordance="carry",
+            )
+            state_before = str(obj["interaction_state"])
             target_x, target_y = int(obj["x"]), int(obj["y"])
             approach = interaction_approach(zone=zone, target_x=target_x, target_y=target_y, current_x=int(creature["x"]), current_y=int(creature["y"]))
             self._route_creature(creature, details, destination=approach, destination_zone=zone)
@@ -965,9 +1071,19 @@ class Simulation:
             creature["expression"] = "excited"
             obj["state"] = "carried"
             obj["carried_by"] = creature["id"]
+            if obj["archetype"] == "soft_nesting":
+                self._set_object_interaction_state(obj, "loose")
+            elif obj["archetype"] == "rolling":
+                self._set_object_interaction_state(obj, "settled")
+            elif obj["archetype"] in {"keepsake", "delicate"}:
+                self._set_object_interaction_state(obj, "handled")
             obj["x"] = int(creature["x"]) + (-22 if creature["facing"] == "left" else 22)
             obj["y"] = int(creature["y"]) - 4
-            details.update({"object_id": obj["id"], "target_x": target_x, "target_y": target_y})
+            details.update({
+                "object_id": obj["id"], "target_x": target_x, "target_y": target_y,
+                "object_archetype": obj["archetype"], "object_affordance_schema": OBJECT_AFFORDANCE_SCHEMA,
+                "object_affordance": "carry", "object_state_before": state_before, "object_state_after": obj["interaction_state"],
+            })
             focus_object_id = obj["id"]
             self._remember_object(context, obj["id"])
             delivery_target = self._choose_arrangement_destination(
@@ -994,22 +1110,37 @@ class Simulation:
             obj["carried_by"] = None
             obj["zone"] = zone
             obj["x"], obj["y"] = target_x, target_y
+            state_before = str(obj["interaction_state"])
+            if obj["archetype"] == "keepsake":
+                self._set_object_interaction_state(obj, "displayed" if zone == "collection_shelf" else "handled")
+            elif obj["archetype"] == "delicate":
+                self._set_object_interaction_state(obj, "fresh" if zone == "window" else "handled")
+            elif obj["archetype"] == "rolling":
+                self._set_object_interaction_state(obj, "settled")
+            elif obj["archetype"] == "soft_nesting":
+                self._set_object_interaction_state(obj, "loose")
             obj["times_moved"] = int(obj["times_moved"]) + 1
             aftermath["arrangement_places"] = int(aftermath["arrangement_places"]) + 1
             creature["carrying"] = None
             creature["activity"] = "place"
             creature["expression"] = "content"
-            details.update({"object_id": obj["id"], "to_zone": zone, "x": obj["x"], "y": obj["y"], "target_x": target_x, "target_y": target_y})
+            details.update({
+                "object_id": obj["id"], "to_zone": zone, "x": obj["x"], "y": obj["y"], "target_x": target_x, "target_y": target_y,
+                "object_archetype": obj["archetype"], "object_affordance_schema": OBJECT_AFFORDANCE_SCHEMA,
+                "object_affordance": "display" if obj["interaction_state"] == "displayed" else "place",
+                "object_state_before": state_before, "object_state_after": obj["interaction_state"],
+            })
             focus_object_id = obj["id"]
             self._remember_object(context, obj["id"])
             context["intent"] = {"kind": "post_place", "stage": "settle", "object_id": obj["id"], "zone": zone}
             event_type = "object_placed"
             summary = f"Moss placed the {obj['name'].lower()} in the {zone.replace('_', ' ')} and regarded it for a moment."
-        elif action == "nudge" and nearby:
+        elif action == "nudge" and nudgeable:
             obj = self._choose_object(
-                rng, nearby, context, habit_profile=habit_profile,
-                preferred_id=(str(intent_object_id) if intent_object_id else None),
+                rng, nudgeable, context, habit_profile=habit_profile,
+                preferred_id=(str(intent_object_id) if intent_object_id else None), required_affordance="nudge",
             )
+            state_before = str(obj["interaction_state"])
             old_x, old_y = int(obj["x"]), int(obj["y"])
             approach = interaction_approach(zone=zone, target_x=old_x, target_y=old_y, current_x=int(creature["x"]), current_y=int(creature["y"]))
             self._route_creature(creature, details, destination=approach, destination_zone=zone)
@@ -1018,6 +1149,14 @@ class Simulation:
             creature["facing"] = "right" if contact[0] >= int(creature["x"]) else "left"
             new_x, new_y = self._nudge_position(state, obj)
             obj["x"], obj["y"] = new_x, new_y
+            if obj["archetype"] == "rolling":
+                affordance_name, next_stage = "roll", "rolled"
+                self._set_object_interaction_state(obj, "rolled")
+            elif obj["archetype"] == "soft_nesting":
+                affordance_name, next_stage = "tug", "rumpled"
+                self._set_object_interaction_state(obj, "rumpled")
+            else:
+                raise AssertionError(f"object {obj['id']} reached nudge without a play affordance")
             obj["times_nudged"] = int(obj.get("times_nudged", 0)) + 1
             obj["times_moved"] = int(obj["times_moved"]) + 1
             aftermath["object_nudges"] = int(aftermath["object_nudges"]) + 1
@@ -1027,12 +1166,19 @@ class Simulation:
             details.update({
                 "object_id": obj["id"], "target_x": old_x, "target_y": old_y,
                 "result_x": new_x, "result_y": new_y, "to_zone": zone,
+                "object_archetype": obj["archetype"], "object_affordance_schema": OBJECT_AFFORDANCE_SCHEMA,
+                "object_affordance": affordance_name, "object_state_before": state_before,
+                "object_state_after": obj["interaction_state"],
             })
             focus_object_id = obj["id"]
             self._remember_object(context, obj["id"])
-            context["intent"] = {"kind": "object_session", "stage": "nudged", "object_id": obj["id"], "zone": zone}
-            event_type = "object_nudged"
-            summary = f"Moss nudged the {obj['name'].lower()} aside, then stayed to inspect the new arrangement."
+            context["intent"] = {"kind": "object_session", "stage": next_stage, "object_id": obj["id"], "zone": zone}
+            event_type = "object_rolled" if affordance_name == "roll" else "object_tugged"
+            summary = (
+                f"Moss pawed the {obj['name'].lower()} into a roll and watched where it went."
+                if affordance_name == "roll"
+                else f"Moss tugged the {obj['name'].lower()} into a rumpled little nest shape."
+            )
         elif action == "sleep":
             support = (int(SLEEP_SUPPORT_ANCHOR["x"]), int(SLEEP_SUPPORT_ANCHOR["y"]))
             self._route_creature(creature, details, destination=support, destination_zone="sleeping_nook")
@@ -1052,6 +1198,36 @@ class Simulation:
             context["intent"] = {"kind": "wake_recovery", "stage": "woke", "zone": "sleeping_nook"}
             event_type = "creature_woke"
             summary = "Moss woke up, unfolded, and stayed near the bed before moving on."
+        elif action == "loaf" and intent_kind == "object_session" and intent_stage == "rumpled" and intent_object_id:
+            obj = next((o for o in nearby if o["id"] == intent_object_id and "nest" in object_affordances(o)), None)
+            if obj is None:
+                context["intent"] = None
+                creature["activity"] = "loaf"
+                creature["expression"] = "content"
+                event_type = "creature_loafed"
+                summary = f"Moss tucked into a comfortable loaf in the {zone.replace('_', ' ')}."
+            else:
+                state_before = str(obj["interaction_state"])
+                approach = interaction_approach(
+                    zone=zone, target_x=int(obj["x"]), target_y=int(obj["y"]),
+                    current_x=int(creature["x"]), current_y=int(creature["y"]),
+                )
+                self._route_creature(creature, details, destination=approach, destination_zone=zone)
+                self._set_object_interaction_state(obj, "nested")
+                creature["activity"] = "loaf"
+                creature["expression"] = "content"
+                creature["comfort"] = min(1.0, float(creature["comfort"]) + 0.045)
+                aftermath["loaf_sessions"] = int(aftermath["loaf_sessions"]) + 1
+                focus_object_id = obj["id"]
+                details.update({
+                    "object_id": obj["id"], "target_x": int(obj["x"]), "target_y": int(obj["y"]),
+                    "object_archetype": obj["archetype"], "object_affordance_schema": OBJECT_AFFORDANCE_SCHEMA,
+                    "object_affordance": "nest", "object_state_before": state_before,
+                    "object_state_after": obj["interaction_state"], "supported_action": "object_nest",
+                })
+                context["intent"] = {"kind": "object_session", "stage": "nested", "object_id": obj["id"], "zone": zone}
+                event_type = "object_nested"
+                summary = f"Moss settled onto the rumpled {obj['name'].lower()} and made it into a temporary nest."
         elif action == "loaf":
             sunlight_engagement = linked_event is not None and linked_event.get("type") == "sunlight" and world_event_role == "engage" and linked_target is not None
             if sunlight_engagement:
@@ -1127,7 +1303,9 @@ class Simulation:
             creature["activity"] = "rest"
             creature["expression"] = "content"
             creature["energy"] = min(1.0, float(creature["energy"]) + 0.034)
-            if intent_kind in {"arrival_settle", "post_place", "wake_recovery", "event_recovery"}:
+            if intent_kind in {"arrival_settle", "post_place", "wake_recovery", "event_recovery"} or (
+                intent_kind == "object_session" and intent_stage in {"recovered", "nested"}
+            ):
                 context["intent"] = None
             elif intent_kind == "window_session" and intent_stage != "arrived":
                 context["intent"] = None
@@ -1155,7 +1333,9 @@ class Simulation:
         else:
             creature["activity"] = "idle"
             creature["expression"] = "neutral"
-            if intent_kind in {"arrival_settle", "post_place", "wake_recovery", "event_recovery"}:
+            if intent_kind in {"arrival_settle", "post_place", "wake_recovery", "event_recovery"} or (
+                intent_kind == "object_session" and intent_stage in {"recovered", "nested"}
+            ):
                 context["intent"] = None
             elif intent_kind == "window_session" and intent_stage != "arrived":
                 context["intent"] = None
@@ -1169,6 +1349,7 @@ class Simulation:
         )
         details["activity_family"] = activity_family
         details["affordance_schema"] = AFFORDANCE_HISTORY_SCHEMA
+        details["object_affordance_schema"] = OBJECT_AFFORDANCE_SCHEMA
         self._learn_from_decision(
             state,
             action=action,

@@ -1,0 +1,230 @@
+{
+  "attachment": {
+    "attached_samples": 11,
+    "passed": true,
+    "relative_offsets": [
+      [
+        21.67711,
+        -3.597736
+      ],
+      [
+        21.734863,
+        -3.965946
+      ],
+      [
+        21.816621,
+        -3.952347
+      ],
+      [
+        22,
+        -4
+      ],
+      [
+        22.766516,
+        -3.529644
+      ],
+      [
+        22.913902,
+        -4.036801
+      ]
+    ]
+  },
+  "continuity": {
+    "jump_px": 0,
+    "passed": true
+  },
+  "determinism": {
+    "exact_repeat": true,
+    "sample_hashes": [
+      "fnv1a32:67b39ae5",
+      "fnv1a32:67b39ae5",
+      "fnv1a32:67b39ae5",
+      "fnv1a32:67b39ae5",
+      "fnv1a32:67b39ae5",
+      "fnv1a32:3217688d",
+      "fnv1a32:3217688d",
+      "fnv1a32:0c7bab8d",
+      "fnv1a32:0c7bab8d",
+      "fnv1a32:0c7bab8d",
+      "fnv1a32:3217688d"
+    ],
+    "scenario": "art_day_clear_fresh_idle"
+  },
+  "environment": {
+    "art_surface": [
+      400,
+      240
+    ],
+    "benign_warning_observed": true,
+    "canonical_runtime_used": false,
+    "console_errors": 0,
+    "image_smoothing": false,
+    "integer_scale": 2,
+    "isolated_data_dir": "/tmp/terrarium-iteration8d-final",
+    "production_renderer": "display/web/app.js",
+    "viewport": [
+      800,
+      480
+    ]
+  },
+  "evidence_dir": "artifacts/iteration8d-browser-evidence",
+  "object_state_chain": {
+    "object_display": {
+      "from_zone": "collection_shelf",
+      "object_affordance": "display",
+      "object_archetype": "keepsake",
+      "object_id": "shell",
+      "object_state_after": "displayed",
+      "object_state_before": "handled",
+      "to_zone": "collection_shelf"
+    },
+    "object_nest": {
+      "from_zone": "open_space",
+      "object_affordance": "nest",
+      "object_archetype": "soft_nesting",
+      "object_id": "red_thread",
+      "object_state_after": "nested",
+      "object_state_before": "rumpled",
+      "to_zone": "open_space"
+    },
+    "object_retrieve": {
+      "from_zone": "collection_shelf",
+      "object_affordance": "retrieve",
+      "object_archetype": "rolling",
+      "object_id": "acorn",
+      "object_state_after": "settled",
+      "object_state_before": "rolled",
+      "to_zone": "collection_shelf"
+    },
+    "object_roll": {
+      "from_zone": "collection_shelf",
+      "object_affordance": "roll",
+      "object_archetype": "rolling",
+      "object_id": "acorn",
+      "object_state_after": "rolled",
+      "object_state_before": "settled",
+      "to_zone": "collection_shelf"
+    },
+    "object_tug": {
+      "from_zone": "open_space",
+      "object_affordance": "tug",
+      "object_archetype": "soft_nesting",
+      "object_id": "red_thread",
+      "object_state_after": "rumpled",
+      "object_state_before": "loose",
+      "to_zone": "open_space"
+    }
+  },
+  "object_state_chain_passed": true,
+  "passed": true,
+  "raf": {
+    "duration_ms": 1800,
+    "frames": 109,
+    "interval_ms": {
+      "max": 16.8,
+      "min": 16.5,
+      "over_34ms": 0,
+      "over_50ms": 0,
+      "p50": 16.7,
+      "p95": 16.7
+    },
+    "passed": true
+  },
+  "schema": "terrarium.pixel-art-overhaul-iteration8d-browser-uat.v1",
+  "sequences": {
+    "art_day_clear_fresh_idle": {
+      "distinct_rasters": 3,
+      "max_scale2x_error_blocks": 0,
+      "samples": 11,
+      "status": "ready"
+    },
+    "art_night_rain_lived_idle": {
+      "distinct_rasters": 10,
+      "max_scale2x_error_blocks": 0,
+      "samples": 11,
+      "status": "ready"
+    },
+    "carried_walk": {
+      "distinct_rasters": 7,
+      "max_scale2x_error_blocks": 0,
+      "samples": 11,
+      "status": "ready"
+    },
+    "event_sunlight_engage": {
+      "distinct_rasters": 8,
+      "max_scale2x_error_blocks": 0,
+      "samples": 11,
+      "status": "ready"
+    },
+    "event_thunder_react": {
+      "distinct_rasters": 10,
+      "max_scale2x_error_blocks": 0,
+      "samples": 11,
+      "status": "ready"
+    },
+    "left_walk": {
+      "distinct_rasters": 8,
+      "max_scale2x_error_blocks": 0,
+      "samples": 11,
+      "status": "ready"
+    },
+    "object_display": {
+      "distinct_rasters": 7,
+      "max_scale2x_error_blocks": 0,
+      "samples": 11,
+      "status": "ready"
+    },
+    "object_nest": {
+      "distinct_rasters": 7,
+      "max_scale2x_error_blocks": 0,
+      "samples": 11,
+      "status": "ready"
+    },
+    "object_retrieve": {
+      "distinct_rasters": 5,
+      "max_scale2x_error_blocks": 0,
+      "samples": 11,
+      "status": "ready"
+    },
+    "object_roll": {
+      "distinct_rasters": 6,
+      "max_scale2x_error_blocks": 0,
+      "samples": 11,
+      "status": "ready"
+    },
+    "object_tug": {
+      "distinct_rasters": 6,
+      "max_scale2x_error_blocks": 0,
+      "samples": 11,
+      "status": "ready"
+    },
+    "right_walk": {
+      "distinct_rasters": 7,
+      "max_scale2x_error_blocks": 0,
+      "samples": 11,
+      "status": "ready"
+    },
+    "sleep_transition": {
+      "distinct_rasters": 8,
+      "max_scale2x_error_blocks": 0,
+      "samples": 11,
+      "status": "ready"
+    },
+    "waking": {
+      "distinct_rasters": 6,
+      "max_scale2x_error_blocks": 0,
+      "samples": 11,
+      "status": "ready"
+    }
+  },
+  "subjective_review": {
+    "accepted": true,
+    "findings": [
+      "The same small object no longer reads as a generic prop: canonical state selects visibly different authored variants after roll, rumple/nest, handling, and display.",
+      "Rolling objects preserve a readable displacement/retrieval chain while the object remains visually grounded in the existing room and Moss contact staging.",
+      "Red thread now reads as a soft nesting object; tugging occurs only on floor/bed-compatible zones and the nested variant supports Moss loafing instead of creating implausible shelf nests.",
+      "Keepsakes read as arranged/displayed when placed on the collection shelf, while delicate and keepsake identities remain visually present without inheriting play/nudge behavior.",
+      "Accepted 8B room composition and 8C Moss locomotion, carry, sleep/wake, weather, and situational-event presentation remain coherent."
+    ]
+  }
+}

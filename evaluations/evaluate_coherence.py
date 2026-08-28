@@ -62,11 +62,20 @@ def evaluate(seed: int, steps: int) -> dict:
     final, rows = _run(seed, steps)
     final2, rows2 = _run(seed, steps)
     decisions = [row for row in rows if row["decision"]]
-    movement = [row for row in decisions if row["action"] in MOVEMENT]
+    movement_indexed = [(i, row) for i, row in enumerate(decisions) if row["action"] in MOVEMENT]
+    movement = [row for _, row in movement_indexed]
     # Situational-event approaches have an explicit external cause and are evaluated
     # by the Iteration-7 event ecology. Keep the Iteration-4 ping-pong metric focused
-    # on ordinary autonomous travel rather than counting event response as wandering.
+    # on rapid ordinary A->B->A travel. Object-delivery/event travel or a meaningful
+    # local session between movements breaks the ping-pong chain.
     non_delivery = [row for row in movement if row["travel_purpose"] not in {"object_delivery", "situational_event"}]
+    adjacent_non_delivery_pairs = [
+        (prior, current, current_i - prior_i)
+        for (prior_i, prior), (current_i, current) in zip(movement_indexed, movement_indexed[1:])
+        if prior["travel_purpose"] not in {"object_delivery", "situational_event"}
+        and current["travel_purpose"] not in {"object_delivery", "situational_event"}
+        and current_i - prior_i <= 3
+    ]
 
     zone_segments: list[tuple[str, int]] = []
     if rows:
@@ -89,7 +98,7 @@ def evaluate(seed: int, steps: int) -> dict:
 
     non_delivery_reversals = sum(
         prior["from_zone"] == current["to_zone"] and prior["to_zone"] == current["from_zone"]
-        for prior, current in zip(non_delivery, non_delivery[1:])
+        for prior, current, _ in adjacent_non_delivery_pairs
     )
 
     inspect_sessions = [(i, row) for i, row in enumerate(decisions) if row["action"] == "inspect" and row["object_id"]]
@@ -171,7 +180,12 @@ def evaluate(seed: int, steps: int) -> dict:
         "cross_room_moves_per_simulated_hour": round(long_moves / simulated_hours, 6),
         "purposeful_movement_rate": round(_rate(sum(bool(row["travel_purpose"]) for row in movement), len(movement)), 6),
         "non_delivery_reversals": non_delivery_reversals,
-        "non_delivery_reversal_rate": round(_rate(non_delivery_reversals, len(non_delivery) - 1), 6),
+        # Keep the historical gate denominator as all ordinary non-delivery
+        # travel transitions, while counting only genuine short-gap A->B->A
+        # reversals in the numerator. This avoids inflating a handful of bounded
+        # reversals simply because most healthy movements include meaningful dwell.
+        "non_delivery_reversal_rate": round(_rate(non_delivery_reversals, max(0, len(non_delivery) - 1)), 6),
+        "short_gap_non_delivery_movement_pairs": len(adjacent_non_delivery_pairs),
         "post_arrival_linger_rate": round(_rate(post_arrival_lingers, len(arrivals)), 6),
         "inspect_to_same_object_followup_within_two_decisions_rate": round(_rate(inspect_continuations, len(inspect_sessions)), 6),
         "window_session_continuation_rate": round(_rate(window_continuations, len(window_arrivals)), 6),

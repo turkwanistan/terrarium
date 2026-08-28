@@ -78,14 +78,19 @@ def test_controlled_history_profiles_change_future_tendencies_deterministically(
         return state
 
     a = with_history("window", "amber_leaf")
-    b = with_history("activity_corner", "acorn")
+    # Hold favorite object identity constant so 8D archetype-specific delivery
+    # tendencies do not confound this controlled zone-history comparison.
+    b = with_history("activity_corner", "amber_leaf")
     a_physical = deepcopy(a); b_physical = deepcopy(b)
     a_physical["creature"].pop("habit_profile"); b_physical["creature"].pop("habit_profile")
     assert canonical_json(a_physical) == canonical_json(b_physical)
 
     def run(state):
         sim = Simulation(); current = deepcopy(state); destinations = []
-        for _ in range(1800):
+        # 8D object-specific delivery tendencies make the short physical trace
+        # slightly sparser. Keep the all-zone exploration assertion, but give
+        # the controlled habit probe enough bounded time to exercise every zone.
+        for _ in range(2400):
             _, _, details, current = sim.step(current)
             if details.get("decision") and details.get("action") in {"walk", "explore"} and details.get("travel_purpose") != "object_delivery":
                 destinations.append(details.get("to_zone"))

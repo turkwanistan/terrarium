@@ -1,0 +1,52 @@
+{
+  "schema": "terrarium.pixel-asset.v1",
+  "id": "object.blue-stone.settled",
+  "width": 16,
+  "height": 14,
+  "anchor": [
+    8,
+    9
+  ],
+  "meta": {
+    "object_id": "blue_stone",
+    "archetype": "rolling",
+    "interaction_state": "settled"
+  },
+  "runs": [
+    [
+      3,
+      9,
+      10,
+      2,
+      "shadow"
+    ],
+    [
+      3,
+      5,
+      10,
+      4,
+      "dustyBlue"
+    ],
+    [
+      5,
+      3,
+      6,
+      2,
+      "dustyBlue"
+    ],
+    [
+      6,
+      4,
+      3,
+      1,
+      "rain"
+    ],
+    [
+      10,
+      7,
+      2,
+      1,
+      "skyDark"
+    ]
+  ]
+}

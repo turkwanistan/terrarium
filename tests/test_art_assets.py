@@ -141,3 +141,32 @@ def test_iteration8c_moss_action_vocabulary_is_authored_not_body_part_assembled(
     assert "function tail(" not in js
     assert "quiet-breathing" not in js
     assert "breathStep" not in js
+
+
+def test_iteration8d_objects_use_authored_state_variants():
+    manifest = _read(ART / "manifest.json")
+    entries = {entry["id"]: entry for entry in manifest["assets"]}
+    required = {
+        "object.blue-stone.settled", "object.blue-stone.rolled",
+        "object.acorn.settled", "object.acorn.rolled",
+        "object.red-thread.loose", "object.red-thread.rumpled", "object.red-thread.nested",
+        "object.amber-leaf.fresh", "object.amber-leaf.handled",
+        "object.shell.handled", "object.shell.displayed",
+        "object.glass-star.handled", "object.glass-star.displayed",
+    }
+    assert required <= set(entries)
+    for asset_id in required:
+        entry = entries[asset_id]
+        assert entry["kind"] == "object"
+        assert entry["layer"] == "WORLD"
+        asset = _read(ART / entry["path"])
+        assert asset.get("meta", {}).get("object_id")
+        assert asset.get("meta", {}).get("archetype")
+        assert asset.get("meta", {}).get("interaction_state")
+
+    js = (ROOT / "display" / "web" / "app.js").read_text(encoding="utf-8")
+    assert "const OBJECT_ART" in js
+    assert "function objectAssetId" in js
+    assert "drawAuthoredAsset(objectAssetId(o)" in js
+    assert "o.kind==='stone'" not in js
+    assert "o.kind==='thread'" not in js

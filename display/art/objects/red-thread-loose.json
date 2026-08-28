@@ -1,0 +1,52 @@
+{
+  "schema": "terrarium.pixel-asset.v1",
+  "id": "object.red-thread.loose",
+  "width": 16,
+  "height": 14,
+  "anchor": [
+    8,
+    9
+  ],
+  "meta": {
+    "object_id": "red_thread",
+    "archetype": "soft_nesting",
+    "interaction_state": "loose"
+  },
+  "runs": [
+    [
+      3,
+      10,
+      10,
+      1,
+      "shadow"
+    ],
+    [
+      3,
+      6,
+      7,
+      2,
+      "flower"
+    ],
+    [
+      6,
+      8,
+      7,
+      2,
+      "flower"
+    ],
+    [
+      10,
+      5,
+      3,
+      1,
+      "terracotta"
+    ],
+    [
+      4,
+      5,
+      2,
+      1,
+      "creamShade"
+    ]
+  ]
+}
