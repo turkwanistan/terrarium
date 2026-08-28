@@ -4,6 +4,7 @@ from typing import Any
 
 from .models import FRAME_HEIGHT, FRAME_WIDTH
 from .spatial import SPATIAL_SCHEMA
+from .situations import event_frame
 
 FRAME_SCHEMA = "terrarium.frame.v1"
 
@@ -21,6 +22,7 @@ def make_frame(state: dict[str, Any], *, last_event: dict[str, Any] | None = Non
         "world_minutes": state["world_minutes"],
         "lighting": state["habitat"]["lighting"],
         "weather": state["habitat"]["weather"],
+        "world_event": event_frame(state),
         "creature": {
             "id": creature["id"],
             "name": creature["name"],
@@ -76,6 +78,12 @@ def make_frame(state: dict[str, Any], *, last_event: dict[str, Any] | None = Non
             "activity_family": (last_event.get("details") or {}).get("activity_family"),
             "result_x": (last_event.get("details") or {}).get("result_x"),
             "result_y": (last_event.get("details") or {}).get("result_y"),
+            "world_event_id": (last_event.get("details") or {}).get("world_event_id"),
+            "world_event_type": (last_event.get("details") or {}).get("world_event_type"),
+            "world_event_role": (last_event.get("details") or {}).get("world_event_role"),
+            "world_event_attention_status": (last_event.get("details") or {}).get("world_event_attention_status"),
+            "world_event_started": (last_event.get("details") or {}).get("world_event_started"),
+            "world_event_ended": (last_event.get("details") or {}).get("world_event_ended"),
         },
         "spatial": {"schema": SPATIAL_SCHEMA},
     }

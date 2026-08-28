@@ -63,7 +63,10 @@ def evaluate(seed: int, steps: int) -> dict:
     final2, rows2 = _run(seed, steps)
     decisions = [row for row in rows if row["decision"]]
     movement = [row for row in decisions if row["action"] in MOVEMENT]
-    non_delivery = [row for row in movement if row["travel_purpose"] != "object_delivery"]
+    # Situational-event approaches have an explicit external cause and are evaluated
+    # by the Iteration-7 event ecology. Keep the Iteration-4 ping-pong metric focused
+    # on ordinary autonomous travel rather than counting event response as wandering.
+    non_delivery = [row for row in movement if row["travel_purpose"] not in {"object_delivery", "situational_event"}]
 
     zone_segments: list[tuple[str, int]] = []
     if rows:

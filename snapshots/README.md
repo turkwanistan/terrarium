@@ -2,6 +2,14 @@
 
 Git-friendly visual milestones. The SVG is a lightweight capture-time thumbnail; run Terrarium and open `/snapshots/` for the same stored frame through the real Canvas renderer.
 
+## 20260828T010131008922Z-pixel-art-overhaul-iteration7
+
+Accepted Iteration 7 situational events and environmental attention after full deterministic, regression, and real-browser validation.
+
+![20260828T010131008922Z-pixel-art-overhaul-iteration7](dev/20260828T010131008922Z-pixel-art-overhaul-iteration7/preview.svg)
+
+Deterministic tick `10080` · renderer `c9b3e44af04b`
+
 ## 20260827T233841118223Z-pixel-art-overhaul-iteration6
 
 Accepted Iteration 6 behavioral repertoire and world affordances after full validation

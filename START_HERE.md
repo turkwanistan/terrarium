@@ -4,16 +4,19 @@ Terrarium is a normal product built after the accepted Self-Building Computer Ge
 
 ## Current checkpoint
 
-**Pixel-Art Overhaul — Iteration 6: Behavioral Repertoire and World Affordances**
+**Pixel-Art Overhaul — Iteration 7: Situational Events and Environmental Attention**
 
-- history: `history/2026-08-27-pixel-art-overhaul-iteration6.md`
-- evidence: `artifacts/pixel-art-overhaul-iteration6.json`
-- evaluation: `artifacts/pixel-art-overhaul-iteration6-evaluation.json`
-- snapshot: `snapshots/dev/20260827T233841118223Z-pixel-art-overhaul-iteration6`
+- history: `history/2026-08-27-pixel-art-overhaul-iteration7.md`
+- evidence: `artifacts/pixel-art-overhaul-iteration7.json`
+- situational evaluation: `artifacts/pixel-art-overhaul-iteration7-situations.json`
+- regression matrix: `artifacts/pixel-art-overhaul-iteration7-regression-matrix.json`
+- browser UAT: `artifacts/pixel-art-overhaul-iteration7-browser-uat.json`
+- snapshot: `snapshots/dev/20260828T010131008922Z-pixel-art-overhaul-iteration7`
 - seed/tick: **1701 / 10080**
-- semantic frame SHA256: `0a759f58fa022f3dcbf7dd4de33c632bb9ee9366b82e0b077d71eacd6314102e`
-- renderer JS SHA256: `66a80f9e86d3242a2c99903956faa39873dd7dbfc0233869af8c2952bb56cd19`
-- behavior rules: `terrarium-rules-v5-behavioral-repertoire`
+- semantic frame SHA256: `e64af0693418973eab51a4f154c375399331fa4117f8168a083ab9296b9a1102`
+- renderer JS SHA256: `c9b3e44af04bfba888d335add0bce822ffc59968029cbd13b8cbbee22c5e0fe2`
+- behavior rules: `terrarium-rules-v6-situational-attention`
+- situational events: `terrarium.situational-events.v1`
 - behavior context: `terrarium.behavior-context.v1`
 - habit profile: `terrarium.habits.v1`
 - affordance history: `terrarium.affordances.v1`
@@ -25,32 +28,35 @@ Read `STATUS.md`, `ART_DIRECTION.md`, `ROADMAP.md`, `plan.md`, `terrarium.md`, a
 
 - semantic/reference frame: **800×480**;
 - pixel-native art surface: **400×240**, exact 2× nearest-neighbor, smoothing off;
-- world engine owns behavior, habits, affordance consequences, semantic targets, physical route/approach/contact authority, object state, history, time, and pacing;
-- renderer may interpolate authoritative routes/object displacement and animate authored poses but may not invent navigation, intent, targets, preferences, or history;
+- world engine owns behavior, habits, event occurrence/lifecycle, attention outcomes, temporary affordances, semantic targets, physical route/approach/contact authority, object state, history, time, and pacing;
+- renderer may interpolate authoritative routes/object/event presentation and animate authored poses but may not invent navigation, event occurrence, intent, targets, preferences, or history;
 - heartbeat: **3 real seconds**; world advance: **1 minute/heartbeat**; full day ~**72 real minutes**;
-- behavior rules: `terrarium-rules-v5-behavioral-repertoire`; RNG stream remains pinned to `terrarium-rules-v3-routine-coherence`; geometry: `terrarium.spatial.v1`.
+- behavior rules: `terrarium-rules-v6-situational-attention`; RNG stream remains pinned to `terrarium-rules-v3-routine-coherence`; geometry remains `terrarium.spatial.v1`.
 
-## Behavioral law after Iteration 6
+## Behavioral law after Iteration 7
 
-Short-horizon routine coherence and long-horizon `terrarium.habits.v1` remain authoritative. Iteration 6 adds affordances rather than a planner: Moss can investigate and nudge objects, carry them into habit-shaped arrangements, loaf/groom/stretch in plausible places, and react to real deterministic weather opportunities. Activities still have bounded beginnings, middles, endings, commitments, and settling periods.
+Short-horizon routine coherence, long-horizon `terrarium.habits.v1`, and Iteration-6 affordances remain authoritative. Iteration 7 adds a compact deterministic situational layer rather than a planner. The initial catalog is `sunlight`, `bird`, `rain_intensify`, `thunder`, `moth`, and `leaf_tap`.
 
-`terrarium.affordances.v1` is aftermath/history, not a drive model. It records only completed post-migration activity and may support later causal presentation/evaluation. It does not schedule Moss or reconstruct nonexistent pre-upgrade behavior. Habits may bias where comfort and arrangement activities occur, but recent-zone/object inhibition, exploration floors, spatial authority, possession continuity, weather, and activity commitments prevent lock-in.
+A world event is canonical state with a bounded lifecycle and source location. It may be unseen or ignored; it is not automatically a behavior command. Moss may ignore, orient, defer, rarely interrupt a low-commitment activity, approach, engage, and then recover depending on current commitment, salience, recent repetition, and deterministic attention choice. High-commitment object/sleep activity is protected. Events must remain opportunities, not compulsory interrupt handlers.
 
-Object manipulation must remain consequential. A nudge changes authoritative object coordinates, exposes the new position to future behavior, and normally earns a same-object re-inspection. A carried object has one chosen arrangement destination and is physically placed into an authored slot. Environmental reaction is similarly causal: noticing rain/mist may redirect Moss to the window, but the reaction is not just an animation label.
+Event causality is explicit: **event → perception/attention → reaction/defer → engagement/decision → aftermath**. The same low-level action can therefore carry different meaning from its cause. Window watching may be casual, bird-driven, rain-driven, or part of another bounded situation without multiplying action enums merely for labels.
+
+Temporary affordances must be authoritative. The moving sunlight patch is the first example: its current walkable location exists in canonical state, Moss can loaf at that location while it exists, may follow one shift, and loses that opportunity when the patch moves or expires. The renderer may depict the patch but cannot decide where or whether it exists.
+
+Object manipulation, habits, possession continuity, spatial authority, supported sleep, recent-zone/object inhibition, exploration floors, and calm commitments continue to constrain situational response. Iteration 7 is additive: ordinary autonomous life still accounts for more than 91% of decisions in the accepted seven-day matrix.
 
 ## Planned next iterations
 
-`ROADMAP.md` is the authoritative forward product sequence unless direct canonical-runtime UAT exposes a more severe defect:
+`ROADMAP.md` is authoritative unless direct canonical-runtime UAT exposes a more severe concrete defect:
 
-1. **Iteration 7 — Situational Events and Environmental Attention** — make the world present canonical opportunities and interruptions; target **event → perception → reaction → decision/engagement → aftermath**, including ignore/defer outcomes.
-2. **Iteration 8 — Object Identity and Stateful Affordances** — make different object classes enable different interactions and persistent state transitions.
-3. **Iteration 9 — Emergent Situations and Consequence Memory** — let events, object state, arrangements, and habits create later opportunities and multi-stage situations across longer horizons.
+1. **Iteration 8 — Object Identity and Stateful Affordances** — make object class materially alter the interactions and persistent state transitions available.
+2. **Iteration 9 — Emergent Situations and Consequence Memory** — let event state, object state, arrangements, and habits compose into later opportunities and multi-stage situations.
 
-These remain normal Terrarium product iterations. A general planner, needs/personality-stat model, quest system, or LLM action selector is not implied by this roadmap.
+A generic planner, needs/personality-stat model, quest system, dialogue system, or LLM action selector is not implied. First keep pushing the existing model of **attention + affordances + persistent state + habits + bounded causal commitments**.
 
 ## Regression procedure
 
-Run `python -m pytest -q`, `node --check display/web/app.js`, Python-3.10 grammar parsing, technical/behavior/spatial/coherence/habit/repertoire evaluators, exact replay, deterministic temporal capture, and real 800×480 browser inspection. For major behavior changes, run coherence and habit robustness across seeds **1701 / 1702 / 42 / 999** and compare semantic activity families rather than enum count alone.
+Run `python -m pytest -q`, `node --check display/web/app.js`, Python-3.10 grammar parsing, technical/behavior/spatial/coherence/habit/repertoire/situational evaluators, exact replay, deterministic temporal capture, and real 800×480 browser inspection. For major behavior changes, retain robustness coverage across seeds **1701 / 1702 / 42 / 999** and compare causal/semantic families rather than enum count alone.
 
 Promoted reusable capabilities remain:
 - `simulation-behavior-auditor-r1` — `932573954fdf126bd4ec4f4d5a1f79a50b48b994bf374ed0cfa3415120dd093f`

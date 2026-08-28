@@ -200,3 +200,24 @@ The explicit forward roadmap now lives in `ROADMAP.md`:
 3. **Iteration 9 — Emergent Situations and Consequence Memory:** events, object state, arrangements, and habits compose into later opportunities across minutes/hours/days without scripted narrative chains.
 
 Direct canonical-runtime UAT may reprioritize this sequence if it exposes a more severe concrete weakness. Do not add GOAP, generic planning, needs/personality-stat systems, quest logic, or LLM action selection by default. Only revisit the planning/SBC substrate if implementation evidence shows the existing attention + affordance + persistent-state + habit + bounded-session model cannot express the required causal situations cleanly.
+
+
+## Completed normal product checkpoint — Pixel-Art Overhaul, Iteration 7
+
+- added canonical deterministic `terrarium.situational-events.v1` with six bounded event types: moving sunlight, bird, rain intensification, thunder, night moth, and leaf/window contact;
+- made event occurrence/lifecycle, source coordinates, salience, attention status, and temporary affordances authoritative world state rather than renderer inventions;
+- added selective ignore/orient/defer/rare-interrupt/approach/engage/recovery behavior using the existing bounded intent/session model rather than a planner;
+- protected high-commitment manipulation, possession continuity, supported sleep, spatial authority, learned habits, and ordinary calm behavior from mandatory interruption;
+- added moving sunlight as a temporary walkable/loafable canonical affordance that can shift and expire;
+- kept window event source coordinates separate from physically valid Moss engagement anchors;
+- tuned deterministic per-type cooldowns so all six event types recur without visual clustering;
+- preserved Iteration-6 repertoire and long-horizon habit divergence without weakening anti-lock-in thresholds;
+- added deterministic four-seed situational evaluation plus final actual-browser fixtures for sunlight engagement, bird engagement, thunder reaction, moth engagement, and deliberate non-reaction;
+- passed 43/43 tests, Python-3.10 grammar, JS syntax, technical/replay, four-seed behavior/spatial/coherence/habit/repertoire/situational matrices, and final 800×480 browser UAT;
+- no SBC platform change, Capability Forge work, MCP growth, or Gen18 was required.
+
+Evidence: `history/2026-08-27-pixel-art-overhaul-iteration7.md`, `artifacts/pixel-art-overhaul-iteration7.json`, snapshot `20260828T010131008922Z-pixel-art-overhaul-iteration7`.
+
+## Next product iteration after Iteration 7
+
+**Iteration 8 — Object Identity and Stateful Affordances.** Give object classes materially different interaction subsets and persistent state transitions so the same event/attention systems can compose with richer physical possibilities. Preserve the accepted event-attention, habit, spatial, persistence, and renderer authority contracts; do not introduce a generic planner merely because object situations become richer.

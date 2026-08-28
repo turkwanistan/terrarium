@@ -1355,3 +1355,22 @@ It is:
 > **"This creature lived on my PC for weeks, and when I moved it into a small physical display it woke up with the same room, possessions, habits, memories, preferences, and history."**
 
 That is the Terrarium.
+
+
+---
+
+# 43. Current world law — situations and selective attention
+
+Post-v0 Terrarium now treats environmental situations as canonical world state. The room may create bounded opportunities independently of Moss: moving sunlight, outside visitors, weather escalation, brief sounds/contact, and small night activity. These events have deterministic occurrence/lifecycle and spatial context.
+
+They are **opportunities, not commands**. Moss may ignore, orient, defer, rarely interrupt a low-commitment activity, approach, engage, or recover based on current commitment, salience, recent repetition, habits/context, and deterministic attention choice. High-commitment object sessions, possession continuity, supported sleep, and spatial authority remain protected.
+
+The governing causal pattern is:
+
+```text
+event → perception / attention → reaction or defer → engagement / decision → aftermath
+```
+
+Temporary event-created affordances must be authoritative. A moving sunlight patch, for example, exists at a real canonical walkable coordinate while active and ceases to be usable when it moves or expires. The renderer may visualize an event but may never invent its occurrence, target, preference impact, or causal history.
+
+This law intentionally reuses the existing bounded action vocabulary when possible. A window-watch or loaf can mean something different because its **cause** is different; Terrarium should increase causal situation space before multiplying verbs or adding a generic planner.

@@ -112,6 +112,34 @@ def _rain_window_scenario() -> dict[str, Any]:
     raise RuntimeError("unable to build deterministic rain_window scenario")
 
 
+def _situational_scenarios() -> dict[str, dict[str, Any]]:
+    found: dict[str, dict[str, Any]] = {}
+    required = {"event_sunlight_engage", "event_bird_engage", "event_thunder_react", "event_moth_engage", "event_ignored"}
+    for seed in (1701, 1702, 42, 999):
+        state = initial_state(seed, created_at=CREATED_AT)
+        sim = Simulation()
+        for _ in range(10080):
+            before = state
+            _, _, details, state = sim.step(state)
+            event_type = details.get("world_event_type")
+            role = details.get("world_event_role")
+            action = details.get("action")
+            if event_type == "sunlight" and role == "engage" and action == "loaf" and "event_sunlight_engage" not in found:
+                found["event_sunlight_engage"] = _scenario("event_sunlight_engage", before, state, details, "Moss reaches and settles into the authoritative temporary sunlight affordance")
+            if event_type == "bird" and role == "engage" and action == "look_outside" and "event_bird_engage" not in found:
+                found["event_bird_engage"] = _scenario("event_bird_engage", before, state, details, "Moss follows a bird event to the supported window-watch position")
+            if event_type == "thunder" and role in {"notice", "notice_after_defer", "notice_after_interrupt"} and action == "react" and "event_thunder_react" not in found:
+                found["event_thunder_react"] = _scenario("event_thunder_react", before, state, details, "Moss startles/orients to authoritative thunder without whole-scene camera motion")
+            if event_type == "moth" and role == "engage" and action == "react" and "event_moth_engage" not in found:
+                found["event_moth_engage"] = _scenario("event_moth_engage", before, state, details, "Moss tracks a bounded night moth event at the activity corner")
+            if details.get("world_event_attention_status") == "ignored" and details.get("decision") and "event_ignored" not in found:
+                found["event_ignored"] = _scenario("event_ignored", before, state, details, "An authoritative world event remains visible while Moss deliberately continues ordinary life")
+            if required.issubset(found):
+                return found
+    missing = required - set(found)
+    raise RuntimeError(f"missing deterministic situational scenarios: {sorted(missing)}")
+
+
 def _populated_room_scenario(seed: int = 1701, steps: int = 240) -> dict[str, Any]:
     state = initial_state(seed, created_at=CREATED_AT)
     sim = Simulation()
@@ -222,11 +250,13 @@ def build() -> dict[str, Any]:
     scenarios["dawn_light_transition"] = _lighting_transition("dawn_light_transition", 330, 390, "gradual night-to-dawn environmental lighting transition")
     scenarios["dusk_light_transition"] = _lighting_transition("dusk_light_transition", 1140, 1200, "gradual dusk-to-night environmental lighting transition")
     scenarios["rain_control"] = _rain_scenario()
+    scenarios.update(_situational_scenarios())
     hero_reel = [
         "left_walk", "right_walk", "arrive_settle", "idle_control", "window_transition",
         "rain_window", "weather_reaction", "inspect_object", "object_nudge", "object_pickup", "carried_walk", "object_placement",
         "loaf", "groom", "stretch", "sleep_transition", "waking", "wake_exit", "activity_corner_approach", "activity_corner_transition",
         "shelf_approach", "populated_room",
+        "event_sunlight_engage", "event_bird_engage", "event_thunder_react", "event_moth_engage", "event_ignored",
         "dawn_light_transition", "dusk_light_transition", "rain_control",
     ]
     return {

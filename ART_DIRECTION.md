@@ -187,3 +187,20 @@ Pixel-Art Overhaul — Iteration 6 makes **consequence part of action readabilit
 Nudge must read as approach/contact **before** displacement, followed by a brief regard of the changed object position. Carry/place should communicate a chosen arrangement rather than generic shuffling. Loaf, groom, and stretch are distinct quiet silhouettes and should not be exaggerated into constant fidgeting. Environmental `react` is an attention shift that may lead into an existing window-watch session; it must remain quieter than the weather itself and must not become alarm animation.
 
 Habits may become visible through where these affordances recur: favorite zones can attract more loafing or arrangements and favored objects may participate somewhat more often. The renderer still never declares a favorite with UI, glow, labels, or hidden memory. Persistent arrangements and object displacement are canonical world history; the renderer only makes their consequences legible.
+
+
+## Accepted Iteration 7 situational-event acting conventions
+
+Pixel-Art Overhaul — Iteration 7 makes **external cause and selective attention part of visual readability**. Environmental events are not full-scene effects and they do not automatically make Moss perform. The renderer depicts canonical event state quietly enough that ignoring an event remains visually plausible.
+
+Event presentation rules:
+
+- moving sunlight is a hard-edged finite-palette patch on valid floor/rug space, never a smooth alpha spotlight or bloom;
+- bird, leaf contact, rain escalation, and thunder stay localized to the window/pane and must not shake, zoom, flash, or recolor the whole room;
+- a night moth is tiny, slow, integer-grid motion near its authoritative source and must not become a particle system;
+- event motion is quieter than Moss acting and may not use `Math.random` or hidden renderer-only lifecycle state;
+- the event's semantic/source position may differ from Moss's physical engagement stance; renderer staging must preserve that distinction rather than moving canonical navigation into presentation code;
+- a non-reaction is valid presentation: the event may remain visible while Moss continues an unrelated committed activity;
+- `react`, `look_outside`, and `loaf` should read differently when their canonical cause differs, but do not create gratuitous pose enums when gaze, target, context, and event depiction already communicate the cause.
+
+The visual question is now: **does something seem to have happened in the room, and does Moss's degree of attention to it feel intentional rather than compulsory?** Moss remains the focal character even when the world initiates the moment.

@@ -1,77 +1,87 @@
 # Terrarium status
 
-Terrarium is normal product development after the accepted Generation 17 pilot. The current checkpoint is **Pixel-Art Overhaul — Iteration 6: Behavioral Repertoire and World Affordances**. This is **not Generation 18**.
+Terrarium is normal product development after the accepted Generation 17 pilot. The current checkpoint is **Pixel-Art Overhaul — Iteration 7: Situational Events and Environmental Attention**. This is **not Generation 18**.
 
 ## Current checkpoint
 
-- history: `history/2026-08-27-pixel-art-overhaul-iteration6.md`
-- bounded evidence: `artifacts/pixel-art-overhaul-iteration6.json`
-- multi-seed repertoire evaluation: `artifacts/pixel-art-overhaul-iteration6-evaluation.json`
-- regression matrix: `artifacts/pixel-art-overhaul-iteration6-regression-matrix.json`
-- real-renderer UAT: `artifacts/pixel-art-overhaul-iteration6-renderer-uat.json`
-- accepted snapshot: `20260827T233841118223Z-pixel-art-overhaul-iteration6`
+- history: `history/2026-08-27-pixel-art-overhaul-iteration7.md`
+- bounded evidence: `artifacts/pixel-art-overhaul-iteration7.json`
+- situational-event evaluation: `artifacts/pixel-art-overhaul-iteration7-situations.json`
+- repertoire regression: `artifacts/pixel-art-overhaul-iteration7-repertoire.json`
+- regression matrix: `artifacts/pixel-art-overhaul-iteration7-regression-matrix.json`
+- real-renderer UAT: `artifacts/pixel-art-overhaul-iteration7-browser-uat.json`
+- accepted snapshot: `20260828T010131008922Z-pixel-art-overhaul-iteration7`
 - deterministic seed/tick: **1701 / 10080**
-- semantic frame SHA256: `0a759f58fa022f3dcbf7dd4de33c632bb9ee9366b82e0b077d71eacd6314102e`
-- renderer JS SHA256: `66a80f9e86d3242a2c99903956faa39873dd7dbfc0233869af8c2952bb56cd19`
-- behavior rules: `terrarium-rules-v5-behavioral-repertoire`
+- semantic frame SHA256: `e64af0693418973eab51a4f154c375399331fa4117f8168a083ab9296b9a1102`
+- renderer JS SHA256: `c9b3e44af04bfba888d335add0bce822ffc59968029cbd13b8cbbee22c5e0fe2`
+- behavior rules: `terrarium-rules-v6-situational-attention`
 - deterministic RNG stream: `terrarium-rules-v3-routine-coherence`
+- situational events: `terrarium.situational-events.v1`
 - short-horizon context: `terrarium.behavior-context.v1`
-- long-horizon habit profile: `terrarium.habits.v1`
+- long-horizon habits: `terrarium.habits.v1`
 - affordance history: `terrarium.affordances.v1`
 - spatial schema: `terrarium.spatial.v1`
 
-## What Iteration 6 established
+## What Iteration 7 established
 
-Iteration 5 had ten decision labels but only seven meaningfully different semantic activity families; travel, idle/rest, and one inspect→carry→place object loop still dominated what a viewer could actually see. Iteration 6 expands the reachable life-space without adding a planner, needs system, personality stats, dialogue logic, or LLM decision-making.
+The world can now initiate bounded, canonical situations rather than relying on Moss to originate nearly every visible activity. The initial event catalog is deliberately small: **moving sunlight, bird outside, rain intensification, thunder, night moth, and leaf/window contact**. Each event has deterministic occurrence conditions, authoritative lifecycle/duration, salience/perceptibility, source location, and any temporary affordance it creates.
 
-Moss can now **nudge** placed objects authoritatively and remain to inspect the result; **loaf**, **groom**, and **stretch** as distinct calm activities; react to deterministic rain/mist and carry that reaction through to a window session; and arrange carried objects across plausible personal spaces rather than treating the collection shelf as the universal destination. `terrarium.affordances.v1` records only real post-upgrade activity: semantic family completions, object nudges, zone comfort, and zone arrangements. Existing worlds migrate neutrally and no pre-Iteration-6 affordance history is fabricated.
+Moss does not treat events as mandatory interrupts. Depending on current commitment, event salience, recent repetition, and deterministic attention choice, Moss may **ignore, orient briefly, defer, rarely interrupt a low-commitment activity, approach, engage, or recover into ordinary behavior**. Existing object sessions, possession continuity, supported sleep, learned habits, and calm activity commitments remain authoritative. The target causal shape is now real state rather than renderer theater: **event → perception/attention → reaction or defer → engagement/decision → aftermath**.
 
-The weather cycle was also corrected: the previous arithmetic generator made canonical seed 1701 effectively clear forever. Weather is now deterministic per three-hour world block but actually varies across clear/rain/mist, giving environmental reactions a real causal opportunity while remaining independent of action RNG.
+Moving sunlight is the first temporary environmental affordance. Its current patch is authoritative world state, Moss can travel to that exact walkable location and loaf there, and the opportunity moves/disappears with the event. Window events keep separate source coordinates and physically valid Moss engagement anchors: the renderer shows where the bird/thunder/leaf/rain event exists while navigation still ends on valid floor-side geometry.
 
 ## Acceptance evidence
 
-The Iteration-5 baseline has **7 meaningful families**, family entropy **2.663–2.697 bits**, and generic idle/rest/travel/sleep behavior at **71.2–73.5%** of decisions. Across seeds **1701 / 1702 / 42 / 999**, Iteration 6 reaches **all 10 meaningful families**. Family entropy rises to **2.915–2.946 bits**, generic share falls to **58.2–60.5%**, and no family exceeds **23.5%** of decisions. Every seed reaches **40–41 zone×family combinations**, **63–66 distinct family transitions**, all six objects are nudged, and arrangement/comfort history reaches all five zones.
+Across deterministic seven-day runs for seeds **1701 / 1702 / 42 / 999**:
 
-New activities remain bounded rather than taking over: `loaf + groom + stretch + nudge + react` account for roughly **11.8–13.7%** of decisions. Inspect sessions lead to manipulation within two decisions **72.9–76.5%** of the time. Nudge→same-object re-inspection succeeds **91.3–100%** of the time, and weather reaction→window follow-through succeeds **94.1–100%**.
+- **51–63** situational events start per seed;
+- every seed reaches all six event types;
+- event-active timeline share is only **6.7–8.5%**;
+- event-linked decisions are only **6.3–8.8%** of decisions, leaving >91% ordinary autonomous behavior on every seed;
+- ignored, oriented, deferred, and engaged responses all occur across the matrix;
+- same-type event starts are separated by at least **115 world-minutes**;
+- true interruptions are rare: only three across the four final runs, limited to `rest` / `loaf`; high-commitment manipulation and sleep are not casually broken;
+- sunlight temporary-affordance use occurs on every seed with **zero invalid-affordance failures**;
+- causal engagement checks report **zero mismatches**.
 
-Equivalent-present-state controlled histories remain exactly deterministic individually but now diverge through the new affordance space. A window/amber-leaf history versus activity-corner/acorn history produces **0.280 loaf-pattern cross-advantage** and **0.341 placement-pattern cross-advantage**, with different final authoritative object arrangements after 3,000 ticks.
+Iteration-6 repertoire breadth is preserved rather than crowded out. Final family entropy is **2.960–2.999 bits**, generic behavior share is **56.6–59.4%**, and the original repertoire evaluator passes all four seeds. Controlled equivalent-present-state histories still diverge deterministically: loaf-pattern cross-advantage is **0.237** and placement-pattern cross-advantage is **0.250**, both above the unchanged Iteration-6 acceptance bars. The arrangement preference strength was deliberately tuned to preserve this history dependence while retaining the original `<70%` anti-lock-in probe.
 
-## Renderer / pacing / persistence
+Long-horizon habits also remain causal and bounded. All four habit robustness seeds pass; controlled favorite-zone cross-advantage remains **0.238–0.361**. Coherence remains calm: ordinary non-delivery reversal is **0–2.33%**, and the calm visible timeline is **68.3–76.1%** across the four reference runs.
 
-The actual 800×480 Canvas renderer has authored poses for nudge, loaf, groom, stretch, and react. Browser temporal UAT sampled 11 frames per new scenario with exact 400×240→800×480 2× scaling and smoothing disabled. Each activity produced **5–8 distinct raster states**. Nudge visibly holds paw contact before displacement, then moves monotonically at ~3.7% → 43.7% → 91.1% and settles by **1.7 s**, rather than teleporting the object.
+## Renderer / browser UAT
 
-Iteration-4 pacing remains intact. In the final reference coherence run, purposeful movement is **100%**, window-session continuation **100%**, wake recovery **100%**, post-place linger **100%**, and the calm visible timeline is **74.6%**. Existing habits remain bounded and all four robustness seeds pass the original long-horizon habit evaluator.
+The actual Canvas renderer consumes canonical `world_event` state. Sunlight is a hard-edged finite-palette rug patch; bird, rain escalation, thunder, and leaf contact remain localized to the window; the moth is a small night event near the activity corner. There is no renderer-owned event scheduling, hidden preference memory, camera shake, random zoom, full-screen particle layer, or high-resolution overlay.
 
-Persistence remains event-authoritative: exact snapshot+event replay, restart preservation, append-only hash-chain integrity, valid spatial endpoints, and blocker avoidance all pass. Canonical Moss was not reset or replaced during development or UAT.
+Real 800×480 browser UAT covered **sunlight engagement, bird engagement, thunder reaction, moth engagement, and deliberate event non-reaction**. Every scenario captured **11 temporal samples**, all with exact 400×240→800×480 2× scaling, smoothing disabled, and monotonic interpolation. Each scenario produced **8–10 distinct raster states**. Browser runs reached the ready state with zero console errors. Human inspection of the actual Canvas output found the event cues restrained, pixel-native, localized, and subordinate to Moss.
+
+Canonical Moss was not reset, replaced, or used for development fixture UAT. Browser evaluation used an isolated temporary world; the service was stopped afterward.
 
 ## Validation
 
-- pytest: **39/39 PASS**;
-- Python 3.10 grammar parse: **30 source files PASS**;
+- pytest: **43/43 PASS**;
+- Python 3.10 grammar parse: **24 source files PASS**;
 - JavaScript syntax: **PASS**;
-- technical evaluator: **PASS**;
-- behavior evaluator: **PASS**;
-- spatial evaluator: **PASS**;
-- Iteration-4 coherence robustness, seeds 1701/1702/42/999: **all PASS**;
-- Iteration-5 long-horizon habit robustness, seeds 1701/1702/42/999: **all PASS**;
-- Iteration-6 repertoire evaluation, seeds 1701/1702/42/999: **all PASS**;
-- real browser Iteration-6 temporal UAT: **PASS**;
-- combined Iteration-6 regression matrix: **PASS**.
+- technical evaluator / exact replay / restart / hash-chain integrity: **PASS**;
+- behavior robustness, seeds 1701/1702/42/999: **all PASS**;
+- spatial robustness, seeds 1701/1702/42/999: **all PASS**;
+- coherence robustness, seeds 1701/1702/42/999: **all PASS**;
+- long-horizon habit robustness, seeds 1701/1702/42/999: **all PASS**;
+- Iteration-6 repertoire regression, seeds 1701/1702/42/999: **all PASS**;
+- Iteration-7 situational-event evaluation, seeds 1701/1702/42/999: **all PASS**;
+- real browser Iteration-7 temporal UAT: **PASS**;
+- combined Iteration-7 regression matrix: **PASS**.
 
 ## SBC conclusion
 
-No reusable substrate deficiency was exposed. The new affordance state, causal activity chains, renderer poses, long-run variety evaluation, migration, and history-divergence evidence are Terrarium product concerns and fit the existing SBC/project/evaluation/temporal substrate. Self-Building Computer, Capability Forge, and the frozen Optiplex MCP surface were not modified. **Gen18 decision: NO — existing SBC substrate remains sufficient.**
+No reusable substrate deficiency was exposed. Canonical environmental-event state, selective attention, deferral/interruption policy, temporary affordances, causal evaluation, replay, migration, and renderer support all fit cleanly inside Terrarium's existing bounded-session model and the already-promoted SBC/project/evaluation substrate. Self-Building Computer, Capability Forge, and the frozen Optiplex MCP surface were not modified. **Gen18 decision: NO — existing SBC substrate remains sufficient.**
 
-## Roadmap after Iteration 6
+## Roadmap after Iteration 7
 
-The forward sequence is now explicit in `ROADMAP.md` and is organized around increasing **causal situation space**, not merely adding verbs:
+1. **Iteration 8 — Object Identity and Stateful Affordances:** object classes gain materially different affordance subsets and persistent state transitions so props stop feeling like skins for one generic interaction graph.
+2. **Iteration 9 — Emergent Situations and Consequence Memory:** environmental events, object state, arrangements, and learned habits compose into later opportunities over minutes/hours/days without scripted quest chains.
 
-1. **Iteration 7 — Situational Events and Environmental Attention:** canonical world events such as moving sunlight, birds, rain escalation, thunder, night insects, window contact, and salient dawn/sunset moments can be perceived, ignored, deferred, or engaged with. Target shape: **event → perception → reaction → decision/engagement → aftermath**.
-2. **Iteration 8 — Object Identity and Stateful Affordances:** object classes gain materially different affordance subsets and persistent state transitions so props stop feeling like skins for one generic inspect/carry/place graph.
-3. **Iteration 9 — Emergent Situations and Consequence Memory:** environmental events, object state, arrangements, and learned habits create follow-up opportunities over minutes/hours/days, producing multi-stage situations through interacting systems rather than authored narrative scripts.
-
-Direct canonical-runtime UAT may reprioritize this sequence if a more severe product defect appears. GOAP, generic planning, needs/personality-stat systems, quest logic, and LLM action selection remain out of scope unless implementation evidence later proves the current attention + affordance + persistent-state + habit + bounded-session model genuinely insufficient.
+Iteration 7 deliberately does not introduce GOAP, a generic planner, needs/personality-stat systems, quest logic, dialogue systems, or LLM action selection. Revisit planning/SBC substrate only if later product evidence shows that attention + affordances + persistent state + habits + short causal commitments cannot express the required situations cleanly.
 
 ## Runtime / Git safety
 
-Canonical Moss remains user-owned outside Git. Runtime databases/event ledgers remain ignored. Any host deployment must preserve `${XDG_STATE_HOME:-$HOME/.local/state}/terrarium/live` (or the explicit `TERRARIUM_DATA_DIR`) and must not substitute a disposable development world.
+Canonical Moss remains user-owned outside Git. Runtime databases/event ledgers remain ignored. Any host deployment must preserve `${XDG_STATE_HOME:-$HOME/.local/state}/terrarium/live` (or explicit `TERRARIUM_DATA_DIR`) and must not substitute a disposable development world.

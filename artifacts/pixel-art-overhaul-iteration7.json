@@ -1,0 +1,31 @@
+{
+  "checkpoint": "Pixel-Art Overhaul \u2014 Iteration 7: Situational Events and Environmental Attention",
+  "event_catalog": [
+    "sunlight",
+    "bird",
+    "rain_intensify",
+    "thunder",
+    "moth",
+    "leaf_tap"
+  ],
+  "evidence": {
+    "baseline": "artifacts/pixel-art-overhaul-iteration7-baseline.json",
+    "browser_uat": "artifacts/pixel-art-overhaul-iteration7-browser-uat.json",
+    "regression_matrix": "artifacts/pixel-art-overhaul-iteration7-regression-matrix.json",
+    "repertoire": "artifacts/pixel-art-overhaul-iteration7-repertoire.json",
+    "situations": "artifacts/pixel-art-overhaul-iteration7-situations.json"
+  },
+  "frame_sha256": "e64af0693418973eab51a4f154c375399331fa4117f8168a083ab9296b9a1102",
+  "renderer_js_sha256": "c9b3e44af04bfba888d335add0bce822ffc59968029cbd13b8cbbee22c5e0fe2",
+  "rules_version": "terrarium-rules-v6-situational-attention",
+  "sbc": {
+    "gen18": false,
+    "reason": "No reusable SBC substrate deficiency was exposed; canonical events, attention, temporary affordances, evaluation, persistence, and rendering fit the existing Terrarium/SBC substrate."
+  },
+  "schema": "terrarium.pixel-art-overhaul-iteration7.v1",
+  "seed": 1701,
+  "situational_events_schema": "terrarium.situational-events.v1",
+  "snapshot": "20260828T010131008922Z-pixel-art-overhaul-iteration7",
+  "status": "accepted",
+  "tick": 10080
+}

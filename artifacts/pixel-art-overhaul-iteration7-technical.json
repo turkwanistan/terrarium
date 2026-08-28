@@ -1,0 +1,25 @@
+{
+  "checks": {
+    "append_only_sqlite_enforced": true,
+    "event_chain_valid": true,
+    "jsonl_matches_event_count": true,
+    "logical_viewport_exact": true,
+    "renderer_frame_is_semantic": true,
+    "restart_preserves_state": true,
+    "snapshot_event_replay_exact": true
+  },
+  "metrics": {
+    "events": 80,
+    "frame_payload_bytes": 2208,
+    "jsonl_bytes": 121785,
+    "replay": {
+      "canonical_state_hash": "3113047a54e6a7ac072abff4b7f7bccc8306f0a7619f2f59ad9bce43ee47a103",
+      "event_count": 80,
+      "ok": true,
+      "replayed_state_hash": "3113047a54e6a7ac072abff4b7f7bccc8306f0a7619f2f59ad9bce43ee47a103"
+    },
+    "sqlite_bytes": 258048
+  },
+  "passed": true,
+  "schema": "terrarium.technical-evaluation.v1"
+}

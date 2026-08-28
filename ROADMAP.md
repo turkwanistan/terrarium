@@ -4,9 +4,9 @@ Terrarium develops as a normal product. Repository state, live canonical state, 
 
 The post-Iteration-6 roadmap is organized around expanding **causal situation space**, not merely increasing the number of action labels.
 
-## Iteration 7 — Situational Events and Environmental Attention
+## Accepted Iteration 7 — Situational Events and Environmental Attention
 
-Make the world initiate meaningful opportunities and interruptions rather than leaving Moss as the sole source of activity.
+**Status: ACCEPTED.** The world now initiates deterministic bounded opportunities and interruptions rather than leaving Moss as the sole source of activity. The accepted implementation uses `terrarium.situational-events.v1`, selective attention/deferral, rare low-commitment interruption, event-linked engagement, and temporary sunlight affordances while preserving the existing bounded-session model.
 
 Target causal structure:
 
@@ -26,9 +26,9 @@ Requirements:
 
 Success means the room begins to feel like a place where things happen **to** Moss and his response reveals character through behavior.
 
-## Iteration 8 — Object Identity and Stateful Affordances
+## Next: Iteration 8 — Object Identity and Stateful Affordances
 
-Stop treating persistent props as one generic inspect→pickup→carry→place token wearing different art.
+Stop treating persistent props as one generic inspect→pickup→carry→place token wearing different art. Iteration 7 is accepted; this is now the highest-value planned product target unless direct canonical-runtime UAT exposes a more severe defect.
 
 Requirements:
 

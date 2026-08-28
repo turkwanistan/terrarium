@@ -1,0 +1,105 @@
+{
+  "all_passed": true,
+  "browser_uat": {
+    "passed": true,
+    "path": "artifacts/pixel-art-overhaul-iteration7-browser-uat.json"
+  },
+  "javascript_syntax": {
+    "passed": true
+  },
+  "multi_seed": {
+    "behavior": {
+      "1701": {
+        "passed": true,
+        "path": "artifacts/pixel-art-overhaul-iteration7-behavior-1701.json"
+      },
+      "1702": {
+        "passed": true,
+        "path": "artifacts/pixel-art-overhaul-iteration7-behavior-1702.json"
+      },
+      "42": {
+        "passed": true,
+        "path": "artifacts/pixel-art-overhaul-iteration7-behavior-42.json"
+      },
+      "999": {
+        "passed": true,
+        "path": "artifacts/pixel-art-overhaul-iteration7-behavior-999.json"
+      }
+    },
+    "coherence": {
+      "1701": {
+        "passed": true,
+        "path": "artifacts/pixel-art-overhaul-iteration7-coherence-1701.json"
+      },
+      "1702": {
+        "passed": true,
+        "path": "artifacts/pixel-art-overhaul-iteration7-coherence-1702.json"
+      },
+      "42": {
+        "passed": true,
+        "path": "artifacts/pixel-art-overhaul-iteration7-coherence-42.json"
+      },
+      "999": {
+        "passed": true,
+        "path": "artifacts/pixel-art-overhaul-iteration7-coherence-999.json"
+      }
+    },
+    "habits": {
+      "1701": {
+        "passed": true,
+        "path": "artifacts/pixel-art-overhaul-iteration7-habits-1701.json"
+      },
+      "1702": {
+        "passed": true,
+        "path": "artifacts/pixel-art-overhaul-iteration7-habits-1702.json"
+      },
+      "42": {
+        "passed": true,
+        "path": "artifacts/pixel-art-overhaul-iteration7-habits-42.json"
+      },
+      "999": {
+        "passed": true,
+        "path": "artifacts/pixel-art-overhaul-iteration7-habits-999.json"
+      }
+    },
+    "spatial": {
+      "1701": {
+        "passed": true,
+        "path": "artifacts/pixel-art-overhaul-iteration7-spatial-1701.json"
+      },
+      "1702": {
+        "passed": true,
+        "path": "artifacts/pixel-art-overhaul-iteration7-spatial-1702.json"
+      },
+      "42": {
+        "passed": true,
+        "path": "artifacts/pixel-art-overhaul-iteration7-spatial-42.json"
+      },
+      "999": {
+        "passed": true,
+        "path": "artifacts/pixel-art-overhaul-iteration7-spatial-999.json"
+      }
+    }
+  },
+  "pytest": {
+    "passed": true,
+    "tests": 43
+  },
+  "python310_grammar": {
+    "passed": true,
+    "source_files": 24
+  },
+  "repertoire": {
+    "passed": true,
+    "path": "artifacts/pixel-art-overhaul-iteration7-repertoire.json"
+  },
+  "schema": "terrarium.iteration7-regression-matrix.v1",
+  "situational_events": {
+    "passed": true,
+    "path": "artifacts/pixel-art-overhaul-iteration7-situations.json"
+  },
+  "technical": {
+    "passed": true,
+    "path": "artifacts/pixel-art-overhaul-iteration7-technical.json"
+  }
+}

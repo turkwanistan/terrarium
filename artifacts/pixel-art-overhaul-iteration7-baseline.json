@@ -1,0 +1,43 @@
+{
+  "accepted_product_commit": "8ae2c6b",
+  "accepted_snapshot": "20260827T233841118223Z-pixel-art-overhaul-iteration6",
+  "captured_from_existing_accepted_evidence": true,
+  "repository_head_before_iteration7": "16d505c",
+  "results": {
+    "1701": {
+      "decision_events": 2660,
+      "family_entropy_bits": 2.931034,
+      "new_action_decision_share": 0.137218,
+      "old_generic_decision_share": 0.598496,
+      "top_family_share": 0.234962
+    },
+    "1702": {
+      "decision_events": 2695,
+      "family_entropy_bits": 2.942419,
+      "new_action_decision_share": 0.117996,
+      "old_generic_decision_share": 0.591095,
+      "top_family_share": 0.218924
+    },
+    "42": {
+      "decision_events": 2714,
+      "family_entropy_bits": 2.946327,
+      "new_action_decision_share": 0.124539,
+      "old_generic_decision_share": 0.604643,
+      "top_family_share": 0.224024
+    },
+    "999": {
+      "decision_events": 2744,
+      "family_entropy_bits": 2.914765,
+      "new_action_decision_share": 0.125729,
+      "old_generic_decision_share": 0.581997,
+      "top_family_share": 0.219388
+    }
+  },
+  "schema": "terrarium.iteration7-baseline.v1",
+  "seeds": [
+    1701,
+    1702,
+    42,
+    999
+  ]
+}

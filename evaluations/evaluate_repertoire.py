@@ -85,6 +85,8 @@ def _run(seed: int, steps: int, *, state: dict[str, Any] | None = None) -> tuple
             "to_zone": details.get("to_zone"),
             "travel_purpose": details.get("travel_purpose"),
             "object_id": details.get("object_id"),
+            "world_event_id": details.get("world_event_id"),
+            "world_event_type": details.get("world_event_type"),
             "target_x": details.get("target_x"),
             "target_y": details.get("target_y"),
             "result_x": details.get("result_x"),
@@ -110,7 +112,7 @@ def _sequence_metrics(rows: list[dict[str, Any]]) -> dict[str, Any]:
             for candidate in rows[i + 1:i + 3])
         for i, row in nudges
     )
-    weather = [(i, row) for i, row in enumerate(rows) if row["action"] == "react"]
+    weather = [(i, row) for i, row in enumerate(rows) if row["action"] == "react" and not row.get("world_event_id")]
     weather_window_followups = sum(
         any(candidate["action"] in {"walk", "explore"} and candidate["to_zone"] == "window"
             for candidate in rows[i + 1:i + 3])

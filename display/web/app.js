@@ -158,6 +158,57 @@
     while(true){ rect(x0-Math.floor(thickness/2),y0-Math.floor(thickness/2),thickness,thickness,color); if(x0===x1&&y0===y1) break; const e2=2*err; if(e2>=dy){err+=dy;x0+=sx;} if(e2<=dx){err+=dx;y0+=sy;} }
   }
 
+  function worldEventRenderState(f,now){
+    const e=f.world_event; if(!e) return null;
+    let x=Number(e.x),y=Number(e.y);
+    const prior=previous?.world_event;
+    if(!snapshotPath&&prior?.id===e.id){
+      const t=smoother01((now-fetchedAt)/MOTION.environment_ms);
+      x=mix(Number(prior.x),x,t); y=mix(Number(prior.y),y,t);
+    }
+    const minute=worldMinuteAt(f,now),start=Number(e.start_world_minute),end=Math.max(start+1,Number(e.end_world_minute));
+    return {...e,x,y,progress:clamp01((minute-start)/(end-start))};
+  }
+
+  function drawFloorWorldEvent(f,now,p){
+    const e=worldEventRenderState(f,now); if(!e||e.type!=='sunlight') return;
+    const x=px(e.x),y=px(e.y);
+    // Hard-edged finite-palette sunlight: an authored rug patch, not an alpha spotlight.
+    rect(x-22,y-6,44,3,p.amber); rect(x-26,y-3,52,6,p.amber); rect(x-22,y+3,44,3,p.amber);
+    rect(x-15,y-4,20,1,p.creamShade); rect(x+7,y+1,12,1,p.rugLight);
+    rect(x-19,y+5,9,1,p.rugLight);
+  }
+
+  function drawInteriorWorldEvent(f,now,p){
+    const e=worldEventRenderState(f,now); if(!e||e.type!=='moth') return;
+    const x=px(e.x),y=px(e.y),wing=(Math.floor(now/420)&1);
+    rect(x-1,y,2,2,p.creamShade);
+    rect(x-4,y-2-wing,3,2,p.cream); rect(x+1,y-2+wing,3,2,p.cream);
+    rect(x-2,y+2,1,1,p.amber);
+  }
+
+  function drawWindowWorldEvent(f,now,p){
+    const e=worldEventRenderState(f,now); if(!e||e.source_zone!=='window') return;
+    const x=px(e.x),y=px(e.y);
+    if(e.type==='bird'){
+      const wing=(Math.floor(now/520)&1);
+      rect(x-4,y,8,2,p.walnutDark); rect(x+3,y-2,3,2,p.walnutDark);
+      rect(x-2,y-2-wing,3,2,p.shadow); rect(x-1,y+2+wing,3,1,p.shadow);
+      rect(x+6,y-1,1,1,p.amber);
+    } else if(e.type==='rain_intensify'){
+      for(let i=0;i<7;i++){ const dx=((i*11)%35)-17,dy=((i*17+Math.floor(now/170))%31)-15; rect(x+dx,y+dy,1,4,p.rain); }
+      rect(x-16,96,31,1,p.rain);
+    } else if(e.type==='thunder'){
+      if((Math.floor(now/360)&3)!==3){
+        drawPixelLine(x+3,y-13,x-2,y-3,p.cream,2); drawPixelLine(x-2,y-3,x+2,y+3,p.creamShade,2); drawPixelLine(x+2,y+3,x-4,y+12,p.cream,2);
+      }
+    } else if(e.type==='leaf_tap'){
+      const sway=(Math.floor(now/460)&1);
+      rect(x-4,y-2+sway,7,3,p.amber); rect(x-2,y-4+sway,5,2,p.amber);
+      drawPixelLine(x-4,y+2,x+3,y-4,p.walnutDark,1);
+    }
+  }
+
   function drawPersistentHistory(f,p){
     const wear=f.habitat.path_wear||{};
     const routes={sleeping_nook:[[202,189],[174,191],[148,196]],window:[[202,189],[150,162],[84,158]],collection_shelf:[[202,189],[244,166],[277,156]],activity_corner:[[202,189],[245,185],[277,186]]};
@@ -214,6 +265,7 @@
     } else if(f.weather==='mist'){
       for(let y=45;y<91;y+=12) for(let x=35+(y%3);x<129;x+=19) rect(x,y,9,2,p.rain);
     }
+    drawWindowWorldEvent(f,now,p);
 
     const watches=historyValue(f,'window_watches',now),wet=historyValue(f,'wet_window_watches',now);
     for(let i=0;i<6;i++){
@@ -319,8 +371,10 @@
     drawWindow(f,now,p);
     drawBed(f,now,p);
     drawRug(p);
+    drawFloorWorldEvent(f,now,p);
     drawShelf(f,p);
     drawActivityCorner(f,now,p);
+    drawInteriorWorldEvent(f,now,p);
     drawBowls(p);
     drawPersistentHistory(f,p);
 
@@ -441,7 +495,8 @@
       carrying:attached?c.carrying:null,carrying_semantic:c.carrying,attachment_progress:Number(attachmentProgress.toFixed(6)),carried_rendered_x:carriedWorldX,carried_rendered_y:carriedWorldY,carried_relative_x:attached?Number(holdX.toFixed(6)):null,carried_relative_y:attached?holdY:null,carry_turning:turningCarry,walk_phase:Number(walkPhase.toFixed(6)),walk_keyframe:walkFrame,
       causal_activity:{sleep_nook:Number(causal.sleep_nook.toFixed(6)),window:Number(causal.window.toFixed(6)),activity_corner:Number(causal.activity_corner.toFixed(6))},
       interaction_target:target?{object_id:target.id||null,x:Number(target.x.toFixed(6)),y:Number(target.y.toFixed(6)),contact:Boolean(target.contact)}:null,semantic_target:(Number.isFinite(Number(f.last_event?.target_x))&&Number.isFinite(Number(f.last_event?.target_y)))?{x:Number(f.last_event.target_x),y:Number(f.last_event.target_y),object_id:f.last_event?.object_id||null}:null,object_placement:activePlacementState(f,now),
-      ambient_classes:[f.weather==='rain'?'rain':f.weather==='mist'?'mist':null,'pixel-motes',c.pose==='sleep'?'breathing':moving?'walk-cycle':'quiet-breathing',causal.sleep_nook>0?'bedding-contact':null,causal.window>0?'window-contact':null,causal.activity_corner>0?'work-surface-contact':null].filter(Boolean),
+      ambient_classes:[f.weather==='rain'?'rain':f.weather==='mist'?'mist':null,f.world_event?`world-event-${f.world_event.type}`:null,'pixel-motes',c.pose==='sleep'?'breathing':moving?'walk-cycle':'quiet-breathing',causal.sleep_nook>0?'bedding-contact':null,causal.window>0?'window-contact':null,causal.activity_corner>0?'work-surface-contact':null].filter(Boolean),
+      world_event:f.world_event?{id:f.world_event.id,type:f.world_event.type,x:Number(f.world_event.x),y:Number(f.world_event.y),attention_status:f.world_event.attention_status,temporary_affordance:f.world_event.temporary_affordance||null}:null,
       art_grid:{width:ART_W,height:ART_H,scale:SCALE,x:px(renderedX),y:px(renderedBaseY)},
     };
   }
@@ -676,7 +731,7 @@
     drawForegroundFurniture(frame,now,p);
     drawForegroundCausality(frame, now, renderState, p);
     presentArtSurface();
-    if(debugVisible){ debug.hidden=false; debug.textContent=JSON.stringify({mode:snapshotPath?'snapshot':'live',connected,tick:frame.tick,lighting:frame.lighting,weather:frame.weather,art_surface:[ART_W,ART_H],display:[DISPLAY_W,DISPLAY_H],scale:SCALE,creature:frame.creature,last_event:frame.last_event,poll_error:lastPollError},null,2); } else debug.hidden=true;
+    if(debugVisible){ debug.hidden=false; debug.textContent=JSON.stringify({mode:snapshotPath?'snapshot':'live',connected,tick:frame.tick,lighting:frame.lighting,weather:frame.weather,world_event:frame.world_event,art_surface:[ART_W,ART_H],display:[DISPLAY_W,DISPLAY_H],scale:SCALE,creature:frame.creature,last_event:frame.last_event,poll_error:lastPollError},null,2); } else debug.hidden=true;
     if(scheduleNext) requestAnimationFrame(render);
     return renderState;
   }

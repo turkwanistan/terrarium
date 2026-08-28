@@ -1,0 +1,82 @@
+{
+  "art_surface": [
+    400,
+    240
+  ],
+  "console_errors": 0,
+  "human_visual_inspection": {
+    "notes": "Actual Canvas renderer inspected at 800x480. Event cues remained pixel-native, localized, restrained, and subordinate to Moss; no camera shake, random zoom, high-resolution overlay, or full-scene flash was introduced.",
+    "passed": true
+  },
+  "integer_scale": 2,
+  "passed": true,
+  "required_scenarios": [
+    "event_sunlight_engage",
+    "event_bird_engage",
+    "event_thunder_react",
+    "event_moth_engage",
+    "event_ignored"
+  ],
+  "scenarios": {
+    "event_bird_engage": {
+      "activity": "look_outside",
+      "distinct_raster_states": 8,
+      "event_type": "bird",
+      "exact_2x": true,
+      "monotonic_interpolation": true,
+      "samples": 11,
+      "schema": "terrarium.temporal-capture.v1",
+      "smoothing_disabled": true,
+      "source_file": "artifacts/iteration7-browser-evidence/event_bird_engage-current.json"
+    },
+    "event_ignored": {
+      "activity": "walk",
+      "distinct_raster_states": 9,
+      "event_type": "sunlight",
+      "exact_2x": true,
+      "monotonic_interpolation": true,
+      "samples": 11,
+      "schema": "terrarium.temporal-capture.v1",
+      "smoothing_disabled": true,
+      "source_file": "artifacts/iteration7-browser-evidence/event_ignored-current.json"
+    },
+    "event_moth_engage": {
+      "activity": "react",
+      "distinct_raster_states": 8,
+      "event_type": "moth",
+      "exact_2x": true,
+      "monotonic_interpolation": true,
+      "samples": 11,
+      "schema": "terrarium.temporal-capture.v1",
+      "smoothing_disabled": true,
+      "source_file": "artifacts/iteration7-browser-evidence/event_moth_engage-current.json"
+    },
+    "event_sunlight_engage": {
+      "activity": "loaf",
+      "distinct_raster_states": 8,
+      "event_type": "sunlight",
+      "exact_2x": true,
+      "monotonic_interpolation": true,
+      "samples": 11,
+      "schema": "terrarium.temporal-capture.v1",
+      "smoothing_disabled": true,
+      "source_file": "artifacts/iteration7-browser-evidence/event_sunlight_engage-current.json"
+    },
+    "event_thunder_react": {
+      "activity": "react",
+      "distinct_raster_states": 10,
+      "event_type": "thunder",
+      "exact_2x": true,
+      "monotonic_interpolation": true,
+      "samples": 11,
+      "schema": "terrarium.temporal-capture.v1",
+      "smoothing_disabled": true,
+      "source_file": "artifacts/iteration7-browser-evidence/event_thunder_react-current.json"
+    }
+  },
+  "schema": "terrarium.iteration7-browser-uat.v1",
+  "viewport": [
+    800,
+    480
+  ]
+}

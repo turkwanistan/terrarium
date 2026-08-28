@@ -11,10 +11,11 @@ from .spatial import ZONE_ANCHORS
 FRAME_WIDTH = 800
 FRAME_HEIGHT = 480
 STATE_SCHEMA_VERSION = 1
-RULES_VERSION = "terrarium-rules-v5-behavioral-repertoire"
+RULES_VERSION = "terrarium-rules-v6-situational-attention"
 BEHAVIOR_CONTEXT_SCHEMA = "terrarium.behavior-context.v1"
 HABIT_PROFILE_SCHEMA = "terrarium.habits.v1"
 AFFORDANCE_HISTORY_SCHEMA = "terrarium.affordances.v1"
+SITUATIONAL_EVENTS_SCHEMA = "terrarium.situational-events.v1"
 HABIT_CONTEXTS = ("dawn", "day", "dusk", "night")
 RNG_STREAM_VERSION = "terrarium-rules-v3-routine-coherence"
 EVENT_VERSION = 1
@@ -167,6 +168,14 @@ def initial_state(seed: int, *, created_at: str | None = None) -> dict[str, Any]
                 "zone_comfort": {name: 0 for name in ZONES},
                 "zone_arrangements": {name: 0 for name in ZONES},
                 "last_weather_reaction_block": -1,
+            },
+            "situational_events": {
+                "schema": SITUATIONAL_EVENTS_SCHEMA,
+                "migration_origin": "native",
+                "active": None,
+                "recent": [],
+                "started_counts": {name: 0 for name in ("sunlight", "bird", "rain_intensify", "thunder", "moth", "leaf_tap")},
+                "outcome_counts": {"ignored": 0, "oriented": 0, "deferred": 0, "interrupted": 0, "engaged": 0},
             },
         },
         "objects": objects,

@@ -60,6 +60,8 @@ def _run(seed: int, steps: int) -> tuple[dict, list[dict]]:
             "contact": None if details.get("contact_x") is None else (int(details["contact_x"]), int(details["contact_y"])),
             "spatial_schema": details.get("spatial_schema"),
             "carrying": c.get("carrying"),
+            "supported_action": details.get("supported_action"),
+            "world_event_type": details.get("world_event_type"),
         })
     return state, records
 
@@ -83,7 +85,12 @@ def evaluate(seed: int, steps: int) -> dict:
     window_actions = [r for r in records if r["decision"] and r["action"] == "look_outside"]
     bad_window = [r for r in window_actions if r["endpoint"] != zone_anchor("window")]
     movement = [r for r in records if r["decision"] and r["action"] in {"walk", "explore"}]
-    bad_zone_arrivals = [r for r in movement if r["to_zone"] and r["endpoint"] != zone_anchor(r["to_zone"])]
+    situational_arrivals = [r for r in movement if r["supported_action"] == "situational_event_approach"]
+    bad_zone_arrivals = [
+        r for r in movement
+        if r["to_zone"] and r["supported_action"] != "situational_event_approach" and r["endpoint"] != zone_anchor(r["to_zone"])
+    ]
+    invalid_situational_arrivals = [r for r in situational_arrivals if not point_is_walkable(r["endpoint"])]
     targeted = [r for r in records if r["decision"] and r["action"] in {"inspect", "carry", "place"} and r["semantic_target"]]
     separated = [r for r in targeted if r["approach"] and r["approach"] != r["semantic_target"]]
     contacted = [r for r in targeted if r["contact"] is not None]
@@ -99,6 +106,7 @@ def evaluate(seed: int, steps: int) -> dict:
         "sleep_always_supported": bool(sleep_decisions) and not unsupported_sleep,
         "window_watch_always_supported": bool(window_actions) and not bad_window,
         "zone_arrivals_use_authored_anchors": bool(movement) and not bad_zone_arrivals,
+        "temporary_affordance_arrivals_are_walkable": not invalid_situational_arrivals,
         "semantic_target_separated_from_physical_approach": bool(targeted) and len(separated) == len(targeted),
         "targeted_actions_have_reachable_contact": bool(targeted) and len(contacted) == len(targeted),
         "multi_segment_navigation_exercised": bool(multi_segment),
@@ -123,6 +131,8 @@ def evaluate(seed: int, steps: int) -> dict:
             "targeted_actions_with_distinct_approach": len(separated),
             "targeted_actions_with_contact": len(contacted),
             "carried_routes": len(carried_routes),
+            "situational_event_routes": len(situational_arrivals),
+            "invalid_situational_event_routes": len(invalid_situational_arrivals),
             "route_actions": dict(sorted(Counter(str(r["action"]) for r in routed).items())),
         },
     }

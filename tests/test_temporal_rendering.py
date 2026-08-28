@@ -28,13 +28,15 @@ def test_temporal_fixture_pack_is_deterministic_and_800x480():
         "sleep_transition", "waking", "wake_exit", "window_transition", "activity_corner_transition",
         "activity_corner_approach", "shelf_approach", "inspect_object", "object_nudge", "object_pickup", "object_placement", "rain_window",
         "loaf", "groom", "stretch", "weather_reaction",
-        "populated_room", "dawn_light_transition", "dusk_light_transition", "rain_control",
+        "populated_room", "event_sunlight_engage", "event_bird_engage", "event_thunder_react", "event_moth_engage", "event_ignored",
+        "dawn_light_transition", "dusk_light_transition", "rain_control",
     }
     assert first["hero_reel"] == [
         "left_walk", "right_walk", "arrive_settle", "idle_control", "window_transition",
         "rain_window", "weather_reaction", "inspect_object", "object_nudge", "object_pickup", "carried_walk", "object_placement",
         "loaf", "groom", "stretch", "sleep_transition", "waking", "wake_exit", "activity_corner_approach", "activity_corner_transition",
-        "shelf_approach", "populated_room", "dawn_light_transition", "dusk_light_transition", "rain_control",
+        "shelf_approach", "populated_room", "event_sunlight_engage", "event_bird_engage", "event_thunder_react", "event_moth_engage", "event_ignored",
+        "dawn_light_transition", "dusk_light_transition", "rain_control",
     ]
     probe = first["continuity_probe"]
     assert probe["source"]["tick"] < probe["middle"]["tick"] < probe["followup"]["tick"]
@@ -74,6 +76,9 @@ def test_renderer_has_manual_clock_path_and_production_raf_path():
     assert "route_distance" in source and "route_segment_index" in source
     assert "transitionSource" in source and "temporalContinuityProbe" in source
     assert "drawForegroundCausality(frame, now, renderState" in source
+    assert "function worldEventRenderState" in source
+    assert "drawFloorWorldEvent" in source and "drawWindowWorldEvent" in source and "drawInteriorWorldEvent" in source
+    assert all(name in source for name in ("sunlight", "bird", "rain_intensify", "thunder", "moth", "leaf_tap"))
 
 
 def test_renderer_is_pixel_native_400x240_with_exact_2x_present_path():

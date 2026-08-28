@@ -14,8 +14,12 @@ from .models import (
     clone_state, lighting_for, weather_for,
 )
 from .spatial import (
-    FAVORITE_SPOTS, SLEEP_SUPPORT_ANCHOR, SPATIAL_SCHEMA, interaction_approach, interaction_contact, route_between,
+    FAVORITE_SPOTS, SLEEP_SUPPORT_ANCHOR, SPATIAL_SCHEMA, interaction_approach, interaction_contact, point_is_walkable, route_between,
     route_length, route_payload, zone_anchor,
+)
+from .situations import (
+    SITUATIONAL_EVENTS_SCHEMA, active_event, can_defer_event, choose_attention, event_target,
+    mark_attention, mark_engaged, should_interrupt_event, update_situational_events,
 )
 from .store import WorldStore
 
@@ -312,7 +316,7 @@ class Simulation:
             # The zone immediately before the current one is the clearest
             # ping-pong signal; older recent zones are only mildly inhibited.
             if len(recent) >= 2 and target == recent[-2]:
-                weight *= 0.12
+                weight *= 0.07
             elif target in recent[-4:]:
                 weight *= 0.48
 
@@ -435,8 +439,8 @@ class Simulation:
         for target, weight in base.items():
             if target == zone:
                 continue
-            habit = self._relative_affinity(habit_profile.get("zone_affinity", {}), target, strength=1.45 * profile_maturity)
-            contextual = self._relative_affinity(context_values, target, strength=0.95 * profile_maturity)
+            habit = self._relative_affinity(habit_profile.get("zone_affinity", {}), target, strength=1.60 * profile_maturity)
+            contextual = self._relative_affinity(context_values, target, strength=1.10 * profile_maturity)
             if target != "collection_shelf":
                 weight *= 1.0 + max(0.0, object_bias) * 1.8
             elif object_bias > 0.0:
@@ -545,6 +549,36 @@ class Simulation:
         }.get(visible, "Moss stayed with the current activity.")
         return "creature_activity", summary, details, state
 
+    @staticmethod
+    def _annotate_situation(
+        details: dict[str, Any],
+        state: dict[str, Any],
+        transition: dict[str, Any],
+        *,
+        event: dict[str, Any] | None = None,
+        role: str | None = None,
+        preempted_action: str | None = None,
+    ) -> None:
+        active = event or active_event(state)
+        if active is not None:
+            details["world_event_id"] = str(active["id"])
+            details["world_event_type"] = str(active["type"])
+            details["world_event_attention_status"] = str(active.get("attention_status") or "pending")
+        if role:
+            details["world_event_role"] = role
+        if preempted_action:
+            details["interrupted_action"] = preempted_action
+        if transition.get("started"):
+            started = transition["started"]
+            details["world_event_started"] = {
+                "id": str(started["id"]), "type": str(started["type"]),
+                "start_world_minute": int(started["start_world_minute"]),
+                "end_world_minute": int(started["end_world_minute"]),
+            }
+        if transition.get("ended"):
+            details["world_event_ended"] = dict(transition["ended"])
+        details["situational_events_schema"] = SITUATIONAL_EVENTS_SCHEMA
+
     def step(self, state: dict[str, Any]) -> tuple[str, str, dict[str, Any], dict[str, Any]]:
         before = state
         state = clone_state(state)
@@ -588,6 +622,8 @@ class Simulation:
         state["world_minutes"] = int(state["world_minutes"]) + self.minutes_per_tick
         habitat["lighting"] = lighting_for(int(state["world_minutes"]))
         habitat["weather"] = weather_for(int(state["world_minutes"]), int(state["seed"]))
+        event_transition = update_situational_events(state)
+        current_world_event = active_event(state)
 
         # Drives change every heartbeat even when a behavioral intent is held.
         if creature["activity"] == "sleep":
@@ -598,12 +634,25 @@ class Simulation:
             creature["curiosity"] = min(1.0, float(creature["curiosity"]) + 0.012)
 
         commitment = creature.get("behavior_commitment") or {}
-        if int(commitment.get("ticks_remaining", 0)) > 0:
+        preempted_action: str | None = None
+        if current_world_event is not None and event_transition.get("started") and int(commitment.get("ticks_remaining", 0)) > 0:
+            if should_interrupt_event(state, current_world_event, commitment):
+                preempted_action = str(commitment.get("action") or "")
+                mark_attention(current_world_event, "interrupt", int(state["world_minutes"]), interrupted_action=preempted_action)
+                habitat["situational_events"]["outcome_counts"]["interrupted"] += 1
+                commitment["ticks_remaining"] = 0
+                creature["behavior_commitment"] = commitment
+            elif can_defer_event(state, current_world_event, commitment):
+                mark_attention(current_world_event, "defer", int(state["world_minutes"]))
+                habitat["situational_events"]["outcome_counts"]["deferred"] += 1
+
+        if int((creature.get("behavior_commitment") or {}).get("ticks_remaining", 0)) > 0:
             event_type, summary, details, state = self._continue_committed_action(state)
             if state["creature"]["zone"] == "sleeping_nook" and state["creature"]["activity"] == "sleep":
                 aftermath["sleep_nook_ticks"] = int(aftermath["sleep_nook_ticks"]) + 1
             habitat["shelf_count"] = sum(1 for o in state["objects"] if o["zone"] == "collection_shelf" and o["state"] == "placed")
             details["energy_after"] = round(float(state["creature"]["energy"]), 6)
+            self._annotate_situation(details, state, event_transition, event=current_world_event, role="deferred_during_commitment" if current_world_event and current_world_event.get("attention_status") == "deferred" else None)
             return event_type, summary, details, state
 
         zone = creature["zone"]
@@ -615,6 +664,59 @@ class Simulation:
         intent_kind = str(intent.get("kind") or "")
         intent_stage = str(intent.get("stage") or "")
         intent_object_id = intent.get("object_id")
+        forced_action: str | None = None
+        world_event_role: str | None = None
+        linked_event = current_world_event
+        linked_target: dict[str, Any] | None = None
+
+        ended = event_transition.get("ended")
+        if ended and intent_kind == "situational_event" and str(intent.get("event_id") or "") == str(ended.get("id") or ""):
+            context["intent"] = {"kind": "event_recovery", "stage": "settle", "event_type": ended.get("type")}
+            intent = dict(context["intent"]); intent_kind = "event_recovery"; intent_stage = "settle"
+
+        if linked_event is not None:
+            linked_target = event_target(linked_event, int(state["world_minutes"]))
+            event_id = str(linked_event["id"])
+            if intent_kind == "situational_event" and str(intent.get("event_id") or "") == event_id:
+                if intent_stage in {"noticed", "deferred"}:
+                    distance = ((int(creature["x"]) - int(linked_target["x"])) ** 2 + (int(creature["y"]) - int(linked_target["y"])) ** 2) ** 0.5
+                    if str(creature["zone"]) != str(linked_target["zone"]) or distance > 18:
+                        forced_action = "walk"; world_event_role = "approach"
+                    else:
+                        forced_action = str(linked_target["engage_action"]); world_event_role = "engage"
+                elif intent_stage == "arrived":
+                    forced_action = str(linked_target["engage_action"]); world_event_role = "engage"
+                elif intent_stage == "engaged":
+                    distance = ((int(creature["x"]) - int(linked_target["x"])) ** 2 + (int(creature["y"]) - int(linked_target["y"])) ** 2) ** 0.5
+                    if linked_event.get("type") == "sunlight" and distance > 18 and int(linked_event.get("follow_moves", 0)) < 1:
+                        forced_action = "walk"; world_event_role = "follow_affordance"
+                    else:
+                        context["intent"] = {"kind": "event_recovery", "stage": "settle", "event_type": linked_event.get("type")}
+                        intent = dict(context["intent"]); intent_kind = "event_recovery"; intent_stage = "settle"
+            elif str(linked_event.get("attention_status")) in {"deferred", "interrupted"}:
+                context["intent"] = {
+                    "kind": "situational_event", "stage": "noticed", "event_id": event_id,
+                    "event_type": linked_event["type"], "target_zone": linked_target["zone"],
+                }
+                intent = dict(context["intent"]); intent_kind = "situational_event"; intent_stage = "noticed"
+                forced_action = "react"
+                world_event_role = "notice_after_interrupt" if linked_event.get("attention_status") == "interrupted" else "notice_after_defer"
+            elif str(linked_event.get("attention_status")) == "pending":
+                protected_object_chain = bool(carrying) or intent_kind == "object_session"
+                if creature.get("activity") == "sleep" or protected_object_chain:
+                    choice = "ignored"
+                else:
+                    choice = choose_attention(state, linked_event)
+                mark_attention(linked_event, choice, int(state["world_minutes"]))
+                if choice == "engage":
+                    context["intent"] = {
+                        "kind": "situational_event", "stage": "noticed", "event_id": event_id,
+                        "event_type": linked_event["type"], "target_zone": linked_target["zone"],
+                    }
+                    intent = dict(context["intent"]); intent_kind = "situational_event"; intent_stage = "noticed"
+                    forced_action = "react"; world_event_role = "notice"
+                elif choice == "orient":
+                    forced_action = "react"; world_event_role = "orient"
 
         weights: dict[str, float] = {}
 
@@ -711,6 +813,12 @@ class Simulation:
             add("walk", 4.20)
             add("idle", 0.10)
             movement_context_penalty = 1.0
+        elif intent_kind == "event_recovery":
+            add("idle", 2.35)
+            add("rest", 1.85)
+            if zone != "collection_shelf":
+                add("loaf", 0.55)
+            movement_context_penalty = 0.03
 
         # Strongly preserve the causal middle of short activities. A nudge is
         # not complete until Moss regards the displaced object; noticing weather
@@ -743,6 +851,12 @@ class Simulation:
             # Genuine exhaustion may still override curiosity, but ordinary
             # restlessness cannot break the reaction chain.
             weights["sleep"] = weights.get("sleep", 0.0) * 0.22
+        elif intent_kind == "event_recovery":
+            for name in list(weights):
+                if name not in {"idle", "rest", "loaf", "stretch"}:
+                    weights[name] *= 0.04
+            weights["idle"] = weights.get("idle", 0.0) + 2.50
+            weights["rest"] = weights.get("rest", 0.0) + 1.80
 
         adjusted: list[tuple[str, float]] = []
         movement_recent = sum(1 for a in recent[-3:] if a in {"walk", "explore"})
@@ -756,7 +870,7 @@ class Simulation:
             if action_name in {"carry", "place", "nudge"}:
                 penalty *= 0.52 ** manipulation_recent
             adjusted.append((action_name, max(0.008, weight * penalty)))
-        action = self._weighted_pick(rng, adjusted)
+        action = forced_action or self._weighted_pick(rng, adjusted)
 
         details: dict[str, Any] = {
             "from_zone": zone, "lighting": lighting, "weather": habitat["weather"],
@@ -767,8 +881,17 @@ class Simulation:
         focus_object_id = None
 
         if action in {"walk", "explore"}:
-            target = self._choose_destination(rng, state, context, zone=zone, carrying=carrying, habit_profile=habit_profile)
-            destination = zone_anchor(target)
+            situational_travel = linked_event is not None and world_event_role in {"approach", "follow_affordance"} and linked_target is not None
+            if situational_travel:
+                target = str(linked_target["zone"])
+                destination = (int(linked_target["x"]), int(linked_target["y"]))
+                if not point_is_walkable(destination):
+                    destination = zone_anchor(target)
+                details["supported_action"] = "situational_event_approach"
+                details["target_x"], details["target_y"] = destination
+            else:
+                target = self._choose_destination(rng, state, context, zone=zone, carrying=carrying, habit_profile=habit_profile)
+                destination = zone_anchor(target)
             self._route_creature(creature, details, destination=destination, destination_zone=target)
             creature["activity"] = "walk"
             creature["expression"] = "curious" if action == "explore" else "neutral"
@@ -779,7 +902,15 @@ class Simulation:
                 if mark not in habitat["marks"]:
                     habitat["marks"].append(mark)
             self._remember_zone(context, target)
-            if carrying:
+            if situational_travel and linked_event is not None:
+                context["intent"] = {
+                    "kind": "situational_event", "stage": "arrived", "event_id": linked_event["id"],
+                    "event_type": linked_event["type"], "target_zone": target,
+                }
+                if world_event_role == "follow_affordance":
+                    linked_event["follow_moves"] = int(linked_event.get("follow_moves", 0)) + 1
+                travel_purpose = "situational_event"
+            elif carrying:
                 carried = next(o for o in state["objects"] if o["id"] == carrying)
                 carried["zone"] = target
                 carried["x"] = creature["x"] + (-14 if creature["facing"] == "left" else 14)
@@ -922,18 +1053,35 @@ class Simulation:
             event_type = "creature_woke"
             summary = "Moss woke up, unfolded, and stayed near the bed before moving on."
         elif action == "loaf":
-            spot = next((spot for spot in FAVORITE_SPOTS.values() if spot["zone"] == zone), None)
-            if spot is not None:
-                self._route_creature(creature, details, destination=(int(spot["x"]), int(spot["y"])), destination_zone=zone)
-                details["supported_action"] = "comfort_spot"
+            sunlight_engagement = linked_event is not None and linked_event.get("type") == "sunlight" and world_event_role == "engage" and linked_target is not None
+            if sunlight_engagement:
+                destination = (int(linked_target["x"]), int(linked_target["y"]))
+                if (int(creature["x"]), int(creature["y"])) != destination:
+                    self._route_creature(creature, details, destination=destination, destination_zone="open_space")
+                details["supported_action"] = "sunlight_affordance"
+                details["target_x"], details["target_y"] = destination
+            else:
+                spot = next((spot for spot in FAVORITE_SPOTS.values() if spot["zone"] == zone), None)
+                if spot is not None:
+                    self._route_creature(creature, details, destination=(int(spot["x"]), int(spot["y"])), destination_zone=zone)
+                    details["supported_action"] = "comfort_spot"
             creature["activity"] = "loaf"
             creature["expression"] = "content"
             creature["comfort"] = min(1.0, float(creature["comfort"]) + 0.035)
             aftermath["loaf_sessions"] = int(aftermath["loaf_sessions"]) + 1
-            if intent_kind in {"arrival_settle", "post_place", "wake_recovery"}:
-                context["intent"] = None
-            event_type = "creature_loafed"
-            summary = f"Moss tucked into a comfortable loaf in the {zone.replace('_', ' ')}."
+            if sunlight_engagement and linked_event is not None:
+                mark_engaged(state, linked_event)
+                context["intent"] = {
+                    "kind": "situational_event", "stage": "engaged", "event_id": linked_event["id"],
+                    "event_type": linked_event["type"], "target_zone": "open_space",
+                }
+                event_type = "sunlight_used"
+                summary = "Moss settled into the temporary patch of sunlight on the rug."
+            else:
+                if intent_kind in {"arrival_settle", "post_place", "wake_recovery", "event_recovery"}:
+                    context["intent"] = None
+                event_type = "creature_loafed"
+                summary = f"Moss tucked into a comfortable loaf in the {zone.replace('_', ' ')}."
         elif action == "groom":
             creature["activity"] = "groom"
             creature["expression"] = "content"
@@ -946,25 +1094,40 @@ class Simulation:
             creature["expression"] = "content"
             creature["comfort"] = min(1.0, float(creature["comfort"]) + 0.018)
             aftermath["stretch_sessions"] = int(aftermath["stretch_sessions"]) + 1
-            if intent_kind == "wake_recovery":
+            if intent_kind in {"wake_recovery", "event_recovery"}:
                 context["intent"] = None
             event_type = "creature_stretched"
             summary = "Moss leaned into a long stretch and settled back down."
         elif action == "react":
             creature["activity"] = "react"
-            creature["expression"] = "curious"
-            creature["facing"] = "left" if int(creature["x"]) > int(ZONES["window"]["x"]) else "right"
+            creature["expression"] = "startled" if linked_event is not None and linked_event.get("type") == "thunder" else "curious"
+            face_x = int(linked_target["x"]) if linked_target is not None else int(ZONES["window"]["x"])
+            creature["facing"] = "left" if int(creature["x"]) > face_x else "right"
             creature["curiosity"] = max(0.0, float(creature["curiosity"]) - 0.025)
-            aftermath["weather_reactions"] = int(aftermath["weather_reactions"]) + 1
-            (habitat.get("affordance_history") or {})["last_weather_reaction_block"] = int(state["world_minutes"]) // 180
-            context["intent"] = {"kind": "weather_reaction", "stage": "noticed", "target_zone": "window"}
-            event_type = "weather_noticed"
-            summary = f"Moss noticed the {habitat['weather']} outside and turned its attention toward the window."
+            if linked_event is not None and world_event_role in {"notice", "notice_after_defer", "notice_after_interrupt", "orient", "engage"}:
+                if world_event_role == "orient":
+                    context["intent"] = None
+                    event_type = "world_event_oriented"
+                    summary = f"Moss briefly oriented toward the {str(linked_event['type']).replace('_', ' ')} and then held its course."
+                elif world_event_role == "engage":
+                    mark_engaged(state, linked_event)
+                    context["intent"] = {"kind": "event_recovery", "stage": "settle", "event_type": linked_event["type"]}
+                    event_type = "world_event_engaged"
+                    summary = f"Moss tracked the {str(linked_event['type']).replace('_', ' ')} for a bounded moment, then began to settle."
+                else:
+                    event_type = "world_event_noticed"
+                    summary = f"Moss noticed the {str(linked_event['type']).replace('_', ' ')} and turned its attention toward it."
+            else:
+                aftermath["weather_reactions"] = int(aftermath["weather_reactions"]) + 1
+                (habitat.get("affordance_history") or {})["last_weather_reaction_block"] = int(state["world_minutes"]) // 180
+                context["intent"] = {"kind": "weather_reaction", "stage": "noticed", "target_zone": "window"}
+                event_type = "weather_noticed"
+                summary = f"Moss noticed the {habitat['weather']} outside and turned its attention toward the window."
         elif action == "rest":
             creature["activity"] = "rest"
             creature["expression"] = "content"
             creature["energy"] = min(1.0, float(creature["energy"]) + 0.034)
-            if intent_kind in {"arrival_settle", "post_place", "wake_recovery"}:
+            if intent_kind in {"arrival_settle", "post_place", "wake_recovery", "event_recovery"}:
                 context["intent"] = None
             elif intent_kind == "window_session" and intent_stage != "arrived":
                 context["intent"] = None
@@ -980,13 +1143,19 @@ class Simulation:
             aftermath["window_watches"] = int(aftermath["window_watches"]) + 1
             if habitat["weather"] in {"rain", "mist"}:
                 aftermath["wet_window_watches"] = int(aftermath["wet_window_watches"]) + 1
-            context["intent"] = {"kind": "window_session", "stage": "watched", "zone": "window"}
-            event_type = "window_watched"
-            summary = f"Moss watched the {habitat['weather']} outside the window."
+            if linked_event is not None and world_event_role == "engage":
+                mark_engaged(state, linked_event)
+                context["intent"] = {"kind": "event_recovery", "stage": "settle", "event_type": linked_event["type"]}
+                event_type = "world_event_watched"
+                summary = f"Moss watched the {str(linked_event['type']).replace('_', ' ')} from the window until the moment passed."
+            else:
+                context["intent"] = {"kind": "window_session", "stage": "watched", "zone": "window"}
+                event_type = "window_watched"
+                summary = f"Moss watched the {habitat['weather']} outside the window."
         else:
             creature["activity"] = "idle"
             creature["expression"] = "neutral"
-            if intent_kind in {"arrival_settle", "post_place", "wake_recovery"}:
+            if intent_kind in {"arrival_settle", "post_place", "wake_recovery", "event_recovery"}:
                 context["intent"] = None
             elif intent_kind == "window_session" and intent_stage != "arrived":
                 context["intent"] = None
@@ -1023,6 +1192,7 @@ class Simulation:
         habitat["shelf_count"] = sum(1 for o in state["objects"] if o["zone"] == "collection_shelf" and o["state"] == "placed")
         details["action"] = action
         details["energy_after"] = round(float(creature["energy"]), 6)
+        self._annotate_situation(details, state, event_transition, event=linked_event, role=world_event_role, preempted_action=preempted_action)
         return event_type, summary, details, state
 
 
