@@ -255,6 +255,21 @@
         "steps": 10080
       },
       "tick": 10080
+    },
+    {
+      "captured_at": "2026-08-28T03:02:58.833430Z",
+      "frame_path": "/snapshots/dev/20260828T030258821895Z-pixel-art-overhaul-iteration8c/frame.json",
+      "meta_path": "/snapshots/dev/20260828T030258821895Z-pixel-art-overhaul-iteration8c/meta.json",
+      "note": "Iteration 8C replaces Moss's procedural finished silhouette with authored low-frame pixel sprites while preserving simulation, contact, possession, routes, habits, events, and room authority.",
+      "preview_path": "/snapshots/dev/20260828T030258821895Z-pixel-art-overhaul-iteration8c/preview.svg",
+      "renderer_sha256": "a0f49cd9f58e8962f609369b9c6e0032b65fcf5aa8fbad63d128889415ac220a",
+      "snapshot_id": "20260828T030258821895Z-pixel-art-overhaul-iteration8c",
+      "source": {
+        "mode": "deterministic",
+        "seed": 1701,
+        "steps": 10080
+      },
+      "tick": 10080
     }
   ]
 }

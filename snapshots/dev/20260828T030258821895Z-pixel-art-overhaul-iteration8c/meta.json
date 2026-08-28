@@ -1,0 +1,41 @@
+{
+  "art_surface": {
+    "height": 240,
+    "integer_scale": 2,
+    "smoothing": false,
+    "width": 400
+  },
+  "captured_at": "2026-08-28T03:02:58.833430Z",
+  "frame": {
+    "logical_height": 480,
+    "logical_width": 800,
+    "path": "dev/20260828T030258821895Z-pixel-art-overhaul-iteration8c/frame.json",
+    "sha256": "e64af0693418973eab51a4f154c375399331fa4117f8168a083ab9296b9a1102",
+    "tick": 10080
+  },
+  "git": {
+    "branch": "main",
+    "dirty": true,
+    "head": "b5b8ecb7c4d4a2bf769240b97535f637f0cac9c7"
+  },
+  "note": "Iteration 8C replaces Moss's procedural finished silhouette with authored low-frame pixel sprites while preserving simulation, contact, possession, routes, habits, events, and room authority.",
+  "preview": {
+    "path": "dev/20260828T030258821895Z-pixel-art-overhaul-iteration8c/preview.svg",
+    "sha256": "dd1662ad07d796302643cbf6240cae51ec72bef050c15ee0253b7b8c77ea9f64"
+  },
+  "schema": "terrarium.dev-snapshot.v1",
+  "snapshot_id": "20260828T030258821895Z-pixel-art-overhaul-iteration8c",
+  "source": {
+    "mode": "deterministic",
+    "seed": 1701,
+    "steps": 10080
+  },
+  "source_hashes": {
+    "authored_art": "a7f940c4f4d2b38849c1c9f5b2a6b453a2d2453027924bc24282da6fd2285e87",
+    "engine": "c557aff864e560e2fd9716d64d5c39af66dda40b294b6b8ff54a5087fc3482fb",
+    "frame_contract": "680a24d7c9824a109abce56bb4bba4fcc4bcd1b9e35bac29a13950b0426108a8",
+    "renderer_css": "3a24319be5a3e0c963b8e721b637f35aedfdc24b8bef8e779ae934dd09fd62d1",
+    "renderer_js": "a0f49cd9f58e8962f609369b9c6e0032b65fcf5aa8fbad63d128889415ac220a"
+  },
+  "view_url": "/?snapshot=/snapshots/dev/20260828T030258821895Z-pixel-art-overhaul-iteration8c/frame.json"
+}

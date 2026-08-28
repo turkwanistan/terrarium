@@ -66,24 +66,15 @@ Requirements:
 
 Success means a screenshot with Moss hidden already reads as a deliberate, richly authored late-16-bit life-RPG interior rather than a procedural pixel mockup.
 
-## Next: Iteration 8C — Moss Sprite Overhaul
+## Accepted Iteration 8C — Moss Sprite Overhaul
 
-**Status: NEXT.**
+**Status: ACCEPTED.** Moss's accepted action presentation now uses 46 authored low-frame pixel assets rather than runtime body/head/leg/tail construction. Four-frame locomotion, object-contact acting, quiet actions, window watch, sleep/curled sleep, and wake all route through the existing authored-art cache. Exact target-dependent forepaw reach remains a bounded presentation detail tied to canonical contact state. Stillness remains valid and no new behavior/action enums were added.
 
-Replace Moss's procedural body-part assembly with true authored low-frame sprite acting while preserving current semantic action and timing authority.
+The seed-1701/tick-10080 semantic frame remains `e64af0693418973eab51a4f154c375399331fa4117f8168a083ab9296b9a1102`, unchanged from Iterations 7/8A/8B. All 47 tests, four-seed 10,080-step evaluator matrices, exact 2× raster checks, deterministic repeat, 0 px continuity probe, and RAF pacing gates pass.
 
-Requirements:
+Accepted evidence: `history/2026-08-27-pixel-art-overhaul-iteration8c.md`, `artifacts/pixel-art-overhaul-iteration8c.json`, `artifacts/pixel-art-overhaul-iteration8c-regression-matrix.json`, and snapshot `20260828T030258821895Z-pixel-art-overhaul-iteration8c`.
 
-- retain Moss's existing hero scale unless visual evidence justifies a bounded revision;
-- author strong silhouettes for idle, four-frame walk, inspect, nudge, pickup, carry, place, loaf, groom, stretch, react, window watch, sleep transition, curled sleep, and wake;
-- preserve floppy asymmetrical ears, compact body, readable muzzle/head direction, planted feet, expressive but restrained tail, and clear contact poses;
-- emphasize pose selection and frame timing over frame count;
-- keep stillness valid; no random fidget layer or smooth skeletal tween system;
-- keep all target/object/world decisions canonical.
-
-Success means Moss looks like a hand-authored character who belongs to the room, not a set of renderer primitives approximating a dog.
-
-## Iteration 8D — Object Identity and Stateful Affordances
+## Next: Iteration 8D — Object Identity and Stateful Affordances
 
 This is the previously planned Iteration 8, deliberately postponed until the visual system can make state differences meaningful.
 

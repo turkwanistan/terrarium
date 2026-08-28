@@ -440,7 +440,7 @@ Success means the room reads as a richly authored late-16-bit life-RPG interior 
 
 ### Iteration 8C — Moss Sprite Overhaul
 
-**Status: NEXT.**
+**Status: ACCEPTED.**
 
 **Purpose:** give the hero the same authored visual maturity as the room.
 
@@ -448,7 +448,11 @@ Deliver true authored sprite frames for the existing accepted action semantics, 
 
 Success means Moss looks like a specific appealing inhabitant of the room rather than a procedural approximation of a dog.
 
+Accepted 8C uses 46 palette-addressed Moss assets, four authored walk frames, discrete contact/quiet/sleep/wake poses, and renderer-only canonical frame selection. Procedural finished-body assembly and constant idle/sleep bobbing are retired. Accepted evidence is `history/2026-08-27-pixel-art-overhaul-iteration8c.md`; snapshot `20260828T030258821895Z-pixel-art-overhaul-iteration8c`.
+
 ### Iteration 8D — Object Identity and Stateful Affordances
+
+**Status: NEXT.**
 
 Resume the previously planned behavior milestone, now paired with unique authored object sprites and state variants.
 

@@ -280,3 +280,22 @@ Evidence: `history/2026-08-27-pixel-art-overhaul-iteration8b.md`, `artifacts/pix
 ## Next product iteration after Iteration 8B
 
 **Iteration 8C — Moss Sprite Overhaul.** The recomposed room now makes Moss's remaining procedural body-part/action rendering the clearest visual bottleneck. Replace those poses with true authored low-frame sprites while preserving the current semantic action vocabulary, timing, target/contact authority, possession continuity, routes, habits, and situational-event behavior. Keep stillness valid; do not add random fidgets or a smooth skeletal animation system.
+
+
+## Completed normal product checkpoint — Pixel-Art Overhaul, Iteration 8C
+
+- migrated Moss's accepted visual vocabulary to **46 authored pixel assets** using the existing `terrarium.pixel-asset.v1` pipeline;
+- replaced runtime body/head/leg/tail construction with authored-frame selection and horizontal mirroring;
+- preserved only bounded target-dependent contact reach for exact canonical object alignment;
+- kept continuous navigation, target/contact authority, object transfer/attachment, event response, habits, pacing, and all authoritative simulation files unchanged;
+- removed time-driven idle/sleep bobbing so stillness remains a valid authored hold;
+- expanded deterministic visual review to 25 scenarios spanning both walk directions, interaction families, quiet actions, sleep/wake, lighting/weather/history, and situations;
+- passed **47/47 tests**, Python-3.10 grammar, JavaScript syntax, 60-asset validation, technical/exact replay, four-seed 10,080-step behavior/spatial/coherence/habit matrices, repertoire/situational regressions, deterministic exact-2× browser UAT, **0 px** continuity, and healthy RAF pacing;
+- preserved seed-1701/tick-10080 semantic frame SHA256 `e64af0693418973eab51a4f154c375399331fa4117f8168a083ab9296b9a1102` exactly;
+- no SBC substrate change or Gen18 was required.
+
+Evidence: `history/2026-08-27-pixel-art-overhaul-iteration8c.md`, `artifacts/pixel-art-overhaul-iteration8c.json`, `artifacts/pixel-art-overhaul-iteration8c-regression-matrix.json`, snapshot `20260828T030258821895Z-pixel-art-overhaul-iteration8c`.
+
+## Next product iteration after Iteration 8C
+
+**Iteration 8D — Object Identity and Stateful Affordances.** With both habitat and protagonist now authored, resume the postponed behavior/state milestone: give small object archetypes materially different affordance subsets and persistent canonical state transitions, then make those states visible through authored object variants. Preserve replay, spatial authority, habits, and renderer/world boundaries.

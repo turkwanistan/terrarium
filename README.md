@@ -44,7 +44,7 @@ The intended remote is `git@github.com:turkwanistan/terrarium.git`. Make one com
 
 See `MEMORY.md` for the evidence-backed memory policy.
 
-Visual direction is governed by `ART_DIRECTION.md`; the accepted Iteration-8B room recomposition now lives under `display/art/`, and the next Moss sprite-overhaul step is defined in `VISUAL_STYLE_OVERHAUL.md` / `ROADMAP.md`.
+Visual direction is governed by `ART_DIRECTION.md`; the accepted Iteration-8B room and Iteration-8C authored Moss sprite vocabulary now live under `display/art/`. The next object-identity/stateful-affordance milestone is defined in `VISUAL_STYLE_OVERHAUL.md` / `ROADMAP.md`.
 
 ## Evaluate
 

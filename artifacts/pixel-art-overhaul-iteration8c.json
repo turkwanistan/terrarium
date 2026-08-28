@@ -1,0 +1,38 @@
+{
+  "acceptance": {
+    "all_regressions_pass": true,
+    "authoritative_simulation_unchanged": true,
+    "canonical_contact_readable": true,
+    "carried_objects_attached_and_contacts_coherent": true,
+    "four_frame_locomotion_planted": true,
+    "major_poses_authored": true,
+    "pixel_native_deterministic_temporal_contracts_intact": true,
+    "quiet_actions_distinct_without_fidget_noise": true,
+    "room_palette_scale_depth_integration": true,
+    "sleep_wake_integrated_with_nook": true,
+    "specific_coherent_silhouette": true
+  },
+  "authored_art_sha256": "a7f940c4f4d2b38849c1c9f5b2a6b453a2d2453027924bc24282da6fd2285e87",
+  "authored_asset_count": 60,
+  "authoritative_simulation_unchanged": true,
+  "behavior_rules": "terrarium-rules-v6-situational-attention",
+  "checkpoint": "Pixel-Art Overhaul \u2014 Iteration 8C: Moss Sprite Overhaul",
+  "evidence": {
+    "art_direction_fixtures": "artifacts/iteration8c-art-direction-fixtures.json",
+    "art_direction_matrix": "artifacts/iteration8c-art-direction-matrix.json",
+    "browser_uat": "artifacts/pixel-art-overhaul-iteration8c-browser-uat.json",
+    "regression_matrix": "artifacts/pixel-art-overhaul-iteration8c-regression-matrix.json"
+  },
+  "gen18": "NO",
+  "moss_authored_asset_count": 46,
+  "next": "Iteration 8D \u2014 Object Identity and Stateful Affordances",
+  "renderer_js_sha256": "a0f49cd9f58e8962f609369b9c6e0032b65fcf5aa8fbad63d128889415ac220a",
+  "schema": "terrarium.pixel-art-overhaul-iteration8c.v1",
+  "seed": 1701,
+  "semantic_frame_sha256": "e64af0693418973eab51a4f154c375399331fa4117f8168a083ab9296b9a1102",
+  "situational_event_schema": "terrarium.situational-events.v1",
+  "snapshot": "20260828T030258821895Z-pixel-art-overhaul-iteration8c",
+  "spatial_schema": "terrarium.spatial.v1",
+  "status": "ACCEPTED",
+  "tick": 10080
+}

@@ -1,0 +1,66 @@
+{
+  "authored_art_validation": {
+    "manifest_assets": 60,
+    "moss_assets": 46,
+    "passed": true
+  },
+  "authoritative_simulation_diff": {
+    "baseline_commit": "06b6b86",
+    "changed_files": [],
+    "files": [
+      "terrarium/engine.py",
+      "terrarium/models.py",
+      "terrarium/frame.py",
+      "terrarium/spatial.py",
+      "terrarium/events.py",
+      "terrarium/situations.py",
+      "terrarium/store.py",
+      "terrarium/replay.py"
+    ],
+    "passed": true
+  },
+  "browser_uat": {
+    "artifact": "artifacts/pixel-art-overhaul-iteration8c-browser-uat.json",
+    "passed": true
+  },
+  "evaluators": {
+    "pixel-art-overhaul-iteration8c-behavior-seed1701.json": true,
+    "pixel-art-overhaul-iteration8c-behavior-seed1702.json": true,
+    "pixel-art-overhaul-iteration8c-behavior-seed42.json": true,
+    "pixel-art-overhaul-iteration8c-behavior-seed999.json": true,
+    "pixel-art-overhaul-iteration8c-coherence-seed1701.json": true,
+    "pixel-art-overhaul-iteration8c-coherence-seed1702.json": true,
+    "pixel-art-overhaul-iteration8c-coherence-seed42.json": true,
+    "pixel-art-overhaul-iteration8c-coherence-seed999.json": true,
+    "pixel-art-overhaul-iteration8c-habits-seed1701.json": true,
+    "pixel-art-overhaul-iteration8c-habits-seed1702.json": true,
+    "pixel-art-overhaul-iteration8c-habits-seed42.json": true,
+    "pixel-art-overhaul-iteration8c-habits-seed999.json": true,
+    "pixel-art-overhaul-iteration8c-repertoire.json": true,
+    "pixel-art-overhaul-iteration8c-situations.json": true,
+    "pixel-art-overhaul-iteration8c-spatial-seed1701.json": true,
+    "pixel-art-overhaul-iteration8c-spatial-seed1702.json": true,
+    "pixel-art-overhaul-iteration8c-spatial-seed42.json": true,
+    "pixel-art-overhaul-iteration8c-spatial-seed999.json": true,
+    "pixel-art-overhaul-iteration8c-technical.json": true
+  },
+  "javascript_syntax": {
+    "passed": true
+  },
+  "passed": true,
+  "pytest": {
+    "passed": true,
+    "tests": 47
+  },
+  "python_3_10_grammar": {
+    "passed": true,
+    "sources": 35
+  },
+  "schema": "terrarium.pixel-art-overhaul-iteration8c-regression-matrix.v1",
+  "semantic_frame": {
+    "matches_iteration8b": true,
+    "seed": 1701,
+    "sha256": "e64af0693418973eab51a4f154c375399331fa4117f8168a083ab9296b9a1102",
+    "tick": 10080
+  }
+}

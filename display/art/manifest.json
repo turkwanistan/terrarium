@@ -1,24 +1,375 @@
 {
   "schema": "terrarium.art-manifest.v1",
-  "art_surface": [400, 240],
+  "art_surface": [
+    400,
+    240
+  ],
   "tile_size": 16,
-  "grid": [25, 15],
+  "grid": [
+    25,
+    15
+  ],
   "palette_source": "palettes/materials.json",
   "assets": [
-    {"id": "structure.room-shell", "kind": "structure", "path": "tiles/room-shell.json", "layer": "BACK"},
-    {"id": "tile.floor-detail", "kind": "tile", "path": "tiles/floor-detail.json", "layer": "SURFACE"},
-    {"id": "environment.window-view", "kind": "environment", "path": "environment/window-view.json", "layer": "BACK"},
-    {"id": "structure.window-alcove", "kind": "structure", "path": "props/window-alcove.json", "layer": "STRUCTURE"},
-    {"id": "structure.sleeping-nook", "kind": "structure", "path": "props/sleeping-nook.json", "layer": "STRUCTURE"},
-    {"id": "surface.living-rug", "kind": "tile", "path": "tiles/living-rug.json", "layer": "SURFACE"},
-    {"id": "structure.collection-shelf", "kind": "structure", "path": "props/collection-shelf.json", "layer": "STRUCTURE"},
-    {"id": "structure.activity-desk", "kind": "structure", "path": "props/activity-desk.json", "layer": "STRUCTURE"},
-    {"id": "environment.desk-plant", "kind": "environment", "path": "environment/desk-plant.json", "layer": "STRUCTURE"},
-    {"id": "prop.water-bowl", "kind": "prop", "path": "props/water-bowl.json", "layer": "WORLD"},
-    {"id": "prop.food-bowl", "kind": "prop", "path": "props/food-bowl.json", "layer": "WORLD"},
-    {"id": "front.collection-shelf-lips", "kind": "structure", "path": "props/collection-shelf-front.json", "layer": "FRONT"},
-    {"id": "front.activity-desk-lip", "kind": "structure", "path": "props/activity-desk-front.json", "layer": "FRONT"},
-    {"id": "front.window-perch", "kind": "structure", "path": "props/window-perch-front.json", "layer": "FRONT"},
-    {"id": "moss.idle", "kind": "moss", "path": "moss/idle.json", "layer": "ACTORS"}
+    {
+      "id": "structure.room-shell",
+      "kind": "structure",
+      "path": "tiles/room-shell.json",
+      "layer": "BACK"
+    },
+    {
+      "id": "tile.floor-detail",
+      "kind": "tile",
+      "path": "tiles/floor-detail.json",
+      "layer": "SURFACE"
+    },
+    {
+      "id": "environment.window-view",
+      "kind": "environment",
+      "path": "environment/window-view.json",
+      "layer": "BACK"
+    },
+    {
+      "id": "structure.window-alcove",
+      "kind": "structure",
+      "path": "props/window-alcove.json",
+      "layer": "STRUCTURE"
+    },
+    {
+      "id": "structure.sleeping-nook",
+      "kind": "structure",
+      "path": "props/sleeping-nook.json",
+      "layer": "STRUCTURE"
+    },
+    {
+      "id": "surface.living-rug",
+      "kind": "tile",
+      "path": "tiles/living-rug.json",
+      "layer": "SURFACE"
+    },
+    {
+      "id": "structure.collection-shelf",
+      "kind": "structure",
+      "path": "props/collection-shelf.json",
+      "layer": "STRUCTURE"
+    },
+    {
+      "id": "structure.activity-desk",
+      "kind": "structure",
+      "path": "props/activity-desk.json",
+      "layer": "STRUCTURE"
+    },
+    {
+      "id": "environment.desk-plant",
+      "kind": "environment",
+      "path": "environment/desk-plant.json",
+      "layer": "STRUCTURE"
+    },
+    {
+      "id": "prop.water-bowl",
+      "kind": "prop",
+      "path": "props/water-bowl.json",
+      "layer": "WORLD"
+    },
+    {
+      "id": "prop.food-bowl",
+      "kind": "prop",
+      "path": "props/food-bowl.json",
+      "layer": "WORLD"
+    },
+    {
+      "id": "front.collection-shelf-lips",
+      "kind": "structure",
+      "path": "props/collection-shelf-front.json",
+      "layer": "FRONT"
+    },
+    {
+      "id": "front.activity-desk-lip",
+      "kind": "structure",
+      "path": "props/activity-desk-front.json",
+      "layer": "FRONT"
+    },
+    {
+      "id": "front.window-perch",
+      "kind": "structure",
+      "path": "props/window-perch-front.json",
+      "layer": "FRONT"
+    },
+    {
+      "id": "moss.idle",
+      "kind": "moss",
+      "path": "moss/idle.json",
+      "layer": "ACTORS"
+    },
+    {
+      "id": "moss.walk.0",
+      "kind": "moss",
+      "path": "moss/walk-0.json",
+      "layer": "ACTORS"
+    },
+    {
+      "id": "moss.walk.1",
+      "kind": "moss",
+      "path": "moss/walk-1.json",
+      "layer": "ACTORS"
+    },
+    {
+      "id": "moss.walk.2",
+      "kind": "moss",
+      "path": "moss/walk-2.json",
+      "layer": "ACTORS"
+    },
+    {
+      "id": "moss.walk.3",
+      "kind": "moss",
+      "path": "moss/walk-3.json",
+      "layer": "ACTORS"
+    },
+    {
+      "id": "moss.inspect.anticipate",
+      "kind": "moss",
+      "path": "moss/inspect-anticipate.json",
+      "layer": "ACTORS"
+    },
+    {
+      "id": "moss.inspect.contact",
+      "kind": "moss",
+      "path": "moss/inspect-contact.json",
+      "layer": "ACTORS"
+    },
+    {
+      "id": "moss.inspect.hold",
+      "kind": "moss",
+      "path": "moss/inspect-hold.json",
+      "layer": "ACTORS"
+    },
+    {
+      "id": "moss.inspect.recover",
+      "kind": "moss",
+      "path": "moss/inspect-recover.json",
+      "layer": "ACTORS"
+    },
+    {
+      "id": "moss.nudge.anticipate",
+      "kind": "moss",
+      "path": "moss/nudge-anticipate.json",
+      "layer": "ACTORS"
+    },
+    {
+      "id": "moss.nudge.contact",
+      "kind": "moss",
+      "path": "moss/nudge-contact.json",
+      "layer": "ACTORS"
+    },
+    {
+      "id": "moss.nudge.press",
+      "kind": "moss",
+      "path": "moss/nudge-press.json",
+      "layer": "ACTORS"
+    },
+    {
+      "id": "moss.nudge.hold",
+      "kind": "moss",
+      "path": "moss/nudge-hold.json",
+      "layer": "ACTORS"
+    },
+    {
+      "id": "moss.nudge.recover",
+      "kind": "moss",
+      "path": "moss/nudge-recover.json",
+      "layer": "ACTORS"
+    },
+    {
+      "id": "moss.pickup.anticipate",
+      "kind": "moss",
+      "path": "moss/pickup-anticipate.json",
+      "layer": "ACTORS"
+    },
+    {
+      "id": "moss.pickup.contact",
+      "kind": "moss",
+      "path": "moss/pickup-contact.json",
+      "layer": "ACTORS"
+    },
+    {
+      "id": "moss.pickup.lift",
+      "kind": "moss",
+      "path": "moss/pickup-lift.json",
+      "layer": "ACTORS"
+    },
+    {
+      "id": "moss.pickup.hold",
+      "kind": "moss",
+      "path": "moss/pickup-hold.json",
+      "layer": "ACTORS"
+    },
+    {
+      "id": "moss.carry",
+      "kind": "moss",
+      "path": "moss/carry.json",
+      "layer": "ACTORS"
+    },
+    {
+      "id": "moss.place.hold",
+      "kind": "moss",
+      "path": "moss/place-hold.json",
+      "layer": "ACTORS"
+    },
+    {
+      "id": "moss.place.lower",
+      "kind": "moss",
+      "path": "moss/place-lower.json",
+      "layer": "ACTORS"
+    },
+    {
+      "id": "moss.place.contact",
+      "kind": "moss",
+      "path": "moss/place-contact.json",
+      "layer": "ACTORS"
+    },
+    {
+      "id": "moss.place.release",
+      "kind": "moss",
+      "path": "moss/place-release.json",
+      "layer": "ACTORS"
+    },
+    {
+      "id": "moss.place.recover",
+      "kind": "moss",
+      "path": "moss/place-recover.json",
+      "layer": "ACTORS"
+    },
+    {
+      "id": "moss.loaf",
+      "kind": "moss",
+      "path": "moss/loaf.json",
+      "layer": "ACTORS"
+    },
+    {
+      "id": "moss.rest",
+      "kind": "moss",
+      "path": "moss/rest.json",
+      "layer": "ACTORS"
+    },
+    {
+      "id": "moss.groom.start",
+      "kind": "moss",
+      "path": "moss/groom-start.json",
+      "layer": "ACTORS"
+    },
+    {
+      "id": "moss.groom.contact",
+      "kind": "moss",
+      "path": "moss/groom-contact.json",
+      "layer": "ACTORS"
+    },
+    {
+      "id": "moss.groom.hold",
+      "kind": "moss",
+      "path": "moss/groom-hold.json",
+      "layer": "ACTORS"
+    },
+    {
+      "id": "moss.groom.recover",
+      "kind": "moss",
+      "path": "moss/groom-recover.json",
+      "layer": "ACTORS"
+    },
+    {
+      "id": "moss.stretch.ready",
+      "kind": "moss",
+      "path": "moss/stretch-ready.json",
+      "layer": "ACTORS"
+    },
+    {
+      "id": "moss.stretch.extend",
+      "kind": "moss",
+      "path": "moss/stretch-extend.json",
+      "layer": "ACTORS"
+    },
+    {
+      "id": "moss.stretch.hold",
+      "kind": "moss",
+      "path": "moss/stretch-hold.json",
+      "layer": "ACTORS"
+    },
+    {
+      "id": "moss.stretch.recover",
+      "kind": "moss",
+      "path": "moss/stretch-recover.json",
+      "layer": "ACTORS"
+    },
+    {
+      "id": "moss.react",
+      "kind": "moss",
+      "path": "moss/react.json",
+      "layer": "ACTORS"
+    },
+    {
+      "id": "moss.window.ready",
+      "kind": "moss",
+      "path": "moss/window-ready.json",
+      "layer": "ACTORS"
+    },
+    {
+      "id": "moss.window.watch",
+      "kind": "moss",
+      "path": "moss/window-watch.json",
+      "layer": "ACTORS"
+    },
+    {
+      "id": "moss.sleep.settle0",
+      "kind": "moss",
+      "path": "moss/sleep-settle0.json",
+      "layer": "ACTORS"
+    },
+    {
+      "id": "moss.sleep.settle1",
+      "kind": "moss",
+      "path": "moss/sleep-settle1.json",
+      "layer": "ACTORS"
+    },
+    {
+      "id": "moss.sleep.settle2",
+      "kind": "moss",
+      "path": "moss/sleep-settle2.json",
+      "layer": "ACTORS"
+    },
+    {
+      "id": "moss.sleep.settle3",
+      "kind": "moss",
+      "path": "moss/sleep-settle3.json",
+      "layer": "ACTORS"
+    },
+    {
+      "id": "moss.sleep.curled",
+      "kind": "moss",
+      "path": "moss/sleep-curled.json",
+      "layer": "ACTORS"
+    },
+    {
+      "id": "moss.wake.0",
+      "kind": "moss",
+      "path": "moss/wake-0.json",
+      "layer": "ACTORS"
+    },
+    {
+      "id": "moss.wake.1",
+      "kind": "moss",
+      "path": "moss/wake-1.json",
+      "layer": "ACTORS"
+    },
+    {
+      "id": "moss.wake.2",
+      "kind": "moss",
+      "path": "moss/wake-2.json",
+      "layer": "ACTORS"
+    },
+    {
+      "id": "moss.wake.3",
+      "kind": "moss",
+      "path": "moss/wake-3.json",
+      "layer": "ACTORS"
+    }
   ]
 }

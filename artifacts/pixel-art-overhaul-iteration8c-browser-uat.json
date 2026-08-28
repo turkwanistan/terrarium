@@ -1,0 +1,206 @@
+{
+  "attachment": {
+    "carried_walk": {
+      "all_have_rendered_object_coordinates": true,
+      "attached_samples": 11,
+      "relative_offsets": [
+        [
+          -22,
+          -4
+        ],
+        [
+          22,
+          -4
+        ]
+      ]
+    },
+    "passed": true,
+    "pickup": {
+      "all_have_rendered_object_coordinates": true,
+      "attached_samples": 6,
+      "relative_offsets": [
+        [
+          22,
+          -4
+        ]
+      ]
+    }
+  },
+  "continuity": {
+    "jump_px": 0,
+    "passed": true
+  },
+  "determinism": {
+    "exact_repeat": true,
+    "first_hash": "fnv1a32:3ea5ca55",
+    "repeat_hash": "fnv1a32:3ea5ca55",
+    "scenario": "art_day_clear_fresh_idle"
+  },
+  "environment": {
+    "art_surface": [
+      400,
+      240
+    ],
+    "benign_warning_observed": true,
+    "canonical_runtime_used": false,
+    "console_errors": 0,
+    "image_smoothing": false,
+    "integer_scale": 2,
+    "isolated_data_dir": "/tmp/terrarium-iteration8c-uat",
+    "production_renderer": "display/web/app.js",
+    "viewport": [
+      800,
+      480
+    ]
+  },
+  "evidence_dir": "artifacts/iteration8c-browser-evidence",
+  "passed": true,
+  "raf": {
+    "duration_ms": 1816.6,
+    "frames": 110,
+    "interval_ms": {
+      "max": 16.8,
+      "min": 16.6,
+      "over_34ms": 0,
+      "over_50ms": 0,
+      "p50": 16.7,
+      "p95": 16.7
+    },
+    "passed": true
+  },
+  "schema": "terrarium.pixel-art-overhaul-iteration8c-browser-uat.v1",
+  "sequences": {
+    "carried_walk": {
+      "distinct_rasters": 7,
+      "max_scale2x_error_blocks": 0,
+      "samples": 11
+    },
+    "event_bird_engage": {
+      "distinct_rasters": 7,
+      "max_scale2x_error_blocks": 0,
+      "samples": 11
+    },
+    "event_moth_engage": {
+      "distinct_rasters": 6,
+      "max_scale2x_error_blocks": 0,
+      "samples": 11
+    },
+    "event_sunlight_engage": {
+      "distinct_rasters": 7,
+      "max_scale2x_error_blocks": 0,
+      "samples": 11
+    },
+    "event_thunder_react": {
+      "distinct_rasters": 10,
+      "max_scale2x_error_blocks": 0,
+      "samples": 11
+    },
+    "groom": {
+      "distinct_rasters": 4,
+      "max_scale2x_error_blocks": 0,
+      "samples": 11
+    },
+    "inspect_object": {
+      "distinct_rasters": 5,
+      "max_scale2x_error_blocks": 0,
+      "samples": 11
+    },
+    "left_walk": {
+      "distinct_rasters": 7,
+      "max_scale2x_error_blocks": 0,
+      "samples": 11
+    },
+    "loaf": {
+      "distinct_rasters": 3,
+      "max_scale2x_error_blocks": 0,
+      "samples": 11
+    },
+    "object_nudge": {
+      "distinct_rasters": 6,
+      "max_scale2x_error_blocks": 0,
+      "samples": 11
+    },
+    "object_pickup": {
+      "distinct_rasters": 4,
+      "max_scale2x_error_blocks": 0,
+      "samples": 11
+    },
+    "object_placement": {
+      "distinct_rasters": 7,
+      "max_scale2x_error_blocks": 0,
+      "samples": 11
+    },
+    "right_walk": {
+      "distinct_rasters": 7,
+      "max_scale2x_error_blocks": 0,
+      "samples": 11
+    },
+    "sleep_transition": {
+      "distinct_rasters": 8,
+      "max_scale2x_error_blocks": 0,
+      "samples": 11
+    },
+    "stretch": {
+      "distinct_rasters": 6,
+      "max_scale2x_error_blocks": 0,
+      "samples": 11
+    },
+    "wake_exit": {
+      "distinct_rasters": 6,
+      "max_scale2x_error_blocks": 0,
+      "samples": 11
+    },
+    "waking": {
+      "distinct_rasters": 6,
+      "max_scale2x_error_blocks": 0,
+      "samples": 11
+    },
+    "weather_reaction": {
+      "distinct_rasters": 3,
+      "max_scale2x_error_blocks": 0,
+      "samples": 11
+    },
+    "window_transition": {
+      "distinct_rasters": 5,
+      "max_scale2x_error_blocks": 0,
+      "samples": 11
+    }
+  },
+  "static_contexts": {
+    "art_dawn_clear_fresh_idle": {
+      "pixel_hash": "fnv1a32:a12957cd",
+      "scale2x_error_blocks": 0
+    },
+    "art_day_clear_fresh_idle": {
+      "pixel_hash": "fnv1a32:3ea5ca55",
+      "scale2x_error_blocks": 0
+    },
+    "art_day_clear_lived_idle": {
+      "pixel_hash": "fnv1a32:beb0276d",
+      "scale2x_error_blocks": 0
+    },
+    "art_dusk_mist_fresh_idle": {
+      "pixel_hash": "fnv1a32:9e94a1cd",
+      "scale2x_error_blocks": 0
+    },
+    "art_night_rain_fresh_idle": {
+      "pixel_hash": "fnv1a32:926fa625",
+      "scale2x_error_blocks": 0
+    },
+    "art_night_rain_lived_idle": {
+      "pixel_hash": "fnv1a32:1a7a813d",
+      "scale2x_error_blocks": 0
+    }
+  },
+  "subjective_review": {
+    "accepted": true,
+    "findings": [
+      "Moss reads as a discrete authored protagonist rather than runtime body-part construction.",
+      "Four-frame locomotion preserves planted contact while authoritative route interpolation remains continuous.",
+      "Inspect/nudge/pickup/place communicate anticipation/contact/hold/recovery without moving objects before canonical state supports it.",
+      "Loaf/groom/stretch/window/sleep/wake have distinct silhouettes without constant fidget animation.",
+      "Curled sleep remains physically integrated with the accepted sleeping nook and foreground bedding overlap.",
+      "Moss remains legible across dawn/day/dusk/night, rain/mist, lived-in history, and situational-event contexts."
+    ]
+  }
+}

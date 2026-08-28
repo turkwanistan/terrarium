@@ -4,24 +4,24 @@ Terrarium is a normal product built after the accepted Self-Building Computer Ge
 
 ## Current checkpoint
 
-**Pixel-Art Overhaul — Iteration 8B: Room Recomposition**
+**Pixel-Art Overhaul — Iteration 8C: Moss Sprite Overhaul**
 
-- history: `history/2026-08-27-pixel-art-overhaul-iteration8b.md`
-- acceptance: `artifacts/pixel-art-overhaul-iteration8b.json`
-- regression matrix: `artifacts/pixel-art-overhaul-iteration8b-regression-matrix.json`
-- browser UAT: `artifacts/pixel-art-overhaul-iteration8b-browser-uat.json`
-- art-direction matrix: `artifacts/iteration8b-art-direction-matrix.json`
-- snapshot: `snapshots/dev/20260828T023312695923Z-pixel-art-overhaul-iteration8b`
+- history: `history/2026-08-27-pixel-art-overhaul-iteration8c.md`
+- acceptance: `artifacts/pixel-art-overhaul-iteration8c.json`
+- regression matrix: `artifacts/pixel-art-overhaul-iteration8c-regression-matrix.json`
+- browser UAT: `artifacts/pixel-art-overhaul-iteration8c-browser-uat.json`
+- art-direction matrix: `artifacts/iteration8c-art-direction-matrix.json`
+- snapshot: `snapshots/dev/20260828T030258821895Z-pixel-art-overhaul-iteration8c`
 - seed/tick: **1701 / 10080**
 - semantic frame SHA256: `e64af0693418973eab51a4f154c375399331fa4117f8168a083ab9296b9a1102`
-- renderer JS SHA256: `e0ad1ddeeb85b0bf23aba987e88394d10f58a641e3da2e398730238f8bf52d10`
-- authored-art tree SHA256: `daaf4362afe7261e0bece29c7561aeb03333620bef5030898deeaec5d6f8ca96`
-- authored asset count: **15**
+- renderer JS SHA256: `a0f49cd9f58e8962f609369b9c6e0032b65fcf5aa8fbad63d128889415ac220a`
+- authored-art tree SHA256: `a7f940c4f4d2b38849c1c9f5b2a6b453a2d2453027924bc24282da6fd2285e87`
+- authored asset count: **60** (**46 Moss assets**)
 - behavior rules remain: `terrarium-rules-v6-situational-attention`
 - situational events remain: `terrarium.situational-events.v1`
 - spatial schema remains: `terrarium.spatial.v1`
 
-Iteration 8B is a renderer/art-composition checkpoint. Its seed-1701/tick-10080 semantic frame hash is identical to accepted Iterations 7 and 8A, proving authoritative simulation state remained unchanged.
+Iteration 8C is a renderer/art checkpoint. Moss now uses authored low-frame sprites for the accepted action vocabulary; JavaScript selects/stages those assets from canonical state, with only bounded target-dependent contact reach remaining procedural. The seed-1701/tick-10080 semantic frame hash remains identical to accepted Iterations 7/8A/8B, proving authoritative simulation state remained unchanged.
 
 Read `STATUS.md`, `ART_DIRECTION.md`, `VISUAL_STYLE_OVERHAUL.md`, `ROADMAP.md`, `plan.md`, `terrarium.md`, and the latest history entry before editing. For renderer work, also inspect `display/art/manifest.json`, `display/art/palettes/materials.json`, representative authored assets, and `display/web/app.js`.
 
@@ -34,7 +34,7 @@ Read `STATUS.md`, `ART_DIRECTION.md`, `VISUAL_STYLE_OVERHAUL.md`, `ROADMAP.md`, 
 - heartbeat: **3 real seconds**; world advance: **1 minute/heartbeat**; full day ~**72 real minutes**;
 - behavior rules: `terrarium-rules-v6-situational-attention`; RNG stream remains pinned to `terrarium-rules-v3-routine-coherence`; geometry remains `terrarium.spatial.v1`.
 
-## Accepted visual grammar after Iteration 8B
+## Accepted visual grammar after Iteration 8C
 
 The room now uses `display/art/` as the source of truth for its major static visual masses. The 16×16 / 25×15 art grid remains a composition grammar only; canonical movement, object positions, event sources, and interaction anchors remain continuous semantic coordinates.
 
@@ -54,7 +54,7 @@ Persistent history remains authoritative. Path wear, bedding compression, activi
 
 ## Behavioral law after Iteration 7
 
-Short-horizon routine coherence, long-horizon `terrarium.habits.v1`, Iteration-6 affordances, and Iteration-7 situational events remain authoritative and unchanged by 8A/8B.
+Short-horizon routine coherence, long-horizon `terrarium.habits.v1`, Iteration-6 affordances, and Iteration-7 situational events remain authoritative and unchanged by 8A/8B/8C.
 
 A world event is canonical state with a bounded lifecycle and source location. It may be unseen or ignored; it is not automatically a behavior command. Moss may ignore, orient, defer, rarely interrupt a low-commitment activity, approach, engage, and recover depending on current commitment, salience, recent repetition, and deterministic attention choice. High-commitment object/sleep activity is protected.
 
@@ -66,11 +66,10 @@ Object manipulation, habits, possession continuity, spatial authority, supported
 
 `ROADMAP.md` and `VISUAL_STYLE_OVERHAUL.md` are authoritative unless direct canonical-runtime UAT exposes a more severe concrete defect:
 
-1. **Iteration 8C — Moss Sprite Overhaul** — replace remaining procedural hero poses with true authored low-frame sprites while preserving current semantic actions/timing/contact authority.
-2. **Iteration 8D — Object Identity and Stateful Affordances** — resume behavior expansion with object-specific state transitions and matching authored visual variants.
-3. **Iteration 8E — Atmospheric World** — persistent non-commanding ambient animation, richer window life, local warm lighting, and stronger weather mood.
-4. **Iteration 8F — Seasonal Terrarium** — add a slow canonical seasonal timescale and coordinated long-horizon visual transformation.
-5. **Iteration 9 — Emergent Situations and Consequence Memory** — compose events, object state, arrangements, habits, and prior consequences into later opportunities.
+1. **Iteration 8D — Object Identity and Stateful Affordances** — resume behavior expansion with object-specific state transitions and matching authored visual variants.
+2. **Iteration 8E — Atmospheric World** — persistent non-commanding ambient animation, richer window life, local warm lighting, and stronger weather mood.
+3. **Iteration 8F — Seasonal Terrarium** — add a slow canonical seasonal timescale and coordinated long-horizon visual transformation.
+4. **Iteration 9 — Emergent Situations and Consequence Memory** — compose events, object state, arrangements, habits, and prior consequences into later opportunities.
 
 The visual target is a hand-authored late-16-bit life-RPG diorama: strict low-resolution grammar, readable silhouettes, richer saturated natural color, clustered shading, pragmatic perspective, layered depth, selective low-frame acting, non-commanding environmental motion, warm/cool lighting, slow world transformation, and persistent visible history. This is a system-level target; do not copy external assets, exact palettes, characters, architecture, UI, or map structure.
 

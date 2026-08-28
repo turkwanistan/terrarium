@@ -102,3 +102,42 @@ def test_iteration8b_room_recomposition_is_authored_and_layered():
     assert "room-zones" in js
     assert "room-surface-and-history" in js
     assert "world-atmosphere" in js
+
+
+def test_iteration8c_moss_action_vocabulary_is_authored_not_body_part_assembled():
+    manifest = _read(ART / "manifest.json")
+    entries = {entry["id"]: entry for entry in manifest["assets"]}
+    required = {
+        "moss.idle",
+        "moss.walk.0", "moss.walk.1", "moss.walk.2", "moss.walk.3",
+        "moss.inspect.anticipate", "moss.inspect.contact", "moss.inspect.hold", "moss.inspect.recover",
+        "moss.nudge.anticipate", "moss.nudge.contact", "moss.nudge.press", "moss.nudge.recover",
+        "moss.pickup.anticipate", "moss.pickup.contact", "moss.pickup.lift", "moss.pickup.hold",
+        "moss.carry",
+        "moss.place.hold", "moss.place.lower", "moss.place.contact", "moss.place.release", "moss.place.recover",
+        "moss.loaf", "moss.groom.start", "moss.groom.contact", "moss.groom.hold",
+        "moss.stretch.ready", "moss.stretch.extend", "moss.stretch.hold",
+        "moss.react", "moss.window.watch",
+        "moss.sleep.settle0", "moss.sleep.settle1", "moss.sleep.settle2", "moss.sleep.settle3", "moss.sleep.curled",
+        "moss.wake.0", "moss.wake.1", "moss.wake.2", "moss.wake.3",
+    }
+    assert required <= set(entries)
+    moss_entries = [entry for entry in manifest["assets"] if entry["kind"] == "moss"]
+    assert len(moss_entries) >= 40
+    for entry in moss_entries:
+        assert entry["layer"] == "ACTORS"
+        asset = _read(ART / entry["path"])
+        assert asset.get("meta", {}).get("action")
+        assert asset.get("meta", {}).get("mirroring") == "horizontal"
+
+    js = (ROOT / "display" / "web" / "app.js").read_text(encoding="utf-8")
+    assert "function mossFrameAsset" in js
+    assert "drawAuthoredAsset(assetId,x,baseY,paletteName" in js
+    assert "function drawMossContactReach" in js
+    assert "function body(" not in js
+    assert "function head(" not in js
+    assert "function plantedLegs(" not in js
+    assert "function walkLegs(" not in js
+    assert "function tail(" not in js
+    assert "quiet-breathing" not in js
+    assert "breathStep" not in js

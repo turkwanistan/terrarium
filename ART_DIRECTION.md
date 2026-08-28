@@ -150,7 +150,7 @@ Prefer authored sprite frames over procedural body-part deformation. Meaningful 
 
 Required hero-pose vocabulary:
 
-- idle/rest: compact planted stance with restrained breathing/ear change;
+- idle/rest: compact planted stance; stillness is valid and no random breathing/ear/tail fidget loop is required;
 - locomotion: four readable contact/weight-shift keyframes, mirrored as appropriate, minimal vertical bob;
 - inspect/contact: target-facing anticipation, gaze/head shift, bounded forepaw/lean contact, hold/recovery;
 - nudge: visible paw/contact before authoritative displacement, then regard/recovery;
@@ -166,6 +166,14 @@ Required hero-pose vocabulary:
 - window watch: planted sill-facing observation with quiet posture.
 
 Favor pose choice, silhouette, contact, and frame timing over high frame counts or smooth tweening.
+
+Accepted Iteration 8C implementation:
+
+- 46 deterministic Moss assets live under `display/art/moss/`;
+- `display/web/app.js` selects/stages those assets from canonical state rather than constructing the finished dog from body-part rectangles;
+- four locomotion sprites carry the visible weight shift while semantic movement stays continuous;
+- exact target-dependent forepaw reach is the only bounded procedural Moss detail retained for canonical contact alignment;
+- whole-sprite idle/sleep bobbing is removed; final quiet/sleep holds may remain completely still.
 
 ## Depth and occlusion
 

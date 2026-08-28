@@ -87,13 +87,9 @@ def build_matrix() -> tuple[dict[str, Any], dict[str, Any]]:
         "art_night_rain_lived_idle": _static_scenario("art_night_rain_lived_idle", minute=1230, weather="rain", lived_steps=480),
     }
     borrowed = [
-        "left_walk",
-        "inspect_object",
-        "sleep_transition",
-        "event_sunlight_engage",
-        "event_bird_engage",
-        "event_thunder_react",
-        "event_moth_engage",
+        "left_walk", "right_walk", "inspect_object", "object_nudge", "object_pickup", "carried_walk", "object_placement",
+        "loaf", "groom", "stretch", "weather_reaction", "window_transition", "sleep_transition", "waking", "wake_exit",
+        "event_sunlight_engage", "event_bird_engage", "event_thunder_react", "event_moth_engage",
     ]
     for name in borrowed:
         scenarios[name] = base["scenarios"][name]
@@ -109,8 +105,10 @@ def build_matrix() -> tuple[dict[str, Any], dict[str, Any]]:
     rows = [
         {"group": "environment", "scenarios": ["art_dawn_clear_fresh_idle", "art_day_clear_fresh_idle", "art_dusk_mist_fresh_idle", "art_night_rain_fresh_idle"]},
         {"group": "history", "scenarios": ["art_day_clear_fresh_idle", "art_day_clear_lived_idle", "art_night_rain_fresh_idle", "art_night_rain_lived_idle"]},
-        {"group": "moss", "scenarios": ["art_day_clear_fresh_idle", "left_walk", "inspect_object", "sleep_transition"]},
-        {"group": "situations", "scenarios": ["event_sunlight_engage", "event_bird_engage", "event_thunder_react", "event_moth_engage"]},
+        {"group": "moss-locomotion", "scenarios": ["art_day_clear_fresh_idle", "left_walk", "right_walk", "carried_walk"]},
+        {"group": "moss-object-acting", "scenarios": ["inspect_object", "object_nudge", "object_pickup", "object_placement"]},
+        {"group": "moss-quiet-acting", "scenarios": ["loaf", "groom", "stretch", "window_transition", "sleep_transition", "waking", "wake_exit"]},
+        {"group": "situations", "scenarios": ["weather_reaction", "event_sunlight_engage", "event_bird_engage", "event_thunder_react", "event_moth_engage"]},
     ]
     renderer_path = ROOT / "display" / "web" / "app.js"
     renderer_sha = _sha_bytes(renderer_path.read_bytes())
