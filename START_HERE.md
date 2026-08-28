@@ -29,6 +29,10 @@ Iteration 9 adds delayed causal memory without a planner. Prior event aftermath,
 
 Read `STATUS.md`, `ART_DIRECTION.md`, `VISUAL_STYLE_OVERHAUL.md`, `ROADMAP.md`, `plan.md`, `terrarium.md`, and the latest history entry before editing.
 
+## Native visual inspection
+
+ChatGPT has verified pixel-level sight into the existing Optiplex Playwright browser. Use `Optiplex_MCP` for browser actions/state, then call `browser_screenshot` with **no filename**, `full_page=false`, PNG, and CSS scale whenever art quality, composition, clipping, sprite appearance, layout, or other rendered-pixel facts matter. A saved screenshot path is not equivalent evidence that the model saw the pixels. Single screenshots support frame-level judgment; temporal smoothness still requires repeated/time-separated evidence.
+
 ## Authority contracts
 
 - semantic/reference frame: **800×480**; pixel-native art surface: **400×240**, exact 2× nearest-neighbor, smoothing off;
