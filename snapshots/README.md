@@ -2,6 +2,14 @@
 
 Git-friendly visual milestones. The SVG is a lightweight capture-time thumbnail; run Terrarium and open `/snapshots/` for the same stored frame through the real Canvas renderer.
 
+## 20260828T123835255741Z-pixel-art-overhaul-iteration8e
+
+Atmospheric World: quiet deterministic ambient life, layered window motion, placed warm night light, and whole-scene weather mood.
+
+![20260828T123835255741Z-pixel-art-overhaul-iteration8e](dev/20260828T123835255741Z-pixel-art-overhaul-iteration8e/preview.svg)
+
+Deterministic tick `10080` · renderer `c46cc4722cad`
+
 ## 20260828T112207258140Z-pixel-art-overhaul-iteration8d
 
 Pixel-Art Overhaul Iteration 8D accepted: object identity, persistent stateful affordances, and authored object-state variants.

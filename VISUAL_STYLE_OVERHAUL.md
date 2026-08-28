@@ -462,11 +462,15 @@ Success criterion met: object identity now changes both what Moss can do and wha
 
 ### Iteration 8E — Atmospheric World
 
-**Status: NEXT.**
+**Status: ACCEPTED.**
 
-Add persistent non-commanding environmental motion, richer window life, placed local lighting, and stronger whole-scene weather mood.
+The production renderer now derives quiet persistent ambient presentation from canonical time/weather without adding behavioral state: phase-varied authored exterior foliage, restrained curtain motion, sparse rain/runoff and mist drift, localized daylight motes, hard-edged branch shadows, infrequent bowl shimmer, warm local night-light palette treatment, and whole-scene rain/mist palette mood. Five ambient assets were added, bringing the authored manifest to 78 assets.
 
-Success means the room remains visibly alive while Moss is still, without becoming busy or demanding.
+The accepted system deliberately excludes random particle fields, looping ambient creatures, premature snow, bloom/blur/gradients, and constant motion everywhere. Stillness remains valid. The seed-1701/tick-10080 semantic frame is unchanged from 8D.
+
+Accepted evidence: `history/2026-08-28-pixel-art-overhaul-iteration8e.md`; snapshot `20260828T123835255741Z-pixel-art-overhaul-iteration8e`; renderer `c46cc4722cade0585f7ef4af122e4801debaa50c6c8eddf054e511118f307b85`.
+
+Success criterion met: the accepted deterministic browser pack reaches **56 seconds** per atmosphere sequence, and a quiet 30–60 second observation now contains environmental change without requiring Moss to move or turning the room into a screensaver.
 
 ### Iteration 8F — Seasonal Terrarium
 

@@ -1,0 +1,67 @@
+{
+  "accepted": true,
+  "art_direction_fixtures": "artifacts/iteration8e-art-direction-fixtures.json",
+  "art_direction_matrix": "artifacts/iteration8e-art-direction-matrix.json",
+  "atmospheric_systems": [
+    "three authored window foliage depth layers with distinct held-step periods/phases",
+    "restrained authored curtain edge motion",
+    "rain pane traces and slow runoff with per-trace periods",
+    "discrete mist drift",
+    "localized clear-day light motes",
+    "slow hard-edged branch-shadow movement",
+    "infrequent water-bowl shimmer",
+    "hard-edged warm nook/desk night light using palette substitution",
+    "whole-scene finite rain/mist palette treatments"
+  ],
+  "authored_art_sha256": "5daacbe022e34b807d2008ee37037bef998b99abe77d8eafde157bcf599faae4",
+  "authored_assets": {
+    "moss": 46,
+    "new_ambient": 5,
+    "object_state": 13,
+    "total": 78
+  },
+  "authority": {
+    "ambient_clock_source": "canonical world_minutes plus deterministic fixture timestamp only in dev temporal mode",
+    "canonical_simulation_changed": false,
+    "canonical_weather_source": "terrarium.frame.v1 weather",
+    "terrarium_source_diff": []
+  },
+  "browser": {
+    "continuity_jump_px": 0,
+    "deterministic_repeat": true,
+    "long_observation_ms": 56000,
+    "passed": true,
+    "path": "artifacts/pixel-art-overhaul-iteration8e-browser-uat.json",
+    "raf": {
+      "duration_ms": 3016.6,
+      "frames": 182,
+      "interval_ms": {
+        "max": 16.8,
+        "min": 16.5,
+        "over_34ms": 0,
+        "over_50ms": 0,
+        "p50": 16.7,
+        "p95": 16.8
+      },
+      "passed": true
+    }
+  },
+  "checkpoint": "Pixel-Art Overhaul \u2014 Iteration 8E: Atmospheric World",
+  "deliberately_rejected_or_not_added": [
+    "drifting-leaf particle field",
+    "ambient distant bird/insect loop",
+    "snow without stronger seasonal authority",
+    "fireplace/flame animation",
+    "full-room random sparkle or motes",
+    "smooth gradients/bloom/fog masks"
+  ],
+  "gen18": false,
+  "next": "Iteration 8F \u2014 Seasonal Terrarium",
+  "regression_matrix": "artifacts/pixel-art-overhaul-iteration8e-regression-matrix.json",
+  "renderer_js_sha256": "c46cc4722cade0585f7ef4af122e4801debaa50c6c8eddf054e511118f307b85",
+  "schema": "terrarium.pixel-art-overhaul-iteration8e.v1",
+  "seed": 1701,
+  "semantic_frame_sha256": "e191850f3c454b926e9b4fe4355298be3ff5eb4ea351be6975fe7d45ab010f9d",
+  "snapshot": "20260828T123835255741Z-pixel-art-overhaul-iteration8e",
+  "tick": 10080
+}

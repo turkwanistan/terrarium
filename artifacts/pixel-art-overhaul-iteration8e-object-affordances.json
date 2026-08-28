@@ -1,0 +1,699 @@
+{
+  "all_passed": true,
+  "controlled_checks": {
+    "rolled_object_blocks_repeat_roll": true,
+    "rolling_and_delicate_differ": true,
+    "rumpled_thread_unlocks_nest": true
+  },
+  "object_affordance_schema": "terrarium.object-affordances.v1",
+  "results": {
+    "1701": {
+      "checks": {
+        "all_four_archetypes_interacted": true,
+        "delicate_and_keepsakes_never_nudged": true,
+        "display_state_exercised": true,
+        "no_illegal_nudges": true,
+        "object_schema_recorded": true,
+        "persistent_state_transitions_exercised": true,
+        "rolling_play_exercised": true,
+        "rolls_create_retrieval_chains": true,
+        "soft_tug_exercised": true,
+        "stateful_affordance_subsets_survive_long_run": true,
+        "tugs_create_nesting_chains": true
+      },
+      "metrics": {
+        "affordance_counts": {
+          "carry": 195,
+          "display": 14,
+          "inspect": 179,
+          "nest": 7,
+          "place": 181,
+          "retrieve": 14,
+          "roll": 14,
+          "tug": 7
+        },
+        "by_archetype": {
+          "delicate": {
+            "carry": 41,
+            "inspect": 35,
+            "place": 41
+          },
+          "keepsake": {
+            "carry": 46,
+            "display": 14,
+            "inspect": 40,
+            "place": 32
+          },
+          "rolling": {
+            "carry": 49,
+            "inspect": 50,
+            "place": 49,
+            "retrieve": 14,
+            "roll": 14
+          },
+          "soft_nesting": {
+            "carry": 59,
+            "inspect": 54,
+            "nest": 7,
+            "place": 59,
+            "tug": 7
+          }
+        },
+        "by_object": {
+          "acorn": {
+            "carry": 27,
+            "inspect": 32,
+            "place": 27,
+            "retrieve": 10,
+            "roll": 10
+          },
+          "amber_leaf": {
+            "carry": 41,
+            "inspect": 35,
+            "place": 41
+          },
+          "blue_stone": {
+            "carry": 22,
+            "inspect": 18,
+            "place": 22,
+            "retrieve": 4,
+            "roll": 4
+          },
+          "glass_star": {
+            "carry": 26,
+            "display": 6,
+            "inspect": 23,
+            "place": 20
+          },
+          "red_thread": {
+            "carry": 59,
+            "inspect": 54,
+            "nest": 7,
+            "place": 59,
+            "tug": 7
+          },
+          "shell": {
+            "carry": 20,
+            "display": 8,
+            "inspect": 17,
+            "place": 12
+          }
+        },
+        "decision_events": 2690,
+        "final_objects": {
+          "acorn": {
+            "archetype": "rolling",
+            "available_affordances": [
+              "inspect",
+              "carry",
+              "nudge"
+            ],
+            "interaction_state": "settled",
+            "state_transitions": 20,
+            "times_moved": 37,
+            "times_nudged": 10
+          },
+          "amber_leaf": {
+            "archetype": "delicate",
+            "available_affordances": [
+              "inspect",
+              "carry"
+            ],
+            "interaction_state": "handled",
+            "state_transitions": 19,
+            "times_moved": 41,
+            "times_nudged": 0
+          },
+          "blue_stone": {
+            "archetype": "rolling",
+            "available_affordances": [
+              "inspect",
+              "carry",
+              "nudge"
+            ],
+            "interaction_state": "settled",
+            "state_transitions": 8,
+            "times_moved": 26,
+            "times_nudged": 4
+          },
+          "glass_star": {
+            "archetype": "keepsake",
+            "available_affordances": [
+              "inspect",
+              "carry"
+            ],
+            "interaction_state": "handled",
+            "state_transitions": 12,
+            "times_moved": 26,
+            "times_nudged": 0
+          },
+          "red_thread": {
+            "archetype": "soft_nesting",
+            "available_affordances": [
+              "inspect",
+              "carry"
+            ],
+            "interaction_state": "loose",
+            "state_transitions": 21,
+            "times_moved": 66,
+            "times_nudged": 7
+          },
+          "shell": {
+            "archetype": "keepsake",
+            "available_affordances": [
+              "inspect",
+              "carry"
+            ],
+            "interaction_state": "handled",
+            "state_transitions": 16,
+            "times_moved": 20,
+            "times_nudged": 0
+          }
+        },
+        "illegal_nudges": 0,
+        "object_decisions": 611,
+        "roll_retrieve_within_two_rate": 1.0,
+        "tug_nest_within_two_rate": 0.857143
+      },
+      "passed": true
+    },
+    "1702": {
+      "checks": {
+        "all_four_archetypes_interacted": true,
+        "delicate_and_keepsakes_never_nudged": true,
+        "display_state_exercised": true,
+        "no_illegal_nudges": true,
+        "object_schema_recorded": true,
+        "persistent_state_transitions_exercised": true,
+        "rolling_play_exercised": true,
+        "rolls_create_retrieval_chains": true,
+        "soft_tug_exercised": true,
+        "stateful_affordance_subsets_survive_long_run": true,
+        "tugs_create_nesting_chains": true
+      },
+      "metrics": {
+        "affordance_counts": {
+          "carry": 185,
+          "display": 18,
+          "inspect": 178,
+          "nest": 6,
+          "place": 166,
+          "retrieve": 23,
+          "roll": 23,
+          "tug": 6
+        },
+        "by_archetype": {
+          "delicate": {
+            "carry": 40,
+            "inspect": 29,
+            "place": 40
+          },
+          "keepsake": {
+            "carry": 59,
+            "display": 18,
+            "inspect": 58,
+            "place": 41
+          },
+          "rolling": {
+            "carry": 46,
+            "inspect": 57,
+            "place": 46,
+            "retrieve": 23,
+            "roll": 23
+          },
+          "soft_nesting": {
+            "carry": 40,
+            "inspect": 34,
+            "nest": 6,
+            "place": 39,
+            "tug": 6
+          }
+        },
+        "by_object": {
+          "acorn": {
+            "carry": 24,
+            "inspect": 25,
+            "place": 24,
+            "retrieve": 10,
+            "roll": 10
+          },
+          "amber_leaf": {
+            "carry": 40,
+            "inspect": 29,
+            "place": 40
+          },
+          "blue_stone": {
+            "carry": 22,
+            "inspect": 32,
+            "place": 22,
+            "retrieve": 13,
+            "roll": 13
+          },
+          "glass_star": {
+            "carry": 38,
+            "display": 9,
+            "inspect": 39,
+            "place": 29
+          },
+          "red_thread": {
+            "carry": 40,
+            "inspect": 34,
+            "nest": 6,
+            "place": 39,
+            "tug": 6
+          },
+          "shell": {
+            "carry": 21,
+            "display": 9,
+            "inspect": 19,
+            "place": 12
+          }
+        },
+        "decision_events": 2710,
+        "final_objects": {
+          "acorn": {
+            "archetype": "rolling",
+            "available_affordances": [
+              "inspect",
+              "carry",
+              "nudge"
+            ],
+            "interaction_state": "settled",
+            "state_transitions": 20,
+            "times_moved": 34,
+            "times_nudged": 10
+          },
+          "amber_leaf": {
+            "archetype": "delicate",
+            "available_affordances": [
+              "inspect",
+              "carry"
+            ],
+            "interaction_state": "handled",
+            "state_transitions": 25,
+            "times_moved": 40,
+            "times_nudged": 0
+          },
+          "blue_stone": {
+            "archetype": "rolling",
+            "available_affordances": [
+              "inspect",
+              "carry",
+              "nudge"
+            ],
+            "interaction_state": "settled",
+            "state_transitions": 26,
+            "times_moved": 35,
+            "times_nudged": 13
+          },
+          "glass_star": {
+            "archetype": "keepsake",
+            "available_affordances": [
+              "inspect",
+              "carry"
+            ],
+            "interaction_state": "handled",
+            "state_transitions": 18,
+            "times_moved": 38,
+            "times_nudged": 0
+          },
+          "red_thread": {
+            "archetype": "soft_nesting",
+            "available_affordances": [
+              "inspect",
+              "carry"
+            ],
+            "interaction_state": "loose",
+            "state_transitions": 18,
+            "times_moved": 45,
+            "times_nudged": 6
+          },
+          "shell": {
+            "archetype": "keepsake",
+            "available_affordances": [
+              "inspect",
+              "carry"
+            ],
+            "interaction_state": "displayed",
+            "state_transitions": 17,
+            "times_moved": 21,
+            "times_nudged": 0
+          }
+        },
+        "illegal_nudges": 0,
+        "object_decisions": 605,
+        "roll_retrieve_within_two_rate": 1.0,
+        "tug_nest_within_two_rate": 1.0
+      },
+      "passed": true
+    },
+    "42": {
+      "checks": {
+        "all_four_archetypes_interacted": true,
+        "delicate_and_keepsakes_never_nudged": true,
+        "display_state_exercised": true,
+        "no_illegal_nudges": true,
+        "object_schema_recorded": true,
+        "persistent_state_transitions_exercised": true,
+        "rolling_play_exercised": true,
+        "rolls_create_retrieval_chains": true,
+        "soft_tug_exercised": true,
+        "stateful_affordance_subsets_survive_long_run": true,
+        "tugs_create_nesting_chains": true
+      },
+      "metrics": {
+        "affordance_counts": {
+          "carry": 188,
+          "display": 20,
+          "inspect": 193,
+          "nest": 7,
+          "place": 168,
+          "retrieve": 25,
+          "roll": 26,
+          "tug": 7
+        },
+        "by_archetype": {
+          "delicate": {
+            "carry": 31,
+            "inspect": 26,
+            "place": 31
+          },
+          "keepsake": {
+            "carry": 62,
+            "display": 20,
+            "inspect": 51,
+            "place": 42
+          },
+          "rolling": {
+            "carry": 48,
+            "inspect": 68,
+            "place": 48,
+            "retrieve": 25,
+            "roll": 26
+          },
+          "soft_nesting": {
+            "carry": 47,
+            "inspect": 48,
+            "nest": 7,
+            "place": 47,
+            "tug": 7
+          }
+        },
+        "by_object": {
+          "acorn": {
+            "carry": 34,
+            "inspect": 40,
+            "place": 34,
+            "retrieve": 11,
+            "roll": 12
+          },
+          "amber_leaf": {
+            "carry": 31,
+            "inspect": 26,
+            "place": 31
+          },
+          "blue_stone": {
+            "carry": 14,
+            "inspect": 28,
+            "place": 14,
+            "retrieve": 14,
+            "roll": 14
+          },
+          "glass_star": {
+            "carry": 26,
+            "display": 9,
+            "inspect": 20,
+            "place": 17
+          },
+          "red_thread": {
+            "carry": 47,
+            "inspect": 48,
+            "nest": 7,
+            "place": 47,
+            "tug": 7
+          },
+          "shell": {
+            "carry": 36,
+            "display": 11,
+            "inspect": 31,
+            "place": 25
+          }
+        },
+        "decision_events": 2747,
+        "final_objects": {
+          "acorn": {
+            "archetype": "rolling",
+            "available_affordances": [
+              "inspect",
+              "carry"
+            ],
+            "interaction_state": "rolled",
+            "state_transitions": 23,
+            "times_moved": 46,
+            "times_nudged": 12
+          },
+          "amber_leaf": {
+            "archetype": "delicate",
+            "available_affordances": [
+              "inspect",
+              "carry"
+            ],
+            "interaction_state": "handled",
+            "state_transitions": 13,
+            "times_moved": 31,
+            "times_nudged": 0
+          },
+          "blue_stone": {
+            "archetype": "rolling",
+            "available_affordances": [
+              "inspect",
+              "carry",
+              "nudge"
+            ],
+            "interaction_state": "settled",
+            "state_transitions": 28,
+            "times_moved": 28,
+            "times_nudged": 14
+          },
+          "glass_star": {
+            "archetype": "keepsake",
+            "available_affordances": [
+              "inspect",
+              "carry"
+            ],
+            "interaction_state": "handled",
+            "state_transitions": 18,
+            "times_moved": 26,
+            "times_nudged": 0
+          },
+          "red_thread": {
+            "archetype": "soft_nesting",
+            "available_affordances": [
+              "inspect",
+              "carry",
+              "nudge"
+            ],
+            "interaction_state": "loose",
+            "state_transitions": 21,
+            "times_moved": 54,
+            "times_nudged": 7
+          },
+          "shell": {
+            "archetype": "keepsake",
+            "available_affordances": [
+              "inspect",
+              "carry"
+            ],
+            "interaction_state": "handled",
+            "state_transitions": 22,
+            "times_moved": 36,
+            "times_nudged": 0
+          }
+        },
+        "illegal_nudges": 0,
+        "object_decisions": 634,
+        "roll_retrieve_within_two_rate": 0.961538,
+        "tug_nest_within_two_rate": 1.0
+      },
+      "passed": true
+    },
+    "999": {
+      "checks": {
+        "all_four_archetypes_interacted": true,
+        "delicate_and_keepsakes_never_nudged": true,
+        "display_state_exercised": true,
+        "no_illegal_nudges": true,
+        "object_schema_recorded": true,
+        "persistent_state_transitions_exercised": true,
+        "rolling_play_exercised": true,
+        "rolls_create_retrieval_chains": true,
+        "soft_tug_exercised": true,
+        "stateful_affordance_subsets_survive_long_run": true,
+        "tugs_create_nesting_chains": true
+      },
+      "metrics": {
+        "affordance_counts": {
+          "carry": 207,
+          "display": 19,
+          "inspect": 179,
+          "nest": 5,
+          "place": 188,
+          "retrieve": 20,
+          "roll": 20,
+          "tug": 5
+        },
+        "by_archetype": {
+          "delicate": {
+            "carry": 41,
+            "inspect": 34,
+            "place": 41
+          },
+          "keepsake": {
+            "carry": 65,
+            "display": 19,
+            "inspect": 50,
+            "place": 46
+          },
+          "rolling": {
+            "carry": 53,
+            "inspect": 54,
+            "place": 53,
+            "retrieve": 20,
+            "roll": 20
+          },
+          "soft_nesting": {
+            "carry": 48,
+            "inspect": 41,
+            "nest": 5,
+            "place": 48,
+            "tug": 5
+          }
+        },
+        "by_object": {
+          "acorn": {
+            "carry": 28,
+            "inspect": 32,
+            "place": 28,
+            "retrieve": 13,
+            "roll": 13
+          },
+          "amber_leaf": {
+            "carry": 41,
+            "inspect": 34,
+            "place": 41
+          },
+          "blue_stone": {
+            "carry": 25,
+            "inspect": 22,
+            "place": 25,
+            "retrieve": 7,
+            "roll": 7
+          },
+          "glass_star": {
+            "carry": 35,
+            "display": 9,
+            "inspect": 25,
+            "place": 26
+          },
+          "red_thread": {
+            "carry": 48,
+            "inspect": 41,
+            "nest": 5,
+            "place": 48,
+            "tug": 5
+          },
+          "shell": {
+            "carry": 30,
+            "display": 10,
+            "inspect": 25,
+            "place": 20
+          }
+        },
+        "decision_events": 2739,
+        "final_objects": {
+          "acorn": {
+            "archetype": "rolling",
+            "available_affordances": [
+              "inspect",
+              "carry",
+              "nudge"
+            ],
+            "interaction_state": "settled",
+            "state_transitions": 26,
+            "times_moved": 41,
+            "times_nudged": 13
+          },
+          "amber_leaf": {
+            "archetype": "delicate",
+            "available_affordances": [
+              "inspect",
+              "carry"
+            ],
+            "interaction_state": "handled",
+            "state_transitions": 25,
+            "times_moved": 41,
+            "times_nudged": 0
+          },
+          "blue_stone": {
+            "archetype": "rolling",
+            "available_affordances": [
+              "inspect",
+              "carry",
+              "nudge"
+            ],
+            "interaction_state": "settled",
+            "state_transitions": 14,
+            "times_moved": 32,
+            "times_nudged": 7
+          },
+          "glass_star": {
+            "archetype": "keepsake",
+            "available_affordances": [
+              "inspect",
+              "carry"
+            ],
+            "interaction_state": "handled",
+            "state_transitions": 18,
+            "times_moved": 35,
+            "times_nudged": 0
+          },
+          "red_thread": {
+            "archetype": "soft_nesting",
+            "available_affordances": [
+              "inspect",
+              "carry"
+            ],
+            "interaction_state": "loose",
+            "state_transitions": 15,
+            "times_moved": 53,
+            "times_nudged": 5
+          },
+          "shell": {
+            "archetype": "keepsake",
+            "available_affordances": [
+              "inspect",
+              "carry"
+            ],
+            "interaction_state": "handled",
+            "state_transitions": 20,
+            "times_moved": 30,
+            "times_nudged": 0
+          }
+        },
+        "illegal_nudges": 0,
+        "object_decisions": 643,
+        "roll_retrieve_within_two_rate": 1.0,
+        "tug_nest_within_two_rate": 1.0
+      },
+      "passed": true
+    }
+  },
+  "schema": "terrarium.object-affordance-evaluation.v1",
+  "seeds": [
+    1701,
+    1702,
+    42,
+    999
+  ],
+  "steps_per_seed": 10080
+}

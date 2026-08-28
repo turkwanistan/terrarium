@@ -1,0 +1,89 @@
+{
+  "schema": "terrarium.pixel-asset.v1",
+  "id": "environment.window-foliage-far",
+  "width": 104,
+  "height": 76,
+  "anchor": [
+    0,
+    0
+  ],
+  "runs": [
+    [
+      0,
+      55,
+      18,
+      4,
+      "leafDeep"
+    ],
+    [
+      4,
+      51,
+      14,
+      5,
+      "foliage"
+    ],
+    [
+      18,
+      58,
+      19,
+      4,
+      "mossDark"
+    ],
+    [
+      28,
+      54,
+      14,
+      5,
+      "foliage"
+    ],
+    [
+      42,
+      59,
+      17,
+      4,
+      "leafDeep"
+    ],
+    [
+      55,
+      56,
+      13,
+      4,
+      "moss"
+    ],
+    [
+      66,
+      60,
+      20,
+      4,
+      "mossDark"
+    ],
+    [
+      82,
+      55,
+      22,
+      5,
+      "leafDeep"
+    ],
+    [
+      90,
+      51,
+      14,
+      6,
+      "foliage"
+    ],
+    [
+      8,
+      45,
+      12,
+      3,
+      "mossDark"
+    ],
+    [
+      73,
+      47,
+      10,
+      3,
+      "mossDark"
+    ]
+  ]
+}

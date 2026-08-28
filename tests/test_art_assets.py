@@ -170,3 +170,34 @@ def test_iteration8d_objects_use_authored_state_variants():
     assert "drawAuthoredAsset(objectAssetId(o)" in js
     assert "o.kind==='stone'" not in js
     assert "o.kind==='thread'" not in js
+
+
+def test_iteration8e_atmosphere_is_authored_deterministic_and_presentation_only():
+    manifest = _read(ART / "manifest.json")
+    entries = {entry["id"]: entry for entry in manifest["assets"]}
+    required = {
+        "environment.window-foliage-far": "BACK",
+        "environment.window-foliage-mid": "BACK",
+        "environment.window-foliage-near": "BACK",
+        "environment.window-curtain-motion": "STRUCTURE",
+        "environment.nook-sconce": "STRUCTURE",
+    }
+    for asset_id, layer in required.items():
+        assert entries[asset_id]["kind"] == "environment"
+        assert entries[asset_id]["layer"] == layer
+
+    palette_bank = _read(ART / manifest["palette_source"])
+    assert set(palette_bank["weather_treatments"]) == {"rain", "mist"}
+    assert palette_bank["local_light_treatment"]["tint"].startswith("#")
+    assert palette_bank["weather_treatments"]["rain"]["role_strength"]["sky"] > palette_bank["weather_treatments"]["rain"]["role_strength"]["dog"]
+
+    js = (ROOT / "display" / "web" / "app.js").read_text(encoding="utf-8")
+    assert "AMBIENT_PATTERNS" in js and "RAIN_TRACES" in js and "LIGHT_MOTES" in js
+    assert "function ambientClockMs" in js and "function ambientStep" in js
+    assert "function drawWindowAmbientBack" in js
+    assert "function drawAmbientBranchShadow" in js
+    assert "function drawLocalLightAccents" in js
+    assert "ambient-window-foliage" in js and "ambient-rain-runoff" in js and "local-warm-light" in js
+    assert "Math.random" not in js and "Math.sin" not in js and "Math.cos" not in js
+    assert "createLinearGradient" not in js and "createRadialGradient" not in js
+    assert "globalAlpha" not in js and "rgba(" not in js

@@ -86,21 +86,15 @@ Acceptance: **49/49 tests**, 36-source Python-3.10 grammar, 73/73 asset validati
 
 Accepted evidence: `history/2026-08-28-pixel-art-overhaul-iteration8d.md`, `artifacts/pixel-art-overhaul-iteration8d.json`, `artifacts/pixel-art-overhaul-iteration8d-regression-matrix.json`, and snapshot `20260828T112207258140Z-pixel-art-overhaul-iteration8d`.
 
-## Next: Iteration 8E — Atmospheric World
+## Accepted Iteration 8E — Atmospheric World
 
-Make the habitat visibly alive even when Moss is still, without turning the screen into a particle show or making every environmental motion behaviorally significant.
+**Status: ACCEPTED.** The habitat now has persistent non-commanding ambient presentation derived from canonical time/weather rather than a new simulation subsystem. Five authored environment assets support three window-foliage depth layers, curtain motion, and a nook sconce; renderer timing adds phase-varied foliage, rain/runoff, mist drift, localized light motes, branch shadows, and water shimmer. Night uses hard-edged warm local palette treatment against the cool room, while rain/mist modify the whole-scene finite palette as well as the window.
 
-Requirements:
+The implementation is renderer/art/tooling-only: authoritative `terrarium/` source is unchanged and seed-1701/tick-10080 remains `e191850f3c454b926e9b4fe4355298be3ff5eb4ea351be6975fe7d45ab010f9d`, exactly matching accepted 8D. Ambient presentation carries no behavior command, persistent state, planner role, or event semantics.
 
-- add a persistent **non-commanding ambient-life** layer distinct from situational events;
-- candidate motion includes exterior foliage, curtain movement, pane runoff, leaf drift, dust in sunlight, plant cycles, water/bowl shimmer, distant birds/insects, snow, and moving branch shadow;
-- distribute/phase ambient loops so they do not all animate in sync;
-- keep ambient motion quieter than Moss and normally outside attention/behavior semantics;
-- add deterministic placed local lighting such as bedside/desk/window light where composition supports it;
-- achieve strong cool-night vs warm-interior contrast using hard-edged pixel-native light treatment, never bloom or smooth gradients;
-- make rain/mist affect whole-scene palette/light mood in addition to local window marks.
+Acceptance: **51/51 tests**, 37-source Python-3.10 grammar, 78/78 asset validation, dedicated atmosphere evaluation, 10,080-event technical exact replay, all four 10,080-step behavior/spatial/coherence/habit seed matrices, repertoire/situations/object-affordance regressions, exact-repeat 56-second production-browser UAT, **0 px** continuity, exact 2× raster output, and healthy RAF pacing all pass.
 
-Success means a quiet Moss can sit in a world that still feels alive, atmospheric, and temporally specific.
+Accepted evidence: `history/2026-08-28-pixel-art-overhaul-iteration8e.md`, `artifacts/pixel-art-overhaul-iteration8e.json`, `artifacts/pixel-art-overhaul-iteration8e-regression-matrix.json`, and snapshot `20260828T123835255741Z-pixel-art-overhaul-iteration8e`.
 
 ## Iteration 8F — Seasonal Terrarium
 

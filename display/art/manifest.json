@@ -448,6 +448,36 @@
       "kind": "object",
       "path": "objects/glass-star-displayed.json",
       "layer": "WORLD"
+    },
+    {
+      "id": "environment.window-foliage-far",
+      "kind": "environment",
+      "path": "environment/window-foliage-far.json",
+      "layer": "BACK"
+    },
+    {
+      "id": "environment.window-foliage-mid",
+      "kind": "environment",
+      "path": "environment/window-foliage-mid.json",
+      "layer": "BACK"
+    },
+    {
+      "id": "environment.window-foliage-near",
+      "kind": "environment",
+      "path": "environment/window-foliage-near.json",
+      "layer": "BACK"
+    },
+    {
+      "id": "environment.window-curtain-motion",
+      "kind": "environment",
+      "path": "environment/window-curtain-motion.json",
+      "layer": "STRUCTURE"
+    },
+    {
+      "id": "environment.nook-sconce",
+      "kind": "environment",
+      "path": "environment/nook-sconce.json",
+      "layer": "STRUCTURE"
     }
   ]
 }

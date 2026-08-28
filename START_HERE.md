@@ -4,29 +4,29 @@ Terrarium is a normal product built after the accepted Self-Building Computer Ge
 
 ## Current checkpoint
 
-**Pixel-Art Overhaul — Iteration 8D: Object Identity and Stateful Affordances**
+**Pixel-Art Overhaul — Iteration 8E: Atmospheric World**
 
-- history: `history/2026-08-28-pixel-art-overhaul-iteration8d.md`
-- acceptance: `artifacts/pixel-art-overhaul-iteration8d.json`
-- regression matrix: `artifacts/pixel-art-overhaul-iteration8d-regression-matrix.json`
-- browser UAT: `artifacts/pixel-art-overhaul-iteration8d-browser-uat.json`
-- object-affordance evaluation: `artifacts/pixel-art-overhaul-iteration8d-object-affordances.json`
-- art-direction matrix: `artifacts/iteration8d-art-direction-matrix.json`
-- snapshot: `snapshots/dev/20260828T112207258140Z-pixel-art-overhaul-iteration8d`
+- history: `history/2026-08-28-pixel-art-overhaul-iteration8e.md`
+- acceptance: `artifacts/pixel-art-overhaul-iteration8e.json`
+- regression matrix: `artifacts/pixel-art-overhaul-iteration8e-regression-matrix.json`
+- browser UAT: `artifacts/pixel-art-overhaul-iteration8e-browser-uat.json`
+- atmosphere evaluation: `artifacts/pixel-art-overhaul-iteration8e-atmosphere.json`
+- art-direction matrix: `artifacts/iteration8e-art-direction-matrix.json`
+- snapshot: `snapshots/dev/20260828T123835255741Z-pixel-art-overhaul-iteration8e`
 - seed/tick: **1701 / 10080**
 - semantic frame SHA256: `e191850f3c454b926e9b4fe4355298be3ff5eb4ea351be6975fe7d45ab010f9d`
-- renderer JS SHA256: `f8e12181a18c2616fdeb8dae1ee5a0453fab6ba3a5ab88912782e497e35cb701`
-- authored-art tree SHA256: `ed1fee4cd060519267d131837ab45772754108c1c2eaa4c9a9c65322bce08d9a`
-- authored asset count: **73** (**46 Moss / 13 object-state assets**)
+- renderer JS SHA256: `c46cc4722cade0585f7ef4af122e4801debaa50c6c8eddf054e511118f307b85`
+- authored-art tree SHA256: `5daacbe022e34b807d2008ee37037bef998b99abe77d8eafde157bcf599faae4`
+- authored asset count: **78** (**46 Moss / 13 object-state / 5 new ambient assets**)
 - behavior rules: `terrarium-rules-v7-object-identity`
 - object affordances: `terrarium.object-affordances.v1`
 - habits: `terrarium.habits.v1`
 - situational events: `terrarium.situational-events.v1`
 - spatial schema: `terrarium.spatial.v1`
 
-Iteration 8D is a behavior/state + authored-art checkpoint. Object identity is now canonical: rolling, soft-nesting, delicate, and keepsake objects expose materially different affordances; interactions can persistently change later possibilities; and the renderer selects matching authored state variants. The semantic frame hash intentionally changes from 8C because object archetype, interaction state, transition count, and available affordances are now authoritative frame data.
+Iteration 8E is a **renderer/art/tooling-only** checkpoint. It adds deterministic non-commanding ambient life, richer multi-depth window motion, hard-edged local night lighting, and whole-scene rain/mist palette mood. All authoritative `terrarium/` simulation source is unchanged, and the accepted seed-1701/tick-10080 semantic frame SHA256 is byte-identical to Iteration 8D.
 
-Read `STATUS.md`, `ART_DIRECTION.md`, `VISUAL_STYLE_OVERHAUL.md`, `ROADMAP.md`, `plan.md`, `terrarium.md`, and the latest history entry before editing. For renderer work, also inspect `display/art/manifest.json`, `display/art/palettes/materials.json`, `display/art/objects/`, `display/art/moss/`, and `display/web/app.js`.
+Read `STATUS.md`, `ART_DIRECTION.md`, `VISUAL_STYLE_OVERHAUL.md`, `ROADMAP.md`, `plan.md`, `terrarium.md`, and the latest history entry before editing. For visual work, also inspect `display/art/manifest.json`, `display/art/palettes/materials.json`, `display/art/environment/`, `display/art/objects/`, `display/art/moss/`, and `display/web/app.js`.
 
 ## Authority contracts
 
@@ -50,9 +50,9 @@ Rolling objects use `settled → rolled → retrieve/settled`; a rolled object c
 
 Object-specific arrangement preferences are tendencies layered beneath learned habits, not hard destinations. Existing habit anti-lock-in, recent-zone/object inhibition, possession continuity, supported sleep, situational-event behavior, exact replay, and additive migration remain authoritative.
 
-## Accepted visual grammar after Iteration 8D
+## Accepted visual grammar after Iteration 8E
 
-The accepted 8B room and 8C authored Moss vocabulary remain intact. `display/art/objects/` adds 13 authored state variants so object history is visible rather than only stored. The 16×16 / 25×15 art grid remains a composition grammar only; canonical movement, object positions, state transitions, event sources, and interaction anchors remain continuous semantic coordinates.
+The accepted 8B room, 8C authored Moss vocabulary, and 8D object-state variants remain intact. Iteration 8E adds five authored ambient environment assets plus deterministic renderer-derived motion and palette treatment. Ambient presentation derives from canonical time/weather/event state and carries no behavior command. The 16×16 / 25×15 art grid remains a composition grammar only; canonical movement, object positions, state transitions, event sources, and interaction anchors remain continuous semantic coordinates.
 
 The scene grammar remains:
 
@@ -78,15 +78,14 @@ Keep using the compact architecture of **attention + affordances + persistent st
 
 `ROADMAP.md` and `VISUAL_STYLE_OVERHAUL.md` are authoritative unless direct canonical-runtime UAT exposes a more severe concrete defect:
 
-1. **Iteration 8E — Atmospheric World** — persistent non-commanding ambient animation, richer window life, local warm lighting, and stronger whole-scene weather mood.
-2. **Iteration 8F — Seasonal Terrarium** — add a slow canonical seasonal timescale and coordinated long-horizon visual transformation.
-3. **Iteration 9 — Emergent Situations and Consequence Memory** — compose events, object state, arrangements, habits, and prior consequences into later opportunities.
+1. **Iteration 8F — Seasonal Terrarium** — add a slow canonical seasonal timescale and coordinated long-horizon visual transformation.
+2. **Iteration 9 — Emergent Situations and Consequence Memory** — compose events, object state, arrangements, habits, and prior consequences into later opportunities.
 
 The visual target remains a hand-authored late-16-bit life-RPG diorama: strict low-resolution grammar, readable silhouettes, richer saturated natural color, clustered shading, pragmatic perspective, layered depth, selective low-frame acting, non-commanding environmental motion, warm/cool lighting, slow world transformation, and persistent visible history. Do not copy external assets, exact palettes, characters, architecture, UI, or map structure.
 
 ## Regression procedure
 
-Run `python -m pytest -q`, `node --check display/web/app.js`, Python-3.10 grammar parsing, authored-art validation, technical/behavior/spatial/coherence/habit/repertoire/situational/**object-affordance** evaluators, exact replay, deterministic art-direction/temporal capture, and real 800×480 browser inspection. For major behavior changes, retain robustness coverage across seeds **1701 / 1702 / 42 / 999** and compare causal/semantic families rather than enum count alone.
+Run `python -m pytest -q`, `node --check display/web/app.js`, Python-3.10 grammar parsing, authored-art validation, technical/behavior/spatial/coherence/habit/repertoire/situational/object-affordance/**atmosphere** evaluators, exact replay, deterministic art-direction/temporal capture, and real 800×480 browser inspection. For major behavior changes, retain robustness coverage across seeds **1701 / 1702 / 42 / 999** and compare causal/semantic families rather than enum count alone.
 
 Promoted reusable capabilities remain:
 - `simulation-behavior-auditor-r1` — `932573954fdf126bd4ec4f4d5a1f79a50b48b994bf374ed0cfa3415120dd093f`

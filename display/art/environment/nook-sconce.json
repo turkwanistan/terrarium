@@ -1,0 +1,54 @@
+{
+  "schema": "terrarium.pixel-asset.v1",
+  "id": "environment.nook-sconce",
+  "width": 18,
+  "height": 20,
+  "anchor": [
+    0,
+    0
+  ],
+  "runs": [
+    [
+      8,
+      0,
+      2,
+      6,
+      "brass"
+    ],
+    [
+      5,
+      5,
+      8,
+      3,
+      "woodDeep"
+    ],
+    [
+      3,
+      8,
+      12,
+      5,
+      "amber"
+    ],
+    [
+      5,
+      9,
+      8,
+      3,
+      "cream"
+    ],
+    [
+      7,
+      13,
+      4,
+      5,
+      "brass"
+    ],
+    [
+      5,
+      18,
+      8,
+      2,
+      "woodDeep"
+    ]
+  ]
+}

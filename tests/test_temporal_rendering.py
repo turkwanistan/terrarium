@@ -32,6 +32,9 @@ def test_temporal_fixture_pack_is_deterministic_and_800x480():
         "loaf", "groom", "stretch", "weather_reaction",
         "populated_room", "event_sunlight_engage", "event_bird_engage", "event_thunder_react", "event_moth_engage", "event_ignored",
         "dawn_light_transition", "dusk_light_transition", "rain_control",
+        "atmosphere_clear_day_idle", "atmosphere_clear_night_idle", "atmosphere_night_warm_light",
+        "atmosphere_rain_idle", "atmosphere_mist_idle", "atmosphere_window_focus", "atmosphere_walk",
+        "atmosphere_event_coexistence", "atmosphere_sleep", "atmosphere_object_interaction",
     }
     assert first["hero_reel"] == [
         "left_walk", "right_walk", "arrive_settle", "idle_control", "window_transition",
@@ -40,7 +43,17 @@ def test_temporal_fixture_pack_is_deterministic_and_800x480():
         "loaf", "groom", "stretch", "sleep_transition", "waking", "wake_exit", "activity_corner_approach", "activity_corner_transition",
         "shelf_approach", "populated_room", "event_sunlight_engage", "event_bird_engage", "event_thunder_react", "event_moth_engage", "event_ignored",
         "dawn_light_transition", "dusk_light_transition", "rain_control",
+        "atmosphere_clear_day_idle", "atmosphere_clear_night_idle", "atmosphere_night_warm_light",
+        "atmosphere_rain_idle", "atmosphere_mist_idle", "atmosphere_window_focus", "atmosphere_walk",
+        "atmosphere_event_coexistence", "atmosphere_sleep", "atmosphere_object_interaction",
     ]
+    assert first["atmosphere_timestamps_ms"] == [0, 1500, 4200, 7800, 12500, 19000, 28000, 41000, 56000]
+    assert set(first["atmosphere_review"]) == {
+        "quiet_clear_day", "quiet_clear_night", "night_with_warm_local_lighting", "rain", "mist",
+        "window_focused", "moss_stationary_environment_alive", "moss_walking_atmosphere_subordinate",
+        "situational_event_plus_ambient", "sleep_context", "object_interaction",
+    }
+    assert all(first["scenarios"][scenario]["temporal_kind"] == "atmosphere" for scenario in set(first["atmosphere_review"].values()))
     probe = first["continuity_probe"]
     assert probe["source"]["tick"] < probe["middle"]["tick"] < probe["followup"]["tick"]
     for scenario in first["scenarios"].values():
@@ -80,6 +93,9 @@ def test_renderer_has_manual_clock_path_and_production_raf_path():
     assert "transitionSource" in source and "temporalContinuityProbe" in source
     assert "drawForegroundCausality(frame,now,renderState" in source or "drawForegroundCausality(frame, now, renderState" in source
     assert "function worldEventRenderState" in source
+    assert "function ambientClockMs" in source and "function ambientStep" in source
+    assert "drawWindowAmbientBack" in source and "drawAmbientBranchShadow" in source and "drawLocalLightAccents" in source
+    assert "weatherPaletteName" in source and "localLightPaletteName" in source
     assert "drawFloorWorldEvent" in source and "drawWindowWorldEvent" in source and "drawInteriorWorldEvent" in source
     assert all(name in source for name in ("sunlight", "bird", "rain_intensify", "thunder", "moth", "leaf_tap"))
 
@@ -97,6 +113,9 @@ def test_renderer_is_pixel_native_400x240_with_exact_2x_present_path():
     assert "createRadialGradient" not in source
     assert "roundRect" not in source
     assert "ctx.ellipse" not in source
+    assert "Math.sin" not in source and "Math.cos" not in source
+    assert "globalAlpha" not in source and "rgba(" not in source
+    assert "shadowBlur" not in source and "ctx.filter" not in source and "displayCtx.filter" not in source
 
 
 def test_moss_pixel_sprite_is_brown_and_default_has_no_glasses():

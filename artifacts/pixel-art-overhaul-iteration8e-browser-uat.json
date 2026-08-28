@@ -1,0 +1,260 @@
+{
+  "continuity": {
+    "jump_px": 0,
+    "passed": true
+  },
+  "determinism": {
+    "exact_repeat": true,
+    "sample_hashes": [
+      "fnv1a32:c20b4aa5",
+      "fnv1a32:21d76335",
+      "fnv1a32:e6bd818d",
+      "fnv1a32:5e5097b5",
+      "fnv1a32:f7f9d125",
+      "fnv1a32:0ce146f5",
+      "fnv1a32:31d74e25",
+      "fnv1a32:ed5020e5",
+      "fnv1a32:9b4792f5"
+    ],
+    "scenario": "atmosphere_clear_day_idle"
+  },
+  "environment": {
+    "art_surface": [
+      400,
+      240
+    ],
+    "benign_temporal_fixture_warning_observed": true,
+    "canonical_runtime_used": false,
+    "console_errors": 0,
+    "image_smoothing": false,
+    "integer_scale": 2,
+    "isolated_data_dir": "/tmp/terrarium-iteration8e-final",
+    "production_renderer": "display/web/app.js",
+    "viewport": [
+      800,
+      480
+    ]
+  },
+  "evidence_dir": "artifacts/iteration8e-browser-evidence",
+  "hierarchy": {
+    "ambient_never_promoted_to_always_front": true,
+    "passed": true,
+    "scene_order_preserved": true
+  },
+  "passed": true,
+  "raf": {
+    "duration_ms": 3016.6,
+    "frames": 182,
+    "interval_ms": {
+      "max": 16.8,
+      "min": 16.5,
+      "over_34ms": 0,
+      "over_50ms": 0,
+      "p50": 16.7,
+      "p95": 16.8
+    },
+    "passed": true
+  },
+  "schema": "terrarium.pixel-art-overhaul-iteration8e-browser-uat.v1",
+  "sequences": {
+    "atmosphere_clear_day_idle": {
+      "ambient_classes": [
+        "ambient-branch-shadow",
+        "ambient-curtain",
+        "ambient-light-motes",
+        "ambient-water-shimmer",
+        "ambient-window-foliage"
+      ],
+      "distinct_rasters": 9,
+      "duration_ms": 56000,
+      "image_smoothing": false,
+      "integer_scale": 2,
+      "max_scale2x_error_blocks": 0,
+      "moving_samples": 0,
+      "samples": 9,
+      "world_event_types": []
+    },
+    "atmosphere_clear_night_idle": {
+      "ambient_classes": [
+        "ambient-curtain",
+        "ambient-water-shimmer",
+        "ambient-window-foliage",
+        "local-warm-light"
+      ],
+      "distinct_rasters": 8,
+      "duration_ms": 56000,
+      "image_smoothing": false,
+      "integer_scale": 2,
+      "max_scale2x_error_blocks": 0,
+      "moving_samples": 0,
+      "samples": 9,
+      "world_event_types": []
+    },
+    "atmosphere_event_coexistence": {
+      "ambient_classes": [
+        "ambient-branch-shadow",
+        "ambient-curtain",
+        "ambient-light-motes",
+        "ambient-water-shimmer",
+        "ambient-window-foliage",
+        "bedding-contact",
+        "world-event-sunlight"
+      ],
+      "distinct_rasters": 9,
+      "duration_ms": 56000,
+      "image_smoothing": false,
+      "integer_scale": 2,
+      "max_scale2x_error_blocks": 0,
+      "moving_samples": 0,
+      "samples": 9,
+      "world_event_types": [
+        "sunlight"
+      ]
+    },
+    "atmosphere_mist_idle": {
+      "ambient_classes": [
+        "ambient-curtain",
+        "ambient-mist-drift",
+        "ambient-water-shimmer",
+        "ambient-window-foliage",
+        "mist"
+      ],
+      "distinct_rasters": 8,
+      "duration_ms": 56000,
+      "image_smoothing": false,
+      "integer_scale": 2,
+      "max_scale2x_error_blocks": 0,
+      "moving_samples": 0,
+      "samples": 9,
+      "world_event_types": []
+    },
+    "atmosphere_night_warm_light": {
+      "ambient_classes": [
+        "ambient-curtain",
+        "ambient-water-shimmer",
+        "ambient-window-foliage",
+        "local-warm-light"
+      ],
+      "distinct_rasters": 7,
+      "duration_ms": 56000,
+      "image_smoothing": false,
+      "integer_scale": 2,
+      "max_scale2x_error_blocks": 0,
+      "moving_samples": 0,
+      "samples": 9,
+      "world_event_types": []
+    },
+    "atmosphere_object_interaction": {
+      "ambient_classes": [
+        "ambient-branch-shadow",
+        "ambient-curtain",
+        "ambient-light-motes",
+        "ambient-water-shimmer",
+        "ambient-window-foliage"
+      ],
+      "distinct_rasters": 9,
+      "duration_ms": 56000,
+      "image_smoothing": false,
+      "integer_scale": 2,
+      "max_scale2x_error_blocks": 0,
+      "moving_samples": 0,
+      "samples": 9,
+      "world_event_types": []
+    },
+    "atmosphere_rain_idle": {
+      "ambient_classes": [
+        "ambient-curtain",
+        "ambient-rain-runoff",
+        "ambient-water-shimmer",
+        "ambient-window-foliage",
+        "rain"
+      ],
+      "distinct_rasters": 9,
+      "duration_ms": 56000,
+      "image_smoothing": false,
+      "integer_scale": 2,
+      "max_scale2x_error_blocks": 0,
+      "moving_samples": 0,
+      "samples": 9,
+      "world_event_types": []
+    },
+    "atmosphere_sleep": {
+      "ambient_classes": [
+        "ambient-curtain",
+        "ambient-mist-drift",
+        "ambient-water-shimmer",
+        "ambient-window-foliage",
+        "bedding-contact",
+        "mist",
+        "walk-cycle",
+        "window-contact"
+      ],
+      "distinct_rasters": 9,
+      "duration_ms": 56000,
+      "image_smoothing": false,
+      "integer_scale": 2,
+      "max_scale2x_error_blocks": 0,
+      "moving_samples": 2,
+      "samples": 9,
+      "world_event_types": []
+    },
+    "atmosphere_walk": {
+      "ambient_classes": [
+        "ambient-branch-shadow",
+        "ambient-curtain",
+        "ambient-light-motes",
+        "ambient-water-shimmer",
+        "ambient-window-foliage",
+        "walk-cycle"
+      ],
+      "distinct_rasters": 9,
+      "duration_ms": 56000,
+      "image_smoothing": false,
+      "integer_scale": 2,
+      "max_scale2x_error_blocks": 0,
+      "moving_samples": 2,
+      "samples": 9,
+      "world_event_types": []
+    },
+    "atmosphere_window_focus": {
+      "ambient_classes": [
+        "ambient-branch-shadow",
+        "ambient-curtain",
+        "ambient-light-motes",
+        "ambient-water-shimmer",
+        "ambient-window-foliage"
+      ],
+      "distinct_rasters": 9,
+      "duration_ms": 56000,
+      "image_smoothing": false,
+      "integer_scale": 2,
+      "max_scale2x_error_blocks": 0,
+      "moving_samples": 0,
+      "samples": 9,
+      "world_event_types": []
+    }
+  },
+  "visual_review": {
+    "accepted": true,
+    "deliberately_not_added": [
+      "drifting-leaf particle field",
+      "ambient distant bird/insect loop",
+      "snow without stronger seasonal authority",
+      "fireplace/flame animation",
+      "full-room random sparkle or motes",
+      "smooth gradients/bloom/fog masks"
+    ],
+    "findings": [
+      "Stationary clear-day scenes visibly change over long observation without semantic Moss movement.",
+      "The window now carries multiple restrained depth layers rather than one synchronized decorative loop.",
+      "Night uses finite hard-edged warm local accents against the cool night palette without bloom or soft masking.",
+      "Rain and mist alter the room palette as well as the glass treatment, while remaining subordinate to Moss and situational events.",
+      "Walking, sleep, object interaction, and a sunlight situational event remain readable with atmosphere active."
+    ],
+    "representative_browser_frames": [
+      "clear day @ 19s",
+      "night warm local light @ 19s",
+      "rain @ 19s"
+    ]
+  }
+}

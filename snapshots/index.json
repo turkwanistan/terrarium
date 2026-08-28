@@ -285,6 +285,21 @@
         "steps": 10080
       },
       "tick": 10080
+    },
+    {
+      "captured_at": "2026-08-28T12:38:35.263501Z",
+      "frame_path": "/snapshots/dev/20260828T123835255741Z-pixel-art-overhaul-iteration8e/frame.json",
+      "meta_path": "/snapshots/dev/20260828T123835255741Z-pixel-art-overhaul-iteration8e/meta.json",
+      "note": "Atmospheric World: quiet deterministic ambient life, layered window motion, placed warm night light, and whole-scene weather mood.",
+      "preview_path": "/snapshots/dev/20260828T123835255741Z-pixel-art-overhaul-iteration8e/preview.svg",
+      "renderer_sha256": "c46cc4722cade0585f7ef4af122e4801debaa50c6c8eddf054e511118f307b85",
+      "snapshot_id": "20260828T123835255741Z-pixel-art-overhaul-iteration8e",
+      "source": {
+        "mode": "deterministic",
+        "seed": 1701,
+        "steps": 10080
+      },
+      "tick": 10080
     }
   ]
 }

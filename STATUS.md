@@ -1,22 +1,21 @@
 # Terrarium status
 
-Terrarium is normal product development after the accepted Generation 17 pilot. The current product checkpoint is **Pixel-Art Overhaul — Iteration 8D: Object Identity and Stateful Affordances**. This is **not Generation 18**.
+Terrarium is normal product development after the accepted Generation 17 pilot. The current product checkpoint is **Pixel-Art Overhaul — Iteration 8E: Atmospheric World**. This is **not Generation 18**.
 
 ## Current checkpoint
 
-- history: `history/2026-08-28-pixel-art-overhaul-iteration8d.md`
-- acceptance: `artifacts/pixel-art-overhaul-iteration8d.json`
-- regression matrix: `artifacts/pixel-art-overhaul-iteration8d-regression-matrix.json`
-- browser UAT: `artifacts/pixel-art-overhaul-iteration8d-browser-uat.json`
-- object-affordance evaluation: `artifacts/pixel-art-overhaul-iteration8d-object-affordances.json`
-- art-direction matrix: `artifacts/iteration8d-art-direction-matrix.json`
-- art-direction fixtures: `artifacts/iteration8d-art-direction-fixtures.json`
-- accepted snapshot: `20260828T112207258140Z-pixel-art-overhaul-iteration8d`
+- history: `history/2026-08-28-pixel-art-overhaul-iteration8e.md`
+- acceptance: `artifacts/pixel-art-overhaul-iteration8e.json`
+- regression matrix: `artifacts/pixel-art-overhaul-iteration8e-regression-matrix.json`
+- browser UAT: `artifacts/pixel-art-overhaul-iteration8e-browser-uat.json`
+- atmosphere evaluation: `artifacts/pixel-art-overhaul-iteration8e-atmosphere.json`
+- art-direction matrix / fixtures: `artifacts/iteration8e-art-direction-matrix.json` / `artifacts/iteration8e-art-direction-fixtures.json`
+- accepted snapshot: `20260828T123835255741Z-pixel-art-overhaul-iteration8e`
 - deterministic seed/tick: **1701 / 10080**
 - semantic frame SHA256: `e191850f3c454b926e9b4fe4355298be3ff5eb4ea351be6975fe7d45ab010f9d`
-- renderer JS SHA256: `f8e12181a18c2616fdeb8dae1ee5a0453fab6ba3a5ab88912782e497e35cb701`
-- authored-art tree SHA256: `ed1fee4cd060519267d131837ab45772754108c1c2eaa4c9a9c65322bce08d9a`
-- authored assets: **73 total / 46 Moss / 13 object-state**
+- renderer JS SHA256: `c46cc4722cade0585f7ef4af122e4801debaa50c6c8eddf054e511118f307b85`
+- authored-art tree SHA256: `5daacbe022e34b807d2008ee37037bef998b99abe77d8eafde157bcf599faae4`
+- authored assets: **78 total / 46 Moss / 13 object-state / 5 new ambient**
 - behavior rules: `terrarium-rules-v7-object-identity`
 - object affordances: `terrarium.object-affordances.v1`
 - deterministic RNG stream: `terrarium-rules-v3-routine-coherence`
@@ -24,86 +23,66 @@ Terrarium is normal product development after the accepted Generation 17 pilot. 
 - habits: `terrarium.habits.v1`
 - spatial schema: `terrarium.spatial.v1`
 
-The semantic hash intentionally changes from accepted 8C because object archetype, interaction state, transition counts, and currently available affordances are now authoritative state projected into `terrarium.frame.v1`.
+The semantic frame hash is **identical to accepted 8D** because 8E changed no authoritative simulation source. `git diff -- terrarium` was empty at acceptance.
 
-## What Iteration 8D changed
+## What Iteration 8E changed
 
-The six persistent movable objects no longer share one generic interaction graph. Four canonical archetypes now constrain behavior:
+Atmosphere is now a deterministic presentation system distinct from situational events. The accepted renderer adds:
 
-- rolling — blue stone / acorn;
-- soft nesting — red thread;
-- delicate — amber leaf;
-- keepsake — shell / glass star.
+- three authored window foliage depth layers with different held-step timing;
+- restrained authored curtain edge motion;
+- per-trace rain timing and slow pane runoff;
+- discrete mist drift;
+- localized clear-day light motes;
+- slow hard-edged branch-shadow movement;
+- infrequent water-bowl shimmer;
+- hard-edged warm nook/desk night-light treatment;
+- finite whole-scene rain/mist palette treatments.
 
-Rolling objects support roll→retrieve stateful play. Red thread supports zone-valid tug→rumple→nest. Delicate and keepsake objects reject generic nudge/play; keepsakes can become displayed on the collection shelf. Carry/place normalize later state according to object identity and destination.
+Ambient clocks derive from canonical `world_minutes`; deterministic fixture timestamps extend that clock only inside development temporal mode. Ambient motion does not create events, attract Moss, mutate habits, add planner state, or write persistent consequences.
 
-All 8D fields migrate additively. Existing worlds retain object position, possession, event ledger, behavior context, habit profile, affordance history, and prior movement counts; missing identity state is added without pretending old interactions occurred.
+## Deliberate restraint
 
-Object identity also shapes plausible arrangement destinations as a bounded tendency beneath learned habits: rolling objects favor floor space, soft objects bed/open space, keepsakes the shelf, and the leaf the window. Habit causal influence and anti-lock-in thresholds remain intact.
-
-## Authored object-state art
-
-The existing `terrarium.pixel-asset.v1` pipeline now includes **13 object-state assets** under `display/art/objects/`. `display/web/app.js` selects these variants from canonical state instead of procedurally drawing each movable object by kind.
-
-States include settled/rolled stone and acorn, loose/rumpled/nested thread, fresh/handled leaf, and handled/displayed shell/star. Existing continuous placement/roll interpolation, carried attachment, room depth, Moss acting, and exact 2× presentation remain unchanged in authority.
-
-## UAT defects fixed before acceptance
-
-- rumpled-thread inspection now preserves the unlocked nest stage rather than erasing it;
-- completed retrieve/nest object sessions close on normal settle instead of generating repeated-rest loops;
-- soft-object tug/nesting is restricted to `open_space` / `sleeping_nook`, preventing shelf/window/desk nests;
-- the coherence evaluator now counts actual rapid ordinary A→B→A travel rather than collapsing meaningful object/event trips into false ping-pong;
-- the controlled habit zone probe now holds object identity constant because 8D makes object archetype a genuine causal variable;
-- the Iteration-6 repertoire consequence gate recognizes the new canonical fact that exactly three objects are nudgeable instead of demanding an illegal fourth.
+The accepted pass did **not** add a drifting-leaf particle field, looping ambient birds/insects, snow before seasonal authority exists, fireplace/flame animation, full-room random sparkle/motes, smooth gradients, bloom, blur, or fog masks. These were rejected/deferred because the smaller system already makes still scenes feel temporal without competing with Moss.
 
 ## Browser / temporal UAT
 
-Final production-browser UAT used isolated `/tmp/terrarium-iteration8d-final`; canonical Moss was never reset or used as a fixture.
+Final production-browser UAT used isolated `/tmp/terrarium-iteration8e-final`; canonical Moss was never reset or used as a fixture.
 
-- deterministic day sequence: **exact repeat**;
-- roll: **11 / 6 distinct rasters**; retrieve **11 / 5**; tug **11 / 6**; nest **11 / 7**; display **11 / 7**;
-- left walk **11 / 8**; right walk **11 / 7**; carried walk **11 / 7**;
-- sleep **11 / 8**; waking **11 / 6**; sunlight **11 / 8**; thunder **11 / 10**;
-- every sampled sequence: **0 scale-error blocks**;
+Ten 8E contexts cover clear day/night, warm night light, rain, mist, window focus, stationary Moss, walking Moss, situational-event coexistence, sleep, and object interaction. The long-observation timestamps reach **56 seconds**.
+
+- deterministic clear-day sequence: **exact repeat**;
+- each required sequence: **7–9 distinct rasters / 9 samples**;
+- every sampled sequence: **0 scale-error blocks**, exact 400×240 → 800×480 2× nearest-neighbor;
 - continuity: **0 px** jump;
-- RAF: **109 frames / 1800 ms**, p50/p95 **16.7 ms**, max **16.8 ms**, zero >34 ms / >50 ms intervals;
-- browser console errors: **0**; same benign fixture warning as prior accepted temporal UAT.
-
-The final object fixture chain is semantically explicit: acorn `settled→rolled→retrieve/settled`; red thread `loose→rumpled→nested` in open space; shell `handled→displayed` on the shelf.
+- RAF: **182 frames / 3016.6 ms**, p50 **16.7 ms**, p95/max **16.8 ms**, zero >34 ms / >50 ms intervals;
+- browser console errors: **0**; the same benign temporal-fixture warning as prior accepted UAT remains;
+- ambient presentation remains below `ACTORS`/foreground priority and is never promoted to `ALWAYS_FRONT`.
 
 ## Validation
 
-- pytest: **49/49 PASS**;
-- Python-3.10 grammar: **36 sources PASS**;
+- pytest: **51/51 PASS**;
+- Python-3.10 grammar: **37 sources PASS**;
 - JavaScript syntax: **PASS**;
-- authored assets: **73/73 PASS**;
+- authored assets: **78/78 PASS**;
+- dedicated Iteration-8E atmosphere evaluator: **PASS**;
 - technical evaluator at 10,080 events / append-only chain / restart / exact replay: **PASS**;
 - behavior, spatial, coherence, habits: seeds **1701 / 1702 / 42 / 999**, 10,080 steps each: **all PASS**;
 - Iteration-6 repertoire regression: **PASS**;
 - Iteration-7 situational regression: **PASS**;
-- Iteration-8D object-affordance evaluator: **PASS**;
+- Iteration-8D object-affordance regression: **PASS**;
 - deterministic production-browser UAT: **PASS**;
-- combined Iteration-8D regression matrix: **PASS**.
-
-Long-run object evidence: roll→retrieve is **96.15–100%**, tug→nest **85.71–100%**, illegal delicate/keepsake nudges **0**, and every object exercises persistent state transitions.
+- combined Iteration-8E regression matrix: **PASS**.
 
 ## SBC conclusion
 
-The existing Terrarium state/migration model, bounded intent/session machinery, replay/event ledger, habit system, authored-art pipeline, deterministic fixtures, and browser/evaluation tools were sufficient. No reusable substrate deficiency was exposed. Self-Building Computer, Capability Forge, and the frozen Optiplex MCP surface were not modified.
+The existing authored-art pipeline, temporal fixtures, browser evidence path, renderer layer system, evaluator framework, and Optiplex/SBC capabilities were sufficient. No reusable substrate deficiency was exposed. Self-Building Computer, Capability Forge, and the frozen Optiplex MCP surface were not modified.
 
 **Gen18: NO**
 
-## Next: Iteration 8E — Atmospheric World
+## Next: Iteration 8F — Seasonal Terrarium
 
-Make the accepted room feel alive even while Moss is still:
-
-- add deterministic persistent non-commanding ambient motion separate from situational events;
-- enrich exterior/window life, foliage, curtain/rain traces and other quiet environmental loops;
-- add hard-edged placed local lighting where composition supports it;
-- strengthen warm-interior/cool-exterior contrast and whole-scene weather mood;
-- preserve Moss/object/event authority: ambient presentation normally must not become a behavior command.
-
-Success means stillness can remain interesting without turning the habitat into a particle show or silently expanding Moss intelligence.
+Add a canonical deterministic seasonal timescale substantially slower than the accelerated day, then coordinate long-horizon exterior foliage, palette, lighting, weather/particles, ambient life, and selected interior accents without erasing the familiar room or compromising replay/migration.
 
 ## Runtime / Git safety
 

@@ -91,6 +91,9 @@ def build_matrix() -> tuple[dict[str, Any], dict[str, Any]]:
         "object_pickup", "carried_walk", "object_placement", "object_display",
         "loaf", "groom", "stretch", "weather_reaction", "window_transition", "sleep_transition", "waking", "wake_exit",
         "event_sunlight_engage", "event_bird_engage", "event_thunder_react", "event_moth_engage",
+        "atmosphere_clear_day_idle", "atmosphere_clear_night_idle", "atmosphere_night_warm_light",
+        "atmosphere_rain_idle", "atmosphere_mist_idle", "atmosphere_window_focus", "atmosphere_walk",
+        "atmosphere_event_coexistence", "atmosphere_sleep", "atmosphere_object_interaction",
     ]
     for name in borrowed:
         scenarios[name] = base["scenarios"][name]
@@ -99,6 +102,8 @@ def build_matrix() -> tuple[dict[str, Any], dict[str, Any]]:
         "schema": base["schema"],
         "transition_duration_ms": base["transition_duration_ms"],
         "recommended_timestamps_ms": base["recommended_timestamps_ms"],
+        "atmosphere_timestamps_ms": base["atmosphere_timestamps_ms"],
+        "atmosphere_review": base["atmosphere_review"],
         "hero_reel": list(scenarios),
         "continuity_probe": base["continuity_probe"],
         "scenarios": scenarios,
@@ -111,6 +116,11 @@ def build_matrix() -> tuple[dict[str, Any], dict[str, Any]]:
         {"group": "object-state", "scenarios": ["object_roll", "object_retrieve", "object_tug", "object_nest", "object_display"]},
         {"group": "moss-quiet-acting", "scenarios": ["loaf", "groom", "stretch", "window_transition", "sleep_transition", "waking", "wake_exit"]},
         {"group": "situations", "scenarios": ["weather_reaction", "event_sunlight_engage", "event_bird_engage", "event_thunder_react", "event_moth_engage"]},
+        {"group": "atmosphere", "scenarios": [
+            "atmosphere_clear_day_idle", "atmosphere_clear_night_idle", "atmosphere_night_warm_light",
+            "atmosphere_rain_idle", "atmosphere_mist_idle", "atmosphere_window_focus", "atmosphere_walk",
+            "atmosphere_event_coexistence", "atmosphere_sleep", "atmosphere_object_interaction",
+        ]},
     ]
     renderer_path = ROOT / "display" / "web" / "app.js"
     renderer_sha = _sha_bytes(renderer_path.read_bytes())
@@ -131,8 +141,8 @@ def build_matrix() -> tuple[dict[str, Any], dict[str, Any]]:
 
 def main() -> int:
     parser = argparse.ArgumentParser(description="Build deterministic production-renderer fixtures for Terrarium art-direction review.")
-    parser.add_argument("--fixtures", default="artifacts/iteration8a-art-direction-fixtures.json")
-    parser.add_argument("--manifest", default="artifacts/iteration8a-art-direction-matrix.json")
+    parser.add_argument("--fixtures", default="artifacts/iteration8e-art-direction-fixtures.json")
+    parser.add_argument("--manifest", default="artifacts/iteration8e-art-direction-matrix.json")
     args = parser.parse_args()
     fixtures, manifest = build_matrix()
     fixture_path = Path(args.fixtures)

@@ -220,6 +220,16 @@ Candidate ambient motion:
 
 Ambient motion must be deterministic, spatially distributed, phase-varied, low-amplitude, and subordinate to Moss. Do not animate every instance in lockstep. Do not convert every atmospheric motion into an attention event.
 
+Accepted Iteration 8E atmospheric implementation:
+
+- ambient presentation derives from canonical `world_minutes`, lighting, weather, and event/frame state; no ambient behavior authority or persistent animation state was added;
+- three authored exterior foliage layers use independent held-step periods, with a separate restrained curtain cycle rather than one shared sine wave;
+- rain traces use multiple deterministic periods and sparse runoff; mist uses discrete drift; clear daylight may show localized motes, branch-shadow movement, and infrequent water shimmer;
+- night uses finite warm palette variants and hard-edged floor/highlight accents around actual nook/desk light sources rather than gradients, bloom, alpha glow, or blur;
+- rain and mist modify whole-scene palette treatment as well as the window;
+- ambient effects stay below actor/foreground priority and must remain quieter than Moss and active situational events;
+- looping distant creatures, generic leaf particle fields, snow without seasonal authority, and full-room sparkle remain unaccepted until a later evidence-backed need exists.
+
 ## Lighting, time, and weather
 
 Dawn/day/dusk/night remain finite authoritative environmental states, but the visual treatment may become substantially richer.

@@ -1,0 +1,77 @@
+{
+  "atmosphere": "artifacts/pixel-art-overhaul-iteration8e-atmosphere.json",
+  "browser_uat": "artifacts/pixel-art-overhaul-iteration8e-browser-uat.json",
+  "checks": {
+    "ambient_authored_assets_5_added": true,
+    "authored_assets_78_pass": true,
+    "authoritative_simulation_source_unchanged": true,
+    "behavior_four_seed_pass": true,
+    "coherence_four_seed_pass": true,
+    "habits_four_seed_pass": true,
+    "iteration6_repertoire_pass": true,
+    "iteration7_situations_pass": true,
+    "iteration8d_object_affordances_pass": true,
+    "iteration8e_atmosphere_pass": true,
+    "javascript_syntax_pass": true,
+    "moss_assets_46_preserved": true,
+    "object_state_assets_13_preserved": true,
+    "production_browser_uat_pass": true,
+    "pytest_51_pass": true,
+    "python310_grammar_37_sources": true,
+    "semantic_frame_identical_to_iteration8d": true,
+    "spatial_four_seed_pass": true,
+    "technical_10080_pass": true
+  },
+  "note": "Iteration 8E is renderer/art/tooling-only. All authoritative terrarium/ source is unchanged and the seed-1701/tick-10080 semantic frame hash exactly matches accepted Iteration 8D.",
+  "object_affordances": "artifacts/pixel-art-overhaul-iteration8e-object-affordances.json",
+  "passed": true,
+  "per_seed": {
+    "behavior": {
+      "1701": true,
+      "1702": true,
+      "42": true,
+      "999": true
+    },
+    "coherence": {
+      "1701": true,
+      "1702": true,
+      "42": true,
+      "999": true
+    },
+    "habits": {
+      "1701": true,
+      "1702": true,
+      "42": true,
+      "999": true
+    },
+    "spatial": {
+      "1701": true,
+      "1702": true,
+      "42": true,
+      "999": true
+    }
+  },
+  "repertoire": "artifacts/pixel-art-overhaul-iteration8e-repertoire.json",
+  "schema": "terrarium.pixel-art-overhaul-iteration8e-regression-matrix.v1",
+  "seeds": [
+    1701,
+    1702,
+    42,
+    999
+  ],
+  "situations": "artifacts/pixel-art-overhaul-iteration8e-situations.json",
+  "steps_per_long_run": 10080,
+  "technical": {
+    "checks": {
+      "append_only_sqlite_enforced": true,
+      "event_chain_valid": true,
+      "jsonl_matches_event_count": true,
+      "logical_viewport_exact": true,
+      "renderer_frame_is_semantic": true,
+      "restart_preserves_state": true,
+      "snapshot_event_replay_exact": true
+    },
+    "events": 10080,
+    "path": "artifacts/pixel-art-overhaul-iteration8e-technical.json"
+  }
+}

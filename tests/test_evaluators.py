@@ -3,6 +3,7 @@ from evaluations.evaluate_technical import evaluate as technical
 from evaluations.evaluate_spatial import evaluate as spatial
 from evaluations.evaluate_coherence import evaluate as coherence
 from evaluations.evaluate_habits import evaluate as habits
+from evaluations.evaluate_atmosphere import evaluate as atmosphere
 
 
 def test_behavior_evaluator_passes_reference_seed():
@@ -23,3 +24,7 @@ def test_coherence_evaluator_passes_reference_seed():
 
 def test_long_horizon_habit_evaluator_passes_reference_seed():
     assert habits(1701, 10080)["passed"]
+
+
+def test_atmosphere_evaluator_passes():
+    assert atmosphere()["passed"]

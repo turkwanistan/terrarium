@@ -1,0 +1,47 @@
+{
+  "checks": {
+    "all_authored_zone_anchors_walkable": true,
+    "carried_multi_route_navigation_exercised": true,
+    "deterministic_execution": true,
+    "multi_segment_navigation_exercised": true,
+    "no_invalid_awake_furniture_occupancy": true,
+    "no_route_blocker_intersections": true,
+    "route_endpoints_match_authoritative_approach": true,
+    "semantic_target_separated_from_physical_approach": true,
+    "sleep_always_supported": true,
+    "spatial_schema_recorded_on_routes": true,
+    "targeted_actions_have_reachable_contact": true,
+    "temporary_affordance_arrivals_are_walkable": true,
+    "window_watch_always_supported": true,
+    "zone_arrivals_use_authored_anchors": true
+  },
+  "metrics": {
+    "blocker_intersections": 0,
+    "carried_routes": 246,
+    "invalid_awake_endpoints": 0,
+    "invalid_situational_event_routes": 0,
+    "max_route_points": 4,
+    "multi_segment_routes": 466,
+    "route_actions": {
+      "carry": 8,
+      "explore": 117,
+      "idle": 125,
+      "inspect": 47,
+      "loaf": 14,
+      "place": 42,
+      "sleep": 125,
+      "walk": 310
+    },
+    "routed_actions": 788,
+    "situational_event_routes": 24,
+    "sleep_decisions": 316,
+    "targeted_actions_with_contact": 570,
+    "targeted_actions_with_distinct_approach": 570,
+    "targeted_object_actions": 570,
+    "window_watch_decisions": 154
+  },
+  "passed": true,
+  "schema": "terrarium.spatial-evaluation.v1",
+  "seed": 1702,
+  "steps": 10080
+}

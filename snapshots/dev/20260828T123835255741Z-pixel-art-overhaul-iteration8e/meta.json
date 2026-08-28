@@ -1,0 +1,41 @@
+{
+  "art_surface": {
+    "height": 240,
+    "integer_scale": 2,
+    "smoothing": false,
+    "width": 400
+  },
+  "captured_at": "2026-08-28T12:38:35.263501Z",
+  "frame": {
+    "logical_height": 480,
+    "logical_width": 800,
+    "path": "dev/20260828T123835255741Z-pixel-art-overhaul-iteration8e/frame.json",
+    "sha256": "e191850f3c454b926e9b4fe4355298be3ff5eb4ea351be6975fe7d45ab010f9d",
+    "tick": 10080
+  },
+  "git": {
+    "branch": "main",
+    "dirty": true,
+    "head": "c0ada09b5203e419b23c5f78bc8f9a89cffef094"
+  },
+  "note": "Atmospheric World: quiet deterministic ambient life, layered window motion, placed warm night light, and whole-scene weather mood.",
+  "preview": {
+    "path": "dev/20260828T123835255741Z-pixel-art-overhaul-iteration8e/preview.svg",
+    "sha256": "835aab7113c18c8c237fc3f0f0ebb7463e92b394588e594292b03218f5da4fe0"
+  },
+  "schema": "terrarium.dev-snapshot.v1",
+  "snapshot_id": "20260828T123835255741Z-pixel-art-overhaul-iteration8e",
+  "source": {
+    "mode": "deterministic",
+    "seed": 1701,
+    "steps": 10080
+  },
+  "source_hashes": {
+    "authored_art": "5daacbe022e34b807d2008ee37037bef998b99abe77d8eafde157bcf599faae4",
+    "engine": "5a9b66bb020490b86cef9d3da6b0d538b3f457d65aa558c7bab824a65d4eb0be",
+    "frame_contract": "4811664e040a06219b887ca24abe4920982cb34536340e9e29b697301edf4bde",
+    "renderer_css": "3a24319be5a3e0c963b8e721b637f35aedfdc24b8bef8e779ae934dd09fd62d1",
+    "renderer_js": "c46cc4722cade0585f7ef4af122e4801debaa50c6c8eddf054e511118f307b85"
+  },
+  "view_url": "/?snapshot=/snapshots/dev/20260828T123835255741Z-pixel-art-overhaul-iteration8e/frame.json"
+}

@@ -1,0 +1,262 @@
+{
+  "art_surface": [
+    400,
+    240
+  ],
+  "authored_art_sha256": "5daacbe022e34b807d2008ee37037bef998b99abe77d8eafde157bcf599faae4",
+  "capture_rule": "start the development server with the generated fixture pack, then capture each URL from the production browser renderer at 800x480; subjective visual judgment remains human/vision authority",
+  "captures": {
+    "art_dawn_clear_fresh_idle": {
+      "target_frame_sha256": "5aa07c65ff821dacf9cf278e92410aacaa1dc66dab8c155e2fd4c11541dddbe8",
+      "url": "/?temporal=art_dawn_clear_fresh_idle&t=1300"
+    },
+    "art_day_clear_fresh_idle": {
+      "target_frame_sha256": "e442659a950a35e8433d25e2c85b2a1af93e258ff46896c14fba540d9a71a2e5",
+      "url": "/?temporal=art_day_clear_fresh_idle&t=1300"
+    },
+    "art_day_clear_lived_idle": {
+      "target_frame_sha256": "600984fcab05a1ad9cb4c57cf39adf96caebf26aca8177ea6d8dd7aedefeab4d",
+      "url": "/?temporal=art_day_clear_lived_idle&t=1300"
+    },
+    "art_dusk_mist_fresh_idle": {
+      "target_frame_sha256": "05fcfa2e594cc867f5d8358c3b4edd9f55e25c9d41cb6b24dd1a77cea758f36f",
+      "url": "/?temporal=art_dusk_mist_fresh_idle&t=1300"
+    },
+    "art_night_rain_fresh_idle": {
+      "target_frame_sha256": "bdc163b7dc3fee8921ab8cc2553b87929c417e040f44ae96e8774c2c1cfdaf48",
+      "url": "/?temporal=art_night_rain_fresh_idle&t=1300"
+    },
+    "art_night_rain_lived_idle": {
+      "target_frame_sha256": "38e60782da5a09f317f3167124360fcbf9cd436b5573b6d1d5119c893ba29c37",
+      "url": "/?temporal=art_night_rain_lived_idle&t=1300"
+    },
+    "atmosphere_clear_day_idle": {
+      "target_frame_sha256": "88fea4a4926ce89dfa8868086aa43a41524da6648e746c11bd6a9f411fc16d47",
+      "url": "/?temporal=atmosphere_clear_day_idle&t=1300"
+    },
+    "atmosphere_clear_night_idle": {
+      "target_frame_sha256": "23706dff1475689d54f3faed605e9a26e42a68310082f8031eb897c7bf12ab2b",
+      "url": "/?temporal=atmosphere_clear_night_idle&t=1300"
+    },
+    "atmosphere_event_coexistence": {
+      "target_frame_sha256": "acd226691976ad15121f6dca8b80e5ae1a9c55eefb8aa17f90c9fc948716549a",
+      "url": "/?temporal=atmosphere_event_coexistence&t=1300"
+    },
+    "atmosphere_mist_idle": {
+      "target_frame_sha256": "4aeef794d7452653aef1a82e08961019cfc3ca62312d48cd6e520c55afc6b34f",
+      "url": "/?temporal=atmosphere_mist_idle&t=1300"
+    },
+    "atmosphere_night_warm_light": {
+      "target_frame_sha256": "077239984e11b6f14c26302103e77b3ee258462d77286fc736ea36c04654cc39",
+      "url": "/?temporal=atmosphere_night_warm_light&t=1300"
+    },
+    "atmosphere_object_interaction": {
+      "target_frame_sha256": "9938edcf3074a909aca35d06ead0ade6ffd04e2d4d8337c90beb46e4ad58356a",
+      "url": "/?temporal=atmosphere_object_interaction&t=1300"
+    },
+    "atmosphere_rain_idle": {
+      "target_frame_sha256": "364c06ffb71d6d188436b14723aec4bae742e04e839ccf8b7fe564687546f8a9",
+      "url": "/?temporal=atmosphere_rain_idle&t=1300"
+    },
+    "atmosphere_sleep": {
+      "target_frame_sha256": "9cf412c65b3385278b866619979c15343bf07b0a7a28814c870a20dad50e4b17",
+      "url": "/?temporal=atmosphere_sleep&t=1300"
+    },
+    "atmosphere_walk": {
+      "target_frame_sha256": "eb6a46f79584d71123dff8eb75c59d41f78443cae4c56bd1bf147cecaf831ffd",
+      "url": "/?temporal=atmosphere_walk&t=1300"
+    },
+    "atmosphere_window_focus": {
+      "target_frame_sha256": "672d01acb3e86515dabf0236cf0abd139e023017a12f98efeb6bf3261d793cce",
+      "url": "/?temporal=atmosphere_window_focus&t=1300"
+    },
+    "carried_walk": {
+      "target_frame_sha256": "c1f619a10ed870bc81c4648f668e6f51f4b1e50c851ae32090a33aa71b7c3899",
+      "url": "/?temporal=carried_walk&t=1300"
+    },
+    "event_bird_engage": {
+      "target_frame_sha256": "698f50294b2c0a46806062f7f67f4a5156338ef5f8ee4a07f382b568c6eba746",
+      "url": "/?temporal=event_bird_engage&t=1300"
+    },
+    "event_moth_engage": {
+      "target_frame_sha256": "e2dc356ebfe1de6dd17e40eabd3fa22241f29b093a721fa3b9438cb5c5c8f68a",
+      "url": "/?temporal=event_moth_engage&t=1300"
+    },
+    "event_sunlight_engage": {
+      "target_frame_sha256": "7a439104e7b0fa06fa17cb6ee2052dad7bcde4305a5ba9b798400b292cfbe62b",
+      "url": "/?temporal=event_sunlight_engage&t=1300"
+    },
+    "event_thunder_react": {
+      "target_frame_sha256": "fff9e504e8ea987787b967caff0a945fff6d0237e1b85015ade658700a2e40a4",
+      "url": "/?temporal=event_thunder_react&t=1300"
+    },
+    "groom": {
+      "target_frame_sha256": "0d94f7c24d2f9ff0301565d65e153546bf823a1fe3603408d4251e17edef72b6",
+      "url": "/?temporal=groom&t=1300"
+    },
+    "inspect_object": {
+      "target_frame_sha256": "4aca839f807c923558324595874bbf84d35d0bad59f015788821c6fa11a7af2e",
+      "url": "/?temporal=inspect_object&t=1300"
+    },
+    "left_walk": {
+      "target_frame_sha256": "cfee222d453ee769d81dd9ed4c63c7592cb21d1ab4e39e42aab08b7c142237e2",
+      "url": "/?temporal=left_walk&t=1300"
+    },
+    "loaf": {
+      "target_frame_sha256": "1ff5f488469026a5ae84397670bf0b6920251d16ac42cc2673706a959e4e8369",
+      "url": "/?temporal=loaf&t=1300"
+    },
+    "object_display": {
+      "target_frame_sha256": "ca3956b4c1e8221ffc7e87fd146de223768cf7aa7f86876c57f6a87f99be3f5d",
+      "url": "/?temporal=object_display&t=1300"
+    },
+    "object_nest": {
+      "target_frame_sha256": "e12fbee8611b4dcf6b2b33e022fe09ac68ab8bff56b59dcb82a25227412a9847",
+      "url": "/?temporal=object_nest&t=1300"
+    },
+    "object_nudge": {
+      "target_frame_sha256": "7d9d0d99e2ec3d7410acb9901c522d7740d79e6e95ae313cdcd419ba2120a322",
+      "url": "/?temporal=object_nudge&t=1300"
+    },
+    "object_pickup": {
+      "target_frame_sha256": "d1a5b7a5e8fb110b0a1784d59c674612fd109b3264e8902c8d34da80a35b7e5d",
+      "url": "/?temporal=object_pickup&t=1300"
+    },
+    "object_placement": {
+      "target_frame_sha256": "d31390bf1859190e97116a4880d1c476718552297a00a4e9e0566d17f8a1cf1b",
+      "url": "/?temporal=object_placement&t=1300"
+    },
+    "object_retrieve": {
+      "target_frame_sha256": "015b7a7f9a367977095e5a5bfcf06b979a125a0334c81408104d6f7ae785d112",
+      "url": "/?temporal=object_retrieve&t=1300"
+    },
+    "object_roll": {
+      "target_frame_sha256": "5b822ceba50dd2f6c6414c3351d78320e05475c9b085efc13ddbb8ac57fdaad7",
+      "url": "/?temporal=object_roll&t=1300"
+    },
+    "object_tug": {
+      "target_frame_sha256": "6404ed21e9057c77fa58d31dbfa70ca7db6f35b829ceb88cb300715cc1cc6d4b",
+      "url": "/?temporal=object_tug&t=1300"
+    },
+    "right_walk": {
+      "target_frame_sha256": "5a3a34dceba6f7a59e18635d9d129b95a925b4b379e2928a9a21c9eaf13ab816",
+      "url": "/?temporal=right_walk&t=1300"
+    },
+    "sleep_transition": {
+      "target_frame_sha256": "9cf412c65b3385278b866619979c15343bf07b0a7a28814c870a20dad50e4b17",
+      "url": "/?temporal=sleep_transition&t=1300"
+    },
+    "stretch": {
+      "target_frame_sha256": "c7658caade8f5d42986db2bd9b097c6285e4cb21bd61641b4fa9b466c5a00bbd",
+      "url": "/?temporal=stretch&t=1300"
+    },
+    "wake_exit": {
+      "target_frame_sha256": "b50a72d5d0fabb46002975ea9f4d238017da0470a1799fc5fa33e5b5c1a570d5",
+      "url": "/?temporal=wake_exit&t=1300"
+    },
+    "waking": {
+      "target_frame_sha256": "29513f2c508a06b2b4012c3f5d9078efc2b675d8cb98316814b1fe951e0dbf08",
+      "url": "/?temporal=waking&t=1300"
+    },
+    "weather_reaction": {
+      "target_frame_sha256": "4da13df0d3867cb4c8855a58afca6d26cd8e9d2d7fc317eb13bd4844a96afaba",
+      "url": "/?temporal=weather_reaction&t=1300"
+    },
+    "window_transition": {
+      "target_frame_sha256": "1231523751db32dc2fa87d0c4d00646dc276cca683e576f5a7d5201b8b5b91a9",
+      "url": "/?temporal=window_transition&t=1300"
+    }
+  },
+  "renderer": "production display/web/app.js",
+  "renderer_sha256": "eb548cca0f008dde4f783003e98377377b42886a628a7cb50c033e729f35478a",
+  "rows": [
+    {
+      "group": "environment",
+      "scenarios": [
+        "art_dawn_clear_fresh_idle",
+        "art_day_clear_fresh_idle",
+        "art_dusk_mist_fresh_idle",
+        "art_night_rain_fresh_idle"
+      ]
+    },
+    {
+      "group": "history",
+      "scenarios": [
+        "art_day_clear_fresh_idle",
+        "art_day_clear_lived_idle",
+        "art_night_rain_fresh_idle",
+        "art_night_rain_lived_idle"
+      ]
+    },
+    {
+      "group": "moss-locomotion",
+      "scenarios": [
+        "art_day_clear_fresh_idle",
+        "left_walk",
+        "right_walk",
+        "carried_walk"
+      ]
+    },
+    {
+      "group": "moss-object-acting",
+      "scenarios": [
+        "inspect_object",
+        "object_nudge",
+        "object_pickup",
+        "object_placement"
+      ]
+    },
+    {
+      "group": "object-state",
+      "scenarios": [
+        "object_roll",
+        "object_retrieve",
+        "object_tug",
+        "object_nest",
+        "object_display"
+      ]
+    },
+    {
+      "group": "moss-quiet-acting",
+      "scenarios": [
+        "loaf",
+        "groom",
+        "stretch",
+        "window_transition",
+        "sleep_transition",
+        "waking",
+        "wake_exit"
+      ]
+    },
+    {
+      "group": "situations",
+      "scenarios": [
+        "weather_reaction",
+        "event_sunlight_engage",
+        "event_bird_engage",
+        "event_thunder_react",
+        "event_moth_engage"
+      ]
+    },
+    {
+      "group": "atmosphere",
+      "scenarios": [
+        "atmosphere_clear_day_idle",
+        "atmosphere_clear_night_idle",
+        "atmosphere_night_warm_light",
+        "atmosphere_rain_idle",
+        "atmosphere_mist_idle",
+        "atmosphere_window_focus",
+        "atmosphere_walk",
+        "atmosphere_event_coexistence",
+        "atmosphere_sleep",
+        "atmosphere_object_interaction"
+      ]
+    }
+  ],
+  "schema": "terrarium.art-direction-matrix.v1",
+  "viewport": [
+    800,
+    480
+  ]
+}

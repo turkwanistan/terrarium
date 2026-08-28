@@ -312,6 +312,21 @@ Evidence: `history/2026-08-27-pixel-art-overhaul-iteration8c.md`, `artifacts/pix
 
 Evidence: `history/2026-08-28-pixel-art-overhaul-iteration8d.md`, `artifacts/pixel-art-overhaul-iteration8d.json`, `artifacts/pixel-art-overhaul-iteration8d-regression-matrix.json`, snapshot `20260828T112207258140Z-pixel-art-overhaul-iteration8d`.
 
-## Next product iteration after Iteration 8D
+## Completed normal product checkpoint — Pixel-Art Overhaul, Iteration 8E
 
-**Iteration 8E — Atmospheric World.** Make the accepted room feel alive while Moss is still through deterministic non-commanding ambient motion, richer exterior/window life, hard-edged placed local lighting, and stronger whole-scene weather mood. Keep ambient presentation normally outside behavior authority; do not turn atmosphere into constant events or particle noise.
+- added deterministic non-commanding ambient presentation without changing authoritative simulation source;
+- added five authored environment assets: three window-foliage depth layers, curtain motion, and nook sconce;
+- added independent held-step timing for foliage/curtain, multi-period rain traces/runoff, discrete mist drift, localized daylight motes, hard-edged branch shadows, and infrequent bowl shimmer;
+- added hard-edged warm local night palette treatment around existing nook/desk composition and whole-scene finite rain/mist palette mood;
+- deliberately rejected/deferred generic particle fields, looping ambient creatures, premature snow, fireplace animation, bloom/blur/gradients/fog masks, and constant motion everywhere;
+- extended deterministic temporal fixtures to explicit 56-second atmosphere review contexts and added a dedicated atmosphere evaluator;
+- fixed missing renderer target/contact coordinates being coerced from `null` to `(0,0)` during UAT;
+- passed **51/51 tests**, 37-source Python-3.10 grammar, JS syntax, 78-asset validation, 10,080-event technical/replay, four-seed 10,080-step behavior/spatial/coherence/habit matrices, repertoire/situations/object-affordance/atmosphere evaluators, exact-repeat production-browser UAT, **0 px** continuity, exact 2× raster scaling, and clean RAF pacing;
+- preserved seed-1701/tick-10080 semantic frame SHA256 `e191850f3c454b926e9b4fe4355298be3ff5eb4ea351be6975fe7d45ab010f9d` exactly from 8D;
+- no SBC substrate change, Capability Forge work, frozen MCP change, or Gen18 was required.
+
+Evidence: `history/2026-08-28-pixel-art-overhaul-iteration8e.md`, `artifacts/pixel-art-overhaul-iteration8e.json`, `artifacts/pixel-art-overhaul-iteration8e-regression-matrix.json`, snapshot `20260828T123835255741Z-pixel-art-overhaul-iteration8e`.
+
+## Next product iteration after Iteration 8E
+
+**Iteration 8F — Seasonal Terrarium.** Introduce a canonical deterministic seasonal clock substantially slower than the accelerated 72-real-minute day, then coordinate long-horizon exterior foliage, palette, lighting, weather/particles, ambient life, and selected interior accents. Preserve familiar room geometry, canonical replay/migration, Moss history, and the renderer/world authority boundary.

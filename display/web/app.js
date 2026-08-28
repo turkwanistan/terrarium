@@ -62,6 +62,38 @@
   const ART_ASSETS = new Map();
   const ART_CACHE = new Map();
 
+  function rgbFromHex(value){
+    const hex=String(value||'').replace('#','');
+    if(!/^[0-9a-fA-F]{6}$/.test(hex)) throw new Error(`invalid authored palette color: ${value}`);
+    return [Number.parseInt(hex.slice(0,2),16),Number.parseInt(hex.slice(2,4),16),Number.parseInt(hex.slice(4,6),16)];
+  }
+  function hexFromRgb(rgb){ return `#${rgb.map(v=>Math.max(0,Math.min(255,Math.round(v))).toString(16).padStart(2,'0')).join('')}`; }
+  function mixHex(a,b,t){
+    const aa=rgbFromHex(a),bb=rgbFromHex(b),q=clamp01(Number(t)||0);
+    return hexFromRgb(aa.map((v,i)=>mix(v,bb[i],q)));
+  }
+  function applyPaletteTreatment(base,treatment){
+    const result={...base}; if(!treatment?.tint) return result;
+    const defaultStrength=Number(treatment.strength||0),roleStrength=treatment.role_strength||{};
+    for(const [role,color] of Object.entries(base)){
+      const strength=role in roleStrength?Number(roleStrength[role]):defaultStrength;
+      if(strength>0) result[role]=mixHex(color,treatment.tint,strength);
+    }
+    return result;
+  }
+  function installDerivedPalettes(paletteBank){
+    const result={};
+    for(const [name,palette] of Object.entries(paletteBank.palettes||{})) result[name]=Object.freeze({...palette});
+    for(const [name,palette] of Object.entries(paletteBank.palettes||{})){
+      for(const [weather,treatment] of Object.entries(paletteBank.weather_treatments||{})) result[`${name}-${weather}`]=Object.freeze(applyPaletteTreatment(palette,treatment));
+    }
+    const local=paletteBank.local_light_treatment;
+    if(local) for(const [name,palette] of Object.entries({...result})) result[`${name}-warm`]=Object.freeze(applyPaletteTreatment(palette,local));
+    return Object.freeze(result);
+  }
+  function weatherPaletteName(baseName,weather){ const candidate=`${baseName}-${weather}`; return weather==='clear'||!PALETTES?.[candidate]?baseName:candidate; }
+  function localLightPaletteName(paletteName){ const candidate=`${paletteName}-warm`; return PALETTES?.[candidate]?candidate:paletteName; }
+
   async function fetchJson(path){
     const response=await fetch(path,{cache:'no-store'});
     if(!response.ok) throw new Error(`unable to load authored art ${path}: HTTP ${response.status}`);
@@ -88,7 +120,7 @@
     if(paletteBank?.schema!=='terrarium.palette-bank.v1'||!paletteBank.palettes) throw new Error('invalid authored palette bank');
     const roles=new Set(paletteBank.required_roles||[]);
     for(const [name,palette] of Object.entries(paletteBank.palettes)) for(const role of roles) if(typeof palette[role]!=='string') throw new Error(`palette ${name} is missing role ${role}`);
-    PALETTES=Object.freeze(paletteBank.palettes);
+    PALETTES=installDerivedPalettes(paletteBank);
     ART_MANIFEST=manifest;
     for(const entry of manifest.assets||[]){
       if(!(entry.layer in SCENE_LAYERS)) throw new Error(`unknown scene layer ${entry.layer} for ${entry.id}`);
@@ -120,8 +152,16 @@
     };
   }
 
-  const rain = Array.from({length: 22}, (_, i) => ({x:(i*37)%194, y:(i*29)%72, phase:(i*7)%17}));
-  const motes = Array.from({length: 9}, (_, i) => ({x:45+(i*47)%310, y:35+(i*31)%125, phase:i*1.7}));
+  const RAIN_TRACES = Array.from({length:18},(_,i)=>({x:(i*37)%96,y:(i*29)%67,phase:(i*733)%3900,period:2200+(i%6)*530,trail:3+(i%3)}));
+  const LIGHT_MOTES = Array.from({length:6},(_,i)=>({x:118+(i*31)%78,y:110+(i*23)%54,phase:(i*1900)%11000,period:7600+(i%4)*1700}));
+  const AMBIENT_PATTERNS = Object.freeze({
+    far:[0,0,0,1,1,0,0,-1,-1,0],
+    mid:[0,0,1,1,1,0,-1,-1,0,0],
+    near:[0,0,0,-1,-1,0,1,1,0,0,0],
+    curtain:[0,0,0,1,1,1,0,0,-1,0,0,0],
+    shadow:[0,0,1,1,1,2,1,1,0,0,-1,-1,0],
+    shimmer:[0,0,1,0,0,0,2,0,0,1,0,0],
+  });
 
   function mix(a,b,t){ return a+(b-a)*t; }
   function clamp(v,lo,hi){ return Math.max(lo,Math.min(hi,v)); }
@@ -172,14 +212,23 @@
     let delta=target-source; if(delta<-720) delta+=1440; if(delta>720) delta-=1440;
     return source+delta*smoother01((now-fetchedAt)/MOTION.environment_ms);
   }
+  function ambientClockMs(f,now){
+    const canonical=worldMinuteAt(f,now)*3000;
+    return temporalScenario?canonical+Math.max(0,Number(now)||0):canonical;
+  }
+  function ambientStep(clock,period,pattern){
+    const seq=pattern||[0],index=((Math.floor(clock/period)%seq.length)+seq.length)%seq.length;
+    return seq[index];
+  }
   function visualLighting(f,now){
     const minute=((worldMinuteAt(f,now)%1440)+1440)%1440;
     const transitions=[[360,'night','dawn'],[480,'dawn','day'],[1050,'day','dusk'],[1170,'dusk','night']];
-    let paletteName=f.lighting in PALETTES?f.lighting:'day';
+    let basePaletteName=f.lighting in PALETTES?f.lighting:'day';
     for(const [center,from,to] of transitions){
-      if(minute>=center-30&&minute<center+30){ const q=Math.floor(clamp01((minute-(center-30))/60)*4); paletteName=q<2?from:to; break; }
+      if(minute>=center-30&&minute<center+30){ const q=Math.floor(clamp01((minute-(center-30))/60)*4); basePaletteName=q<2?from:to; break; }
     }
-    return {palette:PALETTES[paletteName],palette_name:paletteName,night:paletteName==='night'?1:0,minute};
+    const paletteName=weatherPaletteName(basePaletteName,f.weather);
+    return {palette:PALETTES[paletteName],palette_name:paletteName,base_palette_name:basePaletteName,night:basePaletteName==='night'?1:0,minute};
   }
 
   function drawPixelLine(x0,y0,x1,y1,color,thickness=1){
@@ -260,23 +309,43 @@
     }
   }
 
+  function drawWindowAmbientBack(f,now,p,paletteName){
+    const clock=ambientClockMs(f,now),weather=f.weather||'clear';
+    const far=ambientStep(clock,7100,AMBIENT_PATTERNS.far),mid=ambientStep(clock,5100,AMBIENT_PATTERNS.mid),near=ambientStep(clock,8900,AMBIENT_PATTERNS.near);
+    const weatherLift=weather==='rain'?1:0;
+    drawAuthoredAsset('environment.window-foliage-far',32+far,30,paletteName);
+    drawAuthoredAsset('environment.window-foliage-mid',32+mid,30+(weatherLift&&mid>0?1:0),paletteName);
+    drawAuthoredAsset('environment.window-foliage-near',32+near,30,paletteName);
+    if(weather==='clear'&&f.lighting!=='night'){
+      for(let i=0;i<LIGHT_MOTES.length;i++){
+        const mote=LIGHT_MOTES[i],slot=((clock+mote.phase)%mote.period)/mote.period;
+        if(slot>.22) continue;
+        const drift=Math.floor(slot*5),x=mote.x+(i%2?drift:-drift),y=mote.y-Math.floor(slot*3);
+        rect(x,y,1,1,i%3===0?p.cream:p.creamShade);
+      }
+    }
+  }
+
   function drawWindowBack(f,now,p,paletteName){
     drawAuthoredAsset('environment.window-view',32,30,paletteName);
+    drawWindowAmbientBack(f,now,p,paletteName);
     if(f.lighting==='night'){
       rect(108,41,10,8,p.cream); rect(105,44,13,5,p.cream); rect(111,39,4,2,p.cream);
       rect(48,42,2,2,p.creamShade); rect(64,52,1,1,p.cream); rect(121,57,2,1,p.creamShade);
     } else {
       rect(105,39,14,10,p.amber); rect(102,42,20,5,p.amber); rect(109,36,6,3,p.cream);
     }
+    const clock=ambientClockMs(f,now);
     if(f.weather==='rain'){
-      const phase=Math.floor(now/150)%19;
-      for(const d of rain){
-        const x=34+d.x%96,y=31+((d.y+phase+d.phase)%67);
-        rect(x,y,1,3,p.rain); if((d.phase&1)===0) rect(x-1,y+3,1,2,p.rain);
+      for(const d of RAIN_TRACES){
+        const travel=Math.floor((clock+d.phase)/d.period),x=34+d.x,y=31+((d.y+travel*(2+(d.x%3)))%67);
+        rect(x,y,1,d.trail,p.rain); if((travel+d.x)%4===0) rect(x-1,y+d.trail,1,2,p.rain);
       }
-      for(const [x,y,w] of [[38,92,9],[58,88,5],[91,94,11],[115,90,7]]){ rect(x,y,w,1,p.rain); rect(x+2,y+1,Math.max(2,w-4),1,p.skyDark); }
+      const runoff=ambientStep(clock,3200,[0,0,1,1,2,2,1,0,0,-1,0]);
+      for(const [x,y,w] of [[38,92,9],[58,88,5],[91,94,11],[115,90,7]]){ rect(x,y+runoff,w,1,p.rain); rect(x+2,y+1+runoff,Math.max(2,w-4),1,p.skyDark); }
     } else if(f.weather==='mist'){
-      for(let y=45;y<91;y+=12) for(let x=35+(y%3);x<129;x+=19) rect(x,y,9,2,p.rain);
+      const drift=ambientStep(clock,4700,[0,0,1,1,2,2,1,0,-1,-1,0]);
+      for(let y=45;y<91;y+=12) for(let x=35+(y%3)+drift;x<129;x+=19) rect(x,y,9,2,p.rain);
     }
     drawWindowWorldEvent(f,now,p);
     const watches=historyValue(f,'window_watches',now),wet=historyValue(f,'wet_window_watches',now);
@@ -292,10 +361,14 @@
   }
   function drawWindowStructure(f,now,p,paletteName){
     drawAuthoredAsset('structure.window-alcove',14,18,paletteName);
+    const clock=ambientClockMs(f,now),curtain=ambientStep(clock,f.weather==='rain'?3900:6700,AMBIENT_PATTERNS.curtain);
+    drawAuthoredAsset('environment.window-curtain-motion',14,18+curtain,paletteName);
     if(causalActivityState(f,now).window>0){ const cx=clamp(px(f.creature.x),44,121); rect(cx-8,103,16,2,p.creamShade); rect(cx-4,105,8,1,p.walnutLight); }
   }
   function drawBed(f,now,p,paletteName){
-    drawAuthoredAsset('structure.sleeping-nook',18,170,paletteName);
+    const litPalette=paletteName.startsWith('night')?localLightPaletteName(paletteName):paletteName;
+    drawAuthoredAsset('structure.sleeping-nook',18,170,litPalette);
+    drawAuthoredAsset('environment.nook-sconce',121,151,litPalette);
     const sleepTicks=historyValue(f,'sleep_nook_ticks',now),sleepBouts=historyValue(f,'sleep_nook_bouts',now);
     const nest=emergence(sleepTicks,0,18);
     if(nest>0){
@@ -311,7 +384,8 @@
   }
   function drawShelf(f,p,paletteName){ drawAuthoredAsset('structure.collection-shelf',293,27,paletteName); }
   function drawActivityCorner(f,now,p,paletteName){
-    drawAuthoredAsset('structure.activity-desk',286,145,paletteName);
+    const litPalette=paletteName.startsWith('night')?localLightPaletteName(paletteName):paletteName;
+    drawAuthoredAsset('structure.activity-desk',286,145,litPalette);
     const uses=historyValue(f,'activity_corner_uses',now);
     for(let i=0;i<5;i++){
       const strength=emergence(uses,1+i*4.2,8); if(strength<=0) continue;
@@ -319,18 +393,19 @@
       rect(x,y,11,5,p.paper); rect(x+2,y+2,6,1,p.walnutLight); if(strength>.6) rect(x+8,y+1,2,1,p.amber);
     }
     for(let i=0;i<7;i++){ const strength=emergence(uses,2+i*3.2,7); if(strength>.1) rect(304+i*8,172-(i%3),5,1,p.walnutDark); }
-    drawAuthoredAsset('environment.desk-plant',368,151,paletteName);
+    drawAuthoredAsset('environment.desk-plant',368,151,litPalette);
     if(causalActivityState(f,now).activity_corner>0){ const hx=clamp(px(f.creature.x)-4,305,356); rect(hx-6,174,12,1,p.cream); }
   }
-  function drawBowls(p,paletteName){
+  function drawBowls(f,now,p,paletteName){
     drawAuthoredAsset('prop.water-bowl',256,206,paletteName);
     drawAuthoredAsset('prop.food-bowl',284,205,paletteName);
+    const shimmer=ambientStep(ambientClockMs(f,now),4300,AMBIENT_PATTERNS.shimmer);
+    if(shimmer===1){ rect(262,207,5,1,p.glassLight); rect(269,208,3,1,p.creamShade); }
+    else if(shimmer===2){ rect(265,207,6,1,p.glassLight); }
   }
   function drawBackground(f,now,p,paletteName){
     drawAuthoredAsset('structure.room-shell',0,0,paletteName);
     drawWindowBack(f,now,p,paletteName);
-    const phase=Math.floor(now/850);
-    for(const mote of motes){ if((phase+Math.floor(mote.phase))%5!==0) continue; rect(mote.x,mote.y,1,1,p.cream); }
     return p;
   }
   function drawStructureLayer(f,now,p,paletteName){
@@ -339,11 +414,26 @@
     drawShelf(f,p,paletteName);
     drawActivityCorner(f,now,p,paletteName);
   }
+  function drawAmbientBranchShadow(f,now,p){
+    if(f.weather!=='clear'||f.lighting==='night') return;
+    const shift=ambientStep(ambientClockMs(f,now),8200,AMBIENT_PATTERNS.shadow),c=p.floorShade;
+    drawPixelLine(122+shift,126,167+shift,148,c,1); drawPixelLine(137+shift,132,128+shift,145,c,1);
+    drawPixelLine(153+shift,140,172+shift,136,c,1); rect(145+shift,136,7,2,c); rect(160+shift,143,5,2,c);
+  }
+  function drawLocalLightAccents(f,now,p,paletteName){
+    if(!paletteName.startsWith('night')) return;
+    const warm=PALETTES[localLightPaletteName(paletteName)],pulse=ambientStep(ambientClockMs(f,now),6100,[0,0,0,1,1,0,0,0,-1,0,0]);
+    rect(118+pulse,213,23,1,warm.rugLight); rect(126+pulse,217,15,1,warm.floorLight); rect(135+pulse,221,8,1,warm.floorLight);
+    rect(276,196+pulse,18,1,warm.floorLight); rect(283,200+pulse,13,1,warm.floorLight); rect(290,204+pulse,7,1,warm.floorLight);
+    rect(123,169,8,1,warm.amber); rect(304,153,9,1,warm.creamShade);
+  }
   function drawSurfaceLayer(f,now,p,paletteName){
     drawAuthoredAsset('tile.floor-detail',16,164,paletteName);
     drawRug(p,paletteName);
+    drawAmbientBranchShadow(f,now,p);
     drawFloorWorldEvent(f,now,p);
     drawPersistentHistory(f,p);
+    drawLocalLightAccents(f,now,p,paletteName);
     rect(276,149,4,2,p.amber); rect(280,147,2,4,p.foliage); rect(273,148,2,2,p.cream);
     rect(268,151,14,2,p.walnutDark); rect(271,147,8,4,p.walnut); rect(274,144,3,3,p.leafBright);
   }
@@ -397,11 +487,15 @@
     const prior=previous?.objects?.find(o=>o.id===id); if(f.creature.activity==='carry'&&prior?.state==='placed') return prior;
     return f.objects?.find(o=>o.id===id)||prior||null;
   }
+  function finitePoint(xValue,yValue){
+    if(xValue===null||xValue===undefined||yValue===null||yValue===undefined) return null;
+    const x=Number(xValue),y=Number(yValue); return Number.isFinite(x)&&Number.isFinite(y)?{x,y}:null;
+  }
   function actionTargetPoint(f){
-    const cx=Number(f.last_event?.contact_x),cy=Number(f.last_event?.contact_y);
-    if(Number.isFinite(cx)&&Number.isFinite(cy)) return {x:cx,y:cy,id:f.last_event?.object_id||f.creature?.target_object_id,contact:true};
-    const lx=Number(f.last_event?.target_x),ly=Number(f.last_event?.target_y);
-    if(Number.isFinite(lx)&&Number.isFinite(ly)) return {x:lx,y:ly,id:f.last_event?.object_id||f.creature?.target_object_id,contact:false};
+    const contact=finitePoint(f.last_event?.contact_x,f.last_event?.contact_y);
+    if(contact) return {...contact,id:f.last_event?.object_id||f.creature?.target_object_id,contact:true};
+    const target=finitePoint(f.last_event?.target_x,f.last_event?.target_y);
+    if(target) return {...target,id:f.last_event?.object_id||f.creature?.target_object_id,contact:false};
     const obj=actionTargetObject(f); return obj?{x:Number(obj.x),y:Number(obj.y),id:obj.id,contact:false}:null;
   }
   function authoredRoute(f,sourceX,sourceY){
@@ -461,8 +555,8 @@
       interpolation_progress:Number(raw.toFixed(6)),interpolation_ease:Number(travel.toFixed(9)),motion_duration_ms:Number(duration.toFixed(3)),activity_progress:Number(activityProgress.toFixed(6)),motion_phase:phaseName(moving,raw,activityProgress),semantic_distance:Number(semanticDistance.toFixed(6)),route_distance:Number(routeTotal.toFixed(6)),route_segment_index:routeState.segment_index,route_segment_progress:Number(routeState.segment_progress.toFixed(6)),route_points:route.map(point=>({x:Number(point.x.toFixed(6)),y:Number(point.y.toFixed(6))})),moving,facing:renderedFacing,pose:c.pose,activity:c.activity,
       carrying:attached?c.carrying:null,carrying_semantic:c.carrying,attachment_progress:Number(attachmentProgress.toFixed(6)),carried_rendered_x:carriedWorldX,carried_rendered_y:carriedWorldY,carried_relative_x:attached?Number(holdX.toFixed(6)):null,carried_relative_y:attached?holdY:null,carry_turning:turningCarry,walk_phase:Number(walkPhase.toFixed(6)),walk_keyframe:walkFrame,
       causal_activity:{sleep_nook:Number(causal.sleep_nook.toFixed(6)),window:Number(causal.window.toFixed(6)),activity_corner:Number(causal.activity_corner.toFixed(6))},
-      interaction_target:target?{object_id:target.id||null,x:Number(target.x.toFixed(6)),y:Number(target.y.toFixed(6)),contact:Boolean(target.contact)}:null,semantic_target:(Number.isFinite(Number(f.last_event?.target_x))&&Number.isFinite(Number(f.last_event?.target_y)))?{x:Number(f.last_event.target_x),y:Number(f.last_event.target_y),object_id:f.last_event?.object_id||null}:null,object_placement:activePlacementState(f,now),
-      ambient_classes:[f.weather==='rain'?'rain':f.weather==='mist'?'mist':null,f.world_event?`world-event-${f.world_event.type}`:null,'pixel-motes',moving?'walk-cycle':null,causal.sleep_nook>0?'bedding-contact':null,causal.window>0?'window-contact':null,causal.activity_corner>0?'work-surface-contact':null].filter(Boolean),
+      interaction_target:target?{object_id:target.id||null,x:Number(target.x.toFixed(6)),y:Number(target.y.toFixed(6)),contact:Boolean(target.contact)}:null,semantic_target:(()=>{const point=finitePoint(f.last_event?.target_x,f.last_event?.target_y);return point?{x:point.x,y:point.y,object_id:f.last_event?.object_id||null}:null;})(),object_placement:activePlacementState(f,now),
+      ambient_classes:[f.weather==='rain'?'rain':f.weather==='mist'?'mist':null,'ambient-window-foliage','ambient-curtain','ambient-water-shimmer',f.weather==='rain'?'ambient-rain-runoff':null,f.weather==='mist'?'ambient-mist-drift':null,f.weather==='clear'&&f.lighting!=='night'?'ambient-branch-shadow':null,f.weather==='clear'&&f.lighting!=='night'?'ambient-light-motes':null,f.lighting==='night'?'local-warm-light':null,f.world_event?`world-event-${f.world_event.type}`:null,moving?'walk-cycle':null,causal.sleep_nook>0?'bedding-contact':null,causal.window>0?'window-contact':null,causal.activity_corner>0?'work-surface-contact':null].filter(Boolean),
       world_event:f.world_event?{id:f.world_event.id,type:f.world_event.type,x:Number(f.world_event.x),y:Number(f.world_event.y),attention_status:f.world_event.attention_status,temporary_affordance:f.world_event.temporary_affordance||null}:null,
       art_grid:{width:ART_W,height:ART_H,scale:SCALE,x:px(renderedX),y:px(renderedBaseY)},
     };
@@ -570,7 +664,7 @@
     scene.add('STRUCTURE',158,'room-zones',()=>drawStructureLayer(frame,now,p,paletteName));
     scene.add('SURFACE',160,'room-surface-and-history',()=>drawSurfaceLayer(frame,now,p,paletteName));
     scene.add('WORLD',0,'world-atmosphere',()=>drawWorldAtmosphere(frame,now,p));
-    scene.add('WORLD',210,'room-bowls',()=>drawBowls(p,paletteName));
+    scene.add('WORLD',210,'room-bowls',()=>drawBowls(frame,now,p,paletteName));
     for(const o of frame.objects) scene.add('WORLD',px(o.y),`object:${o.id}`,()=>drawWorldObject(o,frame,now,paletteName));
     scene.add('ACTORS',px(renderState.rendered_base_y),'actor:moss',()=>drawCreature(frame,now,p,renderState,paletteName));
     scene.add('FRONT',px(renderState.rendered_base_y)+1,'room-foreground',()=>{ drawForegroundFurniture(frame,now,p,paletteName); drawForegroundCausality(frame,now,renderState,p); });
@@ -624,7 +718,7 @@
         const intervals=[];let last=null,start=null,frames=0;await new Promise(resolve=>{function probe(ts){if(start===null)start=ts;if(last!==null)intervals.push(ts-last);last=ts;frames++;render(ts-start,false);if(ts-start>=temporalDuration)resolve();else requestAnimationFrame(probe);}requestAnimationFrame(probe);});
         const sorted=[...intervals].sort((a,b)=>a-b),pct=p=>sorted.length?sorted[Math.min(sorted.length-1,Math.floor((sorted.length-1)*p))]:0;publishTemporal({schema:'terrarium.raf-probe.v1',status:'ready',scenario:temporalScenario,frames,duration_ms:Number((last-start).toFixed(3)),interval_count:intervals.length,interval_ms:{min:Number((sorted[0]||0).toFixed(3)),p50:Number(pct(.5).toFixed(3)),p95:Number(pct(.95).toFixed(3)),max:Number((sorted.at(-1)||0).toFixed(3)),over_34ms:intervals.filter(v=>v>34).length,over_50ms:intervals.filter(v=>v>50).length},intervals_ms:intervals.map(v=>Number(v.toFixed(3)))});return;
       }
-      if(temporalSequence){ const timestamps=pack.recommended_timestamps_ms||[0,250,500,750,1000,1250,1500],samples=[];for(const t of timestamps)samples.push(await captureTemporalSample(Number(t)));publishTemporal({schema:'terrarium.temporal-capture.v1',status:'ready',scenario:temporalScenario,easing:temporalEasing,source_tick:scenario.source_tick,target_tick:scenario.target_tick,semantic_event:scenario.semantic_event,samples});return; }
+      if(temporalSequence){ const timestamps=scenario.temporal_kind==='atmosphere'?(pack.atmosphere_timestamps_ms||pack.recommended_timestamps_ms):(pack.recommended_timestamps_ms||[0,250,500,750,1000,1250,1500]),samples=[];for(const t of timestamps)samples.push(await captureTemporalSample(Number(t)));publishTemporal({schema:'terrarium.temporal-capture.v1',status:'ready',scenario:temporalScenario,easing:temporalEasing,source_tick:scenario.source_tick,target_tick:scenario.target_tick,semantic_event:scenario.semantic_event,samples});return; }
       const sample=await captureTemporalSample(temporalTimestamp);publishTemporal({schema:'terrarium.temporal-keyframe.v1',status:'ready',scenario:temporalScenario,easing:temporalEasing,source_tick:scenario.source_tick,target_tick:scenario.target_tick,semantic_event:scenario.semantic_event,sample});
     }catch(err){connected=false;lastPollError=String(err);publishTemporal({schema:'terrarium.temporal-error.v1',status:'error',error:String(err)});}
   }

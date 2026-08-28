@@ -1,0 +1,342 @@
+{
+  "all_passed": true,
+  "matrix_checks": {
+    "rare_true_interruption_is_reachable_across_matrix": true,
+    "same_seed_history_is_exactly_deterministic": true
+  },
+  "results": {
+    "1701": {
+      "checks": {
+        "all_authored_event_types_reachable": true,
+        "deferred_attention_is_exercised": true,
+        "engagement_has_causal_followthrough": true,
+        "event_frequency_bounded": true,
+        "event_linked_behavior_is_bounded": true,
+        "events_are_temporally_separated": true,
+        "events_do_not_dominate_timeline": true,
+        "interruptions_only_break_low_commitment_actions": true,
+        "iteration6_repertoire_not_crowded_out": true,
+        "response_diversity_includes_ignore_orient_engage": true,
+        "same_event_clustering_bounded": true,
+        "sunlight_is_real_temporary_affordance": true
+      },
+      "metrics": {
+        "action_counts": {
+          "carry": 195,
+          "explore": 120,
+          "groom": 46,
+          "idle": 335,
+          "inspect": 193,
+          "loaf": 129,
+          "look_outside": 142,
+          "nudge": 21,
+          "place": 195,
+          "react": 59,
+          "rest": 398,
+          "sleep": 351,
+          "stretch": 73,
+          "wake": 121,
+          "walk": 312
+        },
+        "causal_engagement_failures": [],
+        "causal_engagements_verified": 28,
+        "engaged_events": 28,
+        "event_active_timeline_share": 0.084821,
+        "event_counts": {
+          "bird": 11,
+          "leaf_tap": 17,
+          "moth": 18,
+          "rain_intensify": 4,
+          "sunlight": 10,
+          "thunder": 3
+        },
+        "event_linked_decision_share": 0.086245,
+        "event_start_gap_minutes": {
+          "max": 509,
+          "mean": 158.758065,
+          "min": 28
+        },
+        "events_ended": 63,
+        "events_started": 63,
+        "family_entropy_bits": 2.897903,
+        "generic_decision_share": 0.60855,
+        "interruption_actions": {},
+        "iteration6_family_entropy_bits": 2.931034,
+        "iteration6_generic_decision_share": 0.598496,
+        "ordinary_autonomous_decision_share": 0.913755,
+        "outcome_counts": {
+          "engaged": 28,
+          "ignored": 31,
+          "oriented": 4
+        },
+        "response_path_counts": {
+          "deferred": 27,
+          "engaged": 28,
+          "ignored": 31,
+          "noticed": 2,
+          "orient": 3
+        },
+        "same_type_start_gap_minutes": {
+          "mean": 778.578947,
+          "min": 120
+        },
+        "sunlight_affordance_failures": 0,
+        "sunlight_affordance_uses": 12
+      },
+      "passed": true
+    },
+    "1702": {
+      "checks": {
+        "all_authored_event_types_reachable": true,
+        "deferred_attention_is_exercised": true,
+        "engagement_has_causal_followthrough": true,
+        "event_frequency_bounded": true,
+        "event_linked_behavior_is_bounded": true,
+        "events_are_temporally_separated": true,
+        "events_do_not_dominate_timeline": true,
+        "interruptions_only_break_low_commitment_actions": true,
+        "iteration6_repertoire_not_crowded_out": true,
+        "response_diversity_includes_ignore_orient_engage": true,
+        "same_event_clustering_bounded": true,
+        "sunlight_is_real_temporary_affordance": true
+      },
+      "metrics": {
+        "action_counts": {
+          "carry": 185,
+          "explore": 117,
+          "groom": 53,
+          "idle": 373,
+          "inspect": 201,
+          "loaf": 142,
+          "look_outside": 154,
+          "nudge": 29,
+          "place": 184,
+          "react": 60,
+          "rest": 388,
+          "sleep": 316,
+          "stretch": 73,
+          "wake": 125,
+          "walk": 310
+        },
+        "causal_engagement_failures": [],
+        "causal_engagements_verified": 28,
+        "engaged_events": 28,
+        "event_active_timeline_share": 0.067361,
+        "event_counts": {
+          "bird": 10,
+          "leaf_tap": 12,
+          "moth": 15,
+          "rain_intensify": 7,
+          "sunlight": 3,
+          "thunder": 6
+        },
+        "event_linked_decision_share": 0.070111,
+        "event_start_gap_minutes": {
+          "max": 639,
+          "mean": 183.942308,
+          "min": 22
+        },
+        "events_ended": 53,
+        "events_started": 53,
+        "family_entropy_bits": 2.930455,
+        "generic_decision_share": 0.601107,
+        "interruption_actions": {
+          "groom": 1,
+          "rest": 1
+        },
+        "iteration6_family_entropy_bits": 2.942419,
+        "iteration6_generic_decision_share": 0.591095,
+        "ordinary_autonomous_decision_share": 0.929889,
+        "outcome_counts": {
+          "engaged": 28,
+          "ignored": 22,
+          "oriented": 3
+        },
+        "response_path_counts": {
+          "deferred": 24,
+          "engaged": 28,
+          "ignored": 22,
+          "interrupted": 2,
+          "noticed": 4,
+          "orient": 1
+        },
+        "same_type_start_gap_minutes": {
+          "mean": 1040.978723,
+          "min": 125
+        },
+        "sunlight_affordance_failures": 0,
+        "sunlight_affordance_uses": 6
+      },
+      "passed": true
+    },
+    "42": {
+      "checks": {
+        "all_authored_event_types_reachable": true,
+        "deferred_attention_is_exercised": true,
+        "engagement_has_causal_followthrough": true,
+        "event_frequency_bounded": true,
+        "event_linked_behavior_is_bounded": true,
+        "events_are_temporally_separated": true,
+        "events_do_not_dominate_timeline": true,
+        "interruptions_only_break_low_commitment_actions": true,
+        "iteration6_repertoire_not_crowded_out": true,
+        "response_diversity_includes_ignore_orient_engage": true,
+        "same_event_clustering_bounded": true,
+        "sunlight_is_real_temporary_affordance": true
+      },
+      "metrics": {
+        "action_counts": {
+          "carry": 188,
+          "explore": 121,
+          "groom": 55,
+          "idle": 402,
+          "inspect": 218,
+          "loaf": 114,
+          "look_outside": 148,
+          "nudge": 33,
+          "place": 188,
+          "react": 67,
+          "rest": 385,
+          "sleep": 309,
+          "stretch": 70,
+          "wake": 128,
+          "walk": 321
+        },
+        "causal_engagement_failures": [],
+        "causal_engagements_verified": 34,
+        "engaged_events": 34,
+        "event_active_timeline_share": 0.084325,
+        "event_counts": {
+          "bird": 12,
+          "leaf_tap": 12,
+          "moth": 17,
+          "rain_intensify": 5,
+          "sunlight": 9,
+          "thunder": 7
+        },
+        "event_linked_decision_share": 0.081544,
+        "event_start_gap_minutes": {
+          "max": 501,
+          "mean": 154.016393,
+          "min": 22
+        },
+        "events_ended": 62,
+        "events_started": 62,
+        "family_entropy_bits": 2.952355,
+        "generic_decision_share": 0.60648,
+        "interruption_actions": {},
+        "iteration6_family_entropy_bits": 2.946327,
+        "iteration6_generic_decision_share": 0.604643,
+        "ordinary_autonomous_decision_share": 0.918456,
+        "outcome_counts": {
+          "engaged": 34,
+          "ignored": 25,
+          "oriented": 3
+        },
+        "response_path_counts": {
+          "deferred": 26,
+          "engaged": 34,
+          "ignored": 25,
+          "noticed": 8,
+          "orient": 3
+        },
+        "same_type_start_gap_minutes": {
+          "mean": 881.267857,
+          "min": 124
+        },
+        "sunlight_affordance_failures": 0,
+        "sunlight_affordance_uses": 6
+      },
+      "passed": true
+    },
+    "999": {
+      "checks": {
+        "all_authored_event_types_reachable": true,
+        "deferred_attention_is_exercised": true,
+        "engagement_has_causal_followthrough": true,
+        "event_frequency_bounded": true,
+        "event_linked_behavior_is_bounded": true,
+        "events_are_temporally_separated": true,
+        "events_do_not_dominate_timeline": true,
+        "interruptions_only_break_low_commitment_actions": true,
+        "iteration6_repertoire_not_crowded_out": true,
+        "response_diversity_includes_ignore_orient_engage": true,
+        "same_event_clustering_bounded": true,
+        "sunlight_is_real_temporary_affordance": true
+      },
+      "metrics": {
+        "action_counts": {
+          "carry": 207,
+          "explore": 116,
+          "groom": 59,
+          "idle": 365,
+          "inspect": 199,
+          "loaf": 133,
+          "look_outside": 125,
+          "nudge": 25,
+          "place": 207,
+          "react": 51,
+          "rest": 391,
+          "sleep": 327,
+          "stretch": 85,
+          "wake": 127,
+          "walk": 322
+        },
+        "causal_engagement_failures": [],
+        "causal_engagements_verified": 24,
+        "engaged_events": 24,
+        "event_active_timeline_share": 0.071131,
+        "event_counts": {
+          "bird": 13,
+          "leaf_tap": 8,
+          "moth": 17,
+          "rain_intensify": 2,
+          "sunlight": 7,
+          "thunder": 4
+        },
+        "event_linked_decision_share": 0.069733,
+        "event_start_gap_minutes": {
+          "max": 852,
+          "mean": 193.22,
+          "min": 23
+        },
+        "events_ended": 51,
+        "events_started": 51,
+        "family_entropy_bits": 2.9007,
+        "generic_decision_share": 0.601679,
+        "interruption_actions": {},
+        "iteration6_family_entropy_bits": 2.914765,
+        "iteration6_generic_decision_share": 0.581997,
+        "ordinary_autonomous_decision_share": 0.930267,
+        "outcome_counts": {
+          "engaged": 24,
+          "ignored": 22,
+          "oriented": 5
+        },
+        "response_path_counts": {
+          "deferred": 22,
+          "engaged": 24,
+          "ignored": 22,
+          "noticed": 4,
+          "orient": 3
+        },
+        "same_type_start_gap_minutes": {
+          "mean": 889.466667,
+          "min": 115
+        },
+        "sunlight_affordance_failures": 0,
+        "sunlight_affordance_uses": 6
+      },
+      "passed": true
+    }
+  },
+  "schema": "terrarium.situational-events-evaluation.v1",
+  "seeds": [
+    1701,
+    1702,
+    42,
+    999
+  ],
+  "situational_events_schema": "terrarium.situational-events.v1",
+  "steps_per_seed": 10080
+}

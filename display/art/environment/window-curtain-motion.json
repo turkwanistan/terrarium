@@ -1,0 +1,54 @@
+{
+  "schema": "terrarium.pixel-asset.v1",
+  "id": "environment.window-curtain-motion",
+  "width": 144,
+  "height": 90,
+  "anchor": [
+    0,
+    0
+  ],
+  "runs": [
+    [
+      2,
+      16,
+      3,
+      50,
+      "clothBlue"
+    ],
+    [
+      5,
+      20,
+      2,
+      41,
+      "creamShade"
+    ],
+    [
+      8,
+      28,
+      2,
+      31,
+      "dustyBlue"
+    ],
+    [
+      139,
+      17,
+      3,
+      48,
+      "clothBlue"
+    ],
+    [
+      136,
+      21,
+      2,
+      40,
+      "creamShade"
+    ],
+    [
+      133,
+      29,
+      2,
+      30,
+      "dustyBlue"
+    ]
+  ]
+}

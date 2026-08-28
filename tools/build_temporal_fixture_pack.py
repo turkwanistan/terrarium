@@ -95,6 +95,54 @@ def _walk_scenarios(seed: int = 1701) -> dict[str, dict[str, Any]]:
     return found
 
 
+
+def _atmosphere_static_scenario(name: str, *, minute: int, weather: str, zone: str = "open_space", activity: str = "idle") -> dict[str, Any]:
+    state = initial_state(1701, created_at=CREATED_AT)
+    state = deepcopy(state)
+    state["world_minutes"] = minute
+    state["habitat"]["lighting"] = lighting_for(minute)
+    state["habitat"]["weather"] = weather
+    x, y = zone_anchor(zone)
+    state["creature"].update({"zone": zone, "x": x, "y": y, "activity": activity, "pose": activity})
+    frame = make_frame(
+        state,
+        last_event={
+            "event_id": f"fixture-{name}",
+            "type": "fixture",
+            "summary": "Deterministic long-observation atmospheric control.",
+            "details": {
+                "action": "ambient_control",
+                "decision": False,
+                "from_zone": zone,
+                "to_zone": zone,
+            },
+        },
+    )
+    return {
+        "id": name,
+        "seed": 1701,
+        "source_tick": frame["tick"],
+        "target_tick": frame["tick"],
+        "source": frame,
+        "target": deepcopy(frame),
+        "semantic_event": {"action": "ambient_control", "from_zone": zone, "to_zone": zone},
+        "purpose": f"long atmospheric observation: {lighting_for(minute)} / {weather} / {zone} / {activity}",
+        "temporal_kind": "atmosphere",
+    }
+
+
+def _atmosphere_alias(name: str, scenario: dict[str, Any], *, purpose: str, clear_day: bool = False) -> dict[str, Any]:
+    result = deepcopy(scenario)
+    result["id"] = name
+    result["purpose"] = purpose
+    result["temporal_kind"] = "atmosphere"
+    if clear_day:
+        for key in ("source", "target"):
+            result[key]["world_minutes"] = 720
+            result[key]["lighting"] = "day"
+            result[key]["weather"] = "clear"
+    return result
+
 def _rain_scenario() -> dict[str, Any]:
     state = initial_state(0, created_at=CREATED_AT)
     if state["habitat"]["weather"] != "rain":
@@ -266,6 +314,31 @@ def build() -> dict[str, Any]:
     scenarios["dusk_light_transition"] = _lighting_transition("dusk_light_transition", 1140, 1200, "gradual dusk-to-night environmental lighting transition")
     scenarios["rain_control"] = _rain_scenario()
     scenarios.update(_situational_scenarios())
+
+    scenarios["atmosphere_clear_day_idle"] = _atmosphere_static_scenario("atmosphere_clear_day_idle", minute=720, weather="clear")
+    scenarios["atmosphere_clear_night_idle"] = _atmosphere_static_scenario("atmosphere_clear_night_idle", minute=1230, weather="clear")
+    scenarios["atmosphere_night_warm_light"] = _atmosphere_static_scenario("atmosphere_night_warm_light", minute=1290, weather="clear", zone="sleeping_nook", activity="rest")
+    scenarios["atmosphere_rain_idle"] = _atmosphere_static_scenario("atmosphere_rain_idle", minute=900, weather="rain")
+    scenarios["atmosphere_mist_idle"] = _atmosphere_static_scenario("atmosphere_mist_idle", minute=1080, weather="mist")
+    scenarios["atmosphere_window_focus"] = _atmosphere_static_scenario("atmosphere_window_focus", minute=780, weather="clear", zone="window", activity="idle")
+    scenarios["atmosphere_walk"] = _atmosphere_alias("atmosphere_walk", scenarios["left_walk"], purpose="Moss walking while persistent atmosphere remains subordinate", clear_day=True)
+    scenarios["atmosphere_event_coexistence"] = _atmosphere_alias("atmosphere_event_coexistence", scenarios["event_ignored"], purpose="situational event and ambient presentation coexist without semantic coupling")
+    scenarios["atmosphere_sleep"] = _atmosphere_alias("atmosphere_sleep", scenarios["sleep_transition"], purpose="sleep context retains quiet environmental life")
+    scenarios["atmosphere_object_interaction"] = _atmosphere_alias("atmosphere_object_interaction", scenarios["object_roll"], purpose="object interaction remains readable with atmospheric presentation active", clear_day=True)
+
+    atmosphere_review = {
+        "quiet_clear_day": "atmosphere_clear_day_idle",
+        "quiet_clear_night": "atmosphere_clear_night_idle",
+        "night_with_warm_local_lighting": "atmosphere_night_warm_light",
+        "rain": "atmosphere_rain_idle",
+        "mist": "atmosphere_mist_idle",
+        "window_focused": "atmosphere_window_focus",
+        "moss_stationary_environment_alive": "atmosphere_clear_day_idle",
+        "moss_walking_atmosphere_subordinate": "atmosphere_walk",
+        "situational_event_plus_ambient": "atmosphere_event_coexistence",
+        "sleep_context": "atmosphere_sleep",
+        "object_interaction": "atmosphere_object_interaction",
+    }
     hero_reel = [
         "left_walk", "right_walk", "arrive_settle", "idle_control", "window_transition",
         "rain_window", "weather_reaction", "inspect_object", "object_roll", "object_retrieve", "object_tug", "object_nest",
@@ -279,7 +352,9 @@ def build() -> dict[str, Any]:
         "schema": SCHEMA,
         "transition_duration_ms": 2600,
         "recommended_timestamps_ms": [0, 100, 250, 500, 800, 1100, 1400, 1700, 2000, 2300, 2600],
-        "hero_reel": hero_reel,
+        "atmosphere_timestamps_ms": [0, 1500, 4200, 7800, 12500, 19000, 28000, 41000, 56000],
+        "atmosphere_review": atmosphere_review,
+        "hero_reel": hero_reel + list(dict.fromkeys(atmosphere_review.values())),
         "continuity_probe": _continuity_probe(),
         "scenarios": scenarios,
     }
