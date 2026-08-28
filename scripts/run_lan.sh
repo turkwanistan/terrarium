@@ -29,6 +29,26 @@ is_terrarium() {
   fi
 }
 
+is_compatible_terrarium() {
+  local p="$1"
+  local manifest
+  if ! is_terrarium "$p"; then
+    return 1
+  fi
+  if manifest="$(curl -fsS --max-time 0.75 "http://127.0.0.1:${p}/art/manifest.json" 2>/dev/null)"; then
+    printf '%s' "$manifest" | grep -q '"schema"[[:space:]]*:[[:space:]]*"terrarium.art-manifest.v1"'
+  else
+    return 1
+  fi
+}
+
+stale_server_message() {
+  local p="$1"
+  echo "An older Terrarium server is already running on port ${p}, but it does not expose the current authored-art contract." >&2
+  echo "Stop that Terrarium process, then run this launcher again. The canonical runtime data is preserved on disk." >&2
+  echo "Find it with:  pgrep -af 'terrarium.api.server'" >&2
+}
+
 is_occupied() {
   "$python_bin" - "$1" <<'PY'
 import socket, sys
@@ -45,8 +65,11 @@ PY
 explicit_port="${TERRARIUM_PORT:-}"
 if [[ -n "$explicit_port" ]]; then
   port="$explicit_port"
-  if is_terrarium "$port"; then
+  if is_compatible_terrarium "$port"; then
     echo "Terrarium is already running on port ${port}; reusing the existing world process."
+  elif is_terrarium "$port"; then
+    stale_server_message "$port"
+    exit 97
   elif is_occupied "$port"; then
     echo "Port ${port} is already in use by a non-Terrarium process." >&2
     echo "Identify it with:  sudo ss -ltnp 'sport = :${port}'" >&2
@@ -59,10 +82,13 @@ else
   # Prefer a stable Terrarium-specific range instead of common service ports 8080/8081.
   port=""
   for candidate in $(seq 8765 8799); do
-    if is_terrarium "$candidate"; then
+    if is_compatible_terrarium "$candidate"; then
       port="$candidate"
       echo "Terrarium is already running on port ${candidate}; reusing the existing world process."
       break
+    elif is_terrarium "$candidate"; then
+      stale_server_message "$candidate"
+      exit 97
     fi
   done
   if [[ -z "$port" ]]; then
@@ -84,7 +110,7 @@ fi
 local_url="http://127.0.0.1:${port}"
 lan_url="http://${ip}:${port}"
 
-if is_terrarium "$port"; then
+if is_compatible_terrarium "$port"; then
   echo "Local: ${local_url}/"
   if [[ -n "$ip" ]]; then
     echo "From another PC on this LAN: ${lan_url}/"
