@@ -1,0 +1,30 @@
+{
+  "schema": "terrarium.pixel-asset.v1",
+  "id": "structure.room-shell",
+  "width": 400,
+  "height": 240,
+  "anchor": [0,0],
+  "runs": [
+    [0,0,400,160,"wall"], [0,160,400,80,"floor"],
+    [0,0,400,5,"woodDeep"], [0,5,400,2,"woodGold"],
+    [0,149,400,11,"woodDeep"], [0,149,400,2,"woodGold"], [0,157,400,3,"walnut"],
+    [0,160,400,3,"floorShade"],
+    [0,28,400,1,"wallShade"], [0,29,400,1,"wallLight"],
+    [0,82,400,1,"wallShade"], [0,83,400,1,"wallLight"],
+    [0,126,400,1,"wallShade"],
+    [9,12,2,128,"wallShade"], [10,12,1,128,"wallLight"],
+    [387,10,3,132,"wallShade"], [390,10,1,132,"wallLight"],
+    [173,8,1,136,"wallShade"], [174,8,1,136,"wallLight"],
+    [252,8,1,136,"wallShade"],
+    [0,179,400,1,"floorShade"], [0,204,400,1,"floorShade"], [0,228,400,1,"floorShade"],
+    [54,161,1,18,"floorShade"], [108,180,1,24,"floorShade"], [166,161,1,18,"floorShade"],
+    [222,205,1,23,"floorShade"], [280,161,1,18,"floorShade"], [340,180,1,24,"floorShade"],
+    [18,169,22,1,"floorLight"], [70,191,14,1,"floorLight"], [121,217,19,1,"floorLight"],
+    [182,166,18,1,"floorLight"], [239,220,17,1,"floorLight"], [302,189,13,1,"floorLight"], [349,230,22,1,"floorLight"],
+    [23,171,7,1,"floorShade"], [77,193,5,1,"floorShade"], [126,219,7,1,"floorShade"],
+    [189,168,6,1,"floorShade"], [245,222,6,1,"floorShade"], [308,191,5,1,"floorShade"], [357,232,8,1,"floorShade"],
+    [186,19,30,3,"wallLight"], [188,22,26,1,"wallShade"],
+    [190,42,13,2,"wallLight"], [207,63,22,2,"wallShade"], [267,37,17,2,"wallLight"],
+    [329,111,26,2,"wallShade"], [355,113,13,1,"wallLight"]
+  ]
+}

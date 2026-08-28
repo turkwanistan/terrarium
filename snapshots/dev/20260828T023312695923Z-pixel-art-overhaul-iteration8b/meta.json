@@ -1,0 +1,41 @@
+{
+  "art_surface": {
+    "height": 240,
+    "integer_scale": 2,
+    "smoothing": false,
+    "width": 400
+  },
+  "captured_at": "2026-08-28T02:33:12.698735Z",
+  "frame": {
+    "logical_height": 480,
+    "logical_width": 800,
+    "path": "dev/20260828T023312695923Z-pixel-art-overhaul-iteration8b/frame.json",
+    "sha256": "e64af0693418973eab51a4f154c375399331fa4117f8168a083ab9296b9a1102",
+    "tick": 10080
+  },
+  "git": {
+    "branch": "main",
+    "dirty": true,
+    "head": "d28c8d785fa5c9483587b3feab8ab925589470da"
+  },
+  "note": "Accepted Pixel-Art Overhaul Iteration 8B room recomposition",
+  "preview": {
+    "path": "dev/20260828T023312695923Z-pixel-art-overhaul-iteration8b/preview.svg",
+    "sha256": "dd1662ad07d796302643cbf6240cae51ec72bef050c15ee0253b7b8c77ea9f64"
+  },
+  "schema": "terrarium.dev-snapshot.v1",
+  "snapshot_id": "20260828T023312695923Z-pixel-art-overhaul-iteration8b",
+  "source": {
+    "mode": "deterministic",
+    "seed": 1701,
+    "steps": 10080
+  },
+  "source_hashes": {
+    "authored_art": "daaf4362afe7261e0bece29c7561aeb03333620bef5030898deeaec5d6f8ca96",
+    "engine": "c557aff864e560e2fd9716d64d5c39af66dda40b294b6b8ff54a5087fc3482fb",
+    "frame_contract": "680a24d7c9824a109abce56bb4bba4fcc4bcd1b9e35bac29a13950b0426108a8",
+    "renderer_css": "3a24319be5a3e0c963b8e721b637f35aedfdc24b8bef8e779ae934dd09fd62d1",
+    "renderer_js": "e0ad1ddeeb85b0bf23aba987e88394d10f58a641e3da2e398730238f8bf52d10"
+  },
+  "view_url": "/?snapshot=/snapshots/dev/20260828T023312695923Z-pixel-art-overhaul-iteration8b/frame.json"
+}

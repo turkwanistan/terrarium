@@ -240,6 +240,21 @@
         "steps": 10080
       },
       "tick": 10080
+    },
+    {
+      "captured_at": "2026-08-28T02:33:12.698735Z",
+      "frame_path": "/snapshots/dev/20260828T023312695923Z-pixel-art-overhaul-iteration8b/frame.json",
+      "meta_path": "/snapshots/dev/20260828T023312695923Z-pixel-art-overhaul-iteration8b/meta.json",
+      "note": "Accepted Pixel-Art Overhaul Iteration 8B room recomposition",
+      "preview_path": "/snapshots/dev/20260828T023312695923Z-pixel-art-overhaul-iteration8b/preview.svg",
+      "renderer_sha256": "e0ad1ddeeb85b0bf23aba987e88394d10f58a641e3da2e398730238f8bf52d10",
+      "snapshot_id": "20260828T023312695923Z-pixel-art-overhaul-iteration8b",
+      "source": {
+        "mode": "deterministic",
+        "seed": 1701,
+        "steps": 10080
+      },
+      "tick": 10080
     }
   ]
 }

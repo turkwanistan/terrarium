@@ -1,0 +1,15 @@
+{
+  "schema": "terrarium.pixel-asset.v1",
+  "id": "surface.living-rug",
+  "width": 124,
+  "height": 42,
+  "anchor": [0,0],
+  "runs": [
+    [10,2,104,2,"mossDark"], [5,4,114,4,"rug"], [2,8,120,22,"rug"], [5,30,114,4,"rug"], [11,34,102,3,"mossDark"],
+    [12,5,100,2,"rugLight"], [8,10,108,2,"mossDark"], [8,27,108,2,"mossDark"], [14,32,96,1,"rugLight"],
+    [17,14,15,2,"rugLight"], [39,18,10,2,"leafBright"], [65,13,13,2,"rugLight"], [88,20,16,2,"leafBright"],
+    [26,24,10,2,"leafBright"], [54,25,14,2,"rugLight"], [79,16,8,2,"mossDark"], [101,25,8,2,"rugLight"],
+    [19,17,3,3,"amber"], [104,14,3,3,"terracotta"], [72,23,2,2,"amber"],
+    [13,37,1,5,"rugLight"], [29,37,1,4,"rugLight"], [48,37,1,5,"rugLight"], [68,37,1,4,"rugLight"], [90,37,1,5,"rugLight"], [109,37,1,4,"rugLight"]
+  ]
+}

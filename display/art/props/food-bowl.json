@@ -1,0 +1,11 @@
+{
+  "schema": "terrarium.pixel-asset.v1",
+  "id": "prop.food-bowl",
+  "width": 24,
+  "height": 14,
+  "anchor": [0,0],
+  "runs": [
+    [1,8,22,3,"shadow"], [3,3,18,8,"terracotta"], [5,1,14,4,"creamShade"], [7,2,10,2,"woodDeep"],
+    [5,9,14,3,"woodDeep"], [8,4,3,2,"amber"], [13,4,2,2,"amber"], [16,4,2,2,"woodWarm"]
+  ]
+}

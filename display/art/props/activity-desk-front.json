@@ -1,0 +1,10 @@
+{
+  "schema": "terrarium.pixel-asset.v1",
+  "id": "front.activity-desk-lip",
+  "width": 100,
+  "height": 70,
+  "anchor": [0,0],
+  "runs": [
+    [5,31,90,4,"woodDeep"], [8,31,84,1,"woodGold"], [13,43,8,3,"woodDeep"], [75,43,8,3,"woodDeep"]
+  ]
+}

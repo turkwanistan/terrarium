@@ -1,0 +1,320 @@
+{
+  "accepted": true,
+  "art_review": {
+    "authored_art_sha256": "daaf4362afe7261e0bece29c7561aeb03333620bef5030898deeaec5d6f8ca96",
+    "fixtures": "artifacts/iteration8b-art-direction-fixtures.json",
+    "matrix": "artifacts/iteration8b-art-direction-matrix.json",
+    "production_renderer": true,
+    "renderer_sha256": "e0ad1ddeeb85b0bf23aba987e88394d10f58a641e3da2e398730238f8bf52d10",
+    "scenario_count": 13,
+    "tool": "tools/capture_art_direction_matrix.py"
+  },
+  "browser": {
+    "art_surface": [
+      400,
+      240
+    ],
+    "canonical_live_runtime_touched": false,
+    "captures": {
+      "art_dawn_clear_fresh_idle-current": {
+        "distinct_rasters": 1,
+        "exact_2x": true,
+        "first_pixel_hash": "fnv1a32:674275bd",
+        "samples": 1,
+        "scale_error_blocks": 0,
+        "schema": "terrarium.temporal-keyframe.v1",
+        "smoothing_off": true
+      },
+      "art_day_clear_fresh_idle-current": {
+        "distinct_rasters": 1,
+        "exact_2x": true,
+        "first_pixel_hash": "fnv1a32:29e7d52d",
+        "samples": 1,
+        "scale_error_blocks": 0,
+        "schema": "terrarium.temporal-keyframe.v1",
+        "smoothing_off": true
+      },
+      "art_day_clear_lived_idle-current": {
+        "distinct_rasters": 1,
+        "exact_2x": true,
+        "first_pixel_hash": "fnv1a32:32bda785",
+        "samples": 1,
+        "scale_error_blocks": 0,
+        "schema": "terrarium.temporal-keyframe.v1",
+        "smoothing_off": true
+      },
+      "art_dusk_mist_fresh_idle-current": {
+        "distinct_rasters": 1,
+        "exact_2x": true,
+        "first_pixel_hash": "fnv1a32:4ce58c6d",
+        "samples": 1,
+        "scale_error_blocks": 0,
+        "schema": "terrarium.temporal-keyframe.v1",
+        "smoothing_off": true
+      },
+      "art_night_rain_lived_idle-current": {
+        "distinct_rasters": 1,
+        "exact_2x": true,
+        "first_pixel_hash": "fnv1a32:f98a9bf5",
+        "samples": 1,
+        "scale_error_blocks": 0,
+        "schema": "terrarium.temporal-keyframe.v1",
+        "smoothing_off": true
+      },
+      "continuity_probe-current": {
+        "jump_px": 0,
+        "schema": "terrarium.continuity-probe.v1"
+      },
+      "event_moth_engage-current": {
+        "distinct_rasters": 8,
+        "exact_2x": true,
+        "first_pixel_hash": "fnv1a32:7090aded",
+        "samples": 11,
+        "scale_error_blocks": 0,
+        "schema": "terrarium.temporal-capture.v1",
+        "smoothing_off": true
+      },
+      "inspect_object-current": {
+        "distinct_rasters": 7,
+        "exact_2x": true,
+        "first_pixel_hash": "fnv1a32:c4b690ed",
+        "samples": 11,
+        "scale_error_blocks": 0,
+        "schema": "terrarium.temporal-capture.v1",
+        "smoothing_off": true
+      },
+      "left_walk-terrarium-raf-probe-v1": {
+        "duration_ms": 1816.6,
+        "frames": 110,
+        "interval_ms": {
+          "max": 16.8,
+          "min": 16.5,
+          "over_34ms": 0,
+          "over_50ms": 0,
+          "p50": 16.7,
+          "p95": 16.7
+        },
+        "schema": "terrarium.raf-probe.v1"
+      },
+      "sleep_transition-current": {
+        "distinct_rasters": 9,
+        "exact_2x": true,
+        "first_pixel_hash": "fnv1a32:de4bddbd",
+        "samples": 11,
+        "scale_error_blocks": 0,
+        "schema": "terrarium.temporal-capture.v1",
+        "smoothing_off": true
+      }
+    },
+    "console_errors_observed": 0,
+    "console_warning_note": "The browser harness reported one repeated non-fatal warning during sequence/probe loads and zero errors; no renderer or fixture failure was observed.",
+    "console_warnings_observed": 1,
+    "deterministic_repeat": {
+      "pixel_hash": "fnv1a32:29e7d52d",
+      "repeat_match": true,
+      "scenario": "art_day_clear_fresh_idle"
+    },
+    "integer_scale": 2,
+    "isolated_data_dir": "/tmp/terrarium-iteration8b-uat",
+    "passed": true,
+    "production_renderer": true,
+    "schema": "terrarium.pixel-art-overhaul-iteration8b.browser-uat.v1",
+    "subjective_policy": "No synthetic beauty score. 8B acceptance is based on authored room-system implementation plus direct production-browser inspection of day/dawn/dusk/night, fresh/lived, interaction, sleep, and event states.",
+    "viewport": [
+      800,
+      480
+    ]
+  },
+  "canonical_moss": {
+    "development_fixture_data_dir": "/tmp/terrarium-iteration8b-uat",
+    "live_runtime_touched": false,
+    "reset_or_replaced": false
+  },
+  "checkpoint": "Pixel-Art Overhaul \u2014 Iteration 8B: Room Recomposition",
+  "next": "Iteration 8C \u2014 Moss Sprite Overhaul",
+  "palette": {
+    "direction": "earthy but materially richer and more saturated, with chromatic darks, warm timber, stronger greens, clearer cool exterior values, and selective amber/terracotta accents",
+    "external_palette_bank": true,
+    "material_families": [
+      "timber",
+      "vegetation",
+      "cloth",
+      "environment",
+      "ceramic",
+      "metal",
+      "dog"
+    ],
+    "palette_states": [
+      "day",
+      "dawn",
+      "dusk",
+      "night"
+    ],
+    "richer_roles_added": [
+      "woodDeep",
+      "woodWarm",
+      "woodGold",
+      "leafDeep",
+      "leafBright",
+      "clothBlue",
+      "clothDeep",
+      "terracotta",
+      "flower",
+      "glassLight",
+      "stone",
+      "brass"
+    ]
+  },
+  "regression": {
+    "browser": {
+      "continuity_jump_px": 0,
+      "deterministic_repeat": {
+        "pixel_hash": "fnv1a32:29e7d52d",
+        "repeat_match": true,
+        "scenario": "art_day_clear_fresh_idle"
+      },
+      "passed": true,
+      "raf": {
+        "max": 16.8,
+        "min": 16.5,
+        "over_34ms": 0,
+        "over_50ms": 0,
+        "p50": 16.7,
+        "p95": 16.7
+      }
+    },
+    "javascript_syntax": true,
+    "passed": true,
+    "per_seed": {
+      "1701": {
+        "behavior": true,
+        "coherence": true,
+        "habits": true,
+        "spatial": true
+      },
+      "1702": {
+        "behavior": true,
+        "coherence": true,
+        "habits": true,
+        "spatial": true
+      },
+      "42": {
+        "behavior": true,
+        "coherence": true,
+        "habits": true,
+        "spatial": true
+      },
+      "999": {
+        "behavior": true,
+        "coherence": true,
+        "habits": true,
+        "spatial": true
+      }
+    },
+    "promoted_grid_auditor": {
+      "capability": "grid-quantized-temporal-render-auditor-r1",
+      "content_hash": "57fe2065ca3cc984241bee2da545db3bb318fd8a07ae90402a1dd6bc9993e697",
+      "direct_invocation_available": false,
+      "note": "The frozen MCP/Lab surface still does not expose the promoted binary directly; applicable rejection classes were exercised through deterministic temporal fixtures, exact-2x raster telemetry, continuity probe, and real RAF probe. No substitute capability was forged."
+    },
+    "pytest": {
+      "failed_count": 0,
+      "passed": true,
+      "passed_count": 46
+    },
+    "python_3_10_grammar_guard": {
+      "passed": true,
+      "source_count": 35
+    },
+    "repertoire": {
+      "all_passed": true
+    },
+    "schema": "terrarium.pixel-art-overhaul-iteration8b.regression-matrix.v1",
+    "simulation_source_changed": false,
+    "situations": {
+      "all_passed": true
+    },
+    "source_policy": {
+      "ellipse": false,
+      "gradients": false,
+      "math_random": false,
+      "round_rect": false,
+      "smoothing": false
+    },
+    "technical": {
+      "passed": true,
+      "replay": {
+        "canonical_state_hash": "c00e5645b3d6f4cf4a333c29a11df2ca455c28a95f5c713b5e830f7fb58aa8c4",
+        "event_count": 500,
+        "ok": true,
+        "replayed_state_hash": "c00e5645b3d6f4cf4a333c29a11df2ca455c28a95f5c713b5e830f7fb58aa8c4"
+      }
+    }
+  },
+  "room_recomposition": {
+    "asset_count": 15,
+    "event_weather_overlays_preserved": true,
+    "full_room_authored": true,
+    "major_authored_masses": [
+      "room shell and material planes",
+      "window exterior and alcove",
+      "sleeping nook",
+      "open living rug",
+      "collection shelf",
+      "activity desk",
+      "water and food bowls",
+      "foreground furniture lips"
+    ],
+    "moss_action_sprite_overhaul_deferred": "Iteration 8C",
+    "persistent_history_preserved": true,
+    "zone_identity": {
+      "activity_corner": "denser paper/plant/work cluster with richer material contrast",
+      "collection_shelf": "strong vertical memory/accumulation silhouette with real foreground lips",
+      "rug_open_space": "broad quiet movement field with bounded woven motifs and negative space",
+      "sleeping_nook": "layered cloth, warm timber, compressed domestic shape and history overlays",
+      "window": "cool exterior nature/weather cluster with deep framed alcove and asymmetrical cloth"
+    }
+  },
+  "sbc": {
+    "frozen_mcp_changed": false,
+    "gen18_warranted": false,
+    "new_capability_forged": false,
+    "platform_changed": false,
+    "reason": "8B required Terrarium-specific art direction, authored assets, palette tuning, and renderer composition only; existing project/browser/evaluation substrate was sufficient."
+  },
+  "scene_depth": {
+    "bowls_objects_and_interior_events": "WORLD",
+    "layers": [
+      "BACK",
+      "STRUCTURE",
+      "SURFACE",
+      "WORLD",
+      "ACTORS",
+      "FRONT",
+      "ALWAYS_FRONT"
+    ],
+    "major_furniture_zones": "STRUCTURE",
+    "moss": "ACTORS",
+    "room_shell_and_window_view": "BACK",
+    "rug_floor_detail_history_and_floor_events": "SURFACE",
+    "shelf_desk_and_conditional_window_lips": "FRONT"
+  },
+  "schema": "terrarium.pixel-art-overhaul-iteration8b.acceptance.v1",
+  "semantic_change": false,
+  "semantic_frame_matches_iteration8a": true,
+  "simulation_authority_changed": false,
+  "snapshot": {
+    "art_surface": {
+      "height": 240,
+      "integer_scale": 2,
+      "smoothing": false,
+      "width": 400
+    },
+    "authored_art_sha256": "daaf4362afe7261e0bece29c7561aeb03333620bef5030898deeaec5d6f8ca96",
+    "frame_sha256": "e64af0693418973eab51a4f154c375399331fa4117f8168a083ab9296b9a1102",
+    "id": "20260828T023312695923Z-pixel-art-overhaul-iteration8b",
+    "renderer_js_sha256": "e0ad1ddeeb85b0bf23aba987e88394d10f58a641e3da2e398730238f8bf52d10",
+    "seed": 1701,
+    "tick": 10080
+  }
+}

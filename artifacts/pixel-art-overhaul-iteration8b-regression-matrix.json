@@ -1,0 +1,86 @@
+{
+  "browser": {
+    "continuity_jump_px": 0,
+    "deterministic_repeat": {
+      "pixel_hash": "fnv1a32:29e7d52d",
+      "repeat_match": true,
+      "scenario": "art_day_clear_fresh_idle"
+    },
+    "passed": true,
+    "raf": {
+      "max": 16.8,
+      "min": 16.5,
+      "over_34ms": 0,
+      "over_50ms": 0,
+      "p50": 16.7,
+      "p95": 16.7
+    }
+  },
+  "javascript_syntax": true,
+  "passed": true,
+  "per_seed": {
+    "1701": {
+      "behavior": true,
+      "coherence": true,
+      "habits": true,
+      "spatial": true
+    },
+    "1702": {
+      "behavior": true,
+      "coherence": true,
+      "habits": true,
+      "spatial": true
+    },
+    "42": {
+      "behavior": true,
+      "coherence": true,
+      "habits": true,
+      "spatial": true
+    },
+    "999": {
+      "behavior": true,
+      "coherence": true,
+      "habits": true,
+      "spatial": true
+    }
+  },
+  "promoted_grid_auditor": {
+    "capability": "grid-quantized-temporal-render-auditor-r1",
+    "content_hash": "57fe2065ca3cc984241bee2da545db3bb318fd8a07ae90402a1dd6bc9993e697",
+    "direct_invocation_available": false,
+    "note": "The frozen MCP/Lab surface still does not expose the promoted binary directly; applicable rejection classes were exercised through deterministic temporal fixtures, exact-2x raster telemetry, continuity probe, and real RAF probe. No substitute capability was forged."
+  },
+  "pytest": {
+    "failed_count": 0,
+    "passed": true,
+    "passed_count": 46
+  },
+  "python_3_10_grammar_guard": {
+    "passed": true,
+    "source_count": 35
+  },
+  "repertoire": {
+    "all_passed": true
+  },
+  "schema": "terrarium.pixel-art-overhaul-iteration8b.regression-matrix.v1",
+  "simulation_source_changed": false,
+  "situations": {
+    "all_passed": true
+  },
+  "source_policy": {
+    "ellipse": false,
+    "gradients": false,
+    "math_random": false,
+    "round_rect": false,
+    "smoothing": false
+  },
+  "technical": {
+    "passed": true,
+    "replay": {
+      "canonical_state_hash": "c00e5645b3d6f4cf4a333c29a11df2ca455c28a95f5c713b5e830f7fb58aa8c4",
+      "event_count": 500,
+      "ok": true,
+      "replayed_state_hash": "c00e5645b3d6f4cf4a333c29a11df2ca455c28a95f5c713b5e830f7fb58aa8c4"
+    }
+  }
+}

@@ -5,10 +5,20 @@
   "grid": [25, 15],
   "palette_source": "palettes/materials.json",
   "assets": [
+    {"id": "structure.room-shell", "kind": "structure", "path": "tiles/room-shell.json", "layer": "BACK"},
     {"id": "tile.floor-detail", "kind": "tile", "path": "tiles/floor-detail.json", "layer": "SURFACE"},
+    {"id": "environment.window-view", "kind": "environment", "path": "environment/window-view.json", "layer": "BACK"},
+    {"id": "structure.window-alcove", "kind": "structure", "path": "props/window-alcove.json", "layer": "STRUCTURE"},
+    {"id": "structure.sleeping-nook", "kind": "structure", "path": "props/sleeping-nook.json", "layer": "STRUCTURE"},
+    {"id": "surface.living-rug", "kind": "tile", "path": "tiles/living-rug.json", "layer": "SURFACE"},
     {"id": "structure.collection-shelf", "kind": "structure", "path": "props/collection-shelf.json", "layer": "STRUCTURE"},
+    {"id": "structure.activity-desk", "kind": "structure", "path": "props/activity-desk.json", "layer": "STRUCTURE"},
+    {"id": "environment.desk-plant", "kind": "environment", "path": "environment/desk-plant.json", "layer": "STRUCTURE"},
     {"id": "prop.water-bowl", "kind": "prop", "path": "props/water-bowl.json", "layer": "WORLD"},
-    {"id": "moss.idle", "kind": "moss", "path": "moss/idle.json", "layer": "ACTORS"},
-    {"id": "environment.desk-plant", "kind": "environment", "path": "environment/desk-plant.json", "layer": "STRUCTURE"}
+    {"id": "prop.food-bowl", "kind": "prop", "path": "props/food-bowl.json", "layer": "WORLD"},
+    {"id": "front.collection-shelf-lips", "kind": "structure", "path": "props/collection-shelf-front.json", "layer": "FRONT"},
+    {"id": "front.activity-desk-lip", "kind": "structure", "path": "props/activity-desk-front.json", "layer": "FRONT"},
+    {"id": "front.window-perch", "kind": "structure", "path": "props/window-perch-front.json", "layer": "FRONT"},
+    {"id": "moss.idle", "kind": "moss", "path": "moss/idle.json", "layer": "ACTORS"}
   ]
 }

@@ -1,0 +1,17 @@
+{
+  "schema": "terrarium.pixel-asset.v1",
+  "id": "environment.window-view",
+  "width": 104,
+  "height": 76,
+  "anchor": [0,0],
+  "runs": [
+    [0,0,104,76,"sky"], [0,51,104,25,"skyDark"], [0,47,104,4,"glassLight"],
+    [0,58,104,18,"leafDeep"], [0,55,31,10,"foliage"], [72,53,32,12,"foliage"],
+    [4,49,18,8,"moss"], [13,45,14,8,"leafBright"], [77,48,18,9,"moss"], [89,43,12,10,"leafBright"],
+    [0,33,18,5,"leafDeep"], [4,28,17,7,"foliage"], [12,23,9,8,"leafBright"],
+    [84,25,20,5,"leafDeep"], [91,19,13,8,"foliage"], [82,32,12,7,"leafBright"],
+    [5,63,26,3,"leafDeep"], [36,61,18,4,"mossDark"], [55,65,21,3,"leafDeep"], [81,61,23,4,"mossDark"],
+    [12,15,2,17,"woodDeep"], [14,14,2,16,"woodWarm"], [89,11,2,21,"woodDeep"], [87,13,2,18,"woodWarm"],
+    [30,42,18,2,"glassLight"], [58,35,12,2,"glassLight"], [47,19,7,1,"cream"]
+  ]
+}

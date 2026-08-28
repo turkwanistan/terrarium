@@ -43,9 +43,13 @@ Success means the renderer can cleanly support hand-authored late-16-bit art wit
 
 Accepted evidence: `history/2026-08-27-pixel-art-overhaul-iteration8a.md`, `artifacts/pixel-art-overhaul-iteration8a.json`, `artifacts/pixel-art-overhaul-iteration8a-regression-matrix.json`, and snapshot `20260828T020631095429Z-pixel-art-overhaul-iteration8a`.
 
-## Next: Iteration 8B — Room Recomposition
+## Accepted Iteration 8B — Room Recomposition
 
-Redraw the persistent habitat using the new authored asset/layer system.
+**Status: ACCEPTED.** The persistent habitat is now recomposed through the authored asset/layer system with richer material palettes, stronger zone silhouettes, layered exterior foliage, controlled asymmetry, preserved open-space readability, canonical history overlays, and real foreground furniture lips. The seed-1701/tick-10080 semantic frame remains unchanged from Iterations 7/8A.
+
+Accepted evidence: `history/2026-08-27-pixel-art-overhaul-iteration8b.md`, `artifacts/pixel-art-overhaul-iteration8b.json`, `artifacts/pixel-art-overhaul-iteration8b-regression-matrix.json`, and snapshot `20260828T023312695923Z-pixel-art-overhaul-iteration8b`.
+
+Historical 8B requirements:
 
 Requirements:
 
@@ -62,7 +66,9 @@ Requirements:
 
 Success means a screenshot with Moss hidden already reads as a deliberate, richly authored late-16-bit life-RPG interior rather than a procedural pixel mockup.
 
-## Iteration 8C — Moss Sprite Overhaul
+## Next: Iteration 8C — Moss Sprite Overhaul
+
+**Status: NEXT.**
 
 Replace Moss's procedural body-part assembly with true authored low-frame sprite acting while preserving current semantic action and timing authority.
 

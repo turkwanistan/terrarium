@@ -4,23 +4,24 @@ Terrarium is a normal product built after the accepted Self-Building Computer Ge
 
 ## Current checkpoint
 
-**Pixel-Art Overhaul — Iteration 8A: Visual Grammar and Asset Pipeline**
+**Pixel-Art Overhaul — Iteration 8B: Room Recomposition**
 
-- history: `history/2026-08-27-pixel-art-overhaul-iteration8a.md`
-- acceptance: `artifacts/pixel-art-overhaul-iteration8a.json`
-- regression matrix: `artifacts/pixel-art-overhaul-iteration8a-regression-matrix.json`
-- browser UAT: `artifacts/pixel-art-overhaul-iteration8a-browser-uat.json`
-- art-direction matrix: `artifacts/iteration8a-art-direction-matrix.json`
-- snapshot: `snapshots/dev/20260828T020631095429Z-pixel-art-overhaul-iteration8a`
+- history: `history/2026-08-27-pixel-art-overhaul-iteration8b.md`
+- acceptance: `artifacts/pixel-art-overhaul-iteration8b.json`
+- regression matrix: `artifacts/pixel-art-overhaul-iteration8b-regression-matrix.json`
+- browser UAT: `artifacts/pixel-art-overhaul-iteration8b-browser-uat.json`
+- art-direction matrix: `artifacts/iteration8b-art-direction-matrix.json`
+- snapshot: `snapshots/dev/20260828T023312695923Z-pixel-art-overhaul-iteration8b`
 - seed/tick: **1701 / 10080**
 - semantic frame SHA256: `e64af0693418973eab51a4f154c375399331fa4117f8168a083ab9296b9a1102`
-- renderer JS SHA256: `993718bd2a30ce6fe47ce980f12af2512832c5c6a7fb4b4189068bef9bcfdae7`
-- authored-art tree SHA256: `644d19610ac740d5867b36bd266fdb075b7b0548360d5ed39339651cec76faa4`
+- renderer JS SHA256: `e0ad1ddeeb85b0bf23aba987e88394d10f58a641e3da2e398730238f8bf52d10`
+- authored-art tree SHA256: `daaf4362afe7261e0bece29c7561aeb03333620bef5030898deeaec5d6f8ca96`
+- authored asset count: **15**
 - behavior rules remain: `terrarium-rules-v6-situational-attention`
 - situational events remain: `terrarium.situational-events.v1`
 - spatial schema remains: `terrarium.spatial.v1`
 
-Iteration 8A is a renderer/art-substrate checkpoint. Its seed-1701/tick-10080 semantic frame hash is identical to accepted Iteration 7, proving the authoritative simulation remained unchanged.
+Iteration 8B is a renderer/art-composition checkpoint. Its seed-1701/tick-10080 semantic frame hash is identical to accepted Iterations 7 and 8A, proving authoritative simulation state remained unchanged.
 
 Read `STATUS.md`, `ART_DIRECTION.md`, `VISUAL_STYLE_OVERHAUL.md`, `ROADMAP.md`, `plan.md`, `terrarium.md`, and the latest history entry before editing. For renderer work, also inspect `display/art/manifest.json`, `display/art/palettes/materials.json`, representative authored assets, and `display/web/app.js`.
 
@@ -33,32 +34,47 @@ Read `STATUS.md`, `ART_DIRECTION.md`, `VISUAL_STYLE_OVERHAUL.md`, `ROADMAP.md`, 
 - heartbeat: **3 real seconds**; world advance: **1 minute/heartbeat**; full day ~**72 real minutes**;
 - behavior rules: `terrarium-rules-v6-situational-attention`; RNG stream remains pinned to `terrarium-rules-v3-routine-coherence`; geometry remains `terrarium.spatial.v1`.
 
+## Accepted visual grammar after Iteration 8B
+
+The room now uses `display/art/` as the source of truth for its major static visual masses. The 16×16 / 25×15 art grid remains a composition grammar only; canonical movement, object positions, event sources, and interaction anchors remain continuous semantic coordinates.
+
+The accepted scene grammar is:
+
+1. `BACK` — room shell and exterior/window view;
+2. `STRUCTURE` — major furniture/architectural masses;
+3. `SURFACE` — floor detail, rug, path wear/history, and floor-located events;
+4. `WORLD` — bowls, persistent movable objects, and located environmental-event presentation;
+5. `ACTORS` — Moss and carried-object acting;
+6. `FRONT` — authored furniture lips/overhangs and supported sleep foreground causality;
+7. `ALWAYS_FRONT` — reserved for rare justified foreground atmosphere.
+
+The palette bank is now materially richer and more saturated while remaining earthy: chromatic darks, warm timber, stronger vegetation ramps, distinct cloth blues, cool exterior values, and selective amber/terracotta/brass accents. Do not regress to uniform muted beige/brown treatment or expand into neon/glossy color.
+
+Persistent history remains authoritative. Path wear, bedding compression, activity clutter, window marks, object arrangements, and situational events must continue to derive from canonical state rather than decorative renderer memory.
+
 ## Behavioral law after Iteration 7
 
-Short-horizon routine coherence, long-horizon `terrarium.habits.v1`, and Iteration-6 affordances remain authoritative. Iteration 7 adds a compact deterministic situational layer rather than a planner. The initial catalog is `sunlight`, `bird`, `rain_intensify`, `thunder`, `moth`, and `leaf_tap`.
+Short-horizon routine coherence, long-horizon `terrarium.habits.v1`, Iteration-6 affordances, and Iteration-7 situational events remain authoritative and unchanged by 8A/8B.
 
-A world event is canonical state with a bounded lifecycle and source location. It may be unseen or ignored; it is not automatically a behavior command. Moss may ignore, orient, defer, rarely interrupt a low-commitment activity, approach, engage, and then recover depending on current commitment, salience, recent repetition, and deterministic attention choice. High-commitment object/sleep activity is protected. Events must remain opportunities, not compulsory interrupt handlers.
+A world event is canonical state with a bounded lifecycle and source location. It may be unseen or ignored; it is not automatically a behavior command. Moss may ignore, orient, defer, rarely interrupt a low-commitment activity, approach, engage, and recover depending on current commitment, salience, recent repetition, and deterministic attention choice. High-commitment object/sleep activity is protected.
 
-Event causality is explicit: **event → perception/attention → reaction/defer → engagement/decision → aftermath**. The same low-level action can therefore carry different meaning from its cause. Window watching may be casual, bird-driven, rain-driven, or part of another bounded situation without multiplying action enums merely for labels.
+Event causality remains **event → perception/attention → reaction/defer → engagement/decision → aftermath**. Temporary affordances such as moving sunlight remain canonical state; the renderer may depict them but cannot decide where or whether they exist.
 
-Temporary affordances must be authoritative. The moving sunlight patch is the first example: its current walkable location exists in canonical state, Moss can loaf at that location while it exists, may follow one shift, and loses that opportunity when the patch moves or expires. The renderer may depict the patch but cannot decide where or whether it exists.
-
-Object manipulation, habits, possession continuity, spatial authority, supported sleep, recent-zone/object inhibition, exploration floors, and calm commitments continue to constrain situational response. Iteration 7 is additive: ordinary autonomous life still accounts for more than 91% of decisions in the accepted seven-day matrix.
+Object manipulation, habits, possession continuity, spatial authority, supported sleep, recent-zone/object inhibition, exploration floors, and calm commitments continue to constrain situational response.
 
 ## Planned next iterations
 
-`ROADMAP.md` and `VISUAL_STYLE_OVERHAUL.md` are authoritative unless direct canonical-runtime UAT exposes a more severe concrete defect. The simulation is currently ahead of the visual system, so the art pipeline is deliberately reprioritized before deeper behavior work:
+`ROADMAP.md` and `VISUAL_STYLE_OVERHAUL.md` are authoritative unless direct canonical-runtime UAT exposes a more severe concrete defect:
 
-1. **Iteration 8B — Room Recomposition** — use the accepted authored-art pipeline to redraw the habitat into the richer saturated, layered, asymmetrical, materially specific target visual language.
-2. **Iteration 8C — Moss Sprite Overhaul** — migrate the remaining procedural hero poses into true authored low-frame sprites while preserving current semantic actions/timing.
-3. **Iteration 8D — Object Identity and Stateful Affordances** — resume behavior expansion with object-specific state transitions and matching visual variants.
-4. **Iteration 8E — Atmospheric World** — persistent non-commanding ambient animation, richer window life, local warm lighting, and stronger weather mood.
-5. **Iteration 8F — Seasonal Terrarium** — add a slow canonical seasonal timescale and coordinated long-horizon visual transformation.
-6. **Iteration 9 — Emergent Situations and Consequence Memory** — compose events, object state, arrangements, habits, and prior consequences into later opportunities.
+1. **Iteration 8C — Moss Sprite Overhaul** — replace remaining procedural hero poses with true authored low-frame sprites while preserving current semantic actions/timing/contact authority.
+2. **Iteration 8D — Object Identity and Stateful Affordances** — resume behavior expansion with object-specific state transitions and matching authored visual variants.
+3. **Iteration 8E — Atmospheric World** — persistent non-commanding ambient animation, richer window life, local warm lighting, and stronger weather mood.
+4. **Iteration 8F — Seasonal Terrarium** — add a slow canonical seasonal timescale and coordinated long-horizon visual transformation.
+5. **Iteration 9 — Emergent Situations and Consequence Memory** — compose events, object state, arrangements, habits, and prior consequences into later opportunities.
 
 The visual target is a hand-authored late-16-bit life-RPG diorama: strict low-resolution grammar, readable silhouettes, richer saturated natural color, clustered shading, pragmatic perspective, layered depth, selective low-frame acting, non-commanding environmental motion, warm/cool lighting, slow world transformation, and persistent visible history. This is a system-level target; do not copy external assets, exact palettes, characters, architecture, UI, or map structure.
 
-A generic planner, needs/personality-stat model, quest system, dialogue system, or LLM action selector is not implied. First keep pushing the existing model of **attention + affordances + persistent state + habits + bounded causal commitments**.
+A generic planner, needs/personality-stat model, quest system, dialogue system, or LLM action selector is not implied. Keep pushing the existing model of **attention + affordances + persistent state + habits + bounded causal commitments**.
 
 ## Regression procedure
 

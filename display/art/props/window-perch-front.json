@@ -1,0 +1,10 @@
+{
+  "schema": "terrarium.pixel-asset.v1",
+  "id": "front.window-perch",
+  "width": 110,
+  "height": 18,
+  "anchor": [0,0],
+  "runs": [
+    [2,0,106,4,"woodDeep"], [5,0,100,1,"woodGold"], [9,4,8,12,"woodDeep"], [93,4,8,12,"woodDeep"], [11,4,4,8,"woodGold"], [95,4,4,8,"woodGold"]
+  ]
+}

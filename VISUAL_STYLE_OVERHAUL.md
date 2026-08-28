@@ -419,7 +419,7 @@ Success means the renderer can express the desired visual language cleanly witho
 
 ### Iteration 8B — Room Recomposition
 
-**Status: NEXT.**
+**Status: ACCEPTED** — see `history/2026-08-27-pixel-art-overhaul-iteration8b.md` and snapshot `20260828T023312695923Z-pixel-art-overhaul-iteration8b`.
 
 **Purpose:** make a still frame inhabit the target visual territory.
 
@@ -439,6 +439,8 @@ Deliver:
 Success means the room reads as a richly authored late-16-bit life-RPG interior even with Moss hidden.
 
 ### Iteration 8C — Moss Sprite Overhaul
+
+**Status: NEXT.**
 
 **Purpose:** give the hero the same authored visual maturity as the room.
 

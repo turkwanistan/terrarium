@@ -1,0 +1,19 @@
+{
+  "schema": "terrarium.pixel-asset.v1",
+  "id": "structure.sleeping-nook",
+  "width": 124,
+  "height": 58,
+  "anchor": [0,0],
+  "runs": [
+    [2,5,120,46,"shadow"],
+    [4,2,9,48,"woodDeep"], [113,3,9,47,"woodDeep"], [6,0,5,7,"woodGold"], [115,1,5,7,"woodGold"],
+    [12,7,104,37,"woodWarm"], [15,10,98,31,"creamShade"],
+    [17,12,43,15,"cream"], [20,14,37,10,"dogCream"], [22,14,27,2,"cream"],
+    [63,11,46,5,"clothBlue"], [58,16,54,7,"dustyBlue"], [55,23,58,8,"clothBlue"], [59,31,53,7,"clothDeep"],
+    [66,13,18,2,"creamShade"], [62,20,24,2,"skyDark"], [90,26,19,2,"skyDark"], [66,34,31,2,"skyDark"],
+    [77,17,2,8,"creamShade"], [101,30,8,1,"creamShade"],
+    [12,41,106,6,"woodGold"], [12,47,106,5,"woodDeep"], [17,52,9,6,"woodDeep"], [104,52,9,6,"woodDeep"],
+    [20,52,4,3,"woodGold"], [106,52,4,3,"woodGold"],
+    [1,31,8,10,"terracotta"], [0,29,10,3,"creamShade"], [3,25,4,4,"leafDeep"]
+  ]
+}

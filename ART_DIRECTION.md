@@ -325,3 +325,18 @@ Pixel-Art Overhaul — Iteration 8A makes the authored-art law executable. `disp
 The renderer now exposes the declarative `BACK / STRUCTURE / SURFACE / WORLD / ACTORS / FRONT / ALWAYS_FRONT` scene grammar with stable Y/base ordering inside compatible layers. This is presentation ordering only; spatial/world authority remains canonical. Representative authored room, prop, Moss, tile, and environmental assets intentionally coexist with legacy procedural drawing until Iterations 8B and 8C migrate the remainder.
 
 Visual-review evidence is now expected to pin both the renderer hash and authored-art tree hash. `tools/capture_art_direction_matrix.py` is the project-local deterministic review entry point. Automated checks may reject schema, dimensions, grid, scale, smoothing, determinism, temporal continuity, or renderer errors; they still may not manufacture a numerical charm/beauty score.
+
+
+## Accepted Iteration 8B room-composition conventions
+
+Pixel-Art Overhaul — Iteration 8B makes **the habitat itself authored art rather than a procedural backdrop**. Major static visual masses now belong in `display/art/` and should be palette-addressed, deterministic, diffable assets. Room-specific JavaScript rectangles remain appropriate for canonical dynamic overlays, interpolation, event effects, history marks, and other state-dependent presentation; they are no longer the preferred source of truth for finished architecture, furniture, rug, exterior, or foreground lips.
+
+Room composition should preserve distinct zone identities without breaking the single-habitat product: the window is the cool nature/weather/distance cluster; the sleeping nook is warm, layered and soft; the collection shelf is a strong memory/accumulation silhouette; the activity corner may carry the highest controlled detail density; and the rug/open movement field remains deliberate visual rest. Richness belongs primarily around edges, furniture, materials and focal clusters—not uniformly across every floor tile.
+
+The accepted palette direction is **earthy but materially richer and more saturated**. Prefer chromatic darks, reddish/warm timber, strong natural greens, clearer blue/blue-green exterior values, separated cloth ramps, warm cream highlights, and selective amber/terracotta/brass accents. Avoid returning to universal muted beige/brown, but also avoid neon, glossy ramps, dead-black outlining, gradients, bloom, or color noise without material purpose.
+
+Controlled asymmetry is now part of the room language. Curtains, foliage, bedding, papers, small objects, and material clusters may break bilateral/grid repetition, but the large silhouettes and authoritative usable spaces must stay readable. The 16×16 art grid remains a composition grammar only; do not quantize Moss, objects, routes, event sources, or interaction anchors to tiles.
+
+Depth should follow the accepted scene contract in the production path, not merely in manifest metadata: `BACK` for shell/exterior, `STRUCTURE` for architecture/furniture, `SURFACE` for rug/floor/history, `WORLD` for located objects/effects, `ACTORS` for Moss, and `FRONT` for genuine occluding lips/overhangs. Foreground pieces must explain spatial occupancy without hiding action contacts arbitrarily.
+
+Persistent wear, bedding compression, activity clutter, window marks, object arrangements, and situational effects remain canonical-state visualizations. Do not bake fictional history into static assets merely because it improves a screenshot. The accepted 8B room provides a richer stage; the world engine still decides what has actually happened there.

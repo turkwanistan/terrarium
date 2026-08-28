@@ -1,0 +1,19 @@
+{
+  "schema": "terrarium.pixel-asset.v1",
+  "id": "structure.window-alcove",
+  "width": 144,
+  "height": 148,
+  "anchor": [0,0],
+  "runs": [
+    [5,3,130,7,"woodDeep"], [3,8,134,4,"walnutDark"], [8,10,124,4,"woodGold"],
+    [10,12,5,83,"walnutDark"], [126,12,5,83,"walnutDark"], [15,12,111,4,"walnutLight"], [15,89,111,5,"walnutDark"],
+    [67,14,5,75,"skyDark"], [15,47,111,5,"skyDark"], [69,15,1,73,"creamShade"], [16,49,109,1,"creamShade"],
+    [0,8,17,80,"clothDeep"], [3,11,13,72,"clothBlue"], [0,24,9,52,"dustyBlue"], [5,18,3,59,"creamShade"],
+    [127,8,17,80,"clothDeep"], [128,12,13,71,"clothBlue"], [135,25,9,51,"dustyBlue"], [132,19,3,59,"creamShade"],
+    [0,7,20,4,"woodWarm"], [124,7,20,4,"woodWarm"], [2,5,16,2,"woodGold"], [126,5,16,2,"woodGold"],
+    [8,87,128,4,"creamShade"], [5,91,134,7,"woodGold"], [8,98,128,5,"woodDeep"],
+    [18,103,104,4,"woodGold"], [15,107,110,7,"woodWarm"], [18,114,104,4,"woodDeep"],
+    [23,118,8,15,"woodDeep"], [111,118,8,15,"woodDeep"], [25,118,4,11,"woodGold"], [113,118,4,11,"woodGold"],
+    [30,126,83,5,"rug"], [34,124,75,2,"rugLight"], [39,131,66,3,"mossDark"]
+  ]
+}

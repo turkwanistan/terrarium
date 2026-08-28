@@ -65,3 +65,40 @@ def test_renderer_uses_authored_art_cache_and_declarative_scene_layers():
     assert "Math.random" not in js
     assert 'ART_ROOT = PROJECT_ROOT / "display" / "art"' in server
     assert 'parsed.path.startswith("/art/")' in server
+
+
+def test_iteration8b_room_recomposition_is_authored_and_layered():
+    manifest = _read(ART / "manifest.json")
+    entries = {entry["id"]: entry for entry in manifest["assets"]}
+    required = {
+        "structure.room-shell": "BACK",
+        "environment.window-view": "BACK",
+        "structure.window-alcove": "STRUCTURE",
+        "structure.sleeping-nook": "STRUCTURE",
+        "surface.living-rug": "SURFACE",
+        "structure.collection-shelf": "STRUCTURE",
+        "structure.activity-desk": "STRUCTURE",
+        "prop.water-bowl": "WORLD",
+        "prop.food-bowl": "WORLD",
+        "front.collection-shelf-lips": "FRONT",
+        "front.activity-desk-lip": "FRONT",
+        "front.window-perch": "FRONT",
+    }
+    for asset_id, layer in required.items():
+        assert entries[asset_id]["layer"] == layer
+
+    palette_bank = _read(ART / manifest["palette_source"])
+    assert {"woodDeep", "woodWarm", "woodGold", "leafDeep", "leafBright", "clothBlue", "clothDeep", "terracotta", "glassLight", "brass"} <= set(palette_bank["required_roles"])
+
+    js = (ROOT / "display" / "web" / "app.js").read_text(encoding="utf-8")
+    assert "function drawWindowBack" in js
+    assert "function drawWindowStructure" in js
+    assert "function drawStructureLayer" in js
+    assert "function drawSurfaceLayer" in js
+    assert "function drawWorldAtmosphere" in js
+    for asset_id in required:
+        assert asset_id in js
+    assert "room-shell-and-window-view" in js
+    assert "room-zones" in js
+    assert "room-surface-and-history" in js
+    assert "world-atmosphere" in js

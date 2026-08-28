@@ -260,3 +260,23 @@ Evidence: `history/2026-08-27-pixel-art-overhaul-iteration8a.md`, `artifacts/pix
 ## Next product iteration after Iteration 8A
 
 **Iteration 8B — Room Recomposition.** Use the accepted authored-art substrate to redraw the habitat itself: richer saturated natural palette behavior, stronger zone/furniture silhouettes, more specific material language, controlled asymmetry, richer window/exterior foliage, foreground framing/depth, and preserved quiet rug/open-space readability. Keep history marks canonical and spatially valid. The complete Moss action-sprite migration remains Iteration 8C.
+
+
+## Completed normal product checkpoint — Pixel-Art Overhaul, Iteration 8B
+
+- recomposed the habitat's major static visual masses through the accepted authored-art pipeline rather than continuing to grow room-specific procedural drawing code;
+- expanded the manifest from 5 to **15 authored assets**, adding the room shell, window exterior/alcove, sleeping nook, living rug, activity desk, food bowl, and dedicated foreground lips;
+- redesigned dawn/day/dusk/night material palettes toward richer saturated-natural color with deeper timber, stronger vegetation, distinct cloth, terracotta, glass-light, stone and brass roles;
+- strengthened zone identity, furniture silhouettes, controlled asymmetry, exterior foliage, focal detail density, and foreground depth while deliberately preserving the broad rug/open movement field;
+- split production room composition across `BACK / STRUCTURE / SURFACE / WORLD / ACTORS / FRONT` rather than treating the whole room as one background pass;
+- preserved canonical path wear, bedding aftermath, activity clutter, window marks, situational-event presentation, continuous spatial coordinates, object placement and Moss navigation;
+- preserved the Iteration-7/8A seed-1701/tick-10080 semantic frame byte-for-byte by hash;
+- passed **46/46 tests**, Python-3.10 grammar, JavaScript syntax, authored-art validation, exact replay/technical checks, four-seed 10,080-step behavior/spatial/coherence/habit regressions, repertoire/situational regressions, exact-2× browser raster checks, zero-jump continuity, deterministic repeat and clean RAF pacing;
+- used isolated `/tmp/terrarium-iteration8b-uat`; canonical Moss was not reset or replaced;
+- no SBC platform change, Capability Forge work, frozen MCP change, or Gen18 was required.
+
+Evidence: `history/2026-08-27-pixel-art-overhaul-iteration8b.md`, `artifacts/pixel-art-overhaul-iteration8b.json`, `artifacts/pixel-art-overhaul-iteration8b-regression-matrix.json`, snapshot `20260828T023312695923Z-pixel-art-overhaul-iteration8b`.
+
+## Next product iteration after Iteration 8B
+
+**Iteration 8C — Moss Sprite Overhaul.** The recomposed room now makes Moss's remaining procedural body-part/action rendering the clearest visual bottleneck. Replace those poses with true authored low-frame sprites while preserving the current semantic action vocabulary, timing, target/contact authority, possession continuity, routes, habits, and situational-event behavior. Keep stillness valid; do not add random fidgets or a smooth skeletal animation system.

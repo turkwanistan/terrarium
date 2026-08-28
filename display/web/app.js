@@ -260,44 +260,25 @@
     }
   }
 
-  function drawWindow(f,now,p){
-    // Deep inset casing: top/side planes make the window feel built into the wall.
-    rect(20,21,125,94,p.shadow); rect(22,22,121,91,p.walnutDark); rect(25,25,115,86,p.walnut);
-    rect(29,28,107,79,p.walnutLight); rect(32,30,101,75,p.sky);
-    rect(80,30,5,75,p.skyDark); rect(31,64,103,5,p.skyDark);
-    rect(83,31,1,72,p.creamShade); rect(32,67,100,1,p.creamShade);
-    // Exterior focal cluster.
+  function drawWindowBack(f,now,p,paletteName){
+    drawAuthoredAsset('environment.window-view',32,30,paletteName);
     if(f.lighting==='night'){
       rect(108,41,10,8,p.cream); rect(105,44,13,5,p.cream); rect(111,39,4,2,p.cream);
       rect(48,42,2,2,p.creamShade); rect(64,52,1,1,p.cream); rect(121,57,2,1,p.creamShade);
     } else {
       rect(105,39,14,10,p.amber); rect(102,42,20,5,p.amber); rect(109,36,6,3,p.cream);
     }
-    // Curtains use broad stepped cloth masses plus a few fold/shadow clusters.
-    rect(21,27,10,78,p.creamShade); rect(18,31,9,67,p.cream); rect(15,39,7,47,p.creamShade);
-    rect(132,27,10,78,p.creamShade); rect(139,32,9,65,p.cream); rect(146,40,6,46,p.creamShade);
-    for(const [x,y,w] of [[19,35,8],[18,50,7],[17,68,6],[22,89,7],[137,38,8],[141,54,7],[143,72,6],[137,91,8]]) rect(x,y,w,2,p.wallShade);
-    rect(17,28,14,4,p.walnut); rect(132,28,17,4,p.walnut); rect(18,27,12,2,p.walnutLight); rect(134,27,13,2,p.walnutLight);
-    // Sill: bright top lip, darker front face and support brackets.
-    rect(26,104,113,3,p.creamShade); rect(23,107,120,6,p.walnutLight); rect(26,113,114,4,p.walnutDark);
-    rect(35,116,7,6,p.walnutDark); rect(122,116,7,6,p.walnutDark); rect(37,116,3,3,p.walnutLight); rect(124,116,3,3,p.walnutLight);
-    // Low floor-side perch visually connects Moss's valid viewing stance to the sill.
-    rect(45,146,80,3,p.walnutLight); rect(42,149,86,6,p.walnut); rect(45,155,80,3,p.walnutDark);
-    rect(50,158,6,7,p.walnutDark); rect(116,158,6,7,p.walnutDark);
-
     if(f.weather==='rain'){
       const phase=Math.floor(now/150)%19;
       for(const d of rain){
         const x=34+d.x%96,y=31+((d.y+phase+d.phase)%67);
         rect(x,y,1,3,p.rain); if((d.phase&1)===0) rect(x-1,y+3,1,2,p.rain);
       }
-      // Water gathering on the lower panes, kept sparse and clustered.
       for(const [x,y,w] of [[38,92,9],[58,88,5],[91,94,11],[115,90,7]]){ rect(x,y,w,1,p.rain); rect(x+2,y+1,Math.max(2,w-4),1,p.skyDark); }
     } else if(f.weather==='mist'){
       for(let y=45;y<91;y+=12) for(let x=35+(y%3);x<129;x+=19) rect(x,y,9,2,p.rain);
     }
     drawWindowWorldEvent(f,now,p);
-
     const watches=historyValue(f,'window_watches',now),wet=historyValue(f,'wet_window_watches',now);
     for(let i=0;i<6;i++){
       const strength=emergence(watches,1+i*2.5,6); if(strength<=0) continue;
@@ -308,18 +289,13 @@
       const strength=emergence(wet,.4+i*1.3,4.5); if(strength<=0) continue;
       const x=45+i*16; rect(x,75,1,7,p.rain); rect(x+1,82,1,4,p.rain);
     }
+  }
+  function drawWindowStructure(f,now,p,paletteName){
+    drawAuthoredAsset('structure.window-alcove',14,18,paletteName);
     if(causalActivityState(f,now).window>0){ const cx=clamp(px(f.creature.x),44,121); rect(cx-8,103,16,2,p.creamShade); rect(cx-4,105,8,1,p.walnutLight); }
   }
-  function drawBed(f,now,p){
-    // Headboard and frame with exposed posts and a recessed mattress.
-    rect(21,175,114,44,p.shadow); rect(22,172,9,44,p.walnutDark); rect(126,173,9,44,p.walnutDark);
-    rect(24,170,5,5,p.walnutLight); rect(128,171,5,5,p.walnutLight);
-    rect(29,177,99,35,p.walnut); rect(32,180,93,29,p.creamShade);
-    rect(33,182,42,14,p.cream); rect(36,184,36,10,p.creamShade); rect(38,184,28,2,p.cream);
-    // Blanket is an authored stepped mass, not one rectangle.
-    rect(77,181,45,4,p.dustyBlue); rect(73,185,51,6,p.dustyBlue); rect(70,191,55,8,p.dustyBlue); rect(73,199,51,7,p.dustyBlue);
-    rect(80,183,18,2,p.creamShade); rect(75,189,24,2,p.skyDark); rect(103,194,18,2,p.skyDark); rect(79,201,30,2,p.skyDark);
-    rect(91,186,2,8,p.creamShade); rect(112,198,8,1,p.creamShade);
+  function drawBed(f,now,p,paletteName){
+    drawAuthoredAsset('structure.sleeping-nook',18,170,paletteName);
     const sleepTicks=historyValue(f,'sleep_nook_ticks',now),sleepBouts=historyValue(f,'sleep_nook_bouts',now);
     const nest=emergence(sleepTicks,0,18);
     if(nest>0){
@@ -327,78 +303,52 @@
       if(nest>.45){ rect(88,192,13,1,p.creamShade); rect(105,198,10,1,p.skyDark); }
     }
     for(let i=0;i<4;i++){
-      const s=emergence(sleepTicks,1+i*3.5,8); if(s>.2){ rect(65+i*12,187+i*2,8,1,p.walnutLight); rect(70+i*10,193+i,6,1,p.skyDark); }
+      const strength=emergence(sleepTicks,1+i*3.5,8); if(strength>.2){ rect(65+i*12,187+i*2,8,1,p.walnutLight); rect(70+i*10,193+i,6,1,p.skyDark); }
     }
-    // Footboard front plane and feet.
-    rect(22,210,113,5,p.walnutLight); rect(22,215,113,4,p.walnutDark); rect(27,219,8,5,p.walnutDark); rect(122,219,8,5,p.walnutDark);
-    rect(29,219,4,3,p.walnutLight); rect(124,219,4,3,p.walnutLight);
   }
-  function drawRug(p){
-    const rows=[[154,172,92],[149,176,102],[146,180,108],[144,184,112],[144,188,112],[146,192,108],[150,196,100],[156,200,88],[164,204,72]];
-    for(const [x,y,w] of rows) rect(x,y,w,4,p.rug);
-    // A deliberate woven border and a few broad fibers.
-    rect(158,174,84,2,p.rugLight); rect(151,178,98,1,p.mossDark); rect(149,198,98,2,p.mossDark); rect(160,203,80,1,p.rugLight);
-    for(const [x,y,w] of [[165,181,11],[188,184,9],[214,179,12],[173,193,13],[204,196,10],[228,190,8]]) rect(x,y,w,1,p.rugLight);
-    for(const [x,y,w] of [[177,187,8],[198,191,12],[221,184,7],[187,200,9]]) rect(x,y,w,1,p.mossDark);
-    for(const x of [156,171,187,205,222,238]) rect(x,201+(x%2),1,4,p.rugLight);
+  function drawRug(p,paletteName){
+    drawAuthoredAsset('surface.living-rug',140,170,paletteName);
   }
   function drawShelf(f,p,paletteName){ drawAuthoredAsset('structure.collection-shelf',293,27,paletteName); }
   function drawActivityCorner(f,now,p,paletteName){
-    // Desk top: narrow light top plane over a darker apron and planted legs.
-    rect(291,178,81,33,p.shadow); rect(294,173,76,4,p.walnutLight); rect(291,177,82,6,p.walnut); rect(296,183,72,5,p.walnutDark);
-    rect(300,188,7,23,p.walnutDark); rect(356,188,7,23,p.walnutDark); rect(302,188,3,18,p.walnutLight); rect(358,188,3,18,p.walnutLight);
-    rect(311,188,35,10,p.walnut); rect(314,190,29,6,p.walnutDark); rect(339,192,3,2,p.amber);
+    drawAuthoredAsset('structure.activity-desk',286,145,paletteName);
     const uses=historyValue(f,'activity_corner_uses',now);
-    // Notebook and increasingly lived-in canonical activity aftermath.
-    rect(319,167,24,10,p.walnutDark); rect(321,165,21,3,p.paper); rect(323,168,16,6,p.paper); rect(325,169,11,1,p.walnutLight);
     for(let i=0;i<5;i++){
-      const s=emergence(uses,1+i*4.2,8); if(s<=0) continue;
+      const strength=emergence(uses,1+i*4.2,8); if(strength<=0) continue;
       const x=300+i*12+(stableUnit('paper',i)>.5?2:0),y=168-(i%2)*3;
-      rect(x,y,11,5,p.paper); rect(x+2,y+2,6,1,p.walnutLight); if(s>.6) rect(x+8,y+1,2,1,p.amber);
+      rect(x,y,11,5,p.paper); rect(x+2,y+2,6,1,p.walnutLight); if(strength>.6) rect(x+8,y+1,2,1,p.amber);
     }
-    for(let i=0;i<7;i++){ const s=emergence(uses,2+i*3.2,7); if(s>.1) rect(304+i*8,172-(i%3),5,1,p.walnutDark); }
-    // Authored environmental asset; source pixels live under display/art.
+    for(let i=0;i<7;i++){ const strength=emergence(uses,2+i*3.2,7); if(strength>.1) rect(304+i*8,172-(i%3),5,1,p.walnutDark); }
     drawAuthoredAsset('environment.desk-plant',368,151,paletteName);
     if(causalActivityState(f,now).activity_corner>0){ const hx=clamp(px(f.creature.x)-4,305,356); rect(hx-6,174,12,1,p.cream); }
   }
   function drawBowls(p,paletteName){
     drawAuthoredAsset('prop.water-bowl',256,206,paletteName);
-    rect(285,215,21,3,p.shadow); rect(287,209,17,6,p.amber); rect(289,207,13,3,p.creamShade); rect(291,208,9,2,p.walnutDark); rect(289,214,13,2,p.walnutDark);
+    drawAuthoredAsset('prop.food-bowl',284,205,paletteName);
   }
   function drawBackground(f,now,p,paletteName){
-    rect(0,0,ART_W,158,p.wall); rect(0,158,ART_W,82,p.floor);
-    // Plaster/board irregularity: broad authored runs, not confetti texture.
-    for(let y=17;y<153;y+=27) rect(0,y,ART_W,1,p.wallShade);
-    for(const [x,y,w] of [[12,20,18],[61,45,13],[104,74,21],[164,32,15],[214,93,24],[268,55,18],[331,132,22],[362,18,14]]){
-      rect(x,y,w,1,p.wallLight); rect(x+3,y+2,Math.max(4,w-8),1,p.wallShade);
-    }
-    rect(0,152,ART_W,8,p.walnutDark); rect(0,152,ART_W,2,p.walnutLight); rect(0,159,ART_W,2,p.floorShade);
-    // Floor boards receive seams, knots and short grain clusters with open breathing room.
-    for(const y of [178,202,226]) rect(0,y,ART_W,1,p.floorShade);
-    for(const x of [48,99,154,207,262,317,369]){ const y=160+((x/3)%24); rect(x,y,1,17,p.floorShade); }
-    drawAuthoredAsset('tile.floor-detail',16,164,paletteName);
-    for(const [x,y,w] of [[73,186,12],[125,215,17],[184,166,13],[239,221,18],[300,191,15],[348,229,19]]){
-      rect(x,y,w,1,p.floorLight); rect(x+4,y+2,Math.max(3,w-8),1,p.floorShade);
-    }
-
-    drawWindow(f,now,p);
-    drawBed(f,now,p);
-    drawRug(p);
-    drawFloorWorldEvent(f,now,p);
+    drawAuthoredAsset('structure.room-shell',0,0,paletteName);
+    drawWindowBack(f,now,p,paletteName);
+    const phase=Math.floor(now/850);
+    for(const mote of motes){ if((phase+Math.floor(mote.phase))%5!==0) continue; rect(mote.x,mote.y,1,1,p.cream); }
+    return p;
+  }
+  function drawStructureLayer(f,now,p,paletteName){
+    drawWindowStructure(f,now,p,paletteName);
+    drawBed(f,now,p,paletteName);
     drawShelf(f,p,paletteName);
     drawActivityCorner(f,now,p,paletteName);
-    drawInteriorWorldEvent(f,now,p);
-    drawBowls(p,paletteName);
+  }
+  function drawSurfaceLayer(f,now,p,paletteName){
+    drawAuthoredAsset('tile.floor-detail',16,164,paletteName);
+    drawRug(p,paletteName);
+    drawFloorWorldEvent(f,now,p);
     drawPersistentHistory(f,p);
-
-    // A few composition-balancing accents near otherwise empty edges.
     rect(276,149,4,2,p.amber); rect(280,147,2,4,p.foliage); rect(273,148,2,2,p.cream);
-    rect(17,218,7,1,p.floorShade); rect(33,229,5,1,p.floorLight); rect(244,222,9,1,p.floorShade);
-    rect(268,151,14,2,p.walnutDark); rect(271,147,8,4,p.walnut); rect(274,144,3,3,p.foliage);
-
-    const phase=Math.floor(now/850);
-    for(const m of motes){ if((phase+Math.floor(m.phase))%5!==0) continue; rect(m.x,m.y,1,1,p.cream); }
-    return p;
+    rect(268,151,14,2,p.walnutDark); rect(271,147,8,4,p.walnut); rect(274,144,3,3,p.leafBright);
+  }
+  function drawWorldAtmosphere(f,now,p){
+    drawInteriorWorldEvent(f,now,p);
   }
   function placedObjectRenderState(o, f, now) {
     const source=previous?.objects?.find(item=>item.id===o.id);
@@ -721,11 +671,10 @@
     return rs;
   }
 
-  function drawForegroundFurniture(f,now,p){
-    for(const y of [62,87,112]) rect(303,y,70,2,p.walnutDark);
-    rect(303,151,68,4,p.walnutDark); rect(305,151,64,1,p.walnutLight);
-    if(f.creature.zone==='window'&&f.creature.activity==='look_outside'){ rect(44,155,82,3,p.walnutDark); rect(47,155,76,1,p.walnutLight); }
-    rect(294,179,77,3,p.walnutDark); rect(296,179,73,1,p.walnutLight);
+  function drawForegroundFurniture(f,now,p,paletteName){
+    drawAuthoredAsset('front.collection-shelf-lips',293,27,paletteName);
+    drawAuthoredAsset('front.activity-desk-lip',286,145,paletteName);
+    if(f.creature.zone==='window'&&f.creature.activity==='look_outside') drawAuthoredAsset('front.window-perch',42,149,paletteName);
   }
   function drawForegroundCausality(f, now, rs, p) {
     const causal=causalActivityState(f,now);
@@ -743,10 +692,14 @@
     const lighting=visualLighting(frame,now),p=lighting.palette,paletteName=lighting.palette_name;
     const scene=createSceneQueue();
     const renderState=creatureRenderState(frame,now);
-    scene.add('BACK',0,'room-background',()=>drawBackground(frame,now,p,paletteName));
+    scene.add('BACK',0,'room-shell-and-window-view',()=>drawBackground(frame,now,p,paletteName));
+    scene.add('STRUCTURE',158,'room-zones',()=>drawStructureLayer(frame,now,p,paletteName));
+    scene.add('SURFACE',160,'room-surface-and-history',()=>drawSurfaceLayer(frame,now,p,paletteName));
+    scene.add('WORLD',0,'world-atmosphere',()=>drawWorldAtmosphere(frame,now,p));
+    scene.add('WORLD',210,'room-bowls',()=>drawBowls(p,paletteName));
     for(const o of frame.objects) scene.add('WORLD',px(o.y),`object:${o.id}`,()=>drawWorldObject(o,frame,now,p));
     scene.add('ACTORS',px(renderState.rendered_base_y),'actor:moss',()=>drawCreature(frame,now,p,renderState,paletteName));
-    scene.add('FRONT',px(renderState.rendered_base_y)+1,'room-foreground',()=>{ drawForegroundFurniture(frame,now,p); drawForegroundCausality(frame,now,renderState,p); });
+    scene.add('FRONT',px(renderState.rendered_base_y)+1,'room-foreground',()=>{ drawForegroundFurniture(frame,now,p,paletteName); drawForegroundCausality(frame,now,renderState,p); });
     scene.flush();
     window.__terrariumSceneLayers=scene.metadata();
     presentArtSurface();

@@ -1,0 +1,13 @@
+{
+  "schema": "terrarium.pixel-asset.v1",
+  "id": "front.collection-shelf-lips",
+  "width": 88,
+  "height": 132,
+  "anchor": [0,0],
+  "runs": [
+    [10,35,69,3,"woodDeep"], [13,35,63,1,"woodGold"],
+    [10,60,69,3,"woodDeep"], [13,60,63,1,"woodGold"],
+    [10,85,69,3,"woodDeep"], [13,85,63,1,"woodGold"],
+    [9,124,70,4,"woodDeep"], [12,124,64,1,"woodGold"]
+  ]
+}
