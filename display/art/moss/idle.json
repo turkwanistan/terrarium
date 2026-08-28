@@ -1,0 +1,16 @@
+{
+  "schema": "terrarium.pixel-asset.v1",
+  "id": "moss.idle",
+  "width": 54,
+  "height": 44,
+  "anchor": [26, 28],
+  "runs": [
+    [13, 39, 27, 3, "shadow"], [17, 42, 19, 1, "shadow"],
+    [8, 25, 7, 3, "dogDark"], [4, 22, 6, 3, "dog"], [2, 20, 4, 3, "dogLight"],
+    [12, 24, 25, 11, "dogDark"], [14, 20, 23, 13, "dog"], [18, 19, 16, 4, "dogLight"], [17, 24, 17, 7, "dogLight"], [20, 30, 12, 3, "dogDark"], [31, 24, 5, 7, "dogCream"],
+    [16, 33, 5, 7, "dogDark"], [15, 39, 7, 2, "dogDark"], [30, 33, 5, 7, "dogDark"], [30, 39, 7, 2, "dogDark"], [17, 33, 3, 4, "dog"], [31, 33, 3, 4, "dog"],
+    [24, 9, 14, 11, "dogDark"], [26, 6, 13, 13, "dog"], [30, 7, 9, 7, "dogLight"], [31, 6, 4, 2, "dogCream"],
+    [23, 7, 5, 9, "dogDark"], [21, 11, 5, 7, "dogDark"], [37, 8, 4, 8, "dogDark"], [39, 12, 4, 6, "dogDark"],
+    [34, 13, 8, 5, "dogCream"], [39, 14, 3, 2, "eye"], [33, 10, 2, 2, "eye"], [37, 17, 3, 1, "dogDark"]
+  ]
+}

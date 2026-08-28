@@ -225,6 +225,21 @@
         "steps": 10080
       },
       "tick": 10080
+    },
+    {
+      "captured_at": "2026-08-28T02:06:31.097391Z",
+      "frame_path": "/snapshots/dev/20260828T020631095429Z-pixel-art-overhaul-iteration8a/frame.json",
+      "meta_path": "/snapshots/dev/20260828T020631095429Z-pixel-art-overhaul-iteration8a/meta.json",
+      "note": "Iteration 8A accepted authored pixel-art substrate: 16x16 art grammar, validated palette-addressed assets, deterministic offscreen cache, declarative scene layers, representative production migration, and art-direction review fixtures.",
+      "preview_path": "/snapshots/dev/20260828T020631095429Z-pixel-art-overhaul-iteration8a/preview.svg",
+      "renderer_sha256": "993718bd2a30ce6fe47ce980f12af2512832c5c6a7fb4b4189068bef9bcfdae7",
+      "snapshot_id": "20260828T020631095429Z-pixel-art-overhaul-iteration8a",
+      "source": {
+        "mode": "deterministic",
+        "seed": 1701,
+        "steps": 10080
+      },
+      "tick": 10080
     }
   ]
 }

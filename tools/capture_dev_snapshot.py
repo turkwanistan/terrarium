@@ -31,6 +31,16 @@ def sha_json(value: object) -> str:
     return hashlib.sha256(canonical_json(value).encode("utf-8")).hexdigest()
 
 
+def sha_tree(root: Path) -> str:
+    digest = hashlib.sha256()
+    for path in sorted(p for p in root.rglob("*") if p.is_file()):
+        digest.update(path.relative_to(root).as_posix().encode("utf-8"))
+        digest.update(b"\0")
+        digest.update(path.read_bytes())
+        digest.update(b"\0")
+    return digest.hexdigest()
+
+
 def git_info() -> dict:
     def run(*args: str) -> str | None:
         p = subprocess.run(["git", *args], cwd=ROOT, text=True, capture_output=True, check=False)
@@ -154,6 +164,7 @@ def main() -> int:
     source_hashes = {
         "renderer_js": sha_file(ROOT / "display/web/app.js"),
         "renderer_css": sha_file(ROOT / "display/web/style.css"),
+        "authored_art": sha_tree(ROOT / "display/art"),
         "frame_contract": sha_file(ROOT / "terrarium/frame.py"),
         "engine": sha_file(ROOT / "terrarium/engine.py"),
     }
@@ -181,6 +192,7 @@ def main() -> int:
         f"# {snapshot_id}\n\n{args.note}\n\n"
         f"- frame: `{source['mode']}` seed `{source.get('seed')}`, step/tick `{frame['tick']}`\n"
         f"- renderer SHA256: `{source_hashes['renderer_js']}`\n"
+        f"- authored-art SHA256: `{source_hashes['authored_art']}`\n"
         f"- frame SHA256: `{meta['frame']['sha256']}`\n"
         f"- GitHub-friendly preview: `preview.svg`\n"
         f"- local view: `{meta['view_url']}`\n\n"

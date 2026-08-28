@@ -56,34 +56,69 @@
     look_outside: 1700, sleep: 2200, wake: 2000, walk: 1300,
   });
 
-  // Deliberately finite, reusable palette families. Environmental changes swap
-  // and step these colors; they never introduce gradients or bloom.
-  const PALETTES = Object.freeze({
-    day: {
-      wall:'#a48b6a', wallShade:'#8a7155', wallLight:'#c0a27a', floor:'#785638', floorShade:'#60422f', floorLight:'#916947',
-      walnut:'#533824', walnutDark:'#352519', walnutLight:'#765236', cream:'#e5cf9f', creamShade:'#c3aa7d', moss:'#66774b', mossDark:'#435437',
-      amber:'#d39a4a', sky:'#7eaaa6', skyDark:'#557c7e', dustyBlue:'#668399', rain:'#b0c7c0', shadow:'#2e241d', paper:'#d7c493',
-      dog:'#8b5d3b', dogDark:'#5f3c29', dogLight:'#b47c50', dogCream:'#d9bd8d', eye:'#2d241e', rug:'#66754e', rugLight:'#819064', foliage:'#536b42',
-    },
-    dawn: {
-      wall:'#967b69', wallShade:'#765d52', wallLight:'#b49378', floor:'#684b37', floorShade:'#51392e', floorLight:'#805c44',
-      walnut:'#513523', walnutDark:'#332319', walnutLight:'#714c34', cream:'#ddc494', creamShade:'#b99c73', moss:'#61704b', mossDark:'#414f38',
-      amber:'#d59655', sky:'#b77b70', skyDark:'#765c68', dustyBlue:'#6d758c', rain:'#a9b9b4', shadow:'#2c2220', paper:'#ceb786',
-      dog:'#84583c', dogDark:'#5b3a2a', dogLight:'#aa744f', dogCream:'#d0b382', eye:'#2b2421', rug:'#626f51', rugLight:'#788263', foliage:'#536643',
-    },
-    dusk: {
-      wall:'#78645f', wallShade:'#604d4b', wallLight:'#92766e', floor:'#604331', floorShade:'#493128', floorLight:'#79533c',
-      walnut:'#4b3022', walnutDark:'#302019', walnutLight:'#684631', cream:'#cfae82', creamShade:'#aa8969', moss:'#59664a', mossDark:'#3c4738',
-      amber:'#ce864b', sky:'#865d78', skyDark:'#54465f', dustyBlue:'#606b83', rain:'#9caeac', shadow:'#282022', paper:'#c2a97f',
-      dog:'#79503a', dogDark:'#52362a', dogLight:'#9e6a4d', dogCream:'#c3a57e', eye:'#292326', rug:'#59624d', rugLight:'#6f785d', foliage:'#4d5d42',
-    },
-    night: {
-      wall:'#3e4650', wallShade:'#303640', wallLight:'#535b62', floor:'#49382f', floorShade:'#342925', floorLight:'#5a4538',
-      walnut:'#422c21', walnutDark:'#2b201b', walnutLight:'#5c4030', cream:'#b69c79', creamShade:'#927a62', moss:'#4d5b46', mossDark:'#354039',
-      amber:'#c78647', sky:'#1d2a43', skyDark:'#131c30', dustyBlue:'#4f637c', rain:'#8299a0', shadow:'#211d22', paper:'#ad9473',
-      dog:'#6c4937', dogDark:'#4a3329', dogLight:'#8d624a', dogCream:'#ae9374', eye:'#201f24', rug:'#4d5948', rugLight:'#63705a', foliage:'#414f3d',
-    },
-  });
+  const SCENE_LAYERS = Object.freeze({BACK:0,STRUCTURE:1,SURFACE:2,WORLD:3,ACTORS:4,FRONT:5,ALWAYS_FRONT:6});
+  let PALETTES = null;
+  let ART_MANIFEST = null;
+  const ART_ASSETS = new Map();
+  const ART_CACHE = new Map();
+
+  async function fetchJson(path){
+    const response=await fetch(path,{cache:'no-store'});
+    if(!response.ok) throw new Error(`unable to load authored art ${path}: HTTP ${response.status}`);
+    return response.json();
+  }
+  function validateAsset(asset,entry,roles){
+    if(asset?.schema!=='terrarium.pixel-asset.v1'||asset.id!==entry.id) throw new Error(`invalid authored asset identity: ${entry.id}`);
+    if(!Number.isInteger(asset.width)||!Number.isInteger(asset.height)||asset.width<1||asset.height<1) throw new Error(`invalid authored asset dimensions: ${entry.id}`);
+    if(!Array.isArray(asset.anchor)||asset.anchor.length!==2||!asset.anchor.every(Number.isInteger)) throw new Error(`invalid authored asset anchor: ${entry.id}`);
+    if(!Array.isArray(asset.runs)||asset.runs.length<1) throw new Error(`authored asset has no pixel runs: ${entry.id}`);
+    for(const run of asset.runs){
+      if(!Array.isArray(run)||run.length!==5) throw new Error(`invalid pixel run in ${entry.id}`);
+      const [x,y,w,h,role]=run;
+      if(![x,y,w,h].every(Number.isInteger)||x<0||y<0||w<1||h<1||x+w>asset.width||y+h>asset.height) throw new Error(`out-of-bounds pixel run in ${entry.id}`);
+      if(typeof role!=='string'||!roles.has(role)) throw new Error(`unknown palette role ${role} in ${entry.id}`);
+    }
+  }
+  async function loadArtBundle(){
+    const manifest=await fetchJson('/art/manifest.json');
+    if(manifest?.schema!=='terrarium.art-manifest.v1') throw new Error('invalid authored art manifest schema');
+    if(JSON.stringify(manifest.art_surface)!=='[400,240]'||manifest.tile_size!==16||JSON.stringify(manifest.grid)!=='[25,15]') throw new Error('authored art grid must be 400x240, 16px tiles, 25x15 cells');
+    if(manifest.grid[0]*manifest.tile_size!==ART_W||manifest.grid[1]*manifest.tile_size!==ART_H) throw new Error('authored art grid does not exactly cover the art surface');
+    const paletteBank=await fetchJson(`/art/${manifest.palette_source}`);
+    if(paletteBank?.schema!=='terrarium.palette-bank.v1'||!paletteBank.palettes) throw new Error('invalid authored palette bank');
+    const roles=new Set(paletteBank.required_roles||[]);
+    for(const [name,palette] of Object.entries(paletteBank.palettes)) for(const role of roles) if(typeof palette[role]!=='string') throw new Error(`palette ${name} is missing role ${role}`);
+    PALETTES=Object.freeze(paletteBank.palettes);
+    ART_MANIFEST=manifest;
+    for(const entry of manifest.assets||[]){
+      if(!(entry.layer in SCENE_LAYERS)) throw new Error(`unknown scene layer ${entry.layer} for ${entry.id}`);
+      const asset=await fetchJson(`/art/${entry.path}`);
+      validateAsset(asset,entry,roles);
+      ART_ASSETS.set(entry.id,Object.freeze({...asset,kind:entry.kind,layer:entry.layer}));
+    }
+    window.__terrariumAuthoredArt=Object.freeze({schema:manifest.schema,tile_size:manifest.tile_size,grid:manifest.grid,asset_count:ART_ASSETS.size,assets:[...ART_ASSETS.keys()],palette_names:Object.keys(PALETTES),material_families:paletteBank.material_families});
+  }
+  function compiledAsset(id,paletteName){
+    const asset=ART_ASSETS.get(id); if(!asset) throw new Error(`unknown authored asset: ${id}`);
+    const palette=PALETTES[paletteName]; if(!palette) throw new Error(`unknown authored palette: ${paletteName}`);
+    const key=`${id}@${paletteName}`; if(ART_CACHE.has(key)) return ART_CACHE.get(key);
+    const surface=document.createElement('canvas'); surface.width=asset.width; surface.height=asset.height;
+    const assetCtx=surface.getContext('2d',{alpha:true}); assetCtx.imageSmoothingEnabled=false; assetCtx.clearRect(0,0,asset.width,asset.height);
+    for(const [x,y,w,h,role] of asset.runs){ assetCtx.fillStyle=palette[role]; assetCtx.fillRect(x,y,w,h); }
+    const compiled=Object.freeze({surface,anchor:asset.anchor,width:asset.width,height:asset.height}); ART_CACHE.set(key,compiled); return compiled;
+  }
+  function drawAuthoredAsset(id,x,y,paletteName,{flipX=false}={}){
+    const compiled=compiledAsset(id,paletteName),[anchorX,anchorY]=compiled.anchor;
+    ctx.save(); ctx.translate(Math.round(x),Math.round(y)); if(flipX) ctx.scale(-1,1); ctx.imageSmoothingEnabled=false; ctx.drawImage(compiled.surface,-anchorX,-anchorY); ctx.restore();
+  }
+  function createSceneQueue(){
+    let serial=0; const entries=[];
+    return {
+      add(layer,y,id,draw){ if(!(layer in SCENE_LAYERS)) throw new Error(`unknown scene layer: ${layer}`); entries.push({layer,y:Number(y)||0,id,draw,serial:serial++}); },
+      flush(){ entries.sort((a,b)=>SCENE_LAYERS[a.layer]-SCENE_LAYERS[b.layer]||a.y-b.y||a.serial-b.serial); for(const entry of entries) entry.draw(); },
+      metadata(){ return entries.map(({layer,y,id})=>({layer,y,id})); },
+    };
+  }
 
   const rain = Array.from({length: 22}, (_, i) => ({x:(i*37)%194, y:(i*29)%72, phase:(i*7)%17}));
   const motes = Array.from({length: 9}, (_, i) => ({x:45+(i*47)%310, y:35+(i*31)%125, phase:i*1.7}));
@@ -139,16 +174,12 @@
   }
   function visualLighting(f,now){
     const minute=((worldMinuteAt(f,now)%1440)+1440)%1440;
-    // Four deliberate palette steps through each one-hour boundary. This keeps
-    // environmental change calm while retaining a finite pixel-art palette.
     const transitions=[[360,'night','dawn'],[480,'dawn','day'],[1050,'day','dusk'],[1170,'dusk','night']];
+    let paletteName=f.lighting in PALETTES?f.lighting:'day';
     for(const [center,from,to] of transitions){
-      if(minute>=center-30&&minute<center+30){
-        const q=Math.floor(clamp01((minute-(center-30))/60)*4);
-        return {palette: q<2 ? PALETTES[from] : PALETTES[to], night: to==='night'&&q>=2 ? 1 : from==='night'&&q<2 ? 1 : 0, minute};
-      }
+      if(minute>=center-30&&minute<center+30){ const q=Math.floor(clamp01((minute-(center-30))/60)*4); paletteName=q<2?from:to; break; }
     }
-    return {palette:PALETTES[f.lighting]||PALETTES.day,night:f.lighting==='night'?1:0,minute};
+    return {palette:PALETTES[paletteName],palette_name:paletteName,night:paletteName==='night'?1:0,minute};
   }
 
   function drawPixelLine(x0,y0,x1,y1,color,thickness=1){
@@ -311,24 +342,8 @@
     for(const [x,y,w] of [[177,187,8],[198,191,12],[221,184,7],[187,200,9]]) rect(x,y,w,1,p.mossDark);
     for(const x of [156,171,187,205,222,238]) rect(x,201+(x%2),1,4,p.rugLight);
   }
-  function drawShelf(f,p){
-    // Cabinet silhouette with top cap, recessed back and shelf lips.
-    rect(293,29,88,94,p.shadow); rect(296,27,83,11,p.walnutDark); rect(299,28,77,7,p.walnutLight);
-    rect(299,38,7,81,p.walnutDark); rect(369,38,7,81,p.walnutDark); rect(306,39,63,78,p.walnut);
-    rect(309,41,57,16,p.walnutDark); rect(309,66,57,16,p.walnutDark); rect(309,91,57,16,p.walnutDark);
-    for(const y of [58,83,108]){ rect(304,y,68,6,p.walnutLight); rect(306,y+6,65,3,p.walnutDark); rect(311,y,54,1,p.creamShade); }
-    const books=[[310,44,4,13,p.dustyBlue],[315,47,3,10,p.amber],[319,43,5,14,p.moss],[325,48,4,9,p.creamShade],[338,69,4,12,p.cream],[343,66,5,15,p.dustyBlue],[349,70,3,11,p.amber]];
-    for(const b of books){ rect(...b); rect(b[0],b[1],1,b[3],p.shadow); }
-    // Small fixed trinkets make shelf bays recognizable without competing with movable props.
-    rect(337,48,12,7,p.walnutLight); rect(339,46,8,2,p.creamShade); rect(342,44,3,2,p.amber);
-    rect(312,94,15,9,p.walnutDark); rect(314,92,11,2,p.amber); rect(318,90,3,2,p.cream);
-    rect(347,96,8,6,p.creamShade); rect(349,94,4,2,p.dustyBlue);
-    rect(301,119,74,5,p.walnutDark); rect(306,119,8,6,p.walnutLight); rect(361,119,8,6,p.walnutLight);
-    // Accessible low collection tray: canonical shelf objects now stage here instead of inside wall bays.
-    rect(304,143,65,3,p.walnutLight); rect(302,146,69,8,p.walnut); rect(305,146,63,3,p.walnutDark);
-    rect(306,154,6,5,p.walnutDark); rect(361,154,6,5,p.walnutDark);
-  }
-  function drawActivityCorner(f,now,p){
+  function drawShelf(f,p,paletteName){ drawAuthoredAsset('structure.collection-shelf',293,27,paletteName); }
+  function drawActivityCorner(f,now,p,paletteName){
     // Desk top: narrow light top plane over a darker apron and planted legs.
     rect(291,178,81,33,p.shadow); rect(294,173,76,4,p.walnutLight); rect(291,177,82,6,p.walnut); rect(296,183,72,5,p.walnutDark);
     rect(300,188,7,23,p.walnutDark); rect(356,188,7,23,p.walnutDark); rect(302,188,3,18,p.walnutLight); rect(358,188,3,18,p.walnutLight);
@@ -342,18 +357,15 @@
       rect(x,y,11,5,p.paper); rect(x+2,y+2,6,1,p.walnutLight); if(s>.6) rect(x+8,y+1,2,1,p.amber);
     }
     for(let i=0;i<7;i++){ const s=emergence(uses,2+i*3.2,7); if(s>.1) rect(304+i*8,172-(i%3),5,1,p.walnutDark); }
-    // Pot + layered leaf clumps.
-    rect(373,171,13,13,p.amber); rect(371,168,17,4,p.creamShade); rect(375,181,9,3,p.walnutDark);
-    rect(378,154,3,15,p.foliage); rect(371,157,8,5,p.foliage); rect(381,155,8,5,p.moss); rect(368,162,8,4,p.mossDark); rect(382,162,9,4,p.foliage); rect(375,151,7,5,p.moss);
+    // Authored environmental asset; source pixels live under display/art.
+    drawAuthoredAsset('environment.desk-plant',368,151,paletteName);
     if(causalActivityState(f,now).activity_corner>0){ const hx=clamp(px(f.creature.x)-4,305,356); rect(hx-6,174,12,1,p.cream); }
   }
-  function drawBowls(p){
-    // Two squat stepped bowls with rims/interiors and their own contact shadows.
-    rect(256,214,22,3,p.shadow); rect(258,208,18,6,p.dustyBlue); rect(260,206,14,3,p.cream); rect(262,207,10,2,p.skyDark); rect(260,213,14,2,p.skyDark);
+  function drawBowls(p,paletteName){
+    drawAuthoredAsset('prop.water-bowl',256,206,paletteName);
     rect(285,215,21,3,p.shadow); rect(287,209,17,6,p.amber); rect(289,207,13,3,p.creamShade); rect(291,208,9,2,p.walnutDark); rect(289,214,13,2,p.walnutDark);
   }
-  function drawBackground(f,now){
-    const p=visualLighting(f,now).palette;
+  function drawBackground(f,now,p,paletteName){
     rect(0,0,ART_W,158,p.wall); rect(0,158,ART_W,82,p.floor);
     // Plaster/board irregularity: broad authored runs, not confetti texture.
     for(let y=17;y<153;y+=27) rect(0,y,ART_W,1,p.wallShade);
@@ -364,7 +376,8 @@
     // Floor boards receive seams, knots and short grain clusters with open breathing room.
     for(const y of [178,202,226]) rect(0,y,ART_W,1,p.floorShade);
     for(const x of [48,99,154,207,262,317,369]){ const y=160+((x/3)%24); rect(x,y,1,17,p.floorShade); }
-    for(const [x,y,w] of [[16,164,15],[73,186,12],[125,215,17],[184,166,13],[239,221,18],[300,191,15],[348,229,19]]){
+    drawAuthoredAsset('tile.floor-detail',16,164,paletteName);
+    for(const [x,y,w] of [[73,186,12],[125,215,17],[184,166,13],[239,221,18],[300,191,15],[348,229,19]]){
       rect(x,y,w,1,p.floorLight); rect(x+4,y+2,Math.max(3,w-8),1,p.floorShade);
     }
 
@@ -372,10 +385,10 @@
     drawBed(f,now,p);
     drawRug(p);
     drawFloorWorldEvent(f,now,p);
-    drawShelf(f,p);
-    drawActivityCorner(f,now,p);
+    drawShelf(f,p,paletteName);
+    drawActivityCorner(f,now,p,paletteName);
     drawInteriorWorldEvent(f,now,p);
-    drawBowls(p);
+    drawBowls(p,paletteName);
     drawPersistentHistory(f,p);
 
     // A few composition-balancing accents near otherwise empty edges.
@@ -501,7 +514,7 @@
     };
   }
 
-  function drawMossSprite(f,now,rs,p){
+  function drawMossSprite(f,now,rs,p,paletteName){
     const c=f.creature,flip=rs.facing==='left'?-1:1,ap=rs.activity_progress,prior=previous?.creature?.activity;
     const x=px(rs.rendered_x),baseY=px(rs.rendered_base_y),bob=Math.round((rs.rendered_base_y-rs.rendered_y)/SCALE);
     let pose='idle';
@@ -534,6 +547,8 @@
     const restStage=authoredStage(ap,[.22,.58,.84]);
     const sleepStage=prior==='sleep'?4:authoredStage(ap,[.14,.34,.58,.82]);
     const wakeStage=authoredStage(ap,[.16,.38,.68,.88]);
+
+    if(pose==='idle'){ drawAuthoredAsset('moss.idle',x,baseY-bob,paletteName,{flipX:flip===-1}); return; }
 
     ctx.save(); ctx.translate(x,baseY-bob); ctx.scale(flip,1);
 
@@ -700,8 +715,8 @@
 
     ctx.restore();
   }
-  function drawCreature(f,now,p){
-    const rs=creatureRenderState(f,now); drawMossSprite(f,now,rs,p);
+  function drawCreature(f,now,p,rs,paletteName){
+    rs=rs||creatureRenderState(f,now); drawMossSprite(f,now,rs,p,paletteName);
     if(f.creature.carrying){ const obj=f.objects.find(o=>o.id===f.creature.carrying)||previous?.objects?.find(o=>o.id===f.creature.carrying); if(obj&&rs.carried_rendered_x!==null) drawObject({...obj,state:'placed',x:rs.carried_rendered_x,y:rs.carried_rendered_y},p); }
     return rs;
   }
@@ -725,13 +740,17 @@
 
   function render(now, scheduleNext = true) {
     if(!frame){ rect(0,0,ART_W,ART_H,'#25242b'); presentArtSurface(); if(scheduleNext)requestAnimationFrame(render); return null; }
-    const p=drawBackground(frame,now);
-    for(const o of frame.objects) drawWorldObject(o,frame,now,p);
-    const renderState=drawCreature(frame,now,p);
-    drawForegroundFurniture(frame,now,p);
-    drawForegroundCausality(frame, now, renderState, p);
+    const lighting=visualLighting(frame,now),p=lighting.palette,paletteName=lighting.palette_name;
+    const scene=createSceneQueue();
+    const renderState=creatureRenderState(frame,now);
+    scene.add('BACK',0,'room-background',()=>drawBackground(frame,now,p,paletteName));
+    for(const o of frame.objects) scene.add('WORLD',px(o.y),`object:${o.id}`,()=>drawWorldObject(o,frame,now,p));
+    scene.add('ACTORS',px(renderState.rendered_base_y),'actor:moss',()=>drawCreature(frame,now,p,renderState,paletteName));
+    scene.add('FRONT',px(renderState.rendered_base_y)+1,'room-foreground',()=>{ drawForegroundFurniture(frame,now,p); drawForegroundCausality(frame,now,renderState,p); });
+    scene.flush();
+    window.__terrariumSceneLayers=scene.metadata();
     presentArtSurface();
-    if(debugVisible){ debug.hidden=false; debug.textContent=JSON.stringify({mode:snapshotPath?'snapshot':'live',connected,tick:frame.tick,lighting:frame.lighting,weather:frame.weather,world_event:frame.world_event,art_surface:[ART_W,ART_H],display:[DISPLAY_W,DISPLAY_H],scale:SCALE,creature:frame.creature,last_event:frame.last_event,poll_error:lastPollError},null,2); } else debug.hidden=true;
+    if(debugVisible){ debug.hidden=false; debug.textContent=JSON.stringify({mode:snapshotPath?'snapshot':'live',connected,tick:frame.tick,lighting:frame.lighting,weather:frame.weather,world_event:frame.world_event,art_surface:[ART_W,ART_H],art_grid:[25,15],tile_size:16,palette:paletteName,scene_layers:window.__terrariumSceneLayers,display:[DISPLAY_W,DISPLAY_H],scale:SCALE,creature:frame.creature,last_event:frame.last_event,poll_error:lastPollError},null,2); } else debug.hidden=true;
     if(scheduleNext) requestAnimationFrame(render);
     return renderState;
   }
@@ -783,7 +802,12 @@
     }catch(err){connected=false;lastPollError=String(err);publishTemporal({schema:'terrarium.temporal-error.v1',status:'error',error:String(err)});}
   }
 
-  window.__terrariumPixelRenderer = Object.freeze({art_width:ART_W,art_height:ART_H,display_width:DISPLAY_W,display_height:DISPLAY_H,integer_scale:SCALE,smoothing:false});
+  window.__terrariumPixelRenderer = Object.freeze({art_width:ART_W,art_height:ART_H,display_width:DISPLAY_W,display_height:DISPLAY_H,integer_scale:SCALE,smoothing:false,tile_size:16,art_grid:[25,15],scene_layers:Object.keys(SCENE_LAYERS),asset_schema:'terrarium.pixel-asset.v1'});
   document.addEventListener('keydown',ev=>{if(ev.key.toLowerCase()==='d')debugVisible=!debugVisible;});
-  if(temporalScenario)loadTemporalScenario();else if(snapshotPath){loadSnapshot();requestAnimationFrame(render);}else{poll();setInterval(poll,700);requestAnimationFrame(render);}
+  async function start(){
+    try{ await loadArtBundle(); }
+    catch(err){ connected=false; lastPollError=String(err); console.error(err); rect(0,0,ART_W,ART_H,'#25242b'); presentArtSurface(); document.title='Terrarium Art Error'; if(temporalScenario)publishTemporal({schema:'terrarium.art-error.v1',status:'error',scenario:temporalScenario,error:String(err)}); return; }
+    if(temporalScenario)loadTemporalScenario();else if(snapshotPath){await loadSnapshot();requestAnimationFrame(render);}else{await poll();setInterval(poll,700);requestAnimationFrame(render);}
+  }
+  start();
 })();

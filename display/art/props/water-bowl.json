@@ -1,0 +1,14 @@
+{
+  "schema": "terrarium.pixel-asset.v1",
+  "id": "prop.water-bowl",
+  "width": 22,
+  "height": 11,
+  "anchor": [0, 0],
+  "runs": [
+    [0, 8, 22, 3, "shadow"],
+    [2, 2, 18, 6, "dustyBlue"],
+    [4, 0, 14, 3, "cream"],
+    [6, 1, 10, 2, "skyDark"],
+    [4, 7, 14, 2, "skyDark"]
+  ]
+}

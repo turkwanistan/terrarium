@@ -1,0 +1,105 @@
+{
+  "art_surface": [
+    400,
+    240
+  ],
+  "canonical_live_runtime_touched": false,
+  "captures": {
+    "art_dawn_clear_fresh_idle-current": {
+      "distinct_rasters": 1,
+      "exact_2x": true,
+      "first_pixel_hash": "fnv1a32:f2d0223d",
+      "samples": 1,
+      "scale_error_blocks": 0,
+      "schema": "terrarium.temporal-keyframe.v1",
+      "smoothing_off": true
+    },
+    "art_day_clear_fresh_idle-current": {
+      "distinct_rasters": 1,
+      "exact_2x": true,
+      "first_pixel_hash": "fnv1a32:e987c4ed",
+      "samples": 1,
+      "scale_error_blocks": 0,
+      "schema": "terrarium.temporal-keyframe.v1",
+      "smoothing_off": true
+    },
+    "art_dusk_mist_fresh_idle-current": {
+      "distinct_rasters": 1,
+      "exact_2x": true,
+      "first_pixel_hash": "fnv1a32:b6de9f25",
+      "samples": 1,
+      "scale_error_blocks": 0,
+      "schema": "terrarium.temporal-keyframe.v1",
+      "smoothing_off": true
+    },
+    "art_night_rain_lived_idle-current": {
+      "distinct_rasters": 1,
+      "exact_2x": true,
+      "first_pixel_hash": "fnv1a32:6eb0230d",
+      "samples": 1,
+      "scale_error_blocks": 0,
+      "schema": "terrarium.temporal-keyframe.v1",
+      "smoothing_off": true
+    },
+    "continuity_probe-current": {
+      "jump_px": 0,
+      "schema": "terrarium.continuity-probe.v1"
+    },
+    "event_moth_engage-current": {
+      "distinct_rasters": 8,
+      "exact_2x": true,
+      "first_pixel_hash": "fnv1a32:2d957615",
+      "samples": 11,
+      "scale_error_blocks": 0,
+      "schema": "terrarium.temporal-capture.v1",
+      "smoothing_off": true
+    },
+    "inspect_object-current": {
+      "distinct_rasters": 1,
+      "exact_2x": true,
+      "first_pixel_hash": "fnv1a32:e1b47565",
+      "samples": 1,
+      "scale_error_blocks": 0,
+      "schema": "terrarium.temporal-keyframe.v1",
+      "smoothing_off": true
+    },
+    "left_walk-terrarium-raf-probe-v1": {
+      "duration_ms": 1816.5,
+      "frames": 110,
+      "interval_ms": {
+        "max": 16.8,
+        "min": 16.5,
+        "over_34ms": 0,
+        "over_50ms": 0,
+        "p50": 16.7,
+        "p95": 16.7
+      },
+      "schema": "terrarium.raf-probe.v1"
+    },
+    "sleep_transition-current": {
+      "distinct_rasters": 9,
+      "exact_2x": true,
+      "first_pixel_hash": "fnv1a32:77cf809d",
+      "samples": 11,
+      "scale_error_blocks": 0,
+      "schema": "terrarium.temporal-capture.v1",
+      "smoothing_off": true
+    }
+  },
+  "console_errors_observed": 0,
+  "deterministic_repeat": {
+    "pixel_hash": "fnv1a32:e987c4ed",
+    "repeat_match": true,
+    "scenario": "art_day_clear_fresh_idle"
+  },
+  "integer_scale": 2,
+  "isolated_data_dir": "/tmp/terrarium-iteration8a-uat",
+  "passed": true,
+  "production_renderer": true,
+  "schema": "terrarium.pixel-art-overhaul-iteration8a.browser-uat.v1",
+  "subjective_policy": "No synthetic beauty score. Iteration 8A accepts the authored-art production substrate; full room taste convergence remains Iteration 8B.",
+  "viewport": [
+    800,
+    480
+  ]
+}

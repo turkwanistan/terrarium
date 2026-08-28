@@ -1,0 +1,14 @@
+{
+  "schema": "terrarium.art-manifest.v1",
+  "art_surface": [400, 240],
+  "tile_size": 16,
+  "grid": [25, 15],
+  "palette_source": "palettes/materials.json",
+  "assets": [
+    {"id": "tile.floor-detail", "kind": "tile", "path": "tiles/floor-detail.json", "layer": "SURFACE"},
+    {"id": "structure.collection-shelf", "kind": "structure", "path": "props/collection-shelf.json", "layer": "STRUCTURE"},
+    {"id": "prop.water-bowl", "kind": "prop", "path": "props/water-bowl.json", "layer": "WORLD"},
+    {"id": "moss.idle", "kind": "moss", "path": "moss/idle.json", "layer": "ACTORS"},
+    {"id": "environment.desk-plant", "kind": "environment", "path": "environment/desk-plant.json", "layer": "STRUCTURE"}
+  ]
+}

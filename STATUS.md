@@ -1,100 +1,117 @@
 # Terrarium status
 
-Terrarium is normal product development after the accepted Generation 17 pilot. The current checkpoint is **Pixel-Art Overhaul — Iteration 7: Situational Events and Environmental Attention**. This is **not Generation 18**.
+Terrarium is normal product development after the accepted Generation 17 pilot. The current product checkpoint is **Pixel-Art Overhaul — Iteration 8A: Visual Grammar and Asset Pipeline**. This is **not Generation 18**.
 
 ## Current checkpoint
 
-- history: `history/2026-08-27-pixel-art-overhaul-iteration7.md`
-- bounded evidence: `artifacts/pixel-art-overhaul-iteration7.json`
-- situational-event evaluation: `artifacts/pixel-art-overhaul-iteration7-situations.json`
-- repertoire regression: `artifacts/pixel-art-overhaul-iteration7-repertoire.json`
-- regression matrix: `artifacts/pixel-art-overhaul-iteration7-regression-matrix.json`
-- real-renderer UAT: `artifacts/pixel-art-overhaul-iteration7-browser-uat.json`
-- accepted snapshot: `20260828T010131008922Z-pixel-art-overhaul-iteration7`
+- history: `history/2026-08-27-pixel-art-overhaul-iteration8a.md`
+- acceptance: `artifacts/pixel-art-overhaul-iteration8a.json`
+- regression matrix: `artifacts/pixel-art-overhaul-iteration8a-regression-matrix.json`
+- browser UAT: `artifacts/pixel-art-overhaul-iteration8a-browser-uat.json`
+- art-direction matrix: `artifacts/iteration8a-art-direction-matrix.json`
+- art-direction fixtures: `artifacts/iteration8a-art-direction-fixtures.json`
+- accepted snapshot: `20260828T020631095429Z-pixel-art-overhaul-iteration8a`
 - deterministic seed/tick: **1701 / 10080**
 - semantic frame SHA256: `e64af0693418973eab51a4f154c375399331fa4117f8168a083ab9296b9a1102`
-- renderer JS SHA256: `c9b3e44af04bfba888d335add0bce822ffc59968029cbd13b8cbbee22c5e0fe2`
+- renderer JS SHA256: `993718bd2a30ce6fe47ce980f12af2512832c5c6a7fb4b4189068bef9bcfdae7`
+- authored-art tree SHA256: `644d19610ac740d5867b36bd266fdb075b7b0548360d5ed39339651cec76faa4`
 - behavior rules: `terrarium-rules-v6-situational-attention`
 - deterministic RNG stream: `terrarium-rules-v3-routine-coherence`
 - situational events: `terrarium.situational-events.v1`
-- short-horizon context: `terrarium.behavior-context.v1`
-- long-horizon habits: `terrarium.habits.v1`
+- behavior context: `terrarium.behavior-context.v1`
+- habits: `terrarium.habits.v1`
 - affordance history: `terrarium.affordances.v1`
 - spatial schema: `terrarium.spatial.v1`
-- current forward-plan decision: `history/2026-08-27-visual-style-overhaul-plan.md`
 
-## What Iteration 7 established
+The semantic frame hash is identical to accepted Iteration 7 at the same seed/tick. Iteration 8A changed the renderer/art substrate, not Moss's authoritative simulation.
 
-The world can now initiate bounded, canonical situations rather than relying on Moss to originate nearly every visible activity. The initial event catalog is deliberately small: **moving sunlight, bird outside, rain intensification, thunder, night moth, and leaf/window contact**. Each event has deterministic occurrence conditions, authoritative lifecycle/duration, salience/perceptibility, source location, and any temporary affordance it creates.
+## What Iteration 8A established
 
-Moss does not treat events as mandatory interrupts. Depending on current commitment, event salience, recent repetition, and deterministic attention choice, Moss may **ignore, orient briefly, defer, rarely interrupt a low-commitment activity, approach, engage, or recover into ordinary behavior**. Existing object sessions, possession continuity, supported sleep, learned habits, and calm activity commitments remain authoritative. The target causal shape is now real state rather than renderer theater: **event → perception/attention → reaction or defer → engagement/decision → aftermath**.
+Terrarium now has a real authored-art source tree under `display/art/` rather than relying on `display/web/app.js` as the sole home of finished pixel clusters.
 
-Moving sunlight is the first temporary environmental affordance. Its current patch is authoritative world state, Moss can travel to that exact walkable location and loaf there, and the opportunity moves/disappears with the event. Window events keep separate source coordinates and physically valid Moss engagement anchors: the renderer shows where the bird/thunder/leaf/rain event exists while navigation still ends on valid floor-side geometry.
+The foundation includes:
 
-## Acceptance evidence
+- `terrarium.art-manifest.v1` with an exact **400×240** art surface, **16×16** static composition unit, and **25×15** art grid;
+- `terrarium.pixel-asset.v1` palette-addressed run-cluster assets with strict dimension/bounds/role validation;
+- `terrarium.palette-bank.v1` with named material families and dawn/day/dusk/night palette variants;
+- deterministic preload and compilation of authored assets into smoothing-disabled offscreen canvases;
+- an `asset@palette` runtime cache so text assets are not reinterpreted every frame;
+- a generalized scene queue with `BACK / STRUCTURE / SURFACE / WORLD / ACTORS / FRONT / ALWAYS_FRONT` ordering and compatible Y/base ordering;
+- read-only `/art/` serving from the project-owned source tree;
+- production-renderer metadata exposing art-grid, scene-layer, and authored-asset contracts;
+- a deterministic art-direction fixture/matrix workflow tied to renderer, authored-art, and target-frame hashes.
 
-Across deterministic seven-day runs for seeds **1701 / 1702 / 42 / 999**:
+The art grid is presentation grammar only. Canonical coordinates, blockers, routes, object placement, behavior, and `terrarium.spatial.v1` remain continuous and authoritative.
 
-- **51–63** situational events start per seed;
-- every seed reaches all six event types;
-- event-active timeline share is only **6.7–8.5%**;
-- event-linked decisions are only **6.3–8.8%** of decisions, leaving >91% ordinary autonomous behavior on every seed;
-- ignored, oriented, deferred, and engaged responses all occur across the matrix;
-- same-type event starts are separated by at least **115 world-minutes**;
-- true interruptions are rare: only three across the four final runs, limited to `rest` / `loaf`; high-commitment manipulation and sleep are not casually broken;
-- sunlight temporary-affordance use occurs on every seed with **zero invalid-affordance failures**;
-- causal engagement checks report **zero mismatches**.
+## Representative migration
 
-Iteration-6 repertoire breadth is preserved rather than crowded out. Final family entropy is **2.960–2.999 bits**, generic behavior share is **56.6–59.4%**, and the original repertoire evaluator passes all four seeds. Controlled equivalent-present-state histories still diverge deterministically: loaf-pattern cross-advantage is **0.237** and placement-pattern cross-advantage is **0.250**, both above the unchanged Iteration-6 acceptance bars. The arrangement preference strength was deliberately tuned to preserve this history dependence while retaining the original `<70%` anti-lock-in probe.
+Iteration 8A deliberately did not redraw the whole habitat. It proved the architecture with a cross-section of real production content:
 
-Long-horizon habits also remain causal and bounded. All four habit robustness seeds pass; controlled favorite-zone cross-advantage remains **0.238–0.361**. Coherence remains calm: ordinary non-delivery reversal is **0–2.33%**, and the calm visible timeline is **68.3–76.1%** across the four reference runs.
+- one 16×16 floor material/detail tile;
+- the collection shelf structure;
+- one water-bowl prop;
+- a Moss idle frame;
+- the activity-corner desk plant.
 
-## Renderer / browser UAT
+These authored assets coexist with unmigrated legacy procedural art. That bounded transition path is intentional: **Iteration 8B** migrates/recomposes the room, and **Iteration 8C** completes the Moss sprite overhaul.
 
-The actual Canvas renderer consumes canonical `world_event` state. Sunlight is a hard-edged finite-palette rug patch; bird, rain escalation, thunder, and leaf contact remain localized to the window; the moth is a small night event near the activity corner. There is no renderer-owned event scheduling, hidden preference memory, camera shake, random zoom, full-screen particle layer, or high-resolution overlay.
+The existing color values were externalized rather than substantially redesigned. This keeps 8A focused on substrate correctness while ensuring the architecture can support richer material-specific ramps and later time/weather/season variants.
 
-Real 800×480 browser UAT covered **sunlight engagement, bird engagement, thunder reaction, moth engagement, and deliberate event non-reaction**. Every scenario captured **11 temporal samples**, all with exact 400×240→800×480 2× scaling, smoothing disabled, and monotonic interpolation. Each scenario produced **8–10 distinct raster states**. Browser runs reached the ready state with zero console errors. Human inspection of the actual Canvas output found the event cues restrained, pixel-native, localized, and subordinate to Moss.
+## Art-direction review / browser UAT
 
-Canonical Moss was not reset, replaced, or used for development fixture UAT. Browser evaluation used an isolated temporary world; the service was stopped afterward.
+`tools/capture_art_direction_matrix.py` builds **13 deterministic production-renderer scenarios** covering dawn/day/dusk/night, clear/rain/mist, fresh vs lived-in history, idle/walk/inspect/sleep, and representative sunlight/bird/thunder/moth situations.
+
+Real 800×480 browser UAT used an isolated `/tmp/terrarium-iteration8a-uat` world and reached `Terrarium Temporal ready` with zero observed console errors across representative authored and legacy-coexistence cases. Captured rasters preserved exact 400×240→800×480 2× scaling, smoothing disabled, and zero scale-error blocks.
+
+Additional temporal evidence:
+
+- deterministic fresh-day repeat: identical `fnv1a32:e987c4ed` raster hash;
+- sleep transition: 11 samples / 9 distinct raster states;
+- moth engagement: 11 samples / 8 distinct raster states;
+- continuity probe: **0 px** jump;
+- RAF probe: **110 frames / 1816.5 ms**, p50/p95 **16.7 ms**, max **16.8 ms**, zero intervals above 34 ms or 50 ms.
+
+The promoted `grid-quantized-temporal-render-auditor-r1` binary is not directly exposed by the current frozen MCP/Lab tool surface. No substitute capability was created. Its relevant rejection classes were exercised through the existing deterministic temporal fixture/raster/continuity/RAF path.
+
+Subjective art quality still has no machine beauty score. Iteration 8A accepts the production substrate; the major taste/composition redraw begins in 8B.
 
 ## Validation
 
-- pytest: **43/43 PASS**;
-- Python 3.10 grammar parse: **24 source files PASS**;
+- pytest: **45/45 PASS**;
+- Python-3.10 grammar guard: **35 sources PASS**;
 - JavaScript syntax: **PASS**;
-- technical evaluator / exact replay / restart / hash-chain integrity: **PASS**;
-- behavior robustness, seeds 1701/1702/42/999: **all PASS**;
-- spatial robustness, seeds 1701/1702/42/999: **all PASS**;
-- coherence robustness, seeds 1701/1702/42/999: **all PASS**;
-- long-horizon habit robustness, seeds 1701/1702/42/999: **all PASS**;
-- Iteration-6 repertoire regression, seeds 1701/1702/42/999: **all PASS**;
-- Iteration-7 situational-event evaluation, seeds 1701/1702/42/999: **all PASS**;
-- real browser Iteration-7 temporal UAT: **PASS**;
-- combined Iteration-7 regression matrix: **PASS**.
+- authored asset manifest/palette/schema validation: **PASS**;
+- technical evaluator / append-only event chain / restart / exact replay: **PASS**;
+- behavior, seeds 1701/1702/42/999 at 10,080 steps: **all PASS**;
+- spatial, seeds 1701/1702/42/999 at 10,080 steps: **all PASS**;
+- coherence, seeds 1701/1702/42/999 at 10,080 steps: **all PASS**;
+- habits, seeds 1701/1702/42/999 at 10,080 steps: **all PASS**;
+- Iteration-6 repertoire regression: **PASS**;
+- Iteration-7 situational regression: **PASS**;
+- deterministic production-browser art/temporal UAT: **PASS**;
+- combined Iteration-8A regression matrix: **PASS**.
+
+No simulation-authority source file changed. Canonical Moss was not reset, replaced, migrated, or used as a development fixture.
 
 ## SBC conclusion
 
-No reusable substrate deficiency was exposed. Canonical environmental-event state, selective attention, deferral/interruption policy, temporary affordances, causal evaluation, replay, migration, and renderer support all fit cleanly inside Terrarium's existing bounded-session model and the already-promoted SBC/project/evaluation substrate. Self-Building Computer, Capability Forge, and the frozen Optiplex MCP surface were not modified. **Gen18 decision: NO — existing SBC substrate remains sufficient.**
+No reusable substrate deficiency was exposed. Authored art files, the palette bank, renderer cache, scene queue, static art route, and art-review matrix fit cleanly inside Terrarium. Existing project execution, deterministic replay/snapshot support, browser access, and temporal fixture infrastructure were sufficient.
 
-## Roadmap after Iteration 7
+Self-Building Computer, Capability Forge, and the frozen Optiplex MCP surface were not modified. **Gen18 decision: NO.**
 
-A visual-gap audit found that Terrarium's deterministic simulation/behavior systems are now materially ahead of the renderer's authored-art capacity. The current 400×240 pixel contract is sound, but most art remains procedurally constructed in `display/web/app.js`, creating a ceiling on silhouette quality, material richness, asymmetry, sprite acting, depth, lighting, and long-horizon transformation.
+## Next: Iteration 8B — Room Recomposition
 
-The roadmap is therefore reprioritized without changing the accepted Iteration-7 checkpoint:
+Use the accepted authored-art substrate to make the habitat itself inhabit the target visual territory:
 
-1. **Iteration 8A — Visual Grammar and Asset Pipeline**
-2. **Iteration 8B — Room Recomposition**
-3. **Iteration 8C — Moss Sprite Overhaul**
-4. **Iteration 8D — Object Identity and Stateful Affordances**
-5. **Iteration 8E — Atmospheric World**
-6. **Iteration 8F — Seasonal Terrarium**
-7. **Iteration 9 — Emergent Situations and Consequence Memory**
+- migrate/recompose the full room through authored assets;
+- introduce the richer saturated-natural palette/material treatment;
+- strengthen zone/furniture silhouettes and material specificity;
+- increase controlled asymmetry and authored foliage/exterior richness;
+- deepen foreground occlusion and framing;
+- preserve the broad rug/open-space visual rest area;
+- preserve all authoritative history marks and spatial validity.
 
-`VISUAL_STYLE_OVERHAUL.md` defines the detailed migration plan and `ART_DIRECTION.md` defines the visual law. The target emphasizes authored 16×16 static-world grammar, saturated natural palette behavior, strong silhouettes, layered depth/Y-ordering, low-frame sprite acting, environmental animation, warm-vs-cool lighting, slow seasonal transformation, and persistent history made visible. Terrarium remains one habitat with one dog; this is not a farming-game conversion or asset-level imitation of another title.
-
-The previous Object Identity milestone is postponed, not abandoned. It becomes Iteration 8D so stateful object behavior can arrive with a renderer capable of giving those states distinct authored visual consequences.
-
-No new SBC substrate need has been demonstrated by this reprioritization. Project-local asset and visual-review tooling should be attempted first. **Gen18 remains NO unless implementation evidence proves a reusable substrate deficiency.**
+Success for 8B is a still frame with Moss hidden that already reads as a deliberate, richly authored late-16-bit life-RPG interior. Moss's full authored action-sprite migration remains **Iteration 8C**.
 
 ## Runtime / Git safety
 

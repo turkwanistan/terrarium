@@ -1,0 +1,18 @@
+{
+  "schema": "terrarium.pixel-asset.v1",
+  "id": "environment.desk-plant",
+  "width": 21,
+  "height": 33,
+  "anchor": [0, 0],
+  "runs": [
+    [5, 20, 13, 13, "amber"],
+    [3, 17, 17, 4, "creamShade"],
+    [7, 30, 9, 3, "walnutDark"],
+    [10, 3, 3, 15, "foliage"],
+    [3, 6, 8, 5, "foliage"],
+    [13, 4, 8, 5, "moss"],
+    [0, 11, 8, 4, "mossDark"],
+    [14, 11, 7, 4, "foliage"],
+    [7, 0, 7, 5, "moss"]
+  ]
+}

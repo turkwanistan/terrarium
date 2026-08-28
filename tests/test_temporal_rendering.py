@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import importlib.util
+import json
 from pathlib import Path
 
 from terrarium.api.server import build_parser
@@ -75,7 +76,7 @@ def test_renderer_has_manual_clock_path_and_production_raf_path():
     assert "function routeSample(points,progress)" in source
     assert "route_distance" in source and "route_segment_index" in source
     assert "transitionSource" in source and "temporalContinuityProbe" in source
-    assert "drawForegroundCausality(frame, now, renderState" in source
+    assert "drawForegroundCausality(frame,now,renderState" in source or "drawForegroundCausality(frame, now, renderState" in source
     assert "function worldEventRenderState" in source
     assert "drawFloorWorldEvent" in source and "drawWindowWorldEvent" in source and "drawInteriorWorldEvent" in source
     assert all(name in source for name in ("sunlight", "bird", "rain_intensify", "thunder", "moth", "leaf_tap"))
@@ -98,7 +99,8 @@ def test_renderer_is_pixel_native_400x240_with_exact_2x_present_path():
 
 def test_moss_pixel_sprite_is_brown_and_default_has_no_glasses():
     source = (ROOT / "display" / "web" / "app.js").read_text(encoding="utf-8")
-    assert "dog:'#8b5d3b'" in source
+    palettes = json.loads((ROOT / "display" / "art" / "palettes" / "materials.json").read_text(encoding="utf-8"))
+    assert palettes["palettes"]["day"]["dog"] == "#8b5d3b"
     assert "function drawMossSprite" in source
     assert "pose==='walk'" in source and "pose==='sleep'" in source
     assert "pose==='inspect'" in source and "pose==='nudge'" in source and "pose==='carry'" in source and "pose==='place'" in source

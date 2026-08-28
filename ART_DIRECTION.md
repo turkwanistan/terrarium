@@ -316,3 +316,12 @@ Event presentation rules:
 - `react`, `look_outside`, and `loaf` should read differently when their canonical cause differs, but do not create gratuitous pose enums when gaze, target, context, and event depiction already communicate the cause.
 
 The visual question is now: **does something seem to have happened in the room, and does Moss's degree of attention to it feel intentional rather than compulsory?** Moss remains the focal character even when the world initiates the moment.
+
+
+## Accepted Iteration 8A authored-art foundation
+
+Pixel-Art Overhaul — Iteration 8A makes the authored-art law executable. `display/art/manifest.json` now pins the exact 400×240 surface, 16×16 static composition unit, and 25×15 art grid while leaving canonical movement and `terrarium.spatial.v1` continuous. Palette-addressed `terrarium.pixel-asset.v1` sources hold recurring pixel clusters; the browser validates them, compiles them once into smoothing-disabled offscreen canvases, and caches by asset/palette rather than interpreting source text every frame.
+
+The renderer now exposes the declarative `BACK / STRUCTURE / SURFACE / WORLD / ACTORS / FRONT / ALWAYS_FRONT` scene grammar with stable Y/base ordering inside compatible layers. This is presentation ordering only; spatial/world authority remains canonical. Representative authored room, prop, Moss, tile, and environmental assets intentionally coexist with legacy procedural drawing until Iterations 8B and 8C migrate the remainder.
+
+Visual-review evidence is now expected to pin both the renderer hash and authored-art tree hash. `tools/capture_art_direction_matrix.py` is the project-local deterministic review entry point. Automated checks may reject schema, dimensions, grid, scale, smoothing, determinism, temporal continuity, or renderer errors; they still may not manufacture a numerical charm/beauty score.

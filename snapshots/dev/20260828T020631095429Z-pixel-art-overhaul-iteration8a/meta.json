@@ -1,0 +1,41 @@
+{
+  "art_surface": {
+    "height": 240,
+    "integer_scale": 2,
+    "smoothing": false,
+    "width": 400
+  },
+  "captured_at": "2026-08-28T02:06:31.097391Z",
+  "frame": {
+    "logical_height": 480,
+    "logical_width": 800,
+    "path": "dev/20260828T020631095429Z-pixel-art-overhaul-iteration8a/frame.json",
+    "sha256": "e64af0693418973eab51a4f154c375399331fa4117f8168a083ab9296b9a1102",
+    "tick": 10080
+  },
+  "git": {
+    "branch": "main",
+    "dirty": true,
+    "head": "03cc12743f6b0f0bb1273c24719e9fce9397b575"
+  },
+  "note": "Iteration 8A accepted authored pixel-art substrate: 16x16 art grammar, validated palette-addressed assets, deterministic offscreen cache, declarative scene layers, representative production migration, and art-direction review fixtures.",
+  "preview": {
+    "path": "dev/20260828T020631095429Z-pixel-art-overhaul-iteration8a/preview.svg",
+    "sha256": "dd1662ad07d796302643cbf6240cae51ec72bef050c15ee0253b7b8c77ea9f64"
+  },
+  "schema": "terrarium.dev-snapshot.v1",
+  "snapshot_id": "20260828T020631095429Z-pixel-art-overhaul-iteration8a",
+  "source": {
+    "mode": "deterministic",
+    "seed": 1701,
+    "steps": 10080
+  },
+  "source_hashes": {
+    "authored_art": "644d19610ac740d5867b36bd266fdb075b7b0548360d5ed39339651cec76faa4",
+    "engine": "c557aff864e560e2fd9716d64d5c39af66dda40b294b6b8ff54a5087fc3482fb",
+    "frame_contract": "680a24d7c9824a109abce56bb4bba4fcc4bcd1b9e35bac29a13950b0426108a8",
+    "renderer_css": "3a24319be5a3e0c963b8e721b637f35aedfdc24b8bef8e779ae934dd09fd62d1",
+    "renderer_js": "993718bd2a30ce6fe47ce980f12af2512832c5c6a7fb4b4189068bef9bcfdae7"
+  },
+  "view_url": "/?snapshot=/snapshots/dev/20260828T020631095429Z-pixel-art-overhaul-iteration8a/frame.json"
+}

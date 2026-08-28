@@ -239,3 +239,24 @@ Detailed sequence and acceptance criteria live in `VISUAL_STYLE_OVERHAUL.md`.
 7. **9 — Emergent Situations and Consequence Memory**
 
 The sequencing intentionally lets renderer/art capability catch up before expanding the simulation further. Later art-convergence passes may redraw, simplify, or remove assets; progress is not measured by feature count.
+
+
+## Completed normal product checkpoint — Pixel-Art Overhaul, Iteration 8A
+
+- established `display/art/` as the editable source of truth for authored recurring pixel clusters;
+- formalized the 16×16 static-world grammar on the exact 400×240 / 25×15 art surface without changing continuous semantic coordinates;
+- added validated palette-addressed `terrarium.pixel-asset.v1` assets plus a material/palette bank;
+- moved palette definitions out of `app.js` and added deterministic asset preload, offscreen compilation, and `asset@palette` caching;
+- introduced the declarative `BACK / STRUCTURE / SURFACE / WORLD / ACTORS / FRONT / ALWAYS_FRONT` scene queue with stable Y/base ordering;
+- migrated a representative floor tile, collection shelf, water bowl, Moss idle frame, and desk plant through the production pipeline while preserving legacy coexistence;
+- added deterministic production-renderer art-direction fixtures covering time, weather, history, Moss activity, and situational events;
+- preserved the Iteration-7 semantic seed-1701/tick-10080 frame byte-for-byte by hash;
+- passed 45/45 tests, Python-3.10 grammar, JavaScript syntax, exact replay/technical checks, four-seed behavior/spatial/coherence/habit regressions, repertoire/situational regressions, deterministic browser raster checks, zero-jump continuity, and clean RAF pacing;
+- used an isolated `/tmp` development world; canonical Moss was not reset or replaced;
+- no SBC platform change, Capability Forge work, frozen MCP change, or Gen18 was required.
+
+Evidence: `history/2026-08-27-pixel-art-overhaul-iteration8a.md`, `artifacts/pixel-art-overhaul-iteration8a.json`, `artifacts/pixel-art-overhaul-iteration8a-regression-matrix.json`, snapshot `20260828T020631095429Z-pixel-art-overhaul-iteration8a`.
+
+## Next product iteration after Iteration 8A
+
+**Iteration 8B — Room Recomposition.** Use the accepted authored-art substrate to redraw the habitat itself: richer saturated natural palette behavior, stronger zone/furniture silhouettes, more specific material language, controlled asymmetry, richer window/exterior foliage, foreground framing/depth, and preserved quiet rug/open-space readability. Keep history marks canonical and spatially valid. The complete Moss action-sprite migration remains Iteration 8C.

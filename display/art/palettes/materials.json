@@ -1,0 +1,17 @@
+{
+  "schema": "terrarium.palette-bank.v1",
+  "required_roles": ["wall","wallShade","wallLight","floor","floorShade","floorLight","walnut","walnutDark","walnutLight","cream","creamShade","moss","mossDark","amber","sky","skyDark","dustyBlue","rain","shadow","paper","dog","dogDark","dogLight","dogCream","eye","rug","rugLight","foliage"],
+  "material_families": {
+    "timber": ["walnutDark","walnut","walnutLight"],
+    "vegetation": ["mossDark","moss","foliage"],
+    "cloth": ["dustyBlue","creamShade","cream"],
+    "environment": ["skyDark","sky","rain"],
+    "dog": ["dogDark","dog","dogLight","dogCream"]
+  },
+  "palettes": {
+    "day": {"wall":"#a48b6a","wallShade":"#8a7155","wallLight":"#c0a27a","floor":"#785638","floorShade":"#60422f","floorLight":"#916947","walnut":"#533824","walnutDark":"#352519","walnutLight":"#765236","cream":"#e5cf9f","creamShade":"#c3aa7d","moss":"#66774b","mossDark":"#435437","amber":"#d39a4a","sky":"#7eaaa6","skyDark":"#557c7e","dustyBlue":"#668399","rain":"#b0c7c0","shadow":"#2e241d","paper":"#d7c493","dog":"#8b5d3b","dogDark":"#5f3c29","dogLight":"#b47c50","dogCream":"#d9bd8d","eye":"#2d241e","rug":"#66754e","rugLight":"#819064","foliage":"#536b42"},
+    "dawn": {"wall":"#967b69","wallShade":"#765d52","wallLight":"#b49378","floor":"#684b37","floorShade":"#51392e","floorLight":"#805c44","walnut":"#513523","walnutDark":"#332319","walnutLight":"#714c34","cream":"#ddc494","creamShade":"#b99c73","moss":"#61704b","mossDark":"#414f38","amber":"#d59655","sky":"#b77b70","skyDark":"#765c68","dustyBlue":"#6d758c","rain":"#a9b9b4","shadow":"#2c2220","paper":"#ceb786","dog":"#84583c","dogDark":"#5b3a2a","dogLight":"#aa744f","dogCream":"#d0b382","eye":"#2b2421","rug":"#626f51","rugLight":"#788263","foliage":"#536643"},
+    "dusk": {"wall":"#78645f","wallShade":"#604d4b","wallLight":"#92766e","floor":"#604331","floorShade":"#493128","floorLight":"#79533c","walnut":"#4b3022","walnutDark":"#302019","walnutLight":"#684631","cream":"#cfae82","creamShade":"#aa8969","moss":"#59664a","mossDark":"#3c4738","amber":"#ce864b","sky":"#865d78","skyDark":"#54465f","dustyBlue":"#606b83","rain":"#9caeac","shadow":"#282022","paper":"#c2a97f","dog":"#79503a","dogDark":"#52362a","dogLight":"#9e6a4d","dogCream":"#c3a57e","eye":"#292326","rug":"#59624d","rugLight":"#6f785d","foliage":"#4d5d42"},
+    "night": {"wall":"#3e4650","wallShade":"#303640","wallLight":"#535b62","floor":"#49382f","floorShade":"#342925","floorLight":"#5a4538","walnut":"#422c21","walnutDark":"#2b201b","walnutLight":"#5c4030","cream":"#b69c79","creamShade":"#927a62","moss":"#4d5b46","mossDark":"#354039","amber":"#c78647","sky":"#1d2a43","skyDark":"#131c30","dustyBlue":"#4f637c","rain":"#8299a0","shadow":"#211d22","paper":"#ad9473","dog":"#6c4937","dogDark":"#4a3329","dogLight":"#8d624a","dogCream":"#ae9374","eye":"#201f24","rug":"#4d5948","rugLight":"#63705a","foliage":"#414f3d"}
+  }
+}

@@ -17,6 +17,7 @@ from terrarium.store import WorldStore
 
 PROJECT_ROOT = Path(__file__).resolve().parents[2]
 WEB_ROOT = PROJECT_ROOT / "display" / "web"
+ART_ROOT = PROJECT_ROOT / "display" / "art"
 SNAPSHOT_ROOT = PROJECT_ROOT / "snapshots"
 
 
@@ -138,6 +139,10 @@ class Handler(BaseHTTPRequestHandler):
         if parsed.path == "/snapshots" or parsed.path.startswith("/snapshots/"):
             rel = parsed.path[len("/snapshots"):].lstrip("/")
             self._static_from(SNAPSHOT_ROOT, rel)
+            return
+        if parsed.path == "/art" or parsed.path.startswith("/art/"):
+            rel = parsed.path[len("/art"):].lstrip("/")
+            self._static_from(ART_ROOT, rel)
             return
         self._static_from(WEB_ROOT, parsed.path)
 

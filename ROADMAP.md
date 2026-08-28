@@ -16,11 +16,13 @@ Target causal structure:
 
 The accepted catalog is moving sunlight, bird outside, rain escalation, thunder, night moth, and leaf/window contact. Events remain canonical opportunities, not mandatory interrupt handlers. Ordinary autonomous behavior still dominates the long-run timeline.
 
-## Next: Iteration 8A — Visual Grammar and Asset Pipeline
+## Accepted Iteration 8A — Visual Grammar and Asset Pipeline
 
-Remove the current procedural-art ceiling before adding more simulation complexity.
+**Status: ACCEPTED.** Terrarium now has a validated `display/art/` source tree, 16×16 / 25×15 static art grammar, palette/material bank, deterministic offscreen asset compilation/cache, generalized scene-layer queue, representative production asset migration, and deterministic production-renderer art-direction fixtures. The seed-1701/tick-10080 semantic frame is unchanged from Iteration 7.
 
-The current 400×240 → 800×480 exact pixel pipeline is correct, but most finished art is still directly constructed in `display/web/app.js`. Iteration 8A should establish a reusable authored-art substrate inside Terrarium itself.
+The accepted foundation removes the current procedural-art ceiling before adding more simulation complexity.
+
+The current 400×240 → 800×480 exact pixel pipeline is correct, but most finished art is still directly constructed in `display/web/app.js`. Iteration 8A established a reusable authored-art substrate inside Terrarium itself.
 
 Requirements:
 
@@ -39,7 +41,9 @@ Requirements:
 
 Success means the renderer can cleanly support hand-authored late-16-bit art without `app.js` itself being the primary sprite/tile authoring tool.
 
-## Iteration 8B — Room Recomposition
+Accepted evidence: `history/2026-08-27-pixel-art-overhaul-iteration8a.md`, `artifacts/pixel-art-overhaul-iteration8a.json`, `artifacts/pixel-art-overhaul-iteration8a-regression-matrix.json`, and snapshot `20260828T020631095429Z-pixel-art-overhaul-iteration8a`.
+
+## Next: Iteration 8B — Room Recomposition
 
 Redraw the persistent habitat using the new authored asset/layer system.
 

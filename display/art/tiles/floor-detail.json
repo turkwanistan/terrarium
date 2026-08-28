@@ -1,0 +1,14 @@
+{
+  "schema": "terrarium.pixel-asset.v1",
+  "id": "tile.floor-detail",
+  "width": 16,
+  "height": 16,
+  "anchor": [0, 0],
+  "runs": [
+    [0, 0, 16, 1, "floorShade"],
+    [2, 4, 11, 1, "floorLight"],
+    [6, 6, 6, 1, "floorShade"],
+    [15, 1, 1, 12, "floorShade"],
+    [1, 14, 7, 1, "floorLight"]
+  ]
+}

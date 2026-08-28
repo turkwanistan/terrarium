@@ -36,7 +36,7 @@ Snapshots are **development milestones**, not copies of the high-churn creature 
 python tools/capture_dev_snapshot.py cozy-object-storytelling-r1 --note "Objects and wear now tell a clearer story."
 ```
 
-Each checkpoint stores a small `frame.json`, metadata, renderer/source hashes, a GitHub-friendly `preview.svg`, and a note under `snapshots/dev/`. `snapshots/README.md` becomes the browsable visual timeline, while the local gallery renders those frames through the real browser renderer. Git history preserves the exact renderer version associated with each checkpoint. Use deterministic seed `1701` / step `240` by default so visual evolution is comparable over time.
+Each checkpoint stores a small `frame.json`, metadata, renderer/authored-art/source hashes, a GitHub-friendly `preview.svg`, and a note under `snapshots/dev/`. `snapshots/README.md` becomes the browsable visual timeline, while the local gallery renders those frames through the real browser renderer. Git history preserves the exact renderer version associated with each checkpoint. Use deterministic seed `1701` / step `240` by default so visual evolution is comparable over time.
 
 ## Git history
 
@@ -44,7 +44,7 @@ The intended remote is `git@github.com:turkwanistan/terrarium.git`. Make one com
 
 See `MEMORY.md` for the evidence-backed memory policy.
 
-Visual direction is governed by `ART_DIRECTION.md`; the current renderer/art migration sequence is defined in `VISUAL_STYLE_OVERHAUL.md` and prioritized in `ROADMAP.md`.
+Visual direction is governed by `ART_DIRECTION.md`; the accepted Iteration-8A authored-art foundation lives under `display/art/`, and the next room-recomposition step is defined in `VISUAL_STYLE_OVERHAUL.md` / `ROADMAP.md`.
 
 ## Evaluate
 
@@ -66,6 +66,8 @@ The technical evaluator proves fixed 800×480 framing, append-only/hash-chained 
 - `terrarium/frame.py` — hardware-neutral `terrarium.frame.v1` projection, exactly 800×480 logical pixels.
 - `terrarium/api/server.py` — persistent world service and read-only browser-facing API.
 - `display/web/` — reference Canvas diorama renderer; never authoritative.
+- `display/art/` — validated text-addressable authored pixel assets, palettes, and manifest; presentation source only, never world authority.
+- `tools/capture_art_direction_matrix.py` — deterministic production-renderer fixture matrix for visual comparison.
 - `evaluations/` — technical/behavior evaluators and Gen16 project capability pack.
 - `artifacts/` — reproducible Gen17 evidence.
 

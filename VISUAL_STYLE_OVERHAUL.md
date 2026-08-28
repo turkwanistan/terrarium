@@ -396,6 +396,8 @@ Human/vision inspection remains authority for composition, charm, material coher
 
 ### Iteration 8A — Visual Grammar and Asset Pipeline
 
+**Status: ACCEPTED** — see `history/2026-08-27-pixel-art-overhaul-iteration8a.md` and snapshot `20260828T020631095429Z-pixel-art-overhaul-iteration8a`.
+
 **Purpose:** remove the procedural-art ceiling before adding more visual complexity.
 
 Deliver:
@@ -416,6 +418,8 @@ Do **not** expand Moss intelligence, object behavior, seasons, or world-event se
 Success means the renderer can express the desired visual language cleanly without hard-coding every finished sprite/tile into `app.js`.
 
 ### Iteration 8B — Room Recomposition
+
+**Status: NEXT.**
 
 **Purpose:** make a still frame inhabit the target visual territory.
 

@@ -4,26 +4,25 @@ Terrarium is a normal product built after the accepted Self-Building Computer Ge
 
 ## Current checkpoint
 
-**Pixel-Art Overhaul — Iteration 7: Situational Events and Environmental Attention**
+**Pixel-Art Overhaul — Iteration 8A: Visual Grammar and Asset Pipeline**
 
-- history: `history/2026-08-27-pixel-art-overhaul-iteration7.md`
-- evidence: `artifacts/pixel-art-overhaul-iteration7.json`
-- situational evaluation: `artifacts/pixel-art-overhaul-iteration7-situations.json`
-- regression matrix: `artifacts/pixel-art-overhaul-iteration7-regression-matrix.json`
-- browser UAT: `artifacts/pixel-art-overhaul-iteration7-browser-uat.json`
-- snapshot: `snapshots/dev/20260828T010131008922Z-pixel-art-overhaul-iteration7`
+- history: `history/2026-08-27-pixel-art-overhaul-iteration8a.md`
+- acceptance: `artifacts/pixel-art-overhaul-iteration8a.json`
+- regression matrix: `artifacts/pixel-art-overhaul-iteration8a-regression-matrix.json`
+- browser UAT: `artifacts/pixel-art-overhaul-iteration8a-browser-uat.json`
+- art-direction matrix: `artifacts/iteration8a-art-direction-matrix.json`
+- snapshot: `snapshots/dev/20260828T020631095429Z-pixel-art-overhaul-iteration8a`
 - seed/tick: **1701 / 10080**
 - semantic frame SHA256: `e64af0693418973eab51a4f154c375399331fa4117f8168a083ab9296b9a1102`
-- renderer JS SHA256: `c9b3e44af04bfba888d335add0bce822ffc59968029cbd13b8cbbee22c5e0fe2`
-- behavior rules: `terrarium-rules-v6-situational-attention`
-- situational events: `terrarium.situational-events.v1`
-- behavior context: `terrarium.behavior-context.v1`
-- habit profile: `terrarium.habits.v1`
-- affordance history: `terrarium.affordances.v1`
-- spatial schema: `terrarium.spatial.v1`
-- current planning decision: `history/2026-08-27-visual-style-overhaul-plan.md`
+- renderer JS SHA256: `993718bd2a30ce6fe47ce980f12af2512832c5c6a7fb4b4189068bef9bcfdae7`
+- authored-art tree SHA256: `644d19610ac740d5867b36bd266fdb075b7b0548360d5ed39339651cec76faa4`
+- behavior rules remain: `terrarium-rules-v6-situational-attention`
+- situational events remain: `terrarium.situational-events.v1`
+- spatial schema remains: `terrarium.spatial.v1`
 
-Read `STATUS.md`, `ART_DIRECTION.md`, `VISUAL_STYLE_OVERHAUL.md`, `ROADMAP.md`, `plan.md`, `terrarium.md`, and the latest history entry before editing.
+Iteration 8A is a renderer/art-substrate checkpoint. Its seed-1701/tick-10080 semantic frame hash is identical to accepted Iteration 7, proving the authoritative simulation remained unchanged.
+
+Read `STATUS.md`, `ART_DIRECTION.md`, `VISUAL_STYLE_OVERHAUL.md`, `ROADMAP.md`, `plan.md`, `terrarium.md`, and the latest history entry before editing. For renderer work, also inspect `display/art/manifest.json`, `display/art/palettes/materials.json`, representative authored assets, and `display/web/app.js`.
 
 ## Authority contracts
 
@@ -50,13 +49,12 @@ Object manipulation, habits, possession continuity, spatial authority, supported
 
 `ROADMAP.md` and `VISUAL_STYLE_OVERHAUL.md` are authoritative unless direct canonical-runtime UAT exposes a more severe concrete defect. The simulation is currently ahead of the visual system, so the art pipeline is deliberately reprioritized before deeper behavior work:
 
-1. **Iteration 8A — Visual Grammar and Asset Pipeline** — establish the 16×16 static art grammar, text-addressable authored assets, palette/material banks, caching, declarative scene layers, generalized occlusion/Y-ordering, and deterministic visual review fixtures.
-2. **Iteration 8B — Room Recomposition** — redraw the habitat into the richer saturated, layered, asymmetrical, materially specific target visual language.
-3. **Iteration 8C — Moss Sprite Overhaul** — replace procedural body-part drawing with true authored low-frame sprites while preserving current semantic actions/timing.
-4. **Iteration 8D — Object Identity and Stateful Affordances** — resume the planned behavior expansion with object-specific state transitions and matching visual state variants.
-5. **Iteration 8E — Atmospheric World** — persistent non-commanding ambient animation, richer window life, local warm lighting, and stronger weather mood.
-6. **Iteration 8F — Seasonal Terrarium** — add a slow canonical seasonal timescale and coordinated long-horizon visual transformation.
-7. **Iteration 9 — Emergent Situations and Consequence Memory** — compose events, object state, arrangements, habits, and prior consequences into later opportunities.
+1. **Iteration 8B — Room Recomposition** — use the accepted authored-art pipeline to redraw the habitat into the richer saturated, layered, asymmetrical, materially specific target visual language.
+2. **Iteration 8C — Moss Sprite Overhaul** — migrate the remaining procedural hero poses into true authored low-frame sprites while preserving current semantic actions/timing.
+3. **Iteration 8D — Object Identity and Stateful Affordances** — resume behavior expansion with object-specific state transitions and matching visual variants.
+4. **Iteration 8E — Atmospheric World** — persistent non-commanding ambient animation, richer window life, local warm lighting, and stronger weather mood.
+5. **Iteration 8F — Seasonal Terrarium** — add a slow canonical seasonal timescale and coordinated long-horizon visual transformation.
+6. **Iteration 9 — Emergent Situations and Consequence Memory** — compose events, object state, arrangements, habits, and prior consequences into later opportunities.
 
 The visual target is a hand-authored late-16-bit life-RPG diorama: strict low-resolution grammar, readable silhouettes, richer saturated natural color, clustered shading, pragmatic perspective, layered depth, selective low-frame acting, non-commanding environmental motion, warm/cool lighting, slow world transformation, and persistent visible history. This is a system-level target; do not copy external assets, exact palettes, characters, architecture, UI, or map structure.
 
@@ -64,7 +62,7 @@ A generic planner, needs/personality-stat model, quest system, dialogue system, 
 
 ## Regression procedure
 
-Run `python -m pytest -q`, `node --check display/web/app.js`, Python-3.10 grammar parsing, technical/behavior/spatial/coherence/habit/repertoire/situational evaluators, exact replay, deterministic temporal capture, and real 800×480 browser inspection. For major behavior changes, retain robustness coverage across seeds **1701 / 1702 / 42 / 999** and compare causal/semantic families rather than enum count alone.
+Run `python -m pytest -q`, `node --check display/web/app.js`, Python-3.10 grammar parsing, authored-art schema/grid validation, technical/behavior/spatial/coherence/habit/repertoire/situational evaluators, exact replay, deterministic art-direction/temporal capture, and real 800×480 browser inspection. For major behavior changes, retain robustness coverage across seeds **1701 / 1702 / 42 / 999** and compare causal/semantic families rather than enum count alone.
 
 Promoted reusable capabilities remain:
 - `simulation-behavior-auditor-r1` — `932573954fdf126bd4ec4f4d5a1f79a50b48b994bf374ed0cfa3415120dd093f`
