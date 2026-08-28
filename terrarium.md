@@ -152,31 +152,26 @@ A hidden debug overlay is fine.
 
 # 6. Visual direction
 
-Recommended starting style:
+## Hand-authored low-resolution life-RPG diorama
 
-## Cozy pixel / low-resolution illustrated diorama
+Terrarium's visual target has matured beyond the original generic “cozy pixel” starting point. The reference renderer should feel like a **hand-authored late-16-bit life-RPG interior** built on a strict low-resolution grammar and made emotionally rich through saturated natural color, readable silhouettes, layered depth, selective low-frame animation, environmental motion, lighting/weather, slow environmental transformation, and persistent visible history.
 
-Reasons:
+Core visual principles:
 
-- readable on a small screen;
-- expressive without requiring complex art;
-- cheap to animate;
-- easy to port to embedded hardware;
-- visible changes are easy to notice;
-- imperfections can feel intentional;
-- sprite memory requirements remain manageable.
+- source scene remains **400×240**, presented at exactly **800×480** by 2× nearest-neighbor scaling;
+- use **16×16 source pixels** as the primary static-world art/composition unit while keeping canonical creature/object movement continuous rather than tile-based;
+- favor authored pixel assets and coherent material families over procedural renderer primitives as the finished-art source of truth;
+- natural color should be earthy but often **saturated**, with chromatic shadows, warm highlights, strong warm/cool relationships, and deliberate value grouping;
+- silhouette and category readability outrank micro-detail and strict physical perspective;
+- clustered shading, selective outlines, controlled asymmetry, foreground occlusion, and Y-ordering should make the room read as a layered diorama rather than a flat tile board;
+- Moss uses a small number of strong authored poses with deliberate timing rather than smooth skeletal animation or constant fidgeting;
+- the environment carries quiet non-commanding motion even when Moss is still;
+- time of day, weather, and eventually slow canonical seasons are visual-art systems, not merely labels or overlays;
+- the same familiar room should visibly accumulate Moss's real history—wear, bedding state, arrangements, traces, favorite-use patterns, and other authoritative consequences.
 
-A useful art strategy is to author at a lower internal resolution and upscale cleanly.
+Terrarium remains its own single-room persistent-creature product. Do not copy another game's assets, exact palette, characters, buildings, UI, map structure, farming subject matter, or sprite sheets. The transferable target is the **system-level visual ecology**, not asset-level imitation.
 
-For example:
-
-```text
-source scene: 400×240
-display:      800×480
-scale:        2×
-```
-
-The final output remains exactly 800×480.
+`ART_DIRECTION.md` is the detailed visual law. `VISUAL_STYLE_OVERHAUL.md` defines the current migration sequence from the procedural renderer toward that target.
 
 ---
 

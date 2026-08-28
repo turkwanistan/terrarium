@@ -44,6 +44,8 @@ The intended remote is `git@github.com:turkwanistan/terrarium.git`. Make one com
 
 See `MEMORY.md` for the evidence-backed memory policy.
 
+Visual direction is governed by `ART_DIRECTION.md`; the current renderer/art migration sequence is defined in `VISUAL_STYLE_OVERHAUL.md` and prioritized in `ROADMAP.md`.
+
 ## Evaluate
 
 ```bash

@@ -1,6 +1,8 @@
 # Terrarium Pixel-Art Direction
 
-This file is the visual authority for Terrarium. Human inspection of the real renderer governs charm, coherence, composition, and appeal. Automated evaluators protect mechanical correctness; there is no synthetic beauty score.
+This file is the visual authority for Terrarium. Human/vision inspection of the real renderer governs charm, coherence, composition, and appeal. Automated evaluators protect mechanical correctness; there is no synthetic beauty score.
+
+`VISUAL_STYLE_OVERHAUL.md` defines the ordered migration from the current procedural renderer to this target. This file defines the law the resulting art should obey.
 
 ## Rendering contract
 
@@ -9,148 +11,258 @@ This file is the visual authority for Terrarium. Human inspection of the real re
 - Keep both internal drawing and final scaling smoothing disabled.
 - Snap semantic 800-space presentation coordinates to the 400×240 art grid at the renderer boundary; canonical `TerrariumFrame` coordinates remain hardware-neutral and authoritative.
 - Never draw high-resolution 800×480 art and pixelate it afterward.
-- Avoid subpixel transforms, antialias-dependent primitives, gradients, blur, bloom, and glossy post-processing.
+- Avoid subpixel antialias-dependent drawing, gradients, blur, bloom, soft-focus post-processing, and glossy effects.
+- Use **16×16 source pixels** as the primary static-world art/composition unit. At 400×240 this yields an exact 25×15 art grid. This is an art grammar, not a navigation grid.
 
 ## Target aesthetic
 
-Finished handcrafted late-16-bit/early-32-bit farming/life-RPG pixel art: warm, cozy, readable, slightly whimsical, and materially grounded. Pixels should be clearly visible and moderately chunky. Silhouettes and clustered shapes matter more than detail count.
+A hand-authored late-16-bit life-RPG diorama: warm, colorful, readable, materially grounded, nature-connected, slightly whimsical, and rich enough that the habitat itself remains interesting when Moss is still.
 
-The image should read as authored pixel art even when viewed at native 800×480 presentation size—not as smooth vector art with a filter.
+The defining target is not merely “pixel art” or “cozy.” It is the interaction of:
 
-## Palette families
+- strict small-grid construction;
+- strong readable silhouettes;
+- saturated natural color relationships;
+- clustered shading and selective chromatic outlines;
+- pragmatic overhead/three-quarter illustration;
+- layered depth and foreground occlusion;
+- low-frame pose-driven character acting;
+- non-commanding environmental animation;
+- meaningful day/weather/season lighting shifts;
+- controlled detail density with real negative space;
+- visual state that changes because time, habit, and history happened.
 
-Core families:
+The room should look authored rather than procedurally assembled. Individual assets should feel like members of one visual ecology.
 
-- **moss green** — rug, foliage, low-saturation natural accents;
-- **walnut brown** — furniture, trim, outlines, floor depth;
-- **golden amber** — leaves, warm accents, daylight highlights;
-- **dusty blue** — blanket, stone, cool environmental accents;
+## Authored asset law
+
+Finished sprites, tiles, props, and recurring environmental art should live in deterministic text-addressable pixel assets (or an evidence-backed equivalent source format) rather than requiring `display/web/app.js` to be their primary illustration tool.
+
+Preferred properties:
+
+- human-readable and Git-diffable;
+- palette-indexed or palette-addressable;
+- dimension-validated;
+- deterministic;
+- cacheable/precompilable;
+- easy for human and AI editing;
+- suitable for later packing into an atlas or embedded-display representation.
+
+Renderer code should increasingly describe **composition, state selection, layering, timing, and presentation**, while art files describe the actual pixel clusters.
+
+## Color and palette behavior
+
+Terrarium is **earthy but not desaturated**. Natural materials may be quite colorful.
+
+Core families remain useful but their behavior is richer:
+
+- **moss / forest green** — rug and foliage, ranging from deep forest/chromatic shadow through strong natural greens;
+- **walnut / reddish timber** — furniture, trim, outlines, floor depth;
+- **golden amber** — warm accents, leaves, lamplight, daylight highlights;
+- **clear / dusty blue family** — blanket, sky/weather, cool environmental shadow, winter/night accents;
 - **cream** — cloth, paper, selective highlights;
-- **Moss brown** — warm medium brown body with dark brown shadow/ears and restrained tan highlights.
+- **Moss brown** — warm medium brown body with dark chromatic brown shadow/ears and restrained warm highlights.
 
-Use mostly **2–4 stepped shades per material/object**. Neighboring shades should differ enough to form readable clusters. Reserve the lightest values for small deliberate highlights. Reserve the darkest values for selective outlines, contact edges, deep overlaps, and focal facial features.
+Prefer **palette behavior** to one tiny global master palette. A material may use roughly:
 
-Avoid neon saturation and large ramps of near-identical shades.
+1. deep chromatic edge/contact;
+2. cooler/chromatic shadow;
+3. base local color;
+4. warmer/lit midtone;
+5. selective highlight where warranted.
 
-## Pixel-cluster rules
+Use 2–5 meaningful shades where the object needs them; do not add shades merely to smooth ramps. Highlights should often shift warm and shadows may shift cool. Focal props can receive stronger hue/value contrast than background material.
+
+Avoid washed-out pastel sameness, dead-black shadow dependence, neon saturation, giant near-identical ramps, or universal pure-black outlines.
+
+## Pixel-cluster and material rules
 
 - Build forms from intentional rectangles/stair-steps and connected clusters, not smooth analytic curves.
-- Prefer a few coherent clusters over scattered single-pixel noise.
-- Texture exists to communicate material: short wood-grain runs, cloth stitches/speckles, leaf clumps, flower pixels, floor scuffs, paper marks, bedding creases.
-- Break repetitive tiling with deterministic authored offsets or stable hash-derived variation; never use runtime `Math.random`.
-- Keep noisy texture away from Moss's face and interaction contact points.
+- Silhouette carries identity before micro-detail.
+- Prefer coherent color clusters over scattered single-pixel noise.
+- Use selective dark/chromatic outlines where they improve separation; break or lighten outlines where adjacent values already explain the form.
+- Texture communicates material: wood grain, cloth stitching/creases, leaf clumps, flowers, floor scuffs, paper marks, bedding compression, stone facets, glass/wet traces.
+- Organize density hierarchically: quiet planes → medium-frequency structural edges → high-frequency focal accents.
+- Break tile repetition with deterministic authored asymmetry and stable variation; never use runtime `Math.random`.
+- Keep noisy texture away from Moss's face, action contacts, and important silhouettes.
 - One-pixel highlights are accents, not a blanket sparkle layer.
 
 ## Perspective and scale
 
-Use a flattened three-quarter/slightly elevated game-world view. Depth comes from vertical ordering, overlap, stepped top/front faces, value separation, and sparse contact shadows—not perspective realism.
+Use a pragmatic overhead/three-quarter illustrated view. Readability outranks physically exact perspective.
 
-Useful art-grid scale conventions at 400×240:
+Ground/floor can read mostly overhead while furniture exposes whatever top/front/side faces make it instantly understandable. Depth comes from overlap, vertical ordering, value separation, stepped planes, contact shadows, and foreground occlusion.
 
-- Moss hero sprite: roughly **40–46 px wide × 30–38 px tall** including ears/tail in active poses;
-- movable props: roughly **8–12 px** major dimension;
-- furniture edges: typically **2–6 px** thick depending on structural importance;
-- contact shadows: usually **1–3 px** tall and narrower than the subject;
-- major room zones must remain readable without labels.
+Useful source-art scale conventions at 400×240:
 
-The large moss-green rug/open center is a composition anchor and negative-space buffer around Moss.
+- static-world composition unit: **16×16 px**;
+- Moss hero sprite: approximately **40–46 px wide × 30–38 px tall** including ears/tail in active poses, unless visual evidence supports a bounded change;
+- movable props: approximately **8–12 px** major dimension, with category-readable exaggeration allowed;
+- furniture edges: typically **2–6 px** thick depending on importance;
+- contact shadows: usually **1–3 px** tall and narrower than the subject.
 
-## Outlines and shading
+Do not force Moss into a human 16×32 sprite convention merely because the static world uses 16×16 art tiles.
 
-Use selective dark outlines where they improve silhouette separation or clarify overlapping forms. Do not ring every object uniformly.
+The large rug/open center remains a composition anchor, movement field, and negative-space buffer around Moss.
 
-Shading is graphical and stepped:
+## Composition and density
 
-1. dark/contact shade;
-2. base color;
-3. lighter plane/cluster;
-4. optional tiny highlight.
+The room should alternate **density and rest** rather than filling every cell.
 
-Do not simulate volumetric airbrush lighting. Shadows are sparse, hard-edged, and subordinate to silhouettes.
+- landmarks/furniture must read before decoration;
+- object silhouettes should remain distinct at a glance;
+- open rug/floor gives Moss room to act and prevents focal clusters from merging;
+- denser detail belongs around window foliage, shelf collections, bedding, desk/activity materials, and selected edges;
+- organic asymmetry should soften the underlying grid;
+- repeated motifs should vary through authored clusters rather than random pixel noise.
+
+A still frame should be visually interesting, but Moss must remain legible immediately when present.
+
+## Room identity
+
+Preserve the persistent Terrarium habitat rather than replacing it with a decorative mockup or multi-map world.
+
+- **Window / weather:** nature, outside distance, weather, seasonal change, foliage, curtain/sill/glass depth.
+- **Sleeping nook:** softness, safety, domestic warmth, bedding history, foreground blanket overlap.
+- **Rug / open space:** calm visual rest, navigation/acting field, subtle wear.
+- **Collection shelf:** memory, accumulation, persistent arrangements, top/front/recessed planes, foreground lips.
+- **Activity corner:** curiosity, papers/tools/plant/clutter, repeated-use marks, stronger controlled detail.
+- **Bowls and persistent objects:** readable category silhouettes with later state-specific visual variants.
+
+Persistent history remains visible in pixel language: worn routes, object scuffs, sleep compression/creases, window smudges/wet traces, activity papers/marks, object arrangements, and future supported causal aftermath. These marks must derive from canonical history/state; renderer presentation may not invent history.
 
 ## Moss sprite language
 
-Moss is a **small expressive brown floppy-eared dog**:
+Moss is a **small expressive brown floppy-eared dog** with a distinct hand-authored silhouette:
 
 - compact body;
 - slightly oversized head;
 - floppy asymmetrical ears;
 - short planted legs;
-- readable tail;
+- readable muzzle/head direction;
+- readable tail used sparingly as an acting cue;
 - minimal face with dark eye/nose pixels;
 - strong side/three-quarter gameplay silhouette.
 
 The default sprite has **no glasses** and does not depend on accessories for identity.
 
-Prefer side and three-quarter poses. Front-facing presentation should be exceptional and semantically motivated, never the default idle solution.
+Prefer authored sprite frames over procedural body-part deformation. Meaningful action uses a small discrete pose vocabulary with deliberate timing.
 
 Required hero-pose vocabulary:
 
-- idle/rest: compact planted stance with restrained breathing/ear/tail change;
-- locomotion: left/right mirrored gameplay silhouette with two readable leg keyframes and minimal vertical bob;
-- inspect/contact: target-facing head/ear/gaze shift plus a bounded forepaw/lean contact pose;
-- pickup: contact first, then transfer into the chest/paw hold;
+- idle/rest: compact planted stance with restrained breathing/ear change;
+- locomotion: four readable contact/weight-shift keyframes, mirrored as appropriate, minimal vertical bob;
+- inspect/contact: target-facing anticipation, gaze/head shift, bounded forepaw/lean contact, hold/recovery;
+- nudge: visible paw/contact before authoritative displacement, then regard/recovery;
+- pickup: contact first, then transfer into a stable chest/paw hold;
 - carry: rigid object attachment and steadier posture;
 - place: stop → lower/contact → release → settle → retract;
-- sleep: supported curl into the sleeping nook, partially overlapped by bedding;
+- loaf: distinct relaxed supported silhouette;
+- groom: compact contextual pose, not constant fidget;
+- stretch: readable extension/compression with planted contact;
+- react/orient: small attention shift, not alarm theater;
+- sleep: supported transition into a curled bed pose with bedding overlap;
 - wake: deliberate unfold/stand transition;
 - window watch: planted sill-facing observation with quiet posture.
 
-Favor key poses and readable silhouettes over high frame counts.
-
-## Room identity
-
-Preserve the persistent Terrarium room rather than replacing it with a decorative mockup:
-
-- warm wood interior/floor;
-- large readable moss-green rug/open center;
-- window with curtain framing;
-- shelf/bookshelf;
-- plants/foliage;
-- sleeping bed/nook;
-- bowls;
-- activity desk/corner;
-- all existing persistent interactive objects;
-- meaningful foreground shelf/desk/blanket overlaps.
-
-Persistent history remains visible in pixel language: worn routes, object scuffs, sleep compression/creases, window smudges/wet traces, activity papers/marks, and other causal aftermath. These marks must derive from canonical history counters/positions; the renderer may visualize them but not invent history.
-
-## Environmental states
-
-Day, dawn, dusk, and night use finite palette/value shifts rather than smooth high-resolution lighting. Small staged palette steps are preferred to continuous glossy grading.
-
-Rain/mist use sparse integer-grid marks inside the window/environment. Ambient motion stays quiet and must never compete with Moss. No camera shake, random zoom, full-screen particle noise, or bloom.
+Favor pose choice, silhouette, contact, and frame timing over high frame counts or smooth tweening.
 
 ## Depth and occlusion
 
-Foreground furniture edges and bedding may cover Moss/props when world position implies it. Occlusion should clarify space rather than hide actions. Contact points remain readable.
+Use a declarative depth system rather than a growing set of draw-last exceptions.
 
-Depth priority:
+Target layer grammar:
 
-1. background wall/window;
-2. floor/rug/history marks;
-3. world objects;
-4. Moss and carried object;
-5. foreground shelf/desk/blanket lips;
-6. minimal ambient pixel effects where appropriate.
+1. **BACK** — wall, window exterior, base floor;
+2. **STRUCTURE** — architecture and main furniture bodies;
+3. **SURFACE** — rug, wear/history marks, low props;
+4. **WORLD** — persistent objects and spatial ambient entities;
+5. **ACTORS** — Moss and carried object;
+6. **FRONT** — blanket/desk/shelf lips, foreground foliage and overhangs;
+7. **ALWAYS_FRONT** — rare foreground atmosphere only when justified.
+
+Use foot/base Y-ordering within compatible dynamic layers where it improves occupancy. Occlusion should clarify where Moss is standing, sitting, sleeping, or passing behind something; it should not obscure action contacts unnecessarily.
+
+## Environmental animation
+
+Situational events are not the only source of environmental motion. The finished room should support quiet persistent **ambient life** that normally carries no behavior command.
+
+Candidate ambient motion:
+
+- exterior foliage;
+- curtain drift;
+- rain runoff/condensation;
+- occasional leaf drift;
+- dust in sunlight;
+- plant cycles;
+- subtle water/bowl shimmer;
+- distant bird/insect motion;
+- snow;
+- branch-shadow motion;
+- localized lamp/fire-like animation where an actual fixture exists.
+
+Ambient motion must be deterministic, spatially distributed, phase-varied, low-amplitude, and subordinate to Moss. Do not animate every instance in lockstep. Do not convert every atmospheric motion into an attention event.
+
+## Lighting, time, and weather
+
+Dawn/day/dusk/night remain finite authoritative environmental states, but the visual treatment may become substantially richer.
+
+- local object color should be clearest in daylight;
+- night should cool the overall room into blue/indigo families;
+- placed warm light sources may create localized amber/yellow pools using hard-edged pixel-native masks or palette variants;
+- windows, lamps, and other lights should become more compositionally important after dark;
+- no smooth bloom, blur, or airbrushed light gradients.
+
+The key nighttime emotional strategy is **cool environment + warm shelter**.
+
+Weather is a whole-scene modifier, not only a window overlay. Rain/mist may alter palette/value balance and make local warm light more valuable while remaining canonical/deterministic. Visible streaks, mist, wet traces, or snow remain sparse and pixel-native.
+
+## Seasons and long-horizon visual change
+
+Future seasons should repaint a familiar place without destroying its identity.
+
+- structural room landmarks and geometry remain stable;
+- palette, exterior foliage, weather/particles, lighting, and selected decorative/environmental states may change;
+- spring trends toward fresh greens/blossoms/clear blues;
+- summer trends toward fuller greens/strong sun/insects;
+- autumn trends toward rust/orange/red leaves and warmer material harmony;
+- winter trends toward pale/snow exterior, sparse foliage, blue-violet shadow, and stronger warm-interior contrast.
+
+The seasonal clock must be canonical, deterministic, replayable, and much slower than the current accelerated day cycle.
 
 ## Motion rules
 
-Canonical behavior, target ownership, and pacing remain outside renderer authority.
+Canonical behavior, target ownership, route geometry, event occurrence, and pacing remain outside renderer authority.
 
 - Heartbeat continuation must not restart animation clocks.
 - Motion may be deliberately grid-quantized at the 400×240 art boundary, but semantic/presentation interpolation remains deterministic and continuous before quantization.
 - Never add random jitter to fake liveliness.
 - Anticipation, contact, hold, settle, and recovery should read as distinct key-pose phases.
-- Whole-scene motion is prohibited unless explicitly designed later.
 - Carried objects remain rigidly attached after transfer.
 - Environmental animation is slower/quieter than character acting.
+- Whole-scene motion is prohibited unless a future explicit art decision establishes a bounded use; camera shake/random zoom remain prohibited.
 
-`temporal-render-auditor-r1` still guards its original dangerous defect classes. For integer-grid output, `grid-quantized-temporal-render-auditor-r1` may evaluate endpoint settling from the continuous presentation anchor only when the visible coordinates prove the declared quantization contract. Neither auditor judges artistic quality.
+`temporal-render-auditor-r1` and `grid-quantized-temporal-render-auditor-r1` remain objective rejection gates. Neither judges artistic quality.
 
-## Acceptance by human visual inspection
+## Visual review and acceptance
 
-A checkpoint should be rejected if the real 800×480 output feels filtered, smooth/vector-like, over-detailed, muddy, neon, glossy, visually noisy, compositionally confused, or if Moss stops being the focal character—even if automated tests pass.
+Evaluate the real renderer across representative combinations of time, weather, history, action pose, object state, events, and later seasons. Prefer deterministic screenshots/contact sheets plus temporal samples over judging isolated sprite files.
+
+A checkpoint should be rejected if the actual 800×480 output feels:
+
+- filtered or smooth/vector-like;
+- washed out or uniformly muted;
+- neon/glossy;
+- flat despite available depth;
+- mechanically tiled without controlled asymmetry;
+- dependent on micro-detail instead of silhouettes;
+- noisy everywhere with no visual rest;
+- procedurally generic rather than authored;
+- temporally frantic;
+- visually disconnected from canonical history;
+- or if Moss ceases to be the focal inhabitant.
+
+Later convergence passes are expected to redraw, remove, recolor, or simplify existing work. Cohesion comes from repeated taste convergence, not from adding assets forever.
 
 ## Accepted Iteration 2 acting/detail refinement
 

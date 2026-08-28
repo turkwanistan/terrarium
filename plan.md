@@ -193,6 +193,8 @@ Evidence: `history/2026-08-27-pixel-art-overhaul-iteration6.md`, `artifacts/pixe
 
 ## Planned product roadmap after Iteration 6
 
+> Historical note: this sequence was correct before the post-Iteration-7 visual-gap audit. The current forward sequence is the 8A–8F visual overhaul below and in `ROADMAP.md`.
+
 The explicit forward roadmap now lives in `ROADMAP.md`:
 
 1. **Iteration 7 — Situational Events and Environmental Attention:** world events become canonical opportunities/interruptions with the causal shape **event → perception → reaction → decision/engagement → aftermath**.
@@ -220,4 +222,20 @@ Evidence: `history/2026-08-27-pixel-art-overhaul-iteration7.md`, `artifacts/pixe
 
 ## Next product iteration after Iteration 7
 
-**Iteration 8 — Object Identity and Stateful Affordances.** Give object classes materially different interaction subsets and persistent state transitions so the same event/attention systems can compose with richer physical possibilities. Preserve the accepted event-attention, habit, spatial, persistence, and renderer authority contracts; do not introduce a generic planner merely because object situations become richer.
+**Iteration 8A — Visual Grammar and Asset Pipeline.** The accepted behavior simulation is currently ahead of the art system. Before adding deeper object mechanics, remove the renderer's procedural-art ceiling by establishing a text-addressable authored pixel-asset pipeline, 16×16 static-world art grammar, richer palette/material banks, declarative scene layers, generalized occlusion/Y-ordering, caching, and deterministic visual-review fixtures.
+
+Do not change Moss intelligence, event semantics, object-affordance behavior, canonical navigation, or the living runtime merely to prove the art pipeline. Migrate enough representative room/Moss/object content to demonstrate that the new asset system can render the existing authoritative frame cleanly and deterministically.
+
+Detailed sequence and acceptance criteria live in `VISUAL_STYLE_OVERHAUL.md`.
+
+## Updated visual overhaul sequence
+
+1. **8A — Visual Grammar and Asset Pipeline**
+2. **8B — Room Recomposition**
+3. **8C — Moss Sprite Overhaul**
+4. **8D — Object Identity and Stateful Affordances**
+5. **8E — Atmospheric World**
+6. **8F — Seasonal Terrarium**
+7. **9 — Emergent Situations and Consequence Memory**
+
+The sequencing intentionally lets renderer/art capability catch up before expanding the simulation further. Later art-convergence passes may redraw, simplify, or remove assets; progress is not measured by feature count.

@@ -21,6 +21,7 @@ Terrarium is normal product development after the accepted Generation 17 pilot. 
 - long-horizon habits: `terrarium.habits.v1`
 - affordance history: `terrarium.affordances.v1`
 - spatial schema: `terrarium.spatial.v1`
+- current forward-plan decision: `history/2026-08-27-visual-style-overhaul-plan.md`
 
 ## What Iteration 7 established
 
@@ -77,10 +78,23 @@ No reusable substrate deficiency was exposed. Canonical environmental-event stat
 
 ## Roadmap after Iteration 7
 
-1. **Iteration 8 — Object Identity and Stateful Affordances:** object classes gain materially different affordance subsets and persistent state transitions so props stop feeling like skins for one generic interaction graph.
-2. **Iteration 9 — Emergent Situations and Consequence Memory:** environmental events, object state, arrangements, and learned habits compose into later opportunities over minutes/hours/days without scripted quest chains.
+A visual-gap audit found that Terrarium's deterministic simulation/behavior systems are now materially ahead of the renderer's authored-art capacity. The current 400×240 pixel contract is sound, but most art remains procedurally constructed in `display/web/app.js`, creating a ceiling on silhouette quality, material richness, asymmetry, sprite acting, depth, lighting, and long-horizon transformation.
 
-Iteration 7 deliberately does not introduce GOAP, a generic planner, needs/personality-stat systems, quest logic, dialogue systems, or LLM action selection. Revisit planning/SBC substrate only if later product evidence shows that attention + affordances + persistent state + habits + short causal commitments cannot express the required situations cleanly.
+The roadmap is therefore reprioritized without changing the accepted Iteration-7 checkpoint:
+
+1. **Iteration 8A — Visual Grammar and Asset Pipeline**
+2. **Iteration 8B — Room Recomposition**
+3. **Iteration 8C — Moss Sprite Overhaul**
+4. **Iteration 8D — Object Identity and Stateful Affordances**
+5. **Iteration 8E — Atmospheric World**
+6. **Iteration 8F — Seasonal Terrarium**
+7. **Iteration 9 — Emergent Situations and Consequence Memory**
+
+`VISUAL_STYLE_OVERHAUL.md` defines the detailed migration plan and `ART_DIRECTION.md` defines the visual law. The target emphasizes authored 16×16 static-world grammar, saturated natural palette behavior, strong silhouettes, layered depth/Y-ordering, low-frame sprite acting, environmental animation, warm-vs-cool lighting, slow seasonal transformation, and persistent history made visible. Terrarium remains one habitat with one dog; this is not a farming-game conversion or asset-level imitation of another title.
+
+The previous Object Identity milestone is postponed, not abandoned. It becomes Iteration 8D so stateful object behavior can arrive with a renderer capable of giving those states distinct authored visual consequences.
+
+No new SBC substrate need has been demonstrated by this reprioritization. Project-local asset and visual-review tooling should be attempted first. **Gen18 remains NO unless implementation evidence proves a reusable substrate deficiency.**
 
 ## Runtime / Git safety
 

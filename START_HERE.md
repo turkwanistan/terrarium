@@ -21,8 +21,9 @@ Terrarium is a normal product built after the accepted Self-Building Computer Ge
 - habit profile: `terrarium.habits.v1`
 - affordance history: `terrarium.affordances.v1`
 - spatial schema: `terrarium.spatial.v1`
+- current planning decision: `history/2026-08-27-visual-style-overhaul-plan.md`
 
-Read `STATUS.md`, `ART_DIRECTION.md`, `ROADMAP.md`, `plan.md`, `terrarium.md`, and the latest history entry before editing.
+Read `STATUS.md`, `ART_DIRECTION.md`, `VISUAL_STYLE_OVERHAUL.md`, `ROADMAP.md`, `plan.md`, `terrarium.md`, and the latest history entry before editing.
 
 ## Authority contracts
 
@@ -47,10 +48,17 @@ Object manipulation, habits, possession continuity, spatial authority, supported
 
 ## Planned next iterations
 
-`ROADMAP.md` is authoritative unless direct canonical-runtime UAT exposes a more severe concrete defect:
+`ROADMAP.md` and `VISUAL_STYLE_OVERHAUL.md` are authoritative unless direct canonical-runtime UAT exposes a more severe concrete defect. The simulation is currently ahead of the visual system, so the art pipeline is deliberately reprioritized before deeper behavior work:
 
-1. **Iteration 8 — Object Identity and Stateful Affordances** — make object class materially alter the interactions and persistent state transitions available.
-2. **Iteration 9 — Emergent Situations and Consequence Memory** — let event state, object state, arrangements, and habits compose into later opportunities and multi-stage situations.
+1. **Iteration 8A — Visual Grammar and Asset Pipeline** — establish the 16×16 static art grammar, text-addressable authored assets, palette/material banks, caching, declarative scene layers, generalized occlusion/Y-ordering, and deterministic visual review fixtures.
+2. **Iteration 8B — Room Recomposition** — redraw the habitat into the richer saturated, layered, asymmetrical, materially specific target visual language.
+3. **Iteration 8C — Moss Sprite Overhaul** — replace procedural body-part drawing with true authored low-frame sprites while preserving current semantic actions/timing.
+4. **Iteration 8D — Object Identity and Stateful Affordances** — resume the planned behavior expansion with object-specific state transitions and matching visual state variants.
+5. **Iteration 8E — Atmospheric World** — persistent non-commanding ambient animation, richer window life, local warm lighting, and stronger weather mood.
+6. **Iteration 8F — Seasonal Terrarium** — add a slow canonical seasonal timescale and coordinated long-horizon visual transformation.
+7. **Iteration 9 — Emergent Situations and Consequence Memory** — compose events, object state, arrangements, habits, and prior consequences into later opportunities.
+
+The visual target is a hand-authored late-16-bit life-RPG diorama: strict low-resolution grammar, readable silhouettes, richer saturated natural color, clustered shading, pragmatic perspective, layered depth, selective low-frame acting, non-commanding environmental motion, warm/cool lighting, slow world transformation, and persistent visible history. This is a system-level target; do not copy external assets, exact palettes, characters, architecture, UI, or map structure.
 
 A generic planner, needs/personality-stat model, quest system, dialogue system, or LLM action selector is not implied. First keep pushing the existing model of **attention + affordances + persistent state + habits + bounded causal commitments**.
 
