@@ -191,6 +191,12 @@ Choose from direct canonical-runtime UAT after deployment. Let actual observatio
 
 Evidence: `history/2026-08-27-pixel-art-overhaul-iteration6.md`, `artifacts/pixel-art-overhaul-iteration6.json`, snapshot `20260827T233841118223Z-pixel-art-overhaul-iteration6`.
 
-## Next product iteration
+## Planned product roadmap after Iteration 6
 
-Choose from direct canonical-runtime UAT after deployment. The highest-value next work should make the expanded repertoire **compose into richer longer-lived situations**, not merely add more verbs: e.g. revisit/maintain arrangements, react to changes produced by prior activity, and let environmental/object history create occasional multi-stage opportunities. Keep it bounded and product-specific; only introduce a more general planning substrate if concrete Terrarium implementation evidence proves the current intent/session model can no longer express coherent activities cleanly.
+The explicit forward roadmap now lives in `ROADMAP.md`:
+
+1. **Iteration 7 — Situational Events and Environmental Attention:** world events become canonical opportunities/interruptions with the causal shape **event → perception → reaction → decision/engagement → aftermath**.
+2. **Iteration 8 — Object Identity and Stateful Affordances:** object classes expose materially different affordance subsets and persistent state transitions rather than sharing one generic interaction graph.
+3. **Iteration 9 — Emergent Situations and Consequence Memory:** events, object state, arrangements, and habits compose into later opportunities across minutes/hours/days without scripted narrative chains.
+
+Direct canonical-runtime UAT may reprioritize this sequence if it exposes a more severe concrete weakness. Do not add GOAP, generic planning, needs/personality-stat systems, quest logic, or LLM action selection by default. Only revisit the planning/SBC substrate if implementation evidence shows the existing attention + affordance + persistent-state + habit + bounded-session model cannot express the required causal situations cleanly.

@@ -62,6 +62,16 @@ Persistence remains event-authoritative: exact snapshot+event replay, restart pr
 
 No reusable substrate deficiency was exposed. The new affordance state, causal activity chains, renderer poses, long-run variety evaluation, migration, and history-divergence evidence are Terrarium product concerns and fit the existing SBC/project/evaluation/temporal substrate. Self-Building Computer, Capability Forge, and the frozen Optiplex MCP surface were not modified. **Gen18 decision: NO — existing SBC substrate remains sufficient.**
 
+## Roadmap after Iteration 6
+
+The forward sequence is now explicit in `ROADMAP.md` and is organized around increasing **causal situation space**, not merely adding verbs:
+
+1. **Iteration 7 — Situational Events and Environmental Attention:** canonical world events such as moving sunlight, birds, rain escalation, thunder, night insects, window contact, and salient dawn/sunset moments can be perceived, ignored, deferred, or engaged with. Target shape: **event → perception → reaction → decision/engagement → aftermath**.
+2. **Iteration 8 — Object Identity and Stateful Affordances:** object classes gain materially different affordance subsets and persistent state transitions so props stop feeling like skins for one generic inspect/carry/place graph.
+3. **Iteration 9 — Emergent Situations and Consequence Memory:** environmental events, object state, arrangements, and learned habits create follow-up opportunities over minutes/hours/days, producing multi-stage situations through interacting systems rather than authored narrative scripts.
+
+Direct canonical-runtime UAT may reprioritize this sequence if a more severe product defect appears. GOAP, generic planning, needs/personality-stat systems, quest logic, and LLM action selection remain out of scope unless implementation evidence later proves the current attention + affordance + persistent-state + habit + bounded-session model genuinely insufficient.
+
 ## Runtime / Git safety
 
 Canonical Moss remains user-owned outside Git. Runtime databases/event ledgers remain ignored. Any host deployment must preserve `${XDG_STATE_HOME:-$HOME/.local/state}/terrarium/live` (or the explicit `TERRARIUM_DATA_DIR`) and must not substitute a disposable development world.

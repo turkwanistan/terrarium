@@ -19,7 +19,7 @@ Terrarium is a normal product built after the accepted Self-Building Computer Ge
 - affordance history: `terrarium.affordances.v1`
 - spatial schema: `terrarium.spatial.v1`
 
-Read `STATUS.md`, `ART_DIRECTION.md`, `plan.md`, `terrarium.md`, and the latest history entry before editing.
+Read `STATUS.md`, `ART_DIRECTION.md`, `ROADMAP.md`, `plan.md`, `terrarium.md`, and the latest history entry before editing.
 
 ## Authority contracts
 
@@ -37,6 +37,16 @@ Short-horizon routine coherence and long-horizon `terrarium.habits.v1` remain au
 `terrarium.affordances.v1` is aftermath/history, not a drive model. It records only completed post-migration activity and may support later causal presentation/evaluation. It does not schedule Moss or reconstruct nonexistent pre-upgrade behavior. Habits may bias where comfort and arrangement activities occur, but recent-zone/object inhibition, exploration floors, spatial authority, possession continuity, weather, and activity commitments prevent lock-in.
 
 Object manipulation must remain consequential. A nudge changes authoritative object coordinates, exposes the new position to future behavior, and normally earns a same-object re-inspection. A carried object has one chosen arrangement destination and is physically placed into an authored slot. Environmental reaction is similarly causal: noticing rain/mist may redirect Moss to the window, but the reaction is not just an animation label.
+
+## Planned next iterations
+
+`ROADMAP.md` is the authoritative forward product sequence unless direct canonical-runtime UAT exposes a more severe defect:
+
+1. **Iteration 7 — Situational Events and Environmental Attention** — make the world present canonical opportunities and interruptions; target **event → perception → reaction → decision/engagement → aftermath**, including ignore/defer outcomes.
+2. **Iteration 8 — Object Identity and Stateful Affordances** — make different object classes enable different interactions and persistent state transitions.
+3. **Iteration 9 — Emergent Situations and Consequence Memory** — let events, object state, arrangements, and habits create later opportunities and multi-stage situations across longer horizons.
+
+These remain normal Terrarium product iterations. A general planner, needs/personality-stat model, quest system, or LLM action selector is not implied by this roadmap.
 
 ## Regression procedure
 
