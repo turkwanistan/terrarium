@@ -83,15 +83,21 @@
   }
   function installDerivedPalettes(paletteBank){
     const result={};
-    for(const [name,palette] of Object.entries(paletteBank.palettes||{})) result[name]=Object.freeze({...palette});
     for(const [name,palette] of Object.entries(paletteBank.palettes||{})){
+      result[name]=Object.freeze({...palette});
+      for(const [season,treatment] of Object.entries(paletteBank.season_treatments||{})) result[`${name}-${season}`]=Object.freeze(applyPaletteTreatment(palette,treatment));
+    }
+    for(const [name,palette] of Object.entries({...result})){
+      if(name.endsWith('-warm')) continue;
       for(const [weather,treatment] of Object.entries(paletteBank.weather_treatments||{})) result[`${name}-${weather}`]=Object.freeze(applyPaletteTreatment(palette,treatment));
     }
     const local=paletteBank.local_light_treatment;
     if(local) for(const [name,palette] of Object.entries({...result})) result[`${name}-warm`]=Object.freeze(applyPaletteTreatment(palette,local));
     return Object.freeze(result);
   }
+  function seasonalState(f){ const raw=f?.season; const name=raw&&['spring','summer','autumn','winter'].includes(raw.name)?raw.name:null; const stage=name&&['early','full','late'].includes(raw.stage)?raw.stage:null; return {name,stage,index:name?Number(raw.index||0):null,stage_index:stage?Number(raw.stage_index||0):null,progress:name?clamp01(Number(raw.progress||0)):0}; }
   function weatherPaletteName(baseName,weather){ const candidate=`${baseName}-${weather}`; return weather==='clear'||!PALETTES?.[candidate]?baseName:candidate; }
+  function seasonPaletteName(baseName,season,weather){ if(!season)return weatherPaletteName(baseName,weather); const seasonal=`${baseName}-${season}`; const base=PALETTES?.[seasonal]?seasonal:baseName; return weatherPaletteName(base,weather); }
   function localLightPaletteName(paletteName){ const candidate=`${paletteName}-warm`; return PALETTES?.[candidate]?candidate:paletteName; }
 
   async function fetchJson(path){
@@ -227,7 +233,7 @@
     for(const [center,from,to] of transitions){
       if(minute>=center-30&&minute<center+30){ const q=Math.floor(clamp01((minute-(center-30))/60)*4); basePaletteName=q<2?from:to; break; }
     }
-    const paletteName=weatherPaletteName(basePaletteName,f.weather);
+    const paletteName=seasonPaletteName(basePaletteName,seasonalState(f).name,f.weather);
     return {palette:PALETTES[paletteName],palette_name:paletteName,base_palette_name:basePaletteName,night:basePaletteName==='night'?1:0,minute};
   }
 
@@ -310,14 +316,29 @@
   }
 
   function drawWindowAmbientBack(f,now,p,paletteName){
-    const clock=ambientClockMs(f,now),weather=f.weather||'clear';
+    const clock=ambientClockMs(f,now),weather=f.weather||'clear',season=seasonalState(f);
     const far=ambientStep(clock,7100,AMBIENT_PATTERNS.far),mid=ambientStep(clock,5100,AMBIENT_PATTERNS.mid),near=ambientStep(clock,8900,AMBIENT_PATTERNS.near);
     const weatherLift=weather==='rain'?1:0;
-    drawAuthoredAsset('environment.window-foliage-far',32+far,30,paletteName);
-    drawAuthoredAsset('environment.window-foliage-mid',32+mid,30+(weatherLift&&mid>0?1:0),paletteName);
-    drawAuthoredAsset('environment.window-foliage-near',32+near,30,paletteName);
+    if(!season.name){
+      drawAuthoredAsset('environment.window-foliage-far',32+far,30,paletteName);
+      drawAuthoredAsset('environment.window-foliage-mid',32+mid,30+(weatherLift&&mid>0?1:0),paletteName);
+      drawAuthoredAsset('environment.window-foliage-near',32+near,30,paletteName);
+    } else if(season.name==='winter'){
+      drawAuthoredAsset('environment.window-winter-branches',32+mid,30+(weatherLift&&mid>0?1:0),paletteName);
+    } else {
+      const showFar=season.name!=='autumn'||season.stage!=='late';
+      const showNear=season.name==='summer'||(season.name==='spring'&&season.stage!=='early')||(season.name==='autumn'&&season.stage==='early');
+      if(showFar) drawAuthoredAsset('environment.window-foliage-far',32+far,30,paletteName);
+      drawAuthoredAsset('environment.window-foliage-mid',32+mid,30+(weatherLift&&mid>0?1:0),paletteName);
+      if(showNear) drawAuthoredAsset('environment.window-foliage-near',32+near,30,paletteName);
+      if(season.name==='spring'&&season.stage!=='late') drawAuthoredAsset('environment.window-spring-blossom',32,30,paletteName);
+      if(season.name==='summer'&&season.stage!=='early') drawAuthoredAsset('environment.window-summer-canopy',32,30,paletteName);
+      if(season.name==='autumn') drawAuthoredAsset('environment.window-autumn-leaves',32+(season.stage==='late'?near:0),30,paletteName);
+    }
     if(weather==='clear'&&f.lighting!=='night'){
+      const moteStride=!season.name?1:season.name==='winter'?3:season.name==='summer'?1:2;
       for(let i=0;i<LIGHT_MOTES.length;i++){
+        if(i%moteStride!==0) continue;
         const mote=LIGHT_MOTES[i],slot=((clock+mote.phase)%mote.period)/mote.period;
         if(slot>.22) continue;
         const drift=Math.floor(slot*5),x=mote.x+(i%2?drift:-drift),y=mote.y-Math.floor(slot*3);
@@ -327,7 +348,7 @@
   }
 
   function drawWindowBack(f,now,p,paletteName){
-    drawAuthoredAsset('environment.window-view',32,30,paletteName);
+    drawAuthoredAsset(seasonalState(f).name==='winter'?'environment.window-winter-view':'environment.window-view',32,30,paletteName);
     drawWindowAmbientBack(f,now,p,paletteName);
     if(f.lighting==='night'){
       rect(108,41,10,8,p.cream); rect(105,44,13,5,p.cream); rect(111,39,4,2,p.cream);
@@ -415,7 +436,7 @@
     drawActivityCorner(f,now,p,paletteName);
   }
   function drawAmbientBranchShadow(f,now,p){
-    if(f.weather!=='clear'||f.lighting==='night') return;
+    if(f.weather!=='clear'||f.lighting==='night'||seasonalState(f).name==='winter') return;
     const shift=ambientStep(ambientClockMs(f,now),8200,AMBIENT_PATTERNS.shadow),c=p.floorShade;
     drawPixelLine(122+shift,126,167+shift,148,c,1); drawPixelLine(137+shift,132,128+shift,145,c,1);
     drawPixelLine(153+shift,140,172+shift,136,c,1); rect(145+shift,136,7,2,c); rect(160+shift,143,5,2,c);
@@ -426,6 +447,7 @@
     rect(118+pulse,213,23,1,warm.rugLight); rect(126+pulse,217,15,1,warm.floorLight); rect(135+pulse,221,8,1,warm.floorLight);
     rect(276,196+pulse,18,1,warm.floorLight); rect(283,200+pulse,13,1,warm.floorLight); rect(290,204+pulse,7,1,warm.floorLight);
     rect(123,169,8,1,warm.amber); rect(304,153,9,1,warm.creamShade);
+    if(seasonalState(f).name==='winter'){ rect(111+pulse,209,30,1,warm.floorLight); rect(272,193+pulse,25,1,warm.rugLight); }
   }
   function drawSurfaceLayer(f,now,p,paletteName){
     drawAuthoredAsset('tile.floor-detail',16,164,paletteName);
@@ -556,7 +578,7 @@
       carrying:attached?c.carrying:null,carrying_semantic:c.carrying,attachment_progress:Number(attachmentProgress.toFixed(6)),carried_rendered_x:carriedWorldX,carried_rendered_y:carriedWorldY,carried_relative_x:attached?Number(holdX.toFixed(6)):null,carried_relative_y:attached?holdY:null,carry_turning:turningCarry,walk_phase:Number(walkPhase.toFixed(6)),walk_keyframe:walkFrame,
       causal_activity:{sleep_nook:Number(causal.sleep_nook.toFixed(6)),window:Number(causal.window.toFixed(6)),activity_corner:Number(causal.activity_corner.toFixed(6))},
       interaction_target:target?{object_id:target.id||null,x:Number(target.x.toFixed(6)),y:Number(target.y.toFixed(6)),contact:Boolean(target.contact)}:null,semantic_target:(()=>{const point=finitePoint(f.last_event?.target_x,f.last_event?.target_y);return point?{x:point.x,y:point.y,object_id:f.last_event?.object_id||null}:null;})(),object_placement:activePlacementState(f,now),
-      ambient_classes:[f.weather==='rain'?'rain':f.weather==='mist'?'mist':null,'ambient-window-foliage','ambient-curtain','ambient-water-shimmer',f.weather==='rain'?'ambient-rain-runoff':null,f.weather==='mist'?'ambient-mist-drift':null,f.weather==='clear'&&f.lighting!=='night'?'ambient-branch-shadow':null,f.weather==='clear'&&f.lighting!=='night'?'ambient-light-motes':null,f.lighting==='night'?'local-warm-light':null,f.world_event?`world-event-${f.world_event.type}`:null,moving?'walk-cycle':null,causal.sleep_nook>0?'bedding-contact':null,causal.window>0?'window-contact':null,causal.activity_corner>0?'work-surface-contact':null].filter(Boolean),
+      ambient_classes:[seasonalState(f).name?`season-${seasonalState(f).name}`:null,seasonalState(f).stage?`season-stage-${seasonalState(f).stage}`:null,f.weather==='rain'?'rain':f.weather==='mist'?'mist':null,'ambient-window-foliage','ambient-curtain','ambient-water-shimmer',f.weather==='rain'?'ambient-rain-runoff':null,f.weather==='mist'?'ambient-mist-drift':null,f.weather==='clear'&&f.lighting!=='night'&&seasonalState(f).name!=='winter'?'ambient-branch-shadow':null,f.weather==='clear'&&f.lighting!=='night'?'ambient-light-motes':null,f.lighting==='night'?'local-warm-light':null,f.world_event?`world-event-${f.world_event.type}`:null,moving?'walk-cycle':null,causal.sleep_nook>0?'bedding-contact':null,causal.window>0?'window-contact':null,causal.activity_corner>0?'work-surface-contact':null].filter(Boolean),
       world_event:f.world_event?{id:f.world_event.id,type:f.world_event.type,x:Number(f.world_event.x),y:Number(f.world_event.y),attention_status:f.world_event.attention_status,temporary_affordance:f.world_event.temporary_affordance||null}:null,
       art_grid:{width:ART_W,height:ART_H,scale:SCALE,x:px(renderedX),y:px(renderedBaseY)},
     };
@@ -671,7 +693,7 @@
     scene.flush();
     window.__terrariumSceneLayers=scene.metadata();
     presentArtSurface();
-    if(debugVisible){ debug.hidden=false; debug.textContent=JSON.stringify({mode:snapshotPath?'snapshot':'live',connected,tick:frame.tick,lighting:frame.lighting,weather:frame.weather,world_event:frame.world_event,art_surface:[ART_W,ART_H],art_grid:[25,15],tile_size:16,palette:paletteName,scene_layers:window.__terrariumSceneLayers,display:[DISPLAY_W,DISPLAY_H],scale:SCALE,creature:frame.creature,last_event:frame.last_event,poll_error:lastPollError},null,2); } else debug.hidden=true;
+    if(debugVisible){ debug.hidden=false; debug.textContent=JSON.stringify({mode:snapshotPath?'snapshot':'live',connected,tick:frame.tick,lighting:frame.lighting,weather:frame.weather,season:frame.season,world_event:frame.world_event,art_surface:[ART_W,ART_H],art_grid:[25,15],tile_size:16,palette:paletteName,scene_layers:window.__terrariumSceneLayers,display:[DISPLAY_W,DISPLAY_H],scale:SCALE,creature:frame.creature,last_event:frame.last_event,poll_error:lastPollError},null,2); } else debug.hidden=true;
     if(scheduleNext) requestAnimationFrame(render);
     return renderState;
   }

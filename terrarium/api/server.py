@@ -177,6 +177,7 @@ def main() -> int:
         seed=args.seed,
         minutes_per_tick=args.minutes_per_tick,
         snapshot_every=args.snapshot_every,
+        real_time_seasons=True,
     )
     engine.start(tick_seconds=args.tick_seconds)
     fixture_path = Path(args.dev_temporal_fixtures).resolve() if args.dev_temporal_fixtures else None

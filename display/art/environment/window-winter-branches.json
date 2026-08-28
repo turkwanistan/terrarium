@@ -1,0 +1,96 @@
+{
+  "schema": "terrarium.pixel-asset.v1",
+  "id": "environment.window-winter-branches",
+  "width": 104,
+  "height": 76,
+  "anchor": [
+    0,
+    0
+  ],
+  "runs": [
+    [
+      2,
+      54,
+      42,
+      2,
+      "woodDeep"
+    ],
+    [
+      18,
+      45,
+      2,
+      12,
+      "woodDeep"
+    ],
+    [
+      20,
+      45,
+      18,
+      2,
+      "woodWarm"
+    ],
+    [
+      34,
+      39,
+      2,
+      9,
+      "woodDeep"
+    ],
+    [
+      36,
+      39,
+      15,
+      2,
+      "woodWarm"
+    ],
+    [
+      57,
+      57,
+      45,
+      2,
+      "woodDeep"
+    ],
+    [
+      70,
+      46,
+      2,
+      13,
+      "woodDeep"
+    ],
+    [
+      72,
+      46,
+      19,
+      2,
+      "woodWarm"
+    ],
+    [
+      87,
+      39,
+      2,
+      9,
+      "woodDeep"
+    ],
+    [
+      89,
+      39,
+      12,
+      2,
+      "woodWarm"
+    ],
+    [
+      31,
+      36,
+      8,
+      1,
+      "creamShade"
+    ],
+    [
+      83,
+      36,
+      9,
+      1,
+      "creamShade"
+    ]
+  ]
+}

@@ -4,6 +4,7 @@ from evaluations.evaluate_spatial import evaluate as spatial
 from evaluations.evaluate_coherence import evaluate as coherence
 from evaluations.evaluate_habits import evaluate as habits
 from evaluations.evaluate_atmosphere import evaluate as atmosphere
+from evaluations.evaluate_seasons import evaluate as seasons
 
 
 def test_behavior_evaluator_passes_reference_seed():
@@ -28,3 +29,7 @@ def test_long_horizon_habit_evaluator_passes_reference_seed():
 
 def test_atmosphere_evaluator_passes():
     assert atmosphere()["passed"]
+
+
+def test_seasonal_evaluator_passes():
+    assert seasons()["passed"]

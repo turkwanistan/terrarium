@@ -1,0 +1,67 @@
+{
+  "ambient_assets": [
+    "environment.nook-sconce",
+    "environment.window-curtain-motion",
+    "environment.window-foliage-far",
+    "environment.window-foliage-mid",
+    "environment.window-foliage-near"
+  ],
+  "ambient_periods_ms": [
+    3200,
+    4700,
+    5100,
+    7100,
+    8900
+  ],
+  "atmosphere_scenarios": [
+    "atmosphere_clear_day_idle",
+    "atmosphere_clear_night_idle",
+    "atmosphere_event_coexistence",
+    "atmosphere_mist_idle",
+    "atmosphere_night_warm_light",
+    "atmosphere_object_interaction",
+    "atmosphere_rain_idle",
+    "atmosphere_sleep",
+    "atmosphere_walk",
+    "atmosphere_window_focus"
+  ],
+  "authored_asset_count": 83,
+  "checks": {
+    "all_required_review_contexts_present": true,
+    "ambient_motion_uses_canonical_time": true,
+    "ambient_presentation_is_below_actor_layer": true,
+    "ambient_scenarios_are_explicit": true,
+    "authored_ambient_assets_present": true,
+    "fixture_pack_exact_repeat": true,
+    "local_light_palette_treatment_present": true,
+    "long_observation_reaches_56_seconds": true,
+    "no_behavior_authority_added": true,
+    "no_random_or_sine_motion": true,
+    "no_soft_modern_compositing": true,
+    "phase_periods_are_not_one_global_loop": true,
+    "quiet_controls_preserve_semantic_position": true,
+    "rain_traces_have_multiple_periods": true,
+    "whole_scene_weather_treatments_present": true
+  },
+  "observation_timestamps_ms": [
+    0,
+    1500,
+    4200,
+    7800,
+    12500,
+    19000,
+    28000,
+    41000,
+    56000
+  ],
+  "passed": true,
+  "rain_trace_periods_ms": [
+    2200,
+    2730,
+    3260,
+    3790,
+    4320,
+    4850
+  ],
+  "schema": "terrarium.atmosphere-evaluation.v1"
+}

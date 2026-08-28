@@ -44,7 +44,7 @@ The intended remote is `git@github.com:turkwanistan/terrarium.git`. Make one com
 
 See `MEMORY.md` for the evidence-backed memory policy.
 
-Visual direction is governed by `ART_DIRECTION.md`; the accepted Iteration-8B room, Iteration-8C authored Moss vocabulary, Iteration-8D object-state variants, and Iteration-8E atmospheric environment assets now live under `display/art/`. Iteration 8E adds deterministic renderer-derived ambient life and weather/local-light presentation without changing canonical simulation state. The next visual milestone is **Iteration 8F — Seasonal Terrarium** in `VISUAL_STYLE_OVERHAUL.md` / `ROADMAP.md`.
+Visual direction is governed by `ART_DIRECTION.md`; the accepted Iteration-8B room, Iteration-8C authored Moss vocabulary, Iteration-8D object-state variants, Iteration-8E atmosphere, and Iteration-8F seasonal world now live across `display/art/`, canonical frame/state contracts, and `display/web/app.js`. Iteration 8F adds canonical `terrarium.seasons.v1` state on a 21-real-day-per-season cadence, authored seasonal exterior/palette treatment, conservative existing-world migration, and neutral rendering when season authority is absent. The next product milestone is **Iteration 9 — Emergent Situations and Consequence Memory** in `ROADMAP.md`.
 
 ## Evaluate
 

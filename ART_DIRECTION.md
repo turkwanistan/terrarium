@@ -244,18 +244,22 @@ The key nighttime emotional strategy is **cool environment + warm shelter**.
 
 Weather is a whole-scene modifier, not only a window overlay. Rain/mist may alter palette/value balance and make local warm light more valuable while remaining canonical/deterministic. Visible streaks, mist, wet traces, or snow remain sparse and pixel-native.
 
-## Seasons and long-horizon visual change
+## Accepted Iteration 8F seasonal visual law
 
-Future seasons should repaint a familiar place without destroying its identity.
+Seasons repaint a familiar place without destroying its identity. Seasonal authority is canonical `terrarium.seasons.v1`, never renderer uptime or an assumed default. The accepted cadence is **21 real days per season** with discrete **early / full / late** 7-day stages, producing an **84-day full cycle**. Existing worlds start at spring/early from their first post-upgrade observation with `migration_origin=neutral-existing-world`; do not fabricate historical seasonal progression.
 
-- structural room landmarks and geometry remain stable;
-- palette, exterior foliage, weather/particles, lighting, and selected decorative/environmental states may change;
-- spring trends toward fresh greens/blossoms/clear blues;
-- summer trends toward fuller greens/strong sun/insects;
-- autumn trends toward rust/orange/red leaves and warmer material harmony;
-- winter trends toward pale/snow exterior, sparse foliage, blue-violet shadow, and stronger warm-interior contrast.
+- structural room landmarks, furniture geometry, Moss identity, object positions/state, and stored history remain stable unless another canonical system changes them;
+- **spring** uses fresh exterior greens and sparse blossom accents;
+- **summer** uses fuller/deeper exterior greens and denser canopy;
+- **autumn** uses rust/ochre foliage and visibly thins from early → full → late;
+- **winter** replaces dense foliage with a sparse pale exterior and authored branches, strengthening the existing cool-outside/warm-shelter strategy at night;
+- seasonal color is a finite palette/material treatment, not a smooth full-screen filter;
+- canonical weather remains independent and is applied after season; local warm light remains later still;
+- absent canonical season must render the accepted neutral room rather than silently assuming spring;
+- season itself carries no behavior command in Iteration 8F and must not make Moss act, change weather/event occurrence, or create hidden renderer memory;
+- snow, holidays, random falling-leaf fields, smooth seasonal crossfades, gradients, bloom, blur, and fog masks remain outside the accepted 8F grammar.
 
-The seasonal clock must be canonical, deterministic, replayable, and much slower than the current accelerated day cycle.
+The long-horizon visual question is now: **after enough real time passes, does the same room clearly belong to a different season while still reading instantly as Moss's persistent home?**
 
 ## Motion rules
 

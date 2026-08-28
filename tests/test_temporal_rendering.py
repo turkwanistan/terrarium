@@ -35,6 +35,12 @@ def test_temporal_fixture_pack_is_deterministic_and_800x480():
         "atmosphere_clear_day_idle", "atmosphere_clear_night_idle", "atmosphere_night_warm_light",
         "atmosphere_rain_idle", "atmosphere_mist_idle", "atmosphere_window_focus", "atmosphere_walk",
         "atmosphere_event_coexistence", "atmosphere_sleep", "atmosphere_object_interaction",
+        "season_spring_day", "season_summer_day", "season_autumn_day", "season_autumn_early", "season_autumn_late", "season_winter_day",
+        "season_spring_night", "season_summer_night", "season_autumn_night", "season_winter_night",
+        "season_spring_rain", "season_autumn_rain", "season_summer_mist", "season_winter_mist",
+        "season_winter_warm_night", "season_summer_walk", "season_winter_walk", "season_autumn_event",
+        "season_spring_sleep", "season_winter_sleep", "season_summer_object", "season_autumn_object",
+        "season_transition_autumn_to_winter",
     }
     assert first["hero_reel"] == [
         "left_walk", "right_walk", "arrive_settle", "idle_control", "window_transition",
@@ -46,6 +52,13 @@ def test_temporal_fixture_pack_is_deterministic_and_800x480():
         "atmosphere_clear_day_idle", "atmosphere_clear_night_idle", "atmosphere_night_warm_light",
         "atmosphere_rain_idle", "atmosphere_mist_idle", "atmosphere_window_focus", "atmosphere_walk",
         "atmosphere_event_coexistence", "atmosphere_sleep", "atmosphere_object_interaction",
+        "season_spring_day", "season_summer_day", "season_autumn_day", "season_winter_day",
+        "season_autumn_early", "season_autumn_late",
+        "season_spring_night", "season_summer_night", "season_autumn_night", "season_winter_night",
+        "season_spring_rain", "season_autumn_rain", "season_summer_mist", "season_winter_mist",
+        "season_winter_warm_night", "season_summer_walk", "season_winter_walk", "season_autumn_event",
+        "season_spring_sleep", "season_winter_sleep", "season_summer_object", "season_autumn_object",
+        "season_transition_autumn_to_winter",
     ]
     assert first["atmosphere_timestamps_ms"] == [0, 1500, 4200, 7800, 12500, 19000, 28000, 41000, 56000]
     assert set(first["atmosphere_review"]) == {

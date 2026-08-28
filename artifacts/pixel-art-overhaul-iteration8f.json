@@ -1,0 +1,105 @@
+{
+  "accepted": true,
+  "accepted_on": "2026-08-28",
+  "authority": {
+    "behavior_unaffected_by_season": true,
+    "missing_season_renders_neutral": true,
+    "renderer_uptime_is_not_authority": true,
+    "rng_stream": "terrarium-rules-v3-routine-coherence",
+    "season_is_canonical": true,
+    "weather_occurrence_unchanged": true
+  },
+  "canonical_deployment": {
+    "canonical_state_hash": "b9a4ff9a7c1524d4abe34ac2407c0e6988fa7ea04fd2b05da7d400ef5787a277",
+    "created_at_preserved": "2026-08-27T03:45:50.032660Z",
+    "live_browser_palette": "dusk-spring",
+    "live_browser_verified_tick": 78650,
+    "migration_origin": "neutral-existing-world",
+    "replay_ok": true,
+    "replayed_state_hash": "b9a4ff9a7c1524d4abe34ac2407c0e6988fa7ea04fd2b05da7d400ef5787a277",
+    "rules_version": "terrarium-rules-v8-seasonal-world",
+    "runtime_data_dir": "${XDG_STATE_HOME:-$HOME/.local/state}/terrarium/live",
+    "season": "spring",
+    "season_epoch_utc": "2026-08-28T16:33:07.468419Z",
+    "season_schema": "terrarium.seasons.v1",
+    "stage": "early",
+    "status": "deployed_verified",
+    "verified_event_count": 78637,
+    "verified_tick": 78637
+  },
+  "checkpoint": "Pixel-Art Overhaul \u2014 Iteration 8F: Seasonal Terrarium",
+  "deterministic_snapshot": {
+    "accepted_iteration8e_frame_sha256": "e191850f3c454b926e9b4fe4355298be3ff5eb4ea351be6975fe7d45ab010f9d",
+    "frame_sha256": "51d574524e710025428d615dadfcf48fb30e826a03b7b58126ce54784ea9b6ca",
+    "id": "20260828T160757100074Z-pixel-art-overhaul-iteration8f",
+    "recursive_structural_delta": [
+      "season"
+    ],
+    "seed": 1701,
+    "steps": 10080
+  },
+  "next": "Iteration 9 \u2014 Emergent Situations and Consequence Memory",
+  "rules_version": "terrarium-rules-v8-seasonal-world",
+  "sbc": {
+    "frozen_optiplex_mcp_modified": false,
+    "gen18": false,
+    "reusable_substrate_deficiency_found": false,
+    "self_building_computer_modified": false
+  },
+  "schema": "terrarium.pixel-art-overhaul-iteration8f.v1",
+  "season": {
+    "days_per_season": 21,
+    "days_per_stage": 7,
+    "existing_world_migration": "neutral-existing-world at first observation; no fabricated historical seasons",
+    "full_cycle_days": 84,
+    "schema": "terrarium.seasons.v1",
+    "seasons": [
+      "spring",
+      "summer",
+      "autumn",
+      "winter"
+    ],
+    "stages": [
+      "early",
+      "full",
+      "late"
+    ]
+  },
+  "validation": {
+    "assets": "83/83 PASS",
+    "atmosphere_regression": "PASS",
+    "browser_uat": "PASS",
+    "continuity_jump_px": 0,
+    "javascript_syntax": "PASS",
+    "long_seed_matrix": {
+      "behavior": "PASS",
+      "coherence": "PASS",
+      "habits": "PASS",
+      "seeds": [
+        1701,
+        1702,
+        42,
+        999
+      ],
+      "spatial": "PASS",
+      "steps_each": 10080
+    },
+    "object_affordances": "PASS",
+    "pytest": "55/55 PASS",
+    "python310_grammar": "38 sources PASS",
+    "regression_matrix": "artifacts/pixel-art-overhaul-iteration8f-regression-matrix.json",
+    "repertoire": "PASS",
+    "season_evaluator": "PASS",
+    "situations": "PASS",
+    "technical_10080": "PASS"
+  },
+  "visual": {
+    "art_direction_fixtures": "artifacts/iteration8f-art-direction-fixtures.json",
+    "art_direction_matrix": "artifacts/iteration8f-art-direction-matrix.json",
+    "authored_art_sha256": "cd2ec842e4661aa72e7a81ba7ac2504f0e1718319f75afa9bb8666efb942359e",
+    "authored_assets": 83,
+    "browser_uat": "artifacts/pixel-art-overhaul-iteration8f-browser-uat.json",
+    "new_seasonal_environment_assets": 5,
+    "renderer_js_sha256": "df5afe734eb2b367f1cfc28201ea9338ebad86cc155cb93136f14ed4381dadc5"
+  }
+}

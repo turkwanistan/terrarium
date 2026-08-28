@@ -3,7 +3,7 @@ from __future__ import annotations
 import hashlib
 import json
 from copy import deepcopy
-from datetime import datetime, timezone
+from datetime import datetime, timedelta, timezone
 from typing import Any
 
 from .spatial import ZONE_ANCHORS
@@ -11,7 +11,7 @@ from .spatial import ZONE_ANCHORS
 FRAME_WIDTH = 800
 FRAME_HEIGHT = 480
 STATE_SCHEMA_VERSION = 1
-RULES_VERSION = "terrarium-rules-v7-object-identity"
+RULES_VERSION = "terrarium-rules-v8-seasonal-world"
 BEHAVIOR_CONTEXT_SCHEMA = "terrarium.behavior-context.v1"
 HABIT_PROFILE_SCHEMA = "terrarium.habits.v1"
 AFFORDANCE_HISTORY_SCHEMA = "terrarium.affordances.v1"
@@ -21,6 +21,14 @@ HABIT_CONTEXTS = ("dawn", "day", "dusk", "night")
 RNG_STREAM_VERSION = "terrarium-rules-v3-routine-coherence"
 EVENT_VERSION = 1
 WEATHER_STREAM_VERSION = "terrarium.weather.v2"
+SEASONAL_CLOCK_SCHEMA = "terrarium.seasons.v1"
+SEASONS = ("spring", "summer", "autumn", "winter")
+SEASON_STAGES = ("early", "full", "late")
+SEASON_DAYS = 21
+SEASON_STAGE_DAYS = 7
+SEASON_SECONDS = SEASON_DAYS * 24 * 60 * 60
+SEASON_STAGE_SECONDS = SEASON_STAGE_DAYS * 24 * 60 * 60
+SEASON_CYCLE_SECONDS = len(SEASONS) * SEASON_SECONDS
 
 ZONES: dict[str, dict[str, int]] = {name: dict(anchor) for name, anchor in ZONE_ANCHORS.items()}
 
@@ -127,6 +135,67 @@ def lighting_for(world_minutes: int) -> str:
     return "night"
 
 
+def _parse_utc(value: str) -> datetime:
+    parsed = datetime.fromisoformat(str(value).replace("Z", "+00:00"))
+    if parsed.tzinfo is None:
+        parsed = parsed.replace(tzinfo=timezone.utc)
+    return parsed.astimezone(timezone.utc)
+
+
+def _utc_iso(value: datetime) -> str:
+    return value.astimezone(timezone.utc).isoformat().replace("+00:00", "Z")
+
+
+def seasonal_clock_for(epoch_utc: str, observed_at_utc: str, *, migration_origin: str) -> dict[str, Any]:
+    """Return the compact authoritative seasonal state for one observed real time."""
+    epoch = _parse_utc(epoch_utc)
+    observed = max(epoch, _parse_utc(observed_at_utc))
+    elapsed_seconds = max(0, int((observed - epoch).total_seconds()))
+    cycle_index = elapsed_seconds // SEASON_CYCLE_SECONDS
+    cycle_seconds = elapsed_seconds % SEASON_CYCLE_SECONDS
+    season_index = min(len(SEASONS) - 1, cycle_seconds // SEASON_SECONDS)
+    season_seconds = cycle_seconds % SEASON_SECONDS
+    stage_index = min(len(SEASON_STAGES) - 1, season_seconds // SEASON_STAGE_SECONDS)
+    return {
+        "schema": SEASONAL_CLOCK_SCHEMA,
+        "migration_origin": str(migration_origin),
+        "epoch_utc": _utc_iso(epoch),
+        "observed_at_utc": _utc_iso(observed),
+        "cadence_days_per_season": SEASON_DAYS,
+        "stage_days": SEASON_STAGE_DAYS,
+        "cycle_index": int(cycle_index),
+        "season_index": int(season_index),
+        "season": SEASONS[int(season_index)],
+        "stage_index": int(stage_index),
+        "stage": SEASON_STAGES[int(stage_index)],
+        "progress": round(float(season_seconds) / float(SEASON_SECONDS), 6),
+    }
+
+
+def normalize_seasonal_clock(state: dict[str, Any], *, observed_at_utc: str | None = None) -> dict[str, Any]:
+    """Add or advance canonical season state without fabricating pre-migration seasons."""
+    habitat = state["habitat"]
+    current = habitat.get("seasonal_clock")
+    if not isinstance(current, dict) or current.get("schema") != SEASONAL_CLOCK_SCHEMA:
+        # Existing worlds begin their seasonal history when this authority first
+        # observes them. New worlds receive a native clock in initial_state().
+        observed = observed_at_utc or str(state.get("created_at") or utc_now())
+        current = seasonal_clock_for(observed, observed, migration_origin="neutral-existing-world")
+        habitat["seasonal_clock"] = current
+        return current
+    epoch = str(current.get("epoch_utc") or state.get("created_at") or utc_now())
+    if observed_at_utc is None:
+        last = _parse_utc(str(current.get("observed_at_utc") or epoch))
+        observed_at_utc = _utc_iso(last + timedelta(seconds=3))
+    next_clock = seasonal_clock_for(
+        epoch,
+        observed_at_utc,
+        migration_origin=str(current.get("migration_origin") or "native"),
+    )
+    habitat["seasonal_clock"] = next_clock
+    return next_clock
+
+
 def weather_for(world_minutes: int, seed: int) -> str:
     # Pure deterministic ambient cycle independent from action RNG. Hashing the
     # three-hour block avoids low-bit LCG aliasing (canonical seed 1701 used to
@@ -159,6 +228,7 @@ def initial_state(seed: int, *, created_at: str | None = None) -> dict[str, Any]
             "times_nudged": 0,
         }
         objects.append(normalize_object_identity(obj))
+    native_season = seasonal_clock_for(created, created, migration_origin="native")
     return {
         "schema_version": STATE_SCHEMA_VERSION,
         "rules_version": RULES_VERSION,
@@ -203,6 +273,7 @@ def initial_state(seed: int, *, created_at: str | None = None) -> dict[str, Any]
         "habitat": {
             "lighting": lighting_for(420),
             "weather": weather_for(420, int(seed)),
+            "seasonal_clock": native_season,
             "shelf_count": 0,
             "path_wear": {name: 0 for name in ZONES},
             "marks": [],

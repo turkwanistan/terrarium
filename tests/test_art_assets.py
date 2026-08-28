@@ -201,3 +201,23 @@ def test_iteration8e_atmosphere_is_authored_deterministic_and_presentation_only(
     assert "Math.random" not in js and "Math.sin" not in js and "Math.cos" not in js
     assert "createLinearGradient" not in js and "createRadialGradient" not in js
     assert "globalAlpha" not in js and "rgba(" not in js
+
+
+def test_iteration8f_seasons_extend_authored_pipeline_without_parallel_renderer():
+    manifest = _read(ART / "manifest.json")
+    entries = {entry["id"]: entry for entry in manifest["assets"]}
+    required = {
+        "environment.window-spring-blossom", "environment.window-summer-canopy",
+        "environment.window-autumn-leaves", "environment.window-winter-view",
+        "environment.window-winter-branches",
+    }
+    assert required <= set(entries)
+    assert all(entries[asset_id]["kind"] == "environment" and entries[asset_id]["layer"] == "BACK" for asset_id in required)
+    palette_bank = _read(ART / manifest["palette_source"])
+    assert set(palette_bank["season_treatments"]) == {"spring", "summer", "autumn", "winter"}
+    js = (ROOT / "display" / "web" / "app.js").read_text(encoding="utf-8")
+    assert "function seasonalState" in js and "function seasonPaletteName" in js
+    assert "const raw=f?.season;" in js and "?raw.name:null" in js
+    assert "environment.window-winter-view" in js and "environment.window-winter-branches" in js
+    assert "season-stage-" in js
+    assert "Math.random" not in js

@@ -1,0 +1,41 @@
+{
+  "art_surface": {
+    "height": 240,
+    "integer_scale": 2,
+    "smoothing": false,
+    "width": 400
+  },
+  "captured_at": "2026-08-28T16:07:57.112048Z",
+  "frame": {
+    "logical_height": 480,
+    "logical_width": 800,
+    "path": "dev/20260828T160757100074Z-pixel-art-overhaul-iteration8f/frame.json",
+    "sha256": "51d574524e710025428d615dadfcf48fb30e826a03b7b58126ce54784ea9b6ca",
+    "tick": 10080
+  },
+  "git": {
+    "branch": "main",
+    "dirty": true,
+    "head": "0c05317aff7f879700f46f308c0e22e80be4ad39"
+  },
+  "note": "Accepted Pixel-Art Overhaul \u2014 Iteration 8F: Seasonal Terrarium. Adds canonical slow real-time seasonal authority and coordinated authored seasonal presentation while preserving Moss behavior, replay, room geometry, and weather law.",
+  "preview": {
+    "path": "dev/20260828T160757100074Z-pixel-art-overhaul-iteration8f/preview.svg",
+    "sha256": "835aab7113c18c8c237fc3f0f0ebb7463e92b394588e594292b03218f5da4fe0"
+  },
+  "schema": "terrarium.dev-snapshot.v1",
+  "snapshot_id": "20260828T160757100074Z-pixel-art-overhaul-iteration8f",
+  "source": {
+    "mode": "deterministic",
+    "seed": 1701,
+    "steps": 10080
+  },
+  "source_hashes": {
+    "authored_art": "cd2ec842e4661aa72e7a81ba7ac2504f0e1718319f75afa9bb8666efb942359e",
+    "engine": "c7cef11032e1e98ebcd4a32e3c2ef2c660784487402b954032cdd440adef026d",
+    "frame_contract": "457f00f48b03c06201d7b1bd91200c4ad43d934aa689af303b6fecbc1c2c981e",
+    "renderer_css": "3a24319be5a3e0c963b8e721b637f35aedfdc24b8bef8e779ae934dd09fd62d1",
+    "renderer_js": "df5afe734eb2b367f1cfc28201ea9338ebad86cc155cb93136f14ed4381dadc5"
+  },
+  "view_url": "/?snapshot=/snapshots/dev/20260828T160757100074Z-pixel-art-overhaul-iteration8f/frame.json"
+}

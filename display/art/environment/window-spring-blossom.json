@@ -1,0 +1,82 @@
+{
+  "schema": "terrarium.pixel-asset.v1",
+  "id": "environment.window-spring-blossom",
+  "width": 104,
+  "height": 76,
+  "anchor": [
+    0,
+    0
+  ],
+  "runs": [
+    [
+      9,
+      46,
+      2,
+      2,
+      "flower"
+    ],
+    [
+      12,
+      43,
+      2,
+      2,
+      "cream"
+    ],
+    [
+      18,
+      50,
+      2,
+      2,
+      "flower"
+    ],
+    [
+      31,
+      55,
+      2,
+      2,
+      "cream"
+    ],
+    [
+      67,
+      52,
+      2,
+      2,
+      "flower"
+    ],
+    [
+      78,
+      47,
+      2,
+      2,
+      "cream"
+    ],
+    [
+      91,
+      43,
+      2,
+      2,
+      "flower"
+    ],
+    [
+      96,
+      51,
+      2,
+      2,
+      "cream"
+    ],
+    [
+      15,
+      48,
+      3,
+      1,
+      "leafBright"
+    ],
+    [
+      76,
+      50,
+      3,
+      1,
+      "leafBright"
+    ]
+  ]
+}

@@ -376,5 +376,75 @@
       "dogLight": 0.12,
       "dogCream": 0.12
     }
+  },
+  "season_treatments": {
+    "spring": {
+      "tint": "#79a96b",
+      "strength": 0.0,
+      "role_strength": {
+        "sky": 0.06,
+        "skyDark": 0.05,
+        "foliage": 0.18,
+        "leafDeep": 0.12,
+        "leafBright": 0.2,
+        "moss": 0.1,
+        "mossDark": 0.08,
+        "flower": 0.14,
+        "glassLight": 0.05
+      }
+    },
+    "summer": {
+      "tint": "#496c37",
+      "strength": 0.0,
+      "role_strength": {
+        "sky": 0.03,
+        "foliage": 0.17,
+        "leafDeep": 0.16,
+        "leafBright": 0.14,
+        "moss": 0.12,
+        "mossDark": 0.14,
+        "rug": 0.04,
+        "rugLight": 0.04,
+        "woodGold": 0.03
+      }
+    },
+    "autumn": {
+      "tint": "#a65f32",
+      "strength": 0.0,
+      "role_strength": {
+        "foliage": 0.48,
+        "leafDeep": 0.42,
+        "leafBright": 0.52,
+        "moss": 0.22,
+        "mossDark": 0.18,
+        "woodWarm": 0.08,
+        "woodGold": 0.12,
+        "walnutLight": 0.05,
+        "terracotta": 0.12,
+        "flower": 0.2,
+        "sky": 0.04
+      }
+    },
+    "winter": {
+      "tint": "#8297b1",
+      "strength": 0.0,
+      "role_strength": {
+        "sky": 0.3,
+        "skyDark": 0.24,
+        "foliage": 0.38,
+        "leafDeep": 0.34,
+        "leafBright": 0.32,
+        "moss": 0.24,
+        "mossDark": 0.2,
+        "dustyBlue": 0.12,
+        "clothBlue": 0.08,
+        "glassLight": 0.2,
+        "wall": 0.03,
+        "wallShade": 0.03,
+        "floor": 0.02,
+        "rug": 0.05,
+        "rugLight": 0.05
+      }
+    }
   }
 }

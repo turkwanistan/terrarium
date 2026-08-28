@@ -1,0 +1,127 @@
+{
+  "continuity": {
+    "interrupt_ms": 1000,
+    "jump_px": 0,
+    "passed": true
+  },
+  "determinism": {
+    "exact_repeat": true,
+    "first_pixel_hash": "fnv1a32:ba902b2d",
+    "repeat_pixel_hash": "fnv1a32:ba902b2d",
+    "scenario": "season_spring_day",
+    "timestamp_ms": 19000
+  },
+  "environment": {
+    "art_surface": [
+      400,
+      240
+    ],
+    "canonical_live_frame_has_season": false,
+    "canonical_live_palette_with_missing_season": "night",
+    "canonical_live_tick_observed": 77383,
+    "canonical_runtime_mutated": false,
+    "canonical_runtime_read_only_observed": true,
+    "image_smoothing": false,
+    "integer_scale": 2,
+    "isolated_data_dir": "/tmp/terrarium-iteration8f-uat",
+    "neutral_fallback_verified": true,
+    "note": "Live 8E engine had no canonical season field; current renderer correctly preserved the neutral accepted 8E palette instead of fabricating spring.",
+    "production_renderer": "display/web/app.js",
+    "viewport": [
+      800,
+      480
+    ]
+  },
+  "passed": true,
+  "raf": {
+    "duration_ms": 3000,
+    "frames": 181,
+    "interval_ms": {
+      "max": 16.8,
+      "min": 16.5,
+      "over_34ms": 0,
+      "over_50ms": 0,
+      "p50": 16.7,
+      "p95": 16.7
+    },
+    "passed": true,
+    "scenario": "season_spring_day"
+  },
+  "schema": "terrarium.pixel-art-overhaul-iteration8f-browser-uat.v1",
+  "season_identity": {
+    "all_observed_scale2x_error_blocks": 0,
+    "all_observed_scale2x_exact": true,
+    "autumn_early_full_late_hashes_distinct": true,
+    "four_clear_day_hashes_distinct": true,
+    "season_plus_weather_hashes_distinct": true
+  },
+  "season_keyframes": {
+    "autumn_early": {
+      "pixel_hash": "fnv1a32:f13deffd",
+      "scenario": "season_autumn_early"
+    },
+    "autumn_full_clear": {
+      "pixel_hash": "fnv1a32:23147d95",
+      "scenario": "season_autumn_day"
+    },
+    "autumn_late": {
+      "pixel_hash": "fnv1a32:7f71d415",
+      "scenario": "season_autumn_late"
+    },
+    "spring_full_clear": {
+      "pixel_hash": "fnv1a32:ba902b2d",
+      "scenario": "season_spring_day"
+    },
+    "spring_rain": {
+      "pixel_hash": "fnv1a32:2e507c95",
+      "scenario": "season_spring_rain"
+    },
+    "summer_full_clear": {
+      "pixel_hash": "fnv1a32:26cb055d",
+      "scenario": "season_summer_day"
+    },
+    "winter_full_clear": {
+      "pixel_hash": "fnv1a32:fbd16f9d",
+      "scenario": "season_winter_day"
+    },
+    "winter_mist": {
+      "pixel_hash": "fnv1a32:f1d5a215",
+      "scenario": "season_winter_mist"
+    },
+    "winter_warm_night": {
+      "pixel_hash": "fnv1a32:263bd3ad",
+      "scenario": "season_winter_warm_night"
+    }
+  },
+  "visual_review": {
+    "accepted": true,
+    "findings": [
+      "All four seasons remain unmistakably the same persistent room; geometry, furniture, Moss, object arrangements, and history marks remain stable.",
+      "Spring reads through fresh exterior greens and sparse blossom accents rather than a pastel room filter.",
+      "Summer reads through denser exterior canopy and richer vegetation while leaving the interior largely familiar.",
+      "Autumn reads through authored rust/ochre exterior foliage; early/full/late stages visibly thin and shift the exterior in discrete steps.",
+      "Winter replaces dense exterior foliage with sparse authored branches and a pale cool exterior; warm nook/desk accents strengthen shelter contrast at night.",
+      "Rain and mist remain the accepted canonical weather facts and combine cleanly with seasonal palettes without adding renderer-only weather.",
+      "Moss remains the focal inhabitant and the seasonal system does not introduce constant whole-scene motion."
+    ],
+    "rejected_or_deferred": [
+      "canonical snow/new winter weather",
+      "seasonal Moss behavior",
+      "random falling-leaf particle field",
+      "holidays",
+      "smooth cross-fade between seasons",
+      "gradients/bloom/blur/fog masks"
+    ],
+    "representative_browser_frames": [
+      "spring full clear @ 19s",
+      "summer full clear @ 19s",
+      "autumn full clear @ 19s",
+      "winter full clear @ 19s",
+      "autumn early @ 19s",
+      "autumn late @ 19s",
+      "spring rain @ 19s",
+      "winter mist @ 19s",
+      "winter warm night @ 19s"
+    ]
+  }
+}

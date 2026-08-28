@@ -96,20 +96,15 @@ Acceptance: **51/51 tests**, 37-source Python-3.10 grammar, 78/78 asset validati
 
 Accepted evidence: `history/2026-08-28-pixel-art-overhaul-iteration8e.md`, `artifacts/pixel-art-overhaul-iteration8e.json`, `artifacts/pixel-art-overhaul-iteration8e-regression-matrix.json`, and snapshot `20260828T123835255741Z-pixel-art-overhaul-iteration8e`.
 
-## Iteration 8F — Seasonal Terrarium
+## Accepted Iteration 8F — Seasonal Terrarium
 
-Make long real-world time a visual system.
+**Status: ACCEPTED.** Terrarium now has canonical `terrarium.seasons.v1` long-horizon state: spring/summer/autumn/winter, each 21 real days, with discrete early/full/late 7-day stages. Existing worlds migrate additively from their first post-upgrade observation rather than receiving fabricated historical seasons; restart and replay remain exact.
 
-Requirements:
+Presentation preserves the familiar room while changing long-horizon exterior/palette identity. Five authored environment assets and four finite seasonal palette treatments support spring blossoms/fresh greens, fuller summer canopy, staged autumn thinning/rust foliage, and sparse pale winter branches/exterior. Canonical weather remains independent and composes after season; local warm light remains a final hard-edged treatment. Missing canonical season stays visually neutral. Season does not change Moss behavior or weather/event occurrence in 8F.
 
-- add a canonical deterministic seasonal state on a timescale substantially slower than the current 72-real-minute day;
-- do not directly reuse a 28-current-world-day season because it would cycle implausibly fast in real time;
-- preserve stable room landmarks/geometry across seasons;
-- coordinate seasonal palette, exterior foliage, weather/particles, lighting, selected interior accents, and ambient life;
-- use spring/summer/autumn/winter as distinct emotional/color states rather than simple recolors;
-- keep history/replay/migration deterministic and fail-safe.
+Acceptance: **55/55 tests**, 38-source Python-3.10 grammar, 83/83 asset validation, dedicated season evaluation, 10,080-event technical exact replay, all four 10,080-step behavior/spatial/coherence/habit seed matrices, repertoire/situations/object-affordance/atmosphere regressions, exact-repeat multi-season production-browser UAT, **0 px** continuity, exact 2× raster output, healthy RAF pacing, and verified canonical host migration/restart/replay all pass. Seed-1701/tick-10080 semantic frame `51d574524e710025428d615dadfcf48fb30e826a03b7b58126ce54784ea9b6ca` differs from 8E only by top-level `season`.
 
-Success means returning to the same familiar room after long real-world time reveals a meaningful environmental transformation without erasing place identity.
+Accepted evidence: `history/2026-08-28-pixel-art-overhaul-iteration8f.md`, `artifacts/pixel-art-overhaul-iteration8f.json`, `artifacts/pixel-art-overhaul-iteration8f-regression-matrix.json`, and snapshot `20260828T160757100074Z-pixel-art-overhaul-iteration8f`.
 
 ## Iteration 9 — Emergent Situations and Consequence Memory
 

@@ -15,6 +15,7 @@ def make_frame(state: dict[str, Any], *, last_event: dict[str, Any] | None = Non
     creature = state["creature"]
     commitment = creature.get("behavior_commitment") or {}
     aftermath = state["habitat"].get("activity_aftermath") or {}
+    seasonal = state["habitat"].get("seasonal_clock") or {}
     return {
         "schema": FRAME_SCHEMA,
         "frame_version": 1,
@@ -24,6 +25,17 @@ def make_frame(state: dict[str, Any], *, last_event: dict[str, Any] | None = Non
         "world_minutes": state["world_minutes"],
         "lighting": state["habitat"]["lighting"],
         "weather": state["habitat"]["weather"],
+        "season": {
+            "schema": seasonal.get("schema"),
+            "name": seasonal.get("season", "spring"),
+            "index": int(seasonal.get("season_index", 0)),
+            "stage": seasonal.get("stage", "early"),
+            "stage_index": int(seasonal.get("stage_index", 0)),
+            "progress": float(seasonal.get("progress", 0.0)),
+            "cycle_index": int(seasonal.get("cycle_index", 0)),
+            "cadence_days_per_season": int(seasonal.get("cadence_days_per_season", 21)),
+            "stage_days": int(seasonal.get("stage_days", 7)),
+        },
         "world_event": event_frame(state),
         "creature": {
             "id": creature["id"],

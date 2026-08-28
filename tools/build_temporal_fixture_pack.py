@@ -4,6 +4,7 @@ import argparse
 import json
 import sys
 from copy import deepcopy
+from datetime import datetime, timedelta, timezone
 from pathlib import Path
 from typing import Any
 
@@ -13,7 +14,7 @@ if str(PROJECT_ROOT) not in sys.path:
 
 from terrarium.engine import Simulation
 from terrarium.frame import make_frame
-from terrarium.models import initial_state, lighting_for
+from terrarium.models import SEASON_DAYS, SEASON_STAGE_DAYS, SEASONS, SEASON_STAGES, initial_state, lighting_for, seasonal_clock_for
 from terrarium.spatial import route_between, route_length, route_payload, zone_anchor
 
 SCHEMA = "terrarium.temporal-fixtures.v1"
@@ -141,6 +142,45 @@ def _atmosphere_alias(name: str, scenario: dict[str, Any], *, purpose: str, clea
             result[key]["world_minutes"] = 720
             result[key]["lighting"] = "day"
             result[key]["weather"] = "clear"
+    return result
+
+
+
+def _seasonalize_frame(frame: dict[str, Any], season: str, stage: str) -> None:
+    base = datetime.fromisoformat(CREATED_AT.replace("Z", "+00:00")).astimezone(timezone.utc)
+    days = SEASONS.index(season) * SEASON_DAYS + SEASON_STAGES.index(stage) * SEASON_STAGE_DAYS + 2
+    observed = (base + timedelta(days=days)).isoformat().replace("+00:00", "Z")
+    clock = seasonal_clock_for(CREATED_AT, observed, migration_origin="fixture")
+    frame["season"] = {
+        "schema": clock["schema"], "name": clock["season"], "index": clock["season_index"],
+        "stage": clock["stage"], "stage_index": clock["stage_index"], "progress": clock["progress"],
+        "cycle_index": clock["cycle_index"], "cadence_days_per_season": clock["cadence_days_per_season"], "stage_days": clock["stage_days"],
+    }
+
+
+def _seasonal_static_scenario(name: str, *, season: str, stage: str = "full", minute: int = 720, weather: str = "clear", zone: str = "open_space", activity: str = "idle") -> dict[str, Any]:
+    scenario = _atmosphere_static_scenario(name, minute=minute, weather=weather, zone=zone, activity=activity)
+    for key in ("source", "target"):
+        _seasonalize_frame(scenario[key], season, stage)
+    scenario["temporal_kind"] = "seasonal"
+    scenario["purpose"] = f"seasonal review: {season} {stage} / {lighting_for(minute)} / {weather} / {activity}"
+    return scenario
+
+
+def _seasonal_alias(name: str, scenario: dict[str, Any], *, season: str, stage: str = "full", purpose: str) -> dict[str, Any]:
+    result = deepcopy(scenario)
+    result["id"] = name
+    result["purpose"] = purpose
+    result["temporal_kind"] = "seasonal"
+    for key in ("source", "target"):
+        _seasonalize_frame(result[key], season, stage)
+    return result
+
+
+def _seasonal_transition() -> dict[str, Any]:
+    result = _seasonal_static_scenario("season_transition_autumn_to_winter", season="autumn", stage="late", minute=720, weather="clear")
+    _seasonalize_frame(result["target"], "winter", "early")
+    result["purpose"] = "authored discrete seasonal boundary: late autumn to early winter"
     return result
 
 def _rain_scenario() -> dict[str, Any]:
@@ -326,6 +366,38 @@ def build() -> dict[str, Any]:
     scenarios["atmosphere_sleep"] = _atmosphere_alias("atmosphere_sleep", scenarios["sleep_transition"], purpose="sleep context retains quiet environmental life")
     scenarios["atmosphere_object_interaction"] = _atmosphere_alias("atmosphere_object_interaction", scenarios["object_roll"], purpose="object interaction remains readable with atmospheric presentation active", clear_day=True)
 
+    scenarios["season_spring_day"] = _seasonal_static_scenario("season_spring_day", season="spring", stage="full", minute=720, weather="clear")
+    scenarios["season_summer_day"] = _seasonal_static_scenario("season_summer_day", season="summer", stage="full", minute=720, weather="clear")
+    scenarios["season_autumn_day"] = _seasonal_static_scenario("season_autumn_day", season="autumn", stage="full", minute=720, weather="clear")
+    scenarios["season_autumn_early"] = _seasonal_static_scenario("season_autumn_early", season="autumn", stage="early", minute=720, weather="clear")
+    scenarios["season_autumn_late"] = _seasonal_static_scenario("season_autumn_late", season="autumn", stage="late", minute=720, weather="clear")
+    scenarios["season_winter_day"] = _seasonal_static_scenario("season_winter_day", season="winter", stage="full", minute=720, weather="clear")
+    for season in SEASONS:
+        scenarios[f"season_{season}_night"] = _seasonal_static_scenario(f"season_{season}_night", season=season, stage="full", minute=1230, weather="clear")
+    scenarios["season_spring_rain"] = _seasonal_static_scenario("season_spring_rain", season="spring", minute=900, weather="rain")
+    scenarios["season_autumn_rain"] = _seasonal_static_scenario("season_autumn_rain", season="autumn", minute=900, weather="rain")
+    scenarios["season_summer_mist"] = _seasonal_static_scenario("season_summer_mist", season="summer", minute=1080, weather="mist")
+    scenarios["season_winter_mist"] = _seasonal_static_scenario("season_winter_mist", season="winter", minute=1080, weather="mist")
+    scenarios["season_winter_warm_night"] = _seasonal_static_scenario("season_winter_warm_night", season="winter", minute=1290, weather="clear", zone="sleeping_nook", activity="rest")
+    scenarios["season_summer_walk"] = _seasonal_alias("season_summer_walk", scenarios["left_walk"], season="summer", purpose="walking Moss against full summer exterior")
+    scenarios["season_winter_walk"] = _seasonal_alias("season_winter_walk", scenarios["right_walk"], season="winter", purpose="walking Moss against sparse winter exterior")
+    scenarios["season_autumn_event"] = _seasonal_alias("season_autumn_event", scenarios["event_ignored"], season="autumn", purpose="situational event coexists with autumn atmosphere")
+    scenarios["season_spring_sleep"] = _seasonal_alias("season_spring_sleep", scenarios["sleep_transition"], season="spring", purpose="sleep remains readable in spring")
+    scenarios["season_winter_sleep"] = _seasonal_alias("season_winter_sleep", scenarios["sleep_transition"], season="winter", purpose="sleep and warm shelter remain readable in winter")
+    scenarios["season_summer_object"] = _seasonal_alias("season_summer_object", scenarios["object_roll"], season="summer", purpose="object state remains legible in summer")
+    scenarios["season_autumn_object"] = _seasonal_alias("season_autumn_object", scenarios["object_tug"], season="autumn", purpose="object state remains legible in autumn")
+    scenarios["season_transition_autumn_to_winter"] = _seasonal_transition()
+
+    seasonal_review = {
+        "spring_clear_day": "season_spring_day", "summer_clear_day": "season_summer_day", "autumn_clear_day": "season_autumn_day", "winter_clear_day": "season_winter_day",
+        "autumn_early": "season_autumn_early", "autumn_late": "season_autumn_late",
+        "spring_night": "season_spring_night", "summer_night": "season_summer_night", "autumn_night": "season_autumn_night", "winter_night": "season_winter_night",
+        "rain_one": "season_spring_rain", "rain_two": "season_autumn_rain", "mist_one": "season_summer_mist", "mist_two": "season_winter_mist",
+        "winter_warm_local_light": "season_winter_warm_night", "walk_one": "season_summer_walk", "walk_two": "season_winter_walk",
+        "situational_event": "season_autumn_event", "sleep_one": "season_spring_sleep", "sleep_two": "season_winter_sleep",
+        "object_one": "season_summer_object", "object_two": "season_autumn_object", "transition": "season_transition_autumn_to_winter",
+    }
+
     atmosphere_review = {
         "quiet_clear_day": "atmosphere_clear_day_idle",
         "quiet_clear_night": "atmosphere_clear_night_idle",
@@ -354,7 +426,8 @@ def build() -> dict[str, Any]:
         "recommended_timestamps_ms": [0, 100, 250, 500, 800, 1100, 1400, 1700, 2000, 2300, 2600],
         "atmosphere_timestamps_ms": [0, 1500, 4200, 7800, 12500, 19000, 28000, 41000, 56000],
         "atmosphere_review": atmosphere_review,
-        "hero_reel": hero_reel + list(dict.fromkeys(atmosphere_review.values())),
+        "seasonal_review": seasonal_review,
+        "hero_reel": hero_reel + list(dict.fromkeys(atmosphere_review.values())) + list(dict.fromkeys(seasonal_review.values())),
         "continuity_probe": _continuity_probe(),
         "scenarios": scenarios,
     }

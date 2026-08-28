@@ -478,6 +478,36 @@
       "kind": "environment",
       "path": "environment/nook-sconce.json",
       "layer": "STRUCTURE"
+    },
+    {
+      "id": "environment.window-spring-blossom",
+      "kind": "environment",
+      "path": "environment/window-spring-blossom.json",
+      "layer": "BACK"
+    },
+    {
+      "id": "environment.window-summer-canopy",
+      "kind": "environment",
+      "path": "environment/window-summer-canopy.json",
+      "layer": "BACK"
+    },
+    {
+      "id": "environment.window-autumn-leaves",
+      "kind": "environment",
+      "path": "environment/window-autumn-leaves.json",
+      "layer": "BACK"
+    },
+    {
+      "id": "environment.window-winter-view",
+      "kind": "environment",
+      "path": "environment/window-winter-view.json",
+      "layer": "BACK"
+    },
+    {
+      "id": "environment.window-winter-branches",
+      "kind": "environment",
+      "path": "environment/window-winter-branches.json",
+      "layer": "BACK"
     }
   ]
 }

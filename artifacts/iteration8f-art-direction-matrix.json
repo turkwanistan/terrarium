@@ -1,0 +1,409 @@
+{
+  "art_surface": [
+    400,
+    240
+  ],
+  "authored_art_sha256": "cd2ec842e4661aa72e7a81ba7ac2504f0e1718319f75afa9bb8666efb942359e",
+  "capture_rule": "start the development server with the generated fixture pack, then capture each URL from the production browser renderer at 800x480; subjective visual judgment remains human/vision authority",
+  "captures": {
+    "art_dawn_clear_fresh_idle": {
+      "target_frame_sha256": "85f01e24b1e1cc2466597446e08bbb1a607b5c2132fec2d222008698ea8c1414",
+      "url": "/?temporal=art_dawn_clear_fresh_idle&t=1300"
+    },
+    "art_day_clear_fresh_idle": {
+      "target_frame_sha256": "6c9b234052f79ae13a8e2b0fe96155b4432e139dd55060474f8db92f751f5f85",
+      "url": "/?temporal=art_day_clear_fresh_idle&t=1300"
+    },
+    "art_day_clear_lived_idle": {
+      "target_frame_sha256": "18a96a9aea3bb3f7014639431f50835dbeebd587d71565f42dde00a902439953",
+      "url": "/?temporal=art_day_clear_lived_idle&t=1300"
+    },
+    "art_dusk_mist_fresh_idle": {
+      "target_frame_sha256": "ceecd46bab78c9cdaf2a7bdf30bc16017376fed68066bc73fe8952bbf969bb39",
+      "url": "/?temporal=art_dusk_mist_fresh_idle&t=1300"
+    },
+    "art_night_rain_fresh_idle": {
+      "target_frame_sha256": "80af781a4fd1a0f3fd760f2bb14c990b4cb07814a89f16f7bc1bf1cd7add5b70",
+      "url": "/?temporal=art_night_rain_fresh_idle&t=1300"
+    },
+    "art_night_rain_lived_idle": {
+      "target_frame_sha256": "07e02f750a5a4acd3dda3a699990a7819f5d1bdc28bf69ebf2d1c9cf6f5d8322",
+      "url": "/?temporal=art_night_rain_lived_idle&t=1300"
+    },
+    "atmosphere_clear_day_idle": {
+      "target_frame_sha256": "e59da75134899cc63d68bee58c5a84cdf0c0bf8511eee0460e3631c1749f95cb",
+      "url": "/?temporal=atmosphere_clear_day_idle&t=1300"
+    },
+    "atmosphere_clear_night_idle": {
+      "target_frame_sha256": "27d0c2de9331cf6f5d573ec015475af74488f58346e4cca1ac1230cd1c67d337",
+      "url": "/?temporal=atmosphere_clear_night_idle&t=1300"
+    },
+    "atmosphere_event_coexistence": {
+      "target_frame_sha256": "e76b788670f40922d3419a963a4dc5a4291403ca141c571c8cd601f7618c0875",
+      "url": "/?temporal=atmosphere_event_coexistence&t=1300"
+    },
+    "atmosphere_mist_idle": {
+      "target_frame_sha256": "51540f927d86a4ce85f01be5593cd9e61dfa0e16c2511b001460f85a684a2a9d",
+      "url": "/?temporal=atmosphere_mist_idle&t=1300"
+    },
+    "atmosphere_night_warm_light": {
+      "target_frame_sha256": "9da2c05c9e92e711aab3db712ebdf929cf97c791f976c8885b6d53df0d61b3d1",
+      "url": "/?temporal=atmosphere_night_warm_light&t=1300"
+    },
+    "atmosphere_object_interaction": {
+      "target_frame_sha256": "7c7b7f9e7dee2347ada3a5ed4c1c0811d1962fb9be875a055b62806a044ff419",
+      "url": "/?temporal=atmosphere_object_interaction&t=1300"
+    },
+    "atmosphere_rain_idle": {
+      "target_frame_sha256": "dfa6c2c471d43edcf3915c5f7d3c300549dcf6ca7ed8eb2502cf69e8e43c13f6",
+      "url": "/?temporal=atmosphere_rain_idle&t=1300"
+    },
+    "atmosphere_sleep": {
+      "target_frame_sha256": "cbeb5a12841b72535e2d27d924d72d7d139b6d802d45a32215ef9d8dd9da5deb",
+      "url": "/?temporal=atmosphere_sleep&t=1300"
+    },
+    "atmosphere_walk": {
+      "target_frame_sha256": "3ef58b96bc011c7b42cde9664e974d31f9a09698f1e1de4f35ae03953a3c8ddc",
+      "url": "/?temporal=atmosphere_walk&t=1300"
+    },
+    "atmosphere_window_focus": {
+      "target_frame_sha256": "7f553d755a1c79fe79ab70c5744e6cb039ff46f02a8557fb35b7e0c183f2db10",
+      "url": "/?temporal=atmosphere_window_focus&t=1300"
+    },
+    "carried_walk": {
+      "target_frame_sha256": "dded8f569c9e0d4495840cff2f26915119bd0f41710f1d516661869730c2257d",
+      "url": "/?temporal=carried_walk&t=1300"
+    },
+    "event_bird_engage": {
+      "target_frame_sha256": "94ae9aa1a1e379445895f2edbe0a4454e25f78258a545a8f1995d72ad6d25426",
+      "url": "/?temporal=event_bird_engage&t=1300"
+    },
+    "event_moth_engage": {
+      "target_frame_sha256": "bd1f358d73fa00b61eada31d8f02abec2ec628d5a59afca03ce07af298c32346",
+      "url": "/?temporal=event_moth_engage&t=1300"
+    },
+    "event_sunlight_engage": {
+      "target_frame_sha256": "bf7ee0b97d5d7432f203c56863066d1029b0f502c8845ed1c31295fc9b0138bb",
+      "url": "/?temporal=event_sunlight_engage&t=1300"
+    },
+    "event_thunder_react": {
+      "target_frame_sha256": "1c8ecd4e01e9c140ba8467fcc4b75e5b14d1567c3ede5f269c5c92ce1944cd02",
+      "url": "/?temporal=event_thunder_react&t=1300"
+    },
+    "groom": {
+      "target_frame_sha256": "f737eff99ea0da8931ffd2c15cbf531d667be9ca4b69a877db7f6336c413a4dc",
+      "url": "/?temporal=groom&t=1300"
+    },
+    "inspect_object": {
+      "target_frame_sha256": "9f2bc835d42523e2568796778097715def94dde8110c7ddddac2f38d2bfd428f",
+      "url": "/?temporal=inspect_object&t=1300"
+    },
+    "left_walk": {
+      "target_frame_sha256": "8a53bcff4e8576c3a352238fbbe80d990f268df52ca44aff921d85a3bd375b30",
+      "url": "/?temporal=left_walk&t=1300"
+    },
+    "loaf": {
+      "target_frame_sha256": "e710f5bfe9f5acd1f0c0a148e720bb1d64aa593376773e39070398e0d37473b2",
+      "url": "/?temporal=loaf&t=1300"
+    },
+    "object_display": {
+      "target_frame_sha256": "bcaecc8b72784af43403eaed97438db8298ac4d913f624318be0d8d7869ca1f0",
+      "url": "/?temporal=object_display&t=1300"
+    },
+    "object_nest": {
+      "target_frame_sha256": "844fe2cd7f8cdec119b39ee492161e22d114d1f776e9490e6d4db95119b93258",
+      "url": "/?temporal=object_nest&t=1300"
+    },
+    "object_nudge": {
+      "target_frame_sha256": "773f3cd4cdc1c846ffbf2f2d1f1db4e3eddda4ecf2eaa11d39b7e4c977ecf95b",
+      "url": "/?temporal=object_nudge&t=1300"
+    },
+    "object_pickup": {
+      "target_frame_sha256": "995ac86cb138a67652fb2913e94c3b60bbe502cb60e7264ac8035cac3857bf20",
+      "url": "/?temporal=object_pickup&t=1300"
+    },
+    "object_placement": {
+      "target_frame_sha256": "7dbaf793d0080937ee6bee74bc8e75eed85d0c5c0760e32fb7e464ab9257f32a",
+      "url": "/?temporal=object_placement&t=1300"
+    },
+    "object_retrieve": {
+      "target_frame_sha256": "171bc97677488c8f1224dbccb4072b0b3ecd159f2f136be19c498fa056accd79",
+      "url": "/?temporal=object_retrieve&t=1300"
+    },
+    "object_roll": {
+      "target_frame_sha256": "ea76767bef1a38270b2be4c05c3379c9948aa6a50133b384fe9970abadf98ccc",
+      "url": "/?temporal=object_roll&t=1300"
+    },
+    "object_tug": {
+      "target_frame_sha256": "de089de92f1328eff6e0628236789299a6d284b2686a93395b7399d1f15b82a5",
+      "url": "/?temporal=object_tug&t=1300"
+    },
+    "right_walk": {
+      "target_frame_sha256": "1ae36f1d44746ff82b5253e8979f927a97146c68dc926121fb0d807b9a3e9ee4",
+      "url": "/?temporal=right_walk&t=1300"
+    },
+    "season_autumn_day": {
+      "target_frame_sha256": "b53b1e37fe8c2fe8e1329fc288b2dc4b183425523de029145107496f3bb42e7f",
+      "url": "/?temporal=season_autumn_day&t=1300"
+    },
+    "season_autumn_early": {
+      "target_frame_sha256": "c743b7e3aaee8b53824bc782d15e26fb04d7b386129b4b885326399a5dc427e6",
+      "url": "/?temporal=season_autumn_early&t=1300"
+    },
+    "season_autumn_event": {
+      "target_frame_sha256": "b58d775ccb8347d40d234e10da8745e246d047b41aab2c45f433ecb7a05705e2",
+      "url": "/?temporal=season_autumn_event&t=1300"
+    },
+    "season_autumn_late": {
+      "target_frame_sha256": "e67f44386924e19030ad4f1f703712279ef722fe23c6e5bd2b784920573bdf47",
+      "url": "/?temporal=season_autumn_late&t=1300"
+    },
+    "season_autumn_night": {
+      "target_frame_sha256": "3658cb9989b8d7b480e8776f0a27e138c5b932679c5ef944f373e75e3e30488d",
+      "url": "/?temporal=season_autumn_night&t=1300"
+    },
+    "season_autumn_object": {
+      "target_frame_sha256": "37fd915bfa43a3da3673c1bfbff9df0251785489827e770f34d98e0e0552f3df",
+      "url": "/?temporal=season_autumn_object&t=1300"
+    },
+    "season_autumn_rain": {
+      "target_frame_sha256": "26cc32b371fb54c83d8cada59e0eb6977a45ab6b40d6036270b612bff62720ee",
+      "url": "/?temporal=season_autumn_rain&t=1300"
+    },
+    "season_spring_day": {
+      "target_frame_sha256": "651596e03b3a6884baba6cf1741c645cf787b5ee6b3a9bb273ac1ecbf00a7681",
+      "url": "/?temporal=season_spring_day&t=1300"
+    },
+    "season_spring_night": {
+      "target_frame_sha256": "d13e7ce8caa134df4c2812781ed9477efc5777f1d97ef472dfa396be8fad7daa",
+      "url": "/?temporal=season_spring_night&t=1300"
+    },
+    "season_spring_rain": {
+      "target_frame_sha256": "4709c42661ba76559f1c53fbadf4c22acaef6726a31226e86b2429b471f0c732",
+      "url": "/?temporal=season_spring_rain&t=1300"
+    },
+    "season_spring_sleep": {
+      "target_frame_sha256": "99bdec1f90f02f5c655b0a62a94479b4ca6a493ca4c08a8e28136821dcb38d69",
+      "url": "/?temporal=season_spring_sleep&t=1300"
+    },
+    "season_summer_day": {
+      "target_frame_sha256": "6fc88c933e3ae29c71edd87fb9c54120b8b0e94849af71defe75c7859ffa3a79",
+      "url": "/?temporal=season_summer_day&t=1300"
+    },
+    "season_summer_mist": {
+      "target_frame_sha256": "3b17e4ecea0ec07b87a295b0e77b2da2d5bc26e649716cf2e468f9dcfbc31ee3",
+      "url": "/?temporal=season_summer_mist&t=1300"
+    },
+    "season_summer_night": {
+      "target_frame_sha256": "8c2a3432f8bfa86e55b2f4710a977372fd8a80646956bced7b30b60e9a45397a",
+      "url": "/?temporal=season_summer_night&t=1300"
+    },
+    "season_summer_object": {
+      "target_frame_sha256": "866d7a3de884a2f30aa80ef4f6898e668f0c5bd6d7a960e32605a9c948f2dd44",
+      "url": "/?temporal=season_summer_object&t=1300"
+    },
+    "season_summer_walk": {
+      "target_frame_sha256": "c056f3eb6a64fe8872c11a43b52f664cf96b09c609025a2b91671a8cc8a546d3",
+      "url": "/?temporal=season_summer_walk&t=1300"
+    },
+    "season_transition_autumn_to_winter": {
+      "target_frame_sha256": "71862ec788636e1bb6e522ba1b521009b07cb0b59011a54aaa481cd21577d15c",
+      "url": "/?temporal=season_transition_autumn_to_winter&t=1300"
+    },
+    "season_winter_day": {
+      "target_frame_sha256": "df2d397d8f09bfbea07d49413c1a1f512f8dca25a6363483bf9f00ac5463e3bd",
+      "url": "/?temporal=season_winter_day&t=1300"
+    },
+    "season_winter_mist": {
+      "target_frame_sha256": "5ae91a22a1dcf2cc2e91e46332f4aaf444278e901864abc6ec59bea25aef932f",
+      "url": "/?temporal=season_winter_mist&t=1300"
+    },
+    "season_winter_night": {
+      "target_frame_sha256": "374204a3ba5326466689973d4d712104952c40b6f8e26d9c93e4862fe80d9a10",
+      "url": "/?temporal=season_winter_night&t=1300"
+    },
+    "season_winter_sleep": {
+      "target_frame_sha256": "50d2ac0ba84eb88bc0a57b7ece2c5541c991ff4a3d2ab8032416864d49cbc8c4",
+      "url": "/?temporal=season_winter_sleep&t=1300"
+    },
+    "season_winter_walk": {
+      "target_frame_sha256": "e0c8cccdac19a15ac35df45650f644f64ee572213e160f4f506cfeb5e3598d04",
+      "url": "/?temporal=season_winter_walk&t=1300"
+    },
+    "season_winter_warm_night": {
+      "target_frame_sha256": "dd3601c9fbee3ccda889c4925656ad2fc785b361fee8eccbfba65e4b66fb0c16",
+      "url": "/?temporal=season_winter_warm_night&t=1300"
+    },
+    "sleep_transition": {
+      "target_frame_sha256": "cbeb5a12841b72535e2d27d924d72d7d139b6d802d45a32215ef9d8dd9da5deb",
+      "url": "/?temporal=sleep_transition&t=1300"
+    },
+    "stretch": {
+      "target_frame_sha256": "e4e1156cc54e2dd0dae10ce44cd4e280930c1774f359f3f01f75aa01252e6ac8",
+      "url": "/?temporal=stretch&t=1300"
+    },
+    "wake_exit": {
+      "target_frame_sha256": "8a186a0bfd456ab7637242cfd40ddde4b6371f1065d792c963d3a8e8b33f844f",
+      "url": "/?temporal=wake_exit&t=1300"
+    },
+    "waking": {
+      "target_frame_sha256": "1a1d594043b50751f234c20ca5d7b1f0f6a5e31049e8f7abbd2c571781a067cf",
+      "url": "/?temporal=waking&t=1300"
+    },
+    "weather_reaction": {
+      "target_frame_sha256": "f949bfa00c3d9ae65ffbccc072324fc9c27c12ab59a00a561ad21ceec772c6fa",
+      "url": "/?temporal=weather_reaction&t=1300"
+    },
+    "window_transition": {
+      "target_frame_sha256": "68af0c274e1625981d5337cb5ceb1d0d794d16f2d4f8d7606cfb9b3a95ed6a55",
+      "url": "/?temporal=window_transition&t=1300"
+    }
+  },
+  "renderer": "production display/web/app.js",
+  "renderer_sha256": "df5afe734eb2b367f1cfc28201ea9338ebad86cc155cb93136f14ed4381dadc5",
+  "rows": [
+    {
+      "group": "environment",
+      "scenarios": [
+        "art_dawn_clear_fresh_idle",
+        "art_day_clear_fresh_idle",
+        "art_dusk_mist_fresh_idle",
+        "art_night_rain_fresh_idle"
+      ]
+    },
+    {
+      "group": "history",
+      "scenarios": [
+        "art_day_clear_fresh_idle",
+        "art_day_clear_lived_idle",
+        "art_night_rain_fresh_idle",
+        "art_night_rain_lived_idle"
+      ]
+    },
+    {
+      "group": "moss-locomotion",
+      "scenarios": [
+        "art_day_clear_fresh_idle",
+        "left_walk",
+        "right_walk",
+        "carried_walk"
+      ]
+    },
+    {
+      "group": "moss-object-acting",
+      "scenarios": [
+        "inspect_object",
+        "object_nudge",
+        "object_pickup",
+        "object_placement"
+      ]
+    },
+    {
+      "group": "object-state",
+      "scenarios": [
+        "object_roll",
+        "object_retrieve",
+        "object_tug",
+        "object_nest",
+        "object_display"
+      ]
+    },
+    {
+      "group": "moss-quiet-acting",
+      "scenarios": [
+        "loaf",
+        "groom",
+        "stretch",
+        "window_transition",
+        "sleep_transition",
+        "waking",
+        "wake_exit"
+      ]
+    },
+    {
+      "group": "situations",
+      "scenarios": [
+        "weather_reaction",
+        "event_sunlight_engage",
+        "event_bird_engage",
+        "event_thunder_react",
+        "event_moth_engage"
+      ]
+    },
+    {
+      "group": "atmosphere",
+      "scenarios": [
+        "atmosphere_clear_day_idle",
+        "atmosphere_clear_night_idle",
+        "atmosphere_night_warm_light",
+        "atmosphere_rain_idle",
+        "atmosphere_mist_idle",
+        "atmosphere_window_focus",
+        "atmosphere_walk",
+        "atmosphere_event_coexistence",
+        "atmosphere_sleep",
+        "atmosphere_object_interaction"
+      ]
+    },
+    {
+      "group": "seasons-clear-day",
+      "scenarios": [
+        "season_spring_day",
+        "season_summer_day",
+        "season_autumn_day",
+        "season_winter_day"
+      ]
+    },
+    {
+      "group": "seasonal-progression",
+      "scenarios": [
+        "season_autumn_early",
+        "season_autumn_day",
+        "season_autumn_late",
+        "season_transition_autumn_to_winter"
+      ]
+    },
+    {
+      "group": "seasons-night",
+      "scenarios": [
+        "season_spring_night",
+        "season_summer_night",
+        "season_autumn_night",
+        "season_winter_night"
+      ]
+    },
+    {
+      "group": "seasons-weather",
+      "scenarios": [
+        "season_spring_rain",
+        "season_autumn_rain",
+        "season_summer_mist",
+        "season_winter_mist",
+        "season_winter_warm_night"
+      ]
+    },
+    {
+      "group": "seasons-activity",
+      "scenarios": [
+        "season_summer_walk",
+        "season_winter_walk",
+        "season_autumn_event",
+        "season_spring_sleep",
+        "season_winter_sleep",
+        "season_summer_object",
+        "season_autumn_object"
+      ]
+    },
+    {
+      "group": "season-transition",
+      "scenarios": [
+        "season_transition_autumn_to_winter"
+      ]
+    }
+  ],
+  "schema": "terrarium.art-direction-matrix.v1",
+  "viewport": [
+    800,
+    480
+  ]
+}

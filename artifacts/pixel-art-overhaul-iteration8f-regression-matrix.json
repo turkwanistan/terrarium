@@ -1,0 +1,92 @@
+{
+  "art_direction_matrix": "artifacts/iteration8f-art-direction-matrix.json",
+  "atmosphere": "artifacts/pixel-art-overhaul-iteration8f-atmosphere.json",
+  "browser_uat": "artifacts/pixel-art-overhaul-iteration8f-browser-uat.json",
+  "canonical_deployment": {
+    "canonical_state_hash": "b9a4ff9a7c1524d4abe34ac2407c0e6988fa7ea04fd2b05da7d400ef5787a277",
+    "created_at_preserved": "2026-08-27T03:45:50.032660Z",
+    "live_browser_palette": "dusk-spring",
+    "live_browser_verified_tick": 78650,
+    "migration_origin": "neutral-existing-world",
+    "replay_ok": true,
+    "replayed_state_hash": "b9a4ff9a7c1524d4abe34ac2407c0e6988fa7ea04fd2b05da7d400ef5787a277",
+    "rules_version": "terrarium-rules-v8-seasonal-world",
+    "runtime_data_dir": "${XDG_STATE_HOME:-$HOME/.local/state}/terrarium/live",
+    "season": "spring",
+    "season_epoch_utc": "2026-08-28T16:33:07.468419Z",
+    "season_schema": "terrarium.seasons.v1",
+    "stage": "early",
+    "status": "deployed_verified",
+    "verified_event_count": 78637,
+    "verified_tick": 78637
+  },
+  "checks": {
+    "authored_assets_83_pass": true,
+    "behavior_four_seed_pass": true,
+    "canonical_deployment_and_replay_pass": true,
+    "canonical_live_runtime_not_mutated_during_uat": true,
+    "coherence_four_seed_pass": true,
+    "habits_four_seed_pass": true,
+    "iteration6_repertoire_pass": true,
+    "iteration7_situations_pass": true,
+    "iteration8d_object_affordances_pass": true,
+    "iteration8e_atmosphere_pass": true,
+    "iteration8f_seasons_pass": true,
+    "javascript_syntax_pass": true,
+    "neutral_missing_season_fallback": true,
+    "production_browser_uat_pass": true,
+    "pytest_55_pass": true,
+    "python310_grammar_38_sources": true,
+    "semantic_delta_only_season": true,
+    "spatial_four_seed_pass": true,
+    "technical_10080_pass": true,
+    "weather_authority_unchanged": true
+  },
+  "object_affordances": "artifacts/pixel-art-overhaul-iteration8f-object-affordances.json",
+  "passed": true,
+  "per_seed": {
+    "behavior": {
+      "1701": true,
+      "1702": true,
+      "42": true,
+      "999": true
+    },
+    "coherence": {
+      "1701": true,
+      "1702": true,
+      "42": true,
+      "999": true
+    },
+    "habits": {
+      "1701": true,
+      "1702": true,
+      "42": true,
+      "999": true
+    },
+    "spatial": {
+      "1701": true,
+      "1702": true,
+      "42": true,
+      "999": true
+    }
+  },
+  "repertoire": "artifacts/pixel-art-overhaul-iteration8f-repertoire.json",
+  "schema": "terrarium.pixel-art-overhaul-iteration8f-regression-matrix.v1",
+  "seasons": "artifacts/pixel-art-overhaul-iteration8f-seasons.json",
+  "seeds": [
+    1701,
+    1702,
+    42,
+    999
+  ],
+  "semantic_frame": {
+    "accepted_iteration8e_sha256": "e191850f3c454b926e9b4fe4355298be3ff5eb4ea351be6975fe7d45ab010f9d",
+    "iteration8f_sha256": "51d574524e710025428d615dadfcf48fb30e826a03b7b58126ce54784ea9b6ca",
+    "structural_delta": [
+      "season"
+    ]
+  },
+  "situations": "artifacts/pixel-art-overhaul-iteration8f-situations.json",
+  "steps_per_long_run": 10080,
+  "technical": "artifacts/pixel-art-overhaul-iteration8f-technical.json"
+}

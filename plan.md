@@ -327,6 +327,24 @@ Evidence: `history/2026-08-28-pixel-art-overhaul-iteration8d.md`, `artifacts/pix
 
 Evidence: `history/2026-08-28-pixel-art-overhaul-iteration8e.md`, `artifacts/pixel-art-overhaul-iteration8e.json`, `artifacts/pixel-art-overhaul-iteration8e-regression-matrix.json`, snapshot `20260828T123835255741Z-pixel-art-overhaul-iteration8e`.
 
-## Next product iteration after Iteration 8E
+## Completed normal product checkpoint — Pixel-Art Overhaul, Iteration 8F
 
-**Iteration 8F — Seasonal Terrarium.** Introduce a canonical deterministic seasonal clock substantially slower than the accelerated 72-real-minute day, then coordinate long-horizon exterior foliage, palette, lighting, weather/particles, ambient life, and selected interior accents. Preserve familiar room geometry, canonical replay/migration, Moss history, and the renderer/world authority boundary.
+- added canonical `terrarium.seasons.v1` state with spring/summer/autumn/winter on a 21-real-day cadence and early/full/late 7-day stages;
+- made production seasonal observation real-time while preserving deterministic explicit/derived observation for tests, replay, and non-production engines;
+- migrated existing worlds additively at first observation with `neutral-existing-world`, preserving the existing created time, object state, habits, situations, history, event chain, and replay;
+- exposed season through the semantic frame without changing behavior authority; deterministic seed-1701/tick-10080 differs from 8E only by top-level `season`;
+- added four finite seasonal palette treatments and five authored environment assets for spring blossoms, summer canopy, autumn leaves, winter exterior, and winter branches;
+- made autumn early/full/late visibly progressive and winter materially sparse rather than a simple recolor;
+- kept canonical weather independent from season and retained existing hard-edged local-light treatment;
+- fixed the critical authority boundary so a renderer connected to an older/missing-season frame remains neutral instead of fabricating spring;
+- expanded deterministic temporal/art-direction coverage to 63 scenarios across all seasons, stages, weather, night, activity, object interaction, events, sleep, and a season transition;
+- passed **55/55 tests**, 38-source Python-3.10 grammar, JavaScript syntax, 83-asset validation, dedicated season evaluation, 10,080-event technical/replay, four-seed 10,080-step behavior/spatial/coherence/habit matrices, repertoire/situations/object-affordance/atmosphere regressions, exact-repeat browser UAT, exact 2× rendering, **0 px** continuity, and healthy RAF pacing;
+- deployed against canonical host state without resetting Moss: post-restart state retained original `created_at`, continued to tick/event 78,637, migrated to spring/early with epoch `2026-08-28T16:33:07.468419Z`, and replayed to the exact canonical hash;
+- accepted semantic frame SHA256 `51d574524e710025428d615dadfcf48fb30e826a03b7b58126ce54784ea9b6ca` at seed/tick 1701/10080;
+- no SBC substrate change, Capability Forge work, frozen MCP change, or Gen18 was required.
+
+Evidence: `history/2026-08-28-pixel-art-overhaul-iteration8f.md`, `artifacts/pixel-art-overhaul-iteration8f.json`, `artifacts/pixel-art-overhaul-iteration8f-regression-matrix.json`, snapshot `20260828T160757100074Z-pixel-art-overhaul-iteration8f`.
+
+## Next product iteration after Iteration 8F
+
+**Iteration 9 — Emergent Situations and Consequence Memory.** Use the now-richer canonical world to let prior event outcomes, object state/displacement, arrangements, learned habits, persistent traces, and environmental/seasonal context create later opportunities and bounded multi-stage situations. Preserve deterministic replay and current authority boundaries; do not introduce scripted quest chains, a generic planner, needs/personality-stat machinery, or LLM action selection merely by cadence.

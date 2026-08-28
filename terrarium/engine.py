@@ -12,7 +12,7 @@ from .events import make_event, state_patch
 from .models import (
     AFFORDANCE_HISTORY_SCHEMA, BEHAVIOR_CONTEXT_SCHEMA, HABIT_CONTEXTS, HABIT_PROFILE_SCHEMA, OBJECT_AFFORDANCE_SCHEMA,
     PLACEMENT_SLOTS, RNG_STREAM_VERSION, RULES_VERSION, ZONES, clone_state, lighting_for, normalize_object_identity,
-    object_affordances, weather_for,
+    object_affordances, weather_for, normalize_seasonal_clock, utc_now,
 )
 from .spatial import (
     FAVORITE_SPOTS, SLEEP_SUPPORT_ANCHOR, SPATIAL_SCHEMA, interaction_approach, interaction_contact, point_is_walkable, route_between,
@@ -609,7 +609,7 @@ class Simulation:
             details["world_event_ended"] = dict(transition["ended"])
         details["situational_events_schema"] = SITUATIONAL_EVENTS_SCHEMA
 
-    def step(self, state: dict[str, Any]) -> tuple[str, str, dict[str, Any], dict[str, Any]]:
+    def step(self, state: dict[str, Any], *, observed_at_utc: str | None = None) -> tuple[str, str, dict[str, Any], dict[str, Any]]:
         before = state
         state = clone_state(state)
         # Existing canonical worlds migrate forward through an ordinary hashed
@@ -654,6 +654,8 @@ class Simulation:
         state["world_minutes"] = int(state["world_minutes"]) + self.minutes_per_tick
         habitat["lighting"] = lighting_for(int(state["world_minutes"]))
         habitat["weather"] = weather_for(int(state["world_minutes"]), int(state["seed"]))
+        season_before = ((before.get("habitat") or {}).get("seasonal_clock") or {})
+        season_now = normalize_seasonal_clock(state, observed_at_utc=observed_at_utc)
         event_transition = update_situational_events(state)
         current_world_event = active_event(state)
 
@@ -684,6 +686,10 @@ class Simulation:
                 aftermath["sleep_nook_ticks"] = int(aftermath["sleep_nook_ticks"]) + 1
             habitat["shelf_count"] = sum(1 for o in state["objects"] if o["zone"] == "collection_shelf" and o["state"] == "placed")
             details["energy_after"] = round(float(state["creature"]["energy"]), 6)
+            details["season"] = season_now["season"]
+            details["season_stage"] = season_now["stage"]
+            if season_before.get("season") != season_now["season"] or season_before.get("stage") != season_now["stage"]:
+                details["season_transition"] = {"from_season": season_before.get("season"), "from_stage": season_before.get("stage"), "to_season": season_now["season"], "to_stage": season_now["stage"]}
             self._annotate_situation(details, state, event_transition, event=current_world_event, role="deferred_during_commitment" if current_world_event and current_world_event.get("attention_status") == "deferred" else None)
             return event_type, summary, details, state
 
@@ -1373,24 +1379,30 @@ class Simulation:
         habitat["shelf_count"] = sum(1 for o in state["objects"] if o["zone"] == "collection_shelf" and o["state"] == "placed")
         details["action"] = action
         details["energy_after"] = round(float(creature["energy"]), 6)
+        details["season"] = season_now["season"]
+        details["season_stage"] = season_now["stage"]
+        if season_before.get("season") != season_now["season"] or season_before.get("stage") != season_now["stage"]:
+            details["season_transition"] = {"from_season": season_before.get("season"), "from_stage": season_before.get("stage"), "to_season": season_now["season"], "to_stage": season_now["stage"]}
         self._annotate_situation(details, state, event_transition, event=linked_event, role=world_event_role, preempted_action=preempted_action)
         return event_type, summary, details, state
 
 
 class WorldEngine:
-    def __init__(self, store: WorldStore, *, seed: int = 1701, minutes_per_tick: int = 1, snapshot_every: int = 20):
+    def __init__(self, store: WorldStore, *, seed: int = 1701, minutes_per_tick: int = 1, snapshot_every: int = 20, real_time_seasons: bool = False):
         self.store = store
         self.state = store.initialize(seed)
         self.simulation = Simulation(minutes_per_tick=minutes_per_tick)
         self.snapshot_every = int(snapshot_every)
+        self.real_time_seasons = bool(real_time_seasons)
         self._lock = threading.RLock()
         self._stop = threading.Event()
         self._thread: threading.Thread | None = None
 
-    def step(self) -> dict[str, Any]:
+    def step(self, *, observed_at_utc: str | None = None) -> dict[str, Any]:
         with self._lock:
             before = self.state
-            event_type, summary, details, next_state = self.simulation.step(before)
+            observed = observed_at_utc if observed_at_utc is not None else (utc_now() if self.real_time_seasons else None)
+            event_type, summary, details, next_state = self.simulation.step(before, observed_at_utc=observed)
             last = self.store.last_event()
             seq = int(last["seq"]) + 1 if last else 1
             prev_hash = str(last["content_hash"]) if last else "0" * 64

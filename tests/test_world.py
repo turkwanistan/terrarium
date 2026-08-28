@@ -202,3 +202,32 @@ def test_legacy_behavior_context_migrates_without_resetting_possessions():
     assert carried["archetype"] == "soft_nesting"
     assert carried["interaction_state"] == "loose"
     assert carried["state_transitions"] == 0
+
+
+def test_seasonal_clock_is_canonical_real_time_and_additive():
+    from copy import deepcopy
+    from terrarium.models import SEASONAL_CLOCK_SCHEMA, initial_state, normalize_seasonal_clock, seasonal_clock_for
+    state = initial_state(1701, created_at="2026-01-01T00:00:00Z")
+    assert state["habitat"]["seasonal_clock"]["schema"] == SEASONAL_CLOCK_SCHEMA
+    assert state["habitat"]["seasonal_clock"]["season"] == "spring"
+    assert state["habitat"]["seasonal_clock"]["stage"] == "early"
+    assert seasonal_clock_for("2026-01-01T00:00:00Z", "2026-01-22T00:00:00Z", migration_origin="test")["season"] == "summer"
+
+    legacy = deepcopy(state)
+    legacy["habitat"].pop("seasonal_clock")
+    before = deepcopy(legacy)
+    clock = normalize_seasonal_clock(legacy, observed_at_utc="2026-08-28T15:00:00Z")
+    assert clock["epoch_utc"] == "2026-08-28T15:00:00Z"
+    assert clock["migration_origin"] == "neutral-existing-world"
+    legacy["habitat"].pop("seasonal_clock")
+    assert legacy == before
+
+
+def test_frame_exposes_season_without_changing_weather_authority():
+    from terrarium.frame import make_frame
+    from terrarium.models import initial_state, weather_for
+    state = initial_state(1701, created_at="2026-01-01T00:00:00Z")
+    frame = make_frame(state)
+    assert frame["season"]["name"] == "spring"
+    assert frame["season"]["cadence_days_per_season"] == 21
+    assert weather_for(900, 1701) == weather_for(900, 1701)

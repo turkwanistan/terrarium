@@ -474,9 +474,15 @@ Success criterion met: the accepted deterministic browser pack reaches **56 seco
 
 ### Iteration 8F — Seasonal Terrarium
 
-Add a slow canonical seasonal timescale plus coordinated palette, foliage, lighting, weather/particle, exterior, and selected interior changes.
+**Status: ACCEPTED.**
 
-Success means a familiar room changes enough over long real-world time that season itself becomes meaningful visual content.
+A canonical `terrarium.seasons.v1` clock now advances on a separate long real-world cadence: four 21-day seasons, each with early/full/late 7-day stages. Existing worlds begin their seasonal epoch at first post-upgrade observation, preserving prior history without inventing unseen seasons. Exact replay/restart and deterministic fixtures remain valid.
+
+Five authored seasonal environment assets plus finite palette treatments make the same room read differently over long horizons: fresh/blossoming spring, fuller/deeper summer canopy, staged autumn rust/thinning, and sparse pale winter branches with stronger cold-outside/warm-inside contrast. Weather authority remains unchanged and composes independently. Missing canonical season renders neutral rather than defaulting to spring.
+
+Accepted evidence: `history/2026-08-28-pixel-art-overhaul-iteration8f.md`; snapshot `20260828T160757100074Z-pixel-art-overhaul-iteration8f`; renderer `df5afe734eb2b367f1cfc28201ea9338ebad86cc155cb93136f14ed4381dadc5`; semantic frame `51d574524e710025428d615dadfcf48fb30e826a03b7b58126ce54784ea9b6ca`.
+
+Success criterion met: season is now meaningful visual content in a persistent familiar room while canonical Moss behavior, weather occurrence, object/history state, and replay remain intact.
 
 ### Iteration 9 — Emergent Situations and Consequence Memory
 

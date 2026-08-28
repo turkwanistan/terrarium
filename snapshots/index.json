@@ -300,6 +300,21 @@
         "steps": 10080
       },
       "tick": 10080
+    },
+    {
+      "captured_at": "2026-08-28T16:07:57.112048Z",
+      "frame_path": "/snapshots/dev/20260828T160757100074Z-pixel-art-overhaul-iteration8f/frame.json",
+      "meta_path": "/snapshots/dev/20260828T160757100074Z-pixel-art-overhaul-iteration8f/meta.json",
+      "note": "Accepted Pixel-Art Overhaul \u2014 Iteration 8F: Seasonal Terrarium. Adds canonical slow real-time seasonal authority and coordinated authored seasonal presentation while preserving Moss behavior, replay, room geometry, and weather law.",
+      "preview_path": "/snapshots/dev/20260828T160757100074Z-pixel-art-overhaul-iteration8f/preview.svg",
+      "renderer_sha256": "df5afe734eb2b367f1cfc28201ea9338ebad86cc155cb93136f14ed4381dadc5",
+      "snapshot_id": "20260828T160757100074Z-pixel-art-overhaul-iteration8f",
+      "source": {
+        "mode": "deterministic",
+        "seed": 1701,
+        "steps": 10080
+      },
+      "tick": 10080
     }
   ]
 }
