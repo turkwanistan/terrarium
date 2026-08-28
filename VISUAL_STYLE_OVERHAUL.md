@@ -486,7 +486,17 @@ Success criterion met: season is now meaningful visual content in a persistent f
 
 ### Iteration 9 — Emergent Situations and Consequence Memory
 
-Return to the planned systems milestone after the visual/state space is richer. Let event state, object state, arrangements, habits, and accumulated consequences create later opportunities without scripted quests or a generic planner.
+**Status: ACCEPTED.**
+
+Iteration 9 deliberately adds no new visual subsystem. Canonical consequence memory can make an old cause relevant again, while the production renderer communicates the chain through the already-authored `react`, routed `walk`, and quiet engagement poses. Renderer-side consequence memory, quest markers, text callouts, and narrative UI remain prohibited.
+
+Production browser UAT accepted a real delayed thread-displacement chain as readable: pause at the window → authored cross-room return → quiet loaf at the sleeping nook. Exact 2× pixel presentation remains unchanged.
+
+Accepted evidence: `history/2026-08-28-pixel-art-overhaul-iteration9.md`; snapshot `20260828T182004989725Z-pixel-art-overhaul-iteration9`; renderer `df5afe734eb2b367f1cfc28201ea9338ebad86cc155cb93136f14ed4381dadc5`.
+
+### Iteration 10 — Causal Composition and Situation Chaining
+
+If multi-cause situations expose a genuine legibility problem, solve the narrow visual problem with canonical source cues or authored acting. Do not preemptively add HUD markers, thought bubbles, quest indicators, or renderer memory. The default should remain behavior-first readability in the persistent room.
 
 ## Convergence passes
 

@@ -1,0 +1,102 @@
+{
+  "accepted": true,
+  "accepted_on": "2026-08-28",
+  "canonical_deployment": {
+    "canonical_state_hash": "e6e5c57d8c49444831a1b765f70e01c31221b9fba9a50138a60a2b344eeb76b3",
+    "consequence_entries_at_verification": 0,
+    "consequence_migration_origin": "neutral-existing-world",
+    "consequence_schema": "terrarium.consequence-memory.v1",
+    "created_at_preserved": "2026-08-27T03:45:50.032660Z",
+    "replay_ok": true,
+    "replayed_state_hash": "e6e5c57d8c49444831a1b765f70e01c31221b9fba9a50138a60a2b344eeb76b3",
+    "rules_version": "terrarium-rules-v9-consequence-memory",
+    "runtime_data_dir": "${XDG_STATE_HOME:-$HOME/.local/state}/terrarium/live",
+    "season": "spring",
+    "season_epoch_utc": "2026-08-28T16:33:07.468419Z",
+    "season_schema": "terrarium.seasons.v1",
+    "stage": "early",
+    "status": "deployed_verified",
+    "verified_event_count": 80715,
+    "verified_tick": 80715
+  },
+  "checkpoint": "Pixel-Art Overhaul \u2014 Iteration 9: Emergent Situations and Consequence Memory",
+  "consequence_memory": {
+    "active_entry_limit": 12,
+    "maximum_age_minutes": 4320,
+    "minimum_delay_minutes": 45,
+    "renderer_private_memory": false,
+    "revisit_chain": [
+      "recognize",
+      "approach",
+      "engage",
+      "bounded recovery"
+    ],
+    "schema": "terrarium.consequence-memory.v1",
+    "sources": [
+      "situational_aftermath",
+      "persistent_trace",
+      "object_arrangement",
+      "object_displacement",
+      "object_nest"
+    ],
+    "storage_model": "bounded unresolved causal index; append-only event ledger remains full history"
+  },
+  "deterministic_snapshot": {
+    "frame_sha256": "33cced839bb3c2067da01b786c705bf5e3a2a645086e4cfdabee3748ee93f17a",
+    "id": "20260828T182004989725Z-pixel-art-overhaul-iteration9",
+    "seed": 1701,
+    "steps": 10080
+  },
+  "history_sensitivity": {
+    "controlled_divergence_tick": 627,
+    "different_causal_opportunity_sets": true,
+    "future_diverges": true,
+    "individual_determinism": true,
+    "same_immediate_visible_frame": true,
+    "visible_equal_until_controlled_recognition": true
+  },
+  "next": "Iteration 10 \u2014 Causal Composition and Situation Chaining",
+  "representative_chain": {
+    "approach_tick": 2936,
+    "engage_tick": 2938,
+    "from_zone": "window",
+    "memory_id": "con-8870385a3b6b6448",
+    "recognize_tick": 2932,
+    "source": "red-thread tug / rumpled object displacement",
+    "source_tick": 1760,
+    "to_zone": "sleeping_nook"
+  },
+  "rules_version": "terrarium-rules-v9-consequence-memory",
+  "sbc": {
+    "frozen_optiplex_mcp_modified": false,
+    "gen18": false,
+    "reusable_substrate_deficiency_found": false,
+    "self_building_computer_modified": false
+  },
+  "schema": "terrarium.pixel-art-overhaul-iteration9.v1",
+  "validation": {
+    "atmosphere": "PASS",
+    "behavior_spatial_coherence_habits_four_seed_10080": "PASS",
+    "browser_uat": "PASS",
+    "consequence_evaluator_four_seed_10080": "PASS",
+    "javascript_syntax": "PASS",
+    "object_affordances": "PASS",
+    "pytest": "60/60 PASS",
+    "python310_grammar": "41 sources PASS",
+    "regression_matrix": "artifacts/pixel-art-overhaul-iteration9-regression-matrix.json",
+    "repertoire": "PASS",
+    "seasons": "PASS",
+    "situations": "PASS",
+    "technical_10080": "PASS"
+  },
+  "visual": {
+    "approach_hash": "fnv1a32:e8335ae5",
+    "authored_art_sha256": "cd2ec842e4661aa72e7a81ba7ac2504f0e1718319f75afa9bb8666efb942359e",
+    "authored_assets": 83,
+    "browser_uat": "artifacts/pixel-art-overhaul-iteration9-browser-uat.json",
+    "engage_hash": "fnv1a32:39f30efd",
+    "recognize_hash": "fnv1a32:70f5e46d",
+    "renderer_behavior_change": false,
+    "renderer_js_sha256": "df5afe734eb2b367f1cfc28201ea9338ebad86cc155cb93136f14ed4381dadc5"
+  }
+}

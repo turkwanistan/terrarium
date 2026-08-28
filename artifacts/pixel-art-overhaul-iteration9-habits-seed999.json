@@ -1,0 +1,248 @@
+{
+  "checks": {
+    "all_action_classes_remain_available": true,
+    "all_zones_remain_explored": true,
+    "controlled_activity_history_remains_a_tendency": true,
+    "controlled_histories_are_each_deterministic": true,
+    "controlled_histories_diverge": true,
+    "controlled_window_history_remains_a_tendency": true,
+    "controlled_worlds_begin_physically_equivalent": true,
+    "days_retain_variation": true,
+    "deterministic_duplicate_run": true,
+    "iteration4_short_horizon_coherence_preserved": true,
+    "learned_object_preference_causes_choice_uplift": true,
+    "learned_zone_preference_causes_choice_uplift": true,
+    "object_habit_does_not_lock_in": true,
+    "preferences_are_bounded": true,
+    "preferences_change_over_time": true,
+    "profile_schema_and_references_valid": true,
+    "zone_habit_does_not_lock_in": true
+  },
+  "controlled_history_divergence": {
+    "a_deterministic": true,
+    "b_deterministic": true,
+    "favorite_zone_cross_advantage": 0.261331,
+    "future_profiles_diverge": true,
+    "history_a": {
+      "destination_counts": {
+        "activity_corner": 10,
+        "collection_shelf": 7,
+        "open_space": 8,
+        "sleeping_nook": 1,
+        "window": 25
+      },
+      "favorite_object": "amber_leaf",
+      "favorite_object_future_share": 0.153846,
+      "favorite_zone": "window",
+      "favorite_zone_future_share": 0.490196,
+      "object_counts": {
+        "acorn": 23,
+        "amber_leaf": 12,
+        "blue_stone": 13,
+        "glass_star": 7,
+        "red_thread": 12,
+        "shell": 11
+      }
+    },
+    "history_b": {
+      "destination_counts": {
+        "activity_corner": 18,
+        "collection_shelf": 10,
+        "open_space": 7,
+        "sleeping_nook": 6,
+        "window": 20
+      },
+      "favorite_object": "amber_leaf",
+      "favorite_object_future_share": 0.261905,
+      "favorite_zone": "activity_corner",
+      "favorite_zone_future_share": 0.295082,
+      "object_counts": {
+        "acorn": 10,
+        "amber_leaf": 22,
+        "blue_stone": 10,
+        "glass_star": 13,
+        "red_thread": 17,
+        "shell": 12
+      }
+    },
+    "physical_state_equal_before_run": true
+  },
+  "final_habit_profile": {
+    "context_zone_affinity": {
+      "dawn": {
+        "activity_corner": 0.214202,
+        "collection_shelf": 0.040132,
+        "open_space": 0.302433,
+        "sleeping_nook": 0.6059,
+        "window": 0.364487
+      },
+      "day": {
+        "activity_corner": 0.44435,
+        "collection_shelf": 0.346766,
+        "open_space": 0.538305,
+        "sleeping_nook": 0.770159,
+        "window": 0.75933
+      },
+      "dusk": {
+        "activity_corner": 0.161036,
+        "collection_shelf": 0.163142,
+        "open_space": 0.18897,
+        "sleeping_nook": 0.55826,
+        "window": 0.521889
+      },
+      "night": {
+        "activity_corner": 0.59765,
+        "collection_shelf": 0.364076,
+        "open_space": 0.432411,
+        "sleeping_nook": 0.784619,
+        "window": 0.625943
+      }
+    },
+    "experience_count": 2162,
+    "migration_origin": "native",
+    "object_affinity": {
+      "acorn": 0.637085,
+      "amber_leaf": 0.471988,
+      "blue_stone": 0.603318,
+      "glass_star": 0.62289,
+      "red_thread": 0.613453,
+      "shell": 0.670163
+    },
+    "schema": "terrarium.habits.v1",
+    "zone_affinity": {
+      "activity_corner": 0.579925,
+      "collection_shelf": 0.38012,
+      "open_space": 0.519707,
+      "sleeping_nook": 0.764197,
+      "window": 0.681815
+    }
+  },
+  "metrics": {
+    "action_classes": 15,
+    "days_with_autonomous_travel": 7,
+    "decision_action_counts": {
+      "carry": 194,
+      "explore": 109,
+      "groom": 63,
+      "idle": 356,
+      "inspect": 216,
+      "loaf": 145,
+      "look_outside": 139,
+      "nudge": 30,
+      "place": 194,
+      "react": 71,
+      "rest": 374,
+      "sleep": 319,
+      "stretch": 61,
+      "wake": 125,
+      "walk": 323
+    },
+    "decision_events": 2719,
+    "distinct_day_destination_vectors": 7,
+    "future_top_destination_share": 0.35,
+    "future_top_object_share": 0.246377,
+    "habit_experience_count": 2162,
+    "learned_favorite_object_controlled_choice_uplift": 0.0325,
+    "learned_favorite_zone_controlled_choice_uplift": 0.10625,
+    "non_delivery_destination_counts": {
+      "activity_corner": 58,
+      "collection_shelf": 31,
+      "open_space": 57,
+      "sleeping_nook": 15,
+      "window": 74
+    },
+    "object_affinity_range": 0.198175,
+    "object_selection_counts": {
+      "acorn": 72,
+      "amber_leaf": 40,
+      "blue_stone": 79,
+      "glass_star": 81,
+      "red_thread": 64,
+      "shell": 74
+    },
+    "top_non_delivery_destination_share": 0.314894,
+    "top_object_selection_share": 0.197561,
+    "trained_favorite_object": "blue_stone",
+    "trained_favorite_object_future_share": 0.108696,
+    "trained_favorite_zone": "sleeping_nook",
+    "trained_favorite_zone_future_share": 0.05,
+    "zone_affinity_range": 0.384077,
+    "zones_selected": 5
+  },
+  "passed": true,
+  "schema": "terrarium.long-horizon-habit-evaluation.v1",
+  "seed": 999,
+  "short_horizon_coherence": {
+    "checks": {
+      "arrivals_usually_linger": true,
+      "bounded_routine_context": true,
+      "calm_behavior_dominates_timeline": true,
+      "cross_room_motion_is_bounded": true,
+      "deterministic_execution": true,
+      "favorite_spots_are_physically_valid": true,
+      "movement_has_readable_purpose": true,
+      "movement_is_mostly_consequence_not_default": true,
+      "non_delivery_ping_pong_is_rare": true,
+      "object_delivery_follows_chosen_intent": true,
+      "object_inspection_often_continues": true,
+      "placed_objects_get_settle_time": true,
+      "recent_object_inhibition_prevents_fixation": true,
+      "wake_has_recovery_before_travel": true,
+      "window_arrivals_become_sessions": true,
+      "zone_dwell_is_meaningful": true
+    },
+    "metrics": {
+      "average_zone_dwell_ticks": 18.181818,
+      "calm_visible_timeline_ratio": 0.76,
+      "continuation_events": 1462,
+      "cross_room_moves_per_simulated_hour": 0.9,
+      "decision_action_counts": {
+        "carry": 33,
+        "explore": 30,
+        "groom": 13,
+        "idle": 77,
+        "inspect": 37,
+        "loaf": 41,
+        "look_outside": 26,
+        "nudge": 6,
+        "place": 33,
+        "react": 12,
+        "rest": 74,
+        "sleep": 60,
+        "stretch": 13,
+        "wake": 25,
+        "walk": 58
+      },
+      "decision_events": 538,
+      "decisions_per_simulated_hour": 16.14,
+      "direct_object_delivery_rate": 1.0,
+      "inspect_to_same_object_followup_within_two_decisions_rate": 0.837838,
+      "median_zone_dwell_ticks": 15.0,
+      "movement_decision_ratio": 0.163569,
+      "movement_decisions": 88,
+      "moves_per_simulated_hour": 2.64,
+      "non_delivery_reversal_rate": 0.0,
+      "non_delivery_reversals": 0,
+      "post_arrival_linger_rate": 1.0,
+      "post_place_linger_rate": 1.0,
+      "post_place_next_object_repeat_rate": 0.0,
+      "purposeful_movement_rate": 1.0,
+      "short_gap_non_delivery_movement_pairs": 6,
+      "travel_purpose_counts": {
+        "activity_session": 12,
+        "consequence_revisit": 2,
+        "object_delivery": 33,
+        "settle_at_familiar_spot": 22,
+        "situational_event": 4,
+        "window_session": 15
+      },
+      "wake_recovery_rate": 1.0,
+      "window_session_continuation_rate": 1.0
+    },
+    "passed": true,
+    "schema": "terrarium.behavior-coherence-evaluation.v1",
+    "seed": 999,
+    "steps": 2000
+  },
+  "steps": 10080
+}

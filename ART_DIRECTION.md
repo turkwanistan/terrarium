@@ -261,6 +261,10 @@ Seasons repaint a familiar place without destroying its identity. Seasonal autho
 
 The long-horizon visual question is now: **after enough real time passes, does the same room clearly belong to a different season while still reading instantly as Moss's persistent home?**
 
+## Accepted Iteration 9 causal presentation law
+
+Consequence memory is simulation authority, not visual memory. A delayed consequence may change *why* Moss pauses, walks, inspects, rests, loafs, or watches the window, but the renderer must not invent the cause or remember it privately. Prefer existing authored acting and persistent object/world state over explicit UI. If a future causal chain is unreadable, add only a bounded canonical visual cue justified by UAT. Quest markers, thought bubbles, floating labels, and renderer-side narrative state are not part of the accepted grammar.
+
 ## Motion rules
 
 Canonical behavior, target ownership, route geometry, event occurrence, and pacing remain outside renderer authority.

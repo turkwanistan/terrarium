@@ -106,24 +106,30 @@ Acceptance: **55/55 tests**, 38-source Python-3.10 grammar, 83/83 asset validati
 
 Accepted evidence: `history/2026-08-28-pixel-art-overhaul-iteration8f.md`, `artifacts/pixel-art-overhaul-iteration8f.json`, `artifacts/pixel-art-overhaul-iteration8f-regression-matrix.json`, and snapshot `20260828T160757100074Z-pixel-art-overhaul-iteration8f`.
 
-## Iteration 9 — Emergent Situations and Consequence Memory
+## Accepted Iteration 9 — Emergent Situations and Consequence Memory
 
-Once world events, richer visual state, and stateful object affordances exist, let their consequences compose across longer horizons.
+**Status: ACCEPTED.** Canonical `terrarium.consequence-memory.v1` keeps at most 12 unresolved causal consequences from prior event aftermath, traces, arrangements, displacement, and nesting. The append-only event ledger remains complete history; no generic planner or renderer-side memory was added. Later revisit chains reuse the existing bounded intent/session model: recognize → approach → engage → recover.
+
+Controlled evaluation proves identical immediate visible states with different causal histories can remain equal until a later recognition and then diverge deterministically. Four-seed 10,080-step runs produce sparse delayed revisits without breaking quiet behavior, possessions, object state, situations, habits, atmosphere, or seasons. Canonical migration is neutral and does not fabricate old consequences.
+
+Acceptance: **60/60 tests**, 41-source Python-3.10 grammar, JS syntax, 10,080-event exact replay, four-seed behavior/spatial/coherence/habits, repertoire/situations/object-affordance/atmosphere/season regressions, dedicated consequence evaluator, production browser UAT, and canonical host migration/replay all pass.
+
+Accepted evidence: `history/2026-08-28-pixel-art-overhaul-iteration9.md`, `artifacts/pixel-art-overhaul-iteration9.json`, `artifacts/pixel-art-overhaul-iteration9-regression-matrix.json`, snapshot `20260828T182004989725Z-pixel-art-overhaul-iteration9`.
+
+## Iteration 10 — Causal Composition and Situation Chaining
+
+Highest-value next step: compose existing systems rather than widen the action list. A current event/opportunity should sometimes intersect with a stored consequence, object state, habit, arrangement, or spatial condition and create a bounded situation that neither system would create alone.
 
 Requirements:
 
-- Moss can revisit, maintain, exploit, or react to consequences created by prior activity;
-- prior arrangements, temporary environmental events, object displacement/state, learned habits, and persistent traces can create later opportunities;
-- occasional multi-stage situations may unfold across minutes, hours, or days without hard-coded narrative scripts;
-- recognition should come from authoritative world state/history rather than hidden planner memory;
-- equivalent present worlds with different causal histories should be able to produce meaningfully different future situations while remaining individually deterministic;
-- retain bounded intent/session machinery as long as it can express the needed causal chains cleanly.
+- multi-cause situations remain canonical, deterministic, explainable, and sparse;
+- existing attention/affordance/intent machinery remains the default expression mechanism;
+- no scripted quest chains, generic planner, needs/personality stats, dialogue, inventory UI, or LLM action selection;
+- chains must release cleanly and ordinary quiet behavior must continue to dominate;
+- source provenance must remain compact enough to explain why the situation happened;
+- browser presentation should rely on existing authored acting/objects/environment unless UAT proves a concrete legibility gap.
 
-Example target shape:
-
-> moth appears → Moss follows it → engages a ball → ball rolls under furniture → moth disappears → much later Moss revisits the area and retrieves or re-engages the displaced ball
-
-Success means richer situations emerge from interacting systems rather than from prewritten quest chains.
+Success means a present event can naturally redirect Moss into an old unresolved part of his world—for example, an outside stimulus draws him through a zone where a previously displaced object becomes relevant—without any prewritten story graph.
 
 ## Visual convergence passes
 

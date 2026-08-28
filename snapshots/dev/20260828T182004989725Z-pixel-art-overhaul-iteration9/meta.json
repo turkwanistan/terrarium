@@ -1,0 +1,41 @@
+{
+  "art_surface": {
+    "height": 240,
+    "integer_scale": 2,
+    "smoothing": false,
+    "width": 400
+  },
+  "captured_at": "2026-08-28T18:20:05.000586Z",
+  "frame": {
+    "logical_height": 480,
+    "logical_width": 800,
+    "path": "dev/20260828T182004989725Z-pixel-art-overhaul-iteration9/frame.json",
+    "sha256": "33cced839bb3c2067da01b786c705bf5e3a2a645086e4cfdabee3748ee93f17a",
+    "tick": 10080
+  },
+  "git": {
+    "branch": "main",
+    "dirty": true,
+    "head": "3cb7e377afa2d485c352eafd8cf35c65acd0781b"
+  },
+  "note": "Accepted Pixel-Art Overhaul Iteration 9: Emergent Situations and Consequence Memory",
+  "preview": {
+    "path": "dev/20260828T182004989725Z-pixel-art-overhaul-iteration9/preview.svg",
+    "sha256": "2f62caae7dbc08999184b100ef3ef431972edfe694d4383bbb441915d63b0c90"
+  },
+  "schema": "terrarium.dev-snapshot.v1",
+  "snapshot_id": "20260828T182004989725Z-pixel-art-overhaul-iteration9",
+  "source": {
+    "mode": "deterministic",
+    "seed": 1701,
+    "steps": 10080
+  },
+  "source_hashes": {
+    "authored_art": "cd2ec842e4661aa72e7a81ba7ac2504f0e1718319f75afa9bb8666efb942359e",
+    "engine": "aaffb9c5d0f4e3d771e54eaea3b140be9e8f2e2cdf0ad904f0ac009d9f0be426",
+    "frame_contract": "8c71ea060f3ffa8e9204cbf2f4a63e9801ca320498c2ab4465ac3b7b9666f9cd",
+    "renderer_css": "3a24319be5a3e0c963b8e721b637f35aedfdc24b8bef8e779ae934dd09fd62d1",
+    "renderer_js": "df5afe734eb2b367f1cfc28201ea9338ebad86cc155cb93136f14ed4381dadc5"
+  },
+  "view_url": "/?snapshot=/snapshots/dev/20260828T182004989725Z-pixel-art-overhaul-iteration9/frame.json"
+}

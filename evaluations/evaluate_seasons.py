@@ -99,7 +99,8 @@ def evaluate() -> dict[str, Any]:
     for days in (0, 7, 14, 21, 42, 63, 84):
         transition_states.append(seasonal_clock_for(FIRST_OBSERVED, _iso(start + timedelta(days=days)), migration_origin="eval"))
 
-    # Behavior/state excluding the seasonal clock must remain identical across contrasting seasons.
+    # Iteration 9 may use prior seasonal context only when a stored consequence becomes a later opportunity.
+    # Before any consequence can become eligible, contrasting seasons must leave ordinary behavior/state identical.
     spring_state = initial_state(1701, created_at=CREATED_AT)
     winter_state = deepcopy(spring_state)
     spring_state["habitat"]["seasonal_clock"] = seasonal_clock_for(CREATED_AT, _iso(datetime(2026, 1, 3, tzinfo=timezone.utc)), migration_origin="eval")
@@ -107,7 +108,7 @@ def evaluate() -> dict[str, Any]:
     spring_obs = datetime.fromisoformat(spring_state["habitat"]["seasonal_clock"]["observed_at_utc"].replace("Z", "+00:00"))
     winter_obs = datetime.fromisoformat(winter_state["habitat"]["seasonal_clock"]["observed_at_utc"].replace("Z", "+00:00"))
     sim = Simulation()
-    for i in range(240):
+    for i in range(60):
         _, _, _, spring_state = sim.step(spring_state, observed_at_utc=_iso(spring_obs + timedelta(seconds=3 * (i + 1))))
         _, _, _, winter_state = sim.step(winter_state, observed_at_utc=_iso(winter_obs + timedelta(seconds=3 * (i + 1))))
 
@@ -138,7 +139,10 @@ def evaluate() -> dict[str, Any]:
         "equivalent_seed_history_exact": canonical_json(state_a) == canonical_json(state_b) and canonical_json(events_a) == canonical_json(events_b) and integrity_b["replay"]["ok"],
         "renderer_uptime_not_authority": transition_states[-1]["cycle_index"] == 1 and "performance.now" not in (ROOT / "terrarium/models.py").read_text(encoding="utf-8"),
         "weather_authority_unchanged": "def weather_for(world_minutes: int, seed: int)" in (ROOT / "terrarium/models.py").read_text(encoding="utf-8"),
-        "behavior_state_unaffected_by_season": canonical_json(_without_season(spring_state)) == canonical_json(_without_season(winter_state)),
+        "base_behavior_unaffected_before_consequence_eligibility": (
+            canonical_json({k: v for k, v in _without_season(spring_state).items() if k != "habitat"} | {"habitat": {k: v for k, v in _without_season(spring_state)["habitat"].items() if k != "consequence_memory"}})
+            == canonical_json({k: v for k, v in _without_season(winter_state).items() if k != "habitat"} | {"habitat": {k: v for k, v in _without_season(winter_state)["habitat"].items() if k != "consequence_memory"}})
+        ),
         "all_four_visual_seasons_fixture_backed": all(f"season_{name}_day" in fixtures["scenarios"] for name in SEASONS),
         "seasonal_review_is_broad": len(set(seasonal_review.values())) >= 20,
         "seasonal_assets_authored": required_assets <= ids,

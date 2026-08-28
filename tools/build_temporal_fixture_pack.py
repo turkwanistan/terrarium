@@ -239,6 +239,46 @@ def _situational_scenarios() -> dict[str, dict[str, Any]]:
     raise RuntimeError(f"missing deterministic situational scenarios: {sorted(missing)}")
 
 
+def _consequence_scenarios(seed: int = 1701) -> dict[str, dict[str, Any]]:
+    """Capture one real bounded later-consequence chain from the production simulation."""
+    state = initial_state(seed, created_at=CREATED_AT)
+    sim = Simulation()
+    selected_id: str | None = None
+    found: dict[str, dict[str, Any]] = {}
+    for _ in range(10080):
+        before = state
+        _, _, details, state = sim.step(state)
+        role = details.get("consequence_role")
+        memory_id = details.get("consequence_memory_id")
+        if role == "recognize" and memory_id:
+            intent = (state["creature"].get("behavior_context") or {}).get("intent") or {}
+            target_zone = str(intent.get("target_zone") or "")
+            # Prefer a chain that visibly crosses the room so all three stages
+            # are legible through the ordinary renderer vocabulary.
+            if target_zone and target_zone != str(state["creature"]["zone"]):
+                selected_id = str(memory_id)
+                found = {
+                    "consequence_recognize": _scenario(
+                        "consequence_recognize", before, state, details,
+                        "Moss recognizes that a persistent consequence from earlier activity matters again",
+                    )
+                }
+                continue
+        if selected_id and str(memory_id or "") == selected_id and role == "approach":
+            found["consequence_approach"] = _scenario(
+                "consequence_approach", before, state, details,
+                "Moss follows the existing bounded intent machinery back toward the authoritative consequence",
+            )
+        if selected_id and str(memory_id or "") == selected_id and role == "engage":
+            found["consequence_engage"] = _scenario(
+                "consequence_engage", before, state, details,
+                "Moss re-engages the authoritative object or place changed by earlier activity and then releases the commitment",
+            )
+            if {"consequence_recognize", "consequence_approach", "consequence_engage"} <= set(found):
+                return found
+    raise RuntimeError(f"unable to build deterministic consequence chain: {sorted(found)}")
+
+
 def _populated_room_scenario(seed: int = 1701, steps: int = 240) -> dict[str, Any]:
     state = initial_state(seed, created_at=CREATED_AT)
     sim = Simulation()
@@ -287,6 +327,10 @@ def _scenario(name: str, before: dict[str, Any], after: dict[str, Any], details:
             "object_affordance": details.get("object_affordance"),
             "object_state_before": details.get("object_state_before"),
             "object_state_after": details.get("object_state_after"),
+            "consequence_memory_id": details.get("consequence_memory_id"),
+            "consequence_kind": details.get("consequence_kind"),
+            "consequence_role": details.get("consequence_role"),
+            "consequence_source": details.get("consequence_source"),
         },
         "purpose": purpose,
     }
@@ -354,6 +398,7 @@ def build() -> dict[str, Any]:
     scenarios["dusk_light_transition"] = _lighting_transition("dusk_light_transition", 1140, 1200, "gradual dusk-to-night environmental lighting transition")
     scenarios["rain_control"] = _rain_scenario()
     scenarios.update(_situational_scenarios())
+    scenarios.update(_consequence_scenarios())
 
     scenarios["atmosphere_clear_day_idle"] = _atmosphere_static_scenario("atmosphere_clear_day_idle", minute=720, weather="clear")
     scenarios["atmosphere_clear_night_idle"] = _atmosphere_static_scenario("atmosphere_clear_night_idle", minute=1230, weather="clear")
@@ -418,6 +463,7 @@ def build() -> dict[str, Any]:
         "loaf", "groom", "stretch", "sleep_transition", "waking", "wake_exit", "activity_corner_approach", "activity_corner_transition",
         "shelf_approach", "populated_room",
         "event_sunlight_engage", "event_bird_engage", "event_thunder_react", "event_moth_engage", "event_ignored",
+        "consequence_recognize", "consequence_approach", "consequence_engage",
         "dawn_light_transition", "dusk_light_transition", "rain_control",
     ]
     return {

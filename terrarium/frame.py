@@ -110,6 +110,13 @@ def make_frame(state: dict[str, Any], *, last_event: dict[str, Any] | None = Non
             "world_event_attention_status": (last_event.get("details") or {}).get("world_event_attention_status"),
             "world_event_started": (last_event.get("details") or {}).get("world_event_started"),
             "world_event_ended": (last_event.get("details") or {}).get("world_event_ended"),
+            "consequence_memory_schema": (last_event.get("details") or {}).get("consequence_memory_schema"),
+            "consequence_memory_id": (last_event.get("details") or {}).get("consequence_memory_id"),
+            "consequence_kind": (last_event.get("details") or {}).get("consequence_kind"),
+            "consequence_created_world_minute": (last_event.get("details") or {}).get("consequence_created_world_minute"),
+            "consequence_eligible_after_world_minute": (last_event.get("details") or {}).get("consequence_eligible_after_world_minute"),
+            "consequence_role": (last_event.get("details") or {}).get("consequence_role"),
+            "consequence_source": (last_event.get("details") or {}).get("consequence_source"),
         },
         "spatial": {"schema": SPATIAL_SCHEMA},
     }

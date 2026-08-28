@@ -87,6 +87,9 @@ def _run(seed: int, steps: int, *, state: dict[str, Any] | None = None) -> tuple
             "object_id": details.get("object_id"),
             "world_event_id": details.get("world_event_id"),
             "world_event_type": details.get("world_event_type"),
+            "consequence_memory_id": details.get("consequence_memory_id"),
+            "consequence_role": details.get("consequence_role"),
+            "object_affordance": details.get("object_affordance"),
             "target_x": details.get("target_x"),
             "target_y": details.get("target_y"),
             "result_x": details.get("result_x"),
@@ -112,7 +115,21 @@ def _sequence_metrics(rows: list[dict[str, Any]]) -> dict[str, Any]:
             for candidate in rows[i + 1:i + 3])
         for i, row in nudges
     )
-    weather = [(i, row) for i, row in enumerate(rows) if row["action"] == "react" and not row.get("world_event_id")]
+    nudge_causal_followups = sum(
+        any(
+            candidate["object_id"] == row["object_id"]
+            and (
+                (row.get("object_affordance") == "tug" and candidate.get("object_affordance") == "nest")
+                or (row.get("object_affordance") != "tug" and candidate["action"] == "inspect")
+            )
+            for candidate in rows[i + 1:i + 3]
+        )
+        for i, row in nudges
+    )
+    weather = [
+        (i, row) for i, row in enumerate(rows)
+        if row["action"] == "react" and not row.get("world_event_id") and not row.get("consequence_memory_id")
+    ]
     weather_window_followups = sum(
         any(candidate["action"] in {"walk", "explore"} and candidate["to_zone"] == "window"
             for candidate in rows[i + 1:i + 3])
@@ -123,6 +140,7 @@ def _sequence_metrics(rows: list[dict[str, Any]]) -> dict[str, Any]:
         "inspect_to_manipulation_within_two_rate": round(inspect_followups / len(inspected), 6) if inspected else 0.0,
         "nudge_sessions": len(nudges),
         "nudge_to_reinspect_within_two_rate": round(nudge_reinspections / len(nudges), 6) if nudges else 0.0,
+        "nudge_to_causal_followup_within_two_rate": round(nudge_causal_followups / len(nudges), 6) if nudges else 0.0,
         "weather_reactions": len(weather),
         "weather_reaction_to_window_within_two_rate": round(weather_window_followups / len(weather), 6) if weather else 1.0,
     }
@@ -263,7 +281,7 @@ def evaluate(steps: int = 10080, seeds: tuple[int, ...] = SEEDS) -> dict[str, An
             "arrangements_span_world": summary["zones_with_arrangement_history"] >= 4 and summary["distinct_arrangement_patterns"] >= 15,
             "comfort_spans_world": summary["zones_with_comfort_history"] == len(ZONES),
             "inspect_manipulate_sequences_are_common": summary["inspect_to_manipulation_within_two_rate"] >= 0.68,
-            "nudge_has_causal_followup": summary["nudge_to_reinspect_within_two_rate"] >= 0.70,
+            "nudge_has_causal_followup": summary["nudge_to_causal_followup_within_two_rate"] >= 0.70,
             "weather_reactions_have_followup": summary["weather_reactions"] >= 6 and summary["weather_reaction_to_window_within_two_rate"] >= 0.85,
         }
         results[str(seed)] = {"passed": all(checks.values()), "checks": checks, "metrics": summary}

@@ -2,6 +2,14 @@
 
 Git-friendly visual milestones. The SVG is a lightweight capture-time thumbnail; run Terrarium and open `/snapshots/` for the same stored frame through the real Canvas renderer.
 
+## 20260828T182004989725Z-pixel-art-overhaul-iteration9
+
+Accepted Pixel-Art Overhaul Iteration 9: Emergent Situations and Consequence Memory
+
+![20260828T182004989725Z-pixel-art-overhaul-iteration9](dev/20260828T182004989725Z-pixel-art-overhaul-iteration9/preview.svg)
+
+Deterministic tick `10080` · renderer `df5afe734eb2`
+
 ## 20260828T160757100074Z-pixel-art-overhaul-iteration8f
 
 Accepted Pixel-Art Overhaul — Iteration 8F: Seasonal Terrarium. Adds canonical slow real-time seasonal authority and coordinated authored seasonal presentation while preserving Moss behavior, replay, room geometry, and weather law.

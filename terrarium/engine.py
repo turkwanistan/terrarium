@@ -9,6 +9,10 @@ from datetime import datetime, timedelta, timezone
 from typing import Any
 
 from .events import make_event, state_patch
+from .consequences import (
+    CONSEQUENCE_MEMORY_SCHEMA, consequence_opportunities, ensure_consequence_memory, find_consequence,
+    mark_consequence_revisited, prune_consequence_memory, record_consequence,
+)
 from .models import (
     AFFORDANCE_HISTORY_SCHEMA, BEHAVIOR_CONTEXT_SCHEMA, HABIT_CONTEXTS, HABIT_PROFILE_SCHEMA, OBJECT_AFFORDANCE_SCHEMA,
     PLACEMENT_SLOTS, RNG_STREAM_VERSION, RULES_VERSION, ZONES, clone_state, lighting_for, normalize_object_identity,
@@ -609,6 +613,32 @@ class Simulation:
             details["world_event_ended"] = dict(transition["ended"])
         details["situational_events_schema"] = SITUATIONAL_EVENTS_SCHEMA
 
+    @staticmethod
+    def _annotate_consequence(
+        details: dict[str, Any],
+        state: dict[str, Any],
+        *,
+        role: str | None = None,
+        memory_id: str | None = None,
+    ) -> None:
+        memory = ensure_consequence_memory(state)
+        context = ((state.get("creature") or {}).get("behavior_context") or {})
+        intent = context.get("intent") if isinstance(context, dict) else None
+        intent = intent if isinstance(intent, dict) else {}
+        selected_id = memory_id or intent.get("memory_id")
+        entry = find_consequence(state, str(selected_id)) if selected_id else None
+        details["consequence_memory_schema"] = CONSEQUENCE_MEMORY_SCHEMA
+        details["consequence_memory_open"] = len(memory.get("entries") or [])
+        details["consequence_revisit_count"] = int(memory.get("revisit_count", 0))
+        if entry is not None:
+            details["consequence_memory_id"] = str(entry["id"])
+            details["consequence_kind"] = str(entry.get("kind") or "aftermath")
+            details["consequence_created_world_minute"] = int(entry.get("created_world_minute", state.get("world_minutes", 0)))
+            details["consequence_eligible_after_world_minute"] = int(entry.get("created_world_minute", state.get("world_minutes", 0))) + int(entry.get("delay_minutes", 45))
+            details["consequence_source"] = dict(entry.get("source") or {})
+        if role:
+            details["consequence_role"] = str(role)
+
     def step(self, state: dict[str, Any], *, observed_at_utc: str | None = None) -> tuple[str, str, dict[str, Any], dict[str, Any]]:
         before = state
         state = clone_state(state)
@@ -622,6 +652,8 @@ class Simulation:
         context = self._behavior_context(creature)
         habit_profile = self._habit_profile(state)
         self._affordance_history(state)
+        ensure_consequence_memory(state)
+        prune_consequence_memory(state)
         for obj in state["objects"]:
             normalize_object_identity(obj)
         if creature.get("carrying") and not context.get("intent"):
@@ -658,6 +690,21 @@ class Simulation:
         season_now = normalize_seasonal_clock(state, observed_at_utc=observed_at_utc)
         event_transition = update_situational_events(state)
         current_world_event = active_event(state)
+        ended_world_event = event_transition.get("ended")
+        if ended_world_event and str(ended_world_event.get("outcome")) in {"engaged", "oriented"}:
+            record_consequence(
+                state,
+                kind="situational_aftermath",
+                zone=str(ended_world_event.get("source_zone") or "window"),
+                strength=0.72 if ended_world_event.get("outcome") == "engaged" else 0.48,
+                source={
+                    "cause": "situational_event",
+                    "world_event_id": ended_world_event.get("id"),
+                    "world_event_type": ended_world_event.get("type"),
+                    "world_event_outcome": ended_world_event.get("outcome"),
+                },
+                min_delay_minutes=90,
+            )
 
         # Drives change every heartbeat even when a behavioral intent is held.
         if creature["activity"] == "sleep":
@@ -691,6 +738,7 @@ class Simulation:
             if season_before.get("season") != season_now["season"] or season_before.get("stage") != season_now["stage"]:
                 details["season_transition"] = {"from_season": season_before.get("season"), "from_stage": season_before.get("stage"), "to_season": season_now["season"], "to_stage": season_now["stage"]}
             self._annotate_situation(details, state, event_transition, event=current_world_event, role="deferred_during_commitment" if current_world_event and current_world_event.get("attention_status") == "deferred" else None)
+            self._annotate_consequence(details, state)
             return event_type, summary, details, state
 
         zone = creature["zone"]
@@ -707,8 +755,33 @@ class Simulation:
         intent_object_id = intent.get("object_id")
         forced_action: str | None = None
         world_event_role: str | None = None
+        consequence_role: str | None = None
+        linked_consequence_id: str | None = str(intent.get("memory_id")) if intent.get("memory_id") else None
         linked_event = current_world_event
         linked_target: dict[str, Any] | None = None
+
+        if intent_kind == "consequence_revisit":
+            entry = find_consequence(state, str(linked_consequence_id or ""))
+            if entry is None or bool(entry.get("resolved")) or int(state["world_minutes"]) > int(entry.get("expires_world_minute", state["world_minutes"])):
+                context["intent"] = None
+                intent = {}; intent_kind = ""; intent_stage = ""; intent_object_id = None; linked_consequence_id = None
+            else:
+                target_zone = str(intent.get("target_zone") or entry.get("zone"))
+                target_object_id = intent.get("object_id")
+                engage_action = str(intent.get("engage_action") or ("inspect" if target_object_id else ("look_outside" if target_zone == "window" else "loaf")))
+                target_x, target_y = zone_anchor(target_zone)
+                if target_object_id:
+                    target_obj = next((o for o in state["objects"] if str(o["id"]) == str(target_object_id) and o.get("state") == "placed"), None)
+                    if target_obj is not None:
+                        target_x, target_y = int(target_obj["x"]), int(target_obj["y"])
+                distance = ((int(creature["x"]) - int(target_x)) ** 2 + (int(creature["y"]) - int(target_y)) ** 2) ** 0.5
+                if intent_stage == "noticed":
+                    if str(creature["zone"]) != target_zone or distance > 28:
+                        forced_action = "walk"; consequence_role = "approach"
+                    else:
+                        forced_action = engage_action; consequence_role = "engage"
+                elif intent_stage == "arrived":
+                    forced_action = engage_action; consequence_role = "engage"
 
         ended = event_transition.get("ended")
         if ended and intent_kind == "situational_event" and str(intent.get("event_id") or "") == str(ended.get("id") or ""):
@@ -804,6 +877,30 @@ class Simulation:
             if carryable:
                 add("carry", 0.24 + float(creature["curiosity"]) * 0.12)
 
+        consequence_candidate: dict[str, Any] | None = None
+        if not carrying and linked_event is None and not intent_kind and creature.get("activity") != "sleep":
+            opportunities = consequence_opportunities(state)
+            if opportunities:
+                candidate = opportunities[0]
+                gate_material = f"{candidate['memory_id']}:{int(state['tick'])}:revisit".encode("utf-8")
+                gate = int.from_bytes(hashlib.sha256(gate_material).digest()[:2], "big") % 1000
+                threshold = 6 + int(float(candidate["score"]) * 12.0)
+                if gate < threshold:
+                    consequence_candidate = candidate
+                    linked_consequence_id = str(candidate["memory_id"])
+                    context["intent"] = {
+                        "kind": "consequence_revisit",
+                        "stage": "noticed",
+                        "memory_id": linked_consequence_id,
+                        "target_zone": str(candidate["zone"]),
+                        "object_id": candidate.get("object_id"),
+                        "engage_action": str(candidate["engage_action"]),
+                    }
+                    intent = dict(context["intent"]); intent_kind = "consequence_revisit"; intent_stage = "noticed"
+                    intent_object_id = intent.get("object_id")
+                    consequence_role = "recognize"
+                    forced_action = "react"
+
         # A tiny routine context shapes only the next few choices.  It is not a
         # scheduler: weighted autonomy remains, but plausible continuations get
         # much more weight than unrelated room-crossing.
@@ -870,7 +967,7 @@ class Simulation:
             add("walk", 4.20)
             add("idle", 0.10)
             movement_context_penalty = 1.0
-        elif intent_kind == "event_recovery":
+        elif intent_kind in {"event_recovery", "consequence_recovery"}:
             add("idle", 2.35)
             add("rest", 1.85)
             if zone != "collection_shelf":
@@ -939,7 +1036,7 @@ class Simulation:
             # Genuine exhaustion may still override curiosity, but ordinary
             # restlessness cannot break the reaction chain.
             weights["sleep"] = weights.get("sleep", 0.0) * 0.22
-        elif intent_kind == "event_recovery":
+        elif intent_kind in {"event_recovery", "consequence_recovery"}:
             for name in list(weights):
                 if name not in {"idle", "rest", "loaf", "stretch"}:
                     weights[name] *= 0.04
@@ -970,12 +1067,18 @@ class Simulation:
 
         if action in {"walk", "explore"}:
             situational_travel = linked_event is not None and world_event_role in {"approach", "follow_affordance"} and linked_target is not None
+            consequence_travel = intent_kind == "consequence_revisit" and consequence_role == "approach" and linked_consequence_id is not None
             if situational_travel:
                 target = str(linked_target["zone"])
                 destination = (int(linked_target["x"]), int(linked_target["y"]))
                 if not point_is_walkable(destination):
                     destination = zone_anchor(target)
                 details["supported_action"] = "situational_event_approach"
+                details["target_x"], details["target_y"] = destination
+            elif consequence_travel:
+                target = str(intent.get("target_zone") or zone)
+                destination = zone_anchor(target)
+                details["supported_action"] = "consequence_revisit_approach"
                 details["target_x"], details["target_y"] = destination
             else:
                 target = self._choose_destination(rng, state, context, zone=zone, carrying=carrying, habit_profile=habit_profile)
@@ -989,6 +1092,11 @@ class Simulation:
                 mark = f"worn_{target}_{habitat['path_wear'][target]}"
                 if mark not in habitat["marks"]:
                     habitat["marks"].append(mark)
+                    record_consequence(
+                        state, kind="persistent_trace", zone=target, strength=0.42,
+                        source={"cause": "path_wear", "mark": mark, "wear_count": int(habitat["path_wear"][target])},
+                        min_delay_minutes=180,
+                    )
             self._remember_zone(context, target)
             if situational_travel and linked_event is not None:
                 context["intent"] = {
@@ -998,6 +1106,13 @@ class Simulation:
                 if world_event_role == "follow_affordance":
                     linked_event["follow_moves"] = int(linked_event.get("follow_moves", 0)) + 1
                 travel_purpose = "situational_event"
+            elif consequence_travel and linked_consequence_id is not None:
+                context["intent"] = {
+                    "kind": "consequence_revisit", "stage": "arrived", "memory_id": linked_consequence_id,
+                    "target_zone": target, "object_id": intent.get("object_id"),
+                    "engage_action": intent.get("engage_action"),
+                }
+                travel_purpose = "consequence_revisit"
             elif carrying:
                 carried = next(o for o in state["objects"] if o["id"] == carrying)
                 carried["zone"] = target
@@ -1025,7 +1140,14 @@ class Simulation:
         elif action == "inspect" and inspectable:
             obj = self._choose_object(
                 rng, inspectable, context, habit_profile=habit_profile,
-                preferred_id=(str(intent_object_id) if intent_kind == "object_session" and intent_stage in {"inspected", "rolled", "rumpled"} and intent_object_id else None),
+                preferred_id=(
+                    str(intent_object_id)
+                    if intent_object_id and (
+                        (intent_kind == "object_session" and intent_stage in {"inspected", "rolled", "rumpled"})
+                        or (intent_kind == "consequence_revisit" and intent_stage == "arrived")
+                    )
+                    else None
+                ),
                 required_affordance="inspect",
             )
             state_before = str(obj["interaction_state"])
@@ -1053,12 +1175,19 @@ class Simulation:
             next_stage = "recovered" if recovered else (
                 "rumpled" if obj["archetype"] == "soft_nesting" and obj["interaction_state"] == "rumpled" else "inspected"
             )
-            context["intent"] = {"kind": "object_session", "stage": next_stage, "object_id": obj["id"]}
+            consequence_engagement = intent_kind == "consequence_revisit" and consequence_role == "engage" and linked_consequence_id is not None
+            if consequence_engagement:
+                mark_consequence_revisited(state, linked_consequence_id)
+                context["intent"] = {"kind": "consequence_recovery", "stage": "settle", "memory_id": linked_consequence_id}
+            else:
+                context["intent"] = {"kind": "object_session", "stage": next_stage, "object_id": obj["id"]}
             event_type = "object_retrieved" if recovered else "object_inspected"
             summary = (
                 f"Moss chased down the {obj['name'].lower()} after its roll and recovered it."
                 if recovered else f"Moss stopped to inspect the {obj['name'].lower()}."
             )
+            if consequence_engagement:
+                summary = f"Moss returned to the {obj['name'].lower()} and inspected the consequence left there earlier."
         elif action == "carry" and carryable:
             obj = self._choose_object(
                 rng, carryable, context, habit_profile=habit_profile,
@@ -1139,6 +1268,14 @@ class Simulation:
             focus_object_id = obj["id"]
             self._remember_object(context, obj["id"])
             context["intent"] = {"kind": "post_place", "stage": "settle", "object_id": obj["id"], "zone": zone}
+            record_consequence(
+                state, kind="object_arrangement", zone=zone, object_id=str(obj["id"]), strength=0.62,
+                source={
+                    "cause": "object_placed", "object_affordance": details["object_affordance"],
+                    "object_state": str(obj["interaction_state"]), "times_moved": int(obj["times_moved"]),
+                },
+                min_delay_minutes=120,
+            )
             event_type = "object_placed"
             summary = f"Moss placed the {obj['name'].lower()} in the {zone.replace('_', ' ')} and regarded it for a moment."
         elif action == "nudge" and nudgeable:
@@ -1179,6 +1316,15 @@ class Simulation:
             focus_object_id = obj["id"]
             self._remember_object(context, obj["id"])
             context["intent"] = {"kind": "object_session", "stage": next_stage, "object_id": obj["id"], "zone": zone}
+            record_consequence(
+                state, kind="object_displacement", zone=zone, object_id=str(obj["id"]), strength=0.68,
+                source={
+                    "cause": "object_interaction", "object_affordance": affordance_name,
+                    "object_state": str(obj["interaction_state"]), "from_x": old_x, "from_y": old_y,
+                    "to_x": new_x, "to_y": new_y,
+                },
+                min_delay_minutes=150,
+            )
             event_type = "object_rolled" if affordance_name == "roll" else "object_tugged"
             summary = (
                 f"Moss pawed the {obj['name'].lower()} into a roll and watched where it went."
@@ -1232,6 +1378,11 @@ class Simulation:
                     "object_state_after": obj["interaction_state"], "supported_action": "object_nest",
                 })
                 context["intent"] = {"kind": "object_session", "stage": "nested", "object_id": obj["id"], "zone": zone}
+                record_consequence(
+                    state, kind="object_nest", zone=zone, object_id=str(obj["id"]), strength=0.74,
+                    source={"cause": "object_nested", "object_state": str(obj["interaction_state"])},
+                    min_delay_minutes=180,
+                )
                 event_type = "object_nested"
                 summary = f"Moss settled onto the rumpled {obj['name'].lower()} and made it into a temporary nest."
         elif action == "loaf":
@@ -1259,8 +1410,13 @@ class Simulation:
                 }
                 event_type = "sunlight_used"
                 summary = "Moss settled into the temporary patch of sunlight on the rug."
+            elif intent_kind == "consequence_revisit" and consequence_role == "engage" and linked_consequence_id is not None:
+                mark_consequence_revisited(state, linked_consequence_id)
+                context["intent"] = {"kind": "consequence_recovery", "stage": "settle", "memory_id": linked_consequence_id}
+                event_type = "creature_loafed"
+                summary = f"Moss returned to the {zone.replace('_', ' ')} and settled beside a consequence from earlier activity."
             else:
-                if intent_kind in {"arrival_settle", "post_place", "wake_recovery", "event_recovery"}:
+                if intent_kind in {"arrival_settle", "post_place", "wake_recovery", "event_recovery", "consequence_recovery"}:
                     context["intent"] = None
                 event_type = "creature_loafed"
                 summary = f"Moss tucked into a comfortable loaf in the {zone.replace('_', ' ')}."
@@ -1276,17 +1432,24 @@ class Simulation:
             creature["expression"] = "content"
             creature["comfort"] = min(1.0, float(creature["comfort"]) + 0.018)
             aftermath["stretch_sessions"] = int(aftermath["stretch_sessions"]) + 1
-            if intent_kind in {"wake_recovery", "event_recovery"}:
+            if intent_kind in {"wake_recovery", "event_recovery", "consequence_recovery"}:
                 context["intent"] = None
             event_type = "creature_stretched"
             summary = "Moss leaned into a long stretch and settled back down."
         elif action == "react":
             creature["activity"] = "react"
             creature["expression"] = "startled" if linked_event is not None and linked_event.get("type") == "thunder" else "curious"
-            face_x = int(linked_target["x"]) if linked_target is not None else int(ZONES["window"]["x"])
+            if intent_kind == "consequence_revisit":
+                consequence_zone = str(intent.get("target_zone") or zone)
+                face_x = int(zone_anchor(consequence_zone)[0])
+            else:
+                face_x = int(linked_target["x"]) if linked_target is not None else int(ZONES["window"]["x"])
             creature["facing"] = "left" if int(creature["x"]) > face_x else "right"
             creature["curiosity"] = max(0.0, float(creature["curiosity"]) - 0.025)
-            if linked_event is not None and world_event_role in {"notice", "notice_after_defer", "notice_after_interrupt", "orient", "engage"}:
+            if intent_kind == "consequence_revisit" and consequence_role == "recognize" and linked_consequence_id is not None:
+                event_type = "consequence_recognized"
+                summary = "Moss paused as a consequence of earlier activity became relevant again."
+            elif linked_event is not None and world_event_role in {"notice", "notice_after_defer", "notice_after_interrupt", "orient", "engage"}:
                 if world_event_role == "orient":
                     context["intent"] = None
                     event_type = "world_event_oriented"
@@ -1309,14 +1472,19 @@ class Simulation:
             creature["activity"] = "rest"
             creature["expression"] = "content"
             creature["energy"] = min(1.0, float(creature["energy"]) + 0.034)
-            if intent_kind in {"arrival_settle", "post_place", "wake_recovery", "event_recovery"} or (
+            if intent_kind == "consequence_revisit" and consequence_role == "engage" and linked_consequence_id is not None:
+                mark_consequence_revisited(state, linked_consequence_id)
+                context["intent"] = {"kind": "consequence_recovery", "stage": "settle", "memory_id": linked_consequence_id}
+                summary = f"Moss returned to the {zone.replace('_', ' ')} and rested near a familiar consequence."
+            elif intent_kind in {"arrival_settle", "post_place", "wake_recovery", "event_recovery", "consequence_recovery"} or (
                 intent_kind == "object_session" and intent_stage in {"recovered", "nested"}
             ):
                 context["intent"] = None
             elif intent_kind == "window_session" and intent_stage != "arrived":
                 context["intent"] = None
             event_type = "creature_rested"
-            summary = f"Moss rested for a while in the {zone.replace('_', ' ')}."
+            if not (intent_kind == "consequence_revisit" and consequence_role == "engage"):
+                summary = f"Moss rested for a while in the {zone.replace('_', ' ')}."
         elif action == "look_outside":
             destination = zone_anchor("window")
             self._route_creature(creature, details, destination=destination, destination_zone="window")
@@ -1332,6 +1500,11 @@ class Simulation:
                 context["intent"] = {"kind": "event_recovery", "stage": "settle", "event_type": linked_event["type"]}
                 event_type = "world_event_watched"
                 summary = f"Moss watched the {str(linked_event['type']).replace('_', ' ')} from the window until the moment passed."
+            elif intent_kind == "consequence_revisit" and consequence_role == "engage" and linked_consequence_id is not None:
+                mark_consequence_revisited(state, linked_consequence_id)
+                context["intent"] = {"kind": "consequence_recovery", "stage": "settle", "memory_id": linked_consequence_id}
+                event_type = "window_watched"
+                summary = "Moss returned to the window and watched the place where an earlier consequence still mattered."
             else:
                 context["intent"] = {"kind": "window_session", "stage": "watched", "zone": "window"}
                 event_type = "window_watched"
@@ -1339,7 +1512,7 @@ class Simulation:
         else:
             creature["activity"] = "idle"
             creature["expression"] = "neutral"
-            if intent_kind in {"arrival_settle", "post_place", "wake_recovery", "event_recovery"} or (
+            if intent_kind in {"arrival_settle", "post_place", "wake_recovery", "event_recovery", "consequence_recovery"} or (
                 intent_kind == "object_session" and intent_stage in {"recovered", "nested"}
             ):
                 context["intent"] = None
@@ -1384,6 +1557,7 @@ class Simulation:
         if season_before.get("season") != season_now["season"] or season_before.get("stage") != season_now["stage"]:
             details["season_transition"] = {"from_season": season_before.get("season"), "from_stage": season_before.get("stage"), "to_season": season_now["season"], "to_stage": season_now["stage"]}
         self._annotate_situation(details, state, event_transition, event=linked_event, role=world_event_role, preempted_action=preempted_action)
+        self._annotate_consequence(details, state, role=consequence_role, memory_id=linked_consequence_id)
         return event_type, summary, details, state
 
 

@@ -1,0 +1,34 @@
+{
+  "canonical_deployment": "pending_host_boundary",
+  "canonical_predeploy": {
+    "created_at": "2026-08-27T03:45:50.032660Z",
+    "event_count": 80632,
+    "mutated_during_development": false,
+    "replay_ok": true,
+    "rules_version": "terrarium-rules-v8-seasonal-world",
+    "season": "spring",
+    "stage": "early",
+    "state_hash": "be154cb8da33ce4bed3ed7276ca5954ccbef8b8a42c31d628cd69ab935f86b4f",
+    "tick": 80632
+  },
+  "checks": {
+    "atmosphere_pass": true,
+    "behavior_four_seed_pass": true,
+    "coherence_four_seed_pass": true,
+    "habits_four_seed_pass": true,
+    "iteration9_consequence_evaluator_four_seed_10080_pass": true,
+    "javascript_syntax_pass": true,
+    "object_affordances_pass": true,
+    "production_browser_uat_pass": true,
+    "pytest_60_pass": true,
+    "python310_grammar_41_sources": true,
+    "repertoire_pass": true,
+    "seasons_pass": true,
+    "situations_pass": true,
+    "spatial_four_seed_pass": true,
+    "technical_10080_pass": true
+  },
+  "passed": true,
+  "schema": "terrarium.pixel-art-overhaul-iteration9-predeploy-gates.v1",
+  "status": "ready_for_canonical_deployment"
+}

@@ -11,7 +11,7 @@ from .spatial import ZONE_ANCHORS
 FRAME_WIDTH = 800
 FRAME_HEIGHT = 480
 STATE_SCHEMA_VERSION = 1
-RULES_VERSION = "terrarium-rules-v8-seasonal-world"
+RULES_VERSION = "terrarium-rules-v9-consequence-memory"
 BEHAVIOR_CONTEXT_SCHEMA = "terrarium.behavior-context.v1"
 HABIT_PROFILE_SCHEMA = "terrarium.habits.v1"
 AFFORDANCE_HISTORY_SCHEMA = "terrarium.affordances.v1"
@@ -29,6 +29,7 @@ SEASON_STAGE_DAYS = 7
 SEASON_SECONDS = SEASON_DAYS * 24 * 60 * 60
 SEASON_STAGE_SECONDS = SEASON_STAGE_DAYS * 24 * 60 * 60
 SEASON_CYCLE_SECONDS = len(SEASONS) * SEASON_SECONDS
+CONSEQUENCE_MEMORY_SCHEMA = "terrarium.consequence-memory.v1"
 
 ZONES: dict[str, dict[str, int]] = {name: dict(anchor) for name, anchor in ZONE_ANCHORS.items()}
 
@@ -305,6 +306,14 @@ def initial_state(seed: int, *, created_at: str | None = None) -> dict[str, Any]
                 "recent": [],
                 "started_counts": {name: 0 for name in ("sunlight", "bird", "rain_intensify", "thunder", "moth", "leaf_tap")},
                 "outcome_counts": {"ignored": 0, "oriented": 0, "deferred": 0, "interrupted": 0, "engaged": 0},
+            },
+            "consequence_memory": {
+                "schema": CONSEQUENCE_MEMORY_SCHEMA,
+                "migration_origin": "native",
+                "entries": [],
+                "created_count": 0,
+                "revisit_count": 0,
+                "resolved_count": 0,
             },
         },
         "objects": objects,

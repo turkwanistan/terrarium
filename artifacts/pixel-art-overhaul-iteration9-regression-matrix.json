@@ -1,0 +1,100 @@
+{
+  "atmosphere": "artifacts/pixel-art-overhaul-iteration9-atmosphere.json",
+  "browser_uat": "artifacts/pixel-art-overhaul-iteration9-browser-uat.json",
+  "canonical_deployment": {
+    "canonical_state_hash": "e6e5c57d8c49444831a1b765f70e01c31221b9fba9a50138a60a2b344eeb76b3",
+    "consequence_entries_at_verification": 0,
+    "consequence_migration_origin": "neutral-existing-world",
+    "consequence_schema": "terrarium.consequence-memory.v1",
+    "created_at_preserved": "2026-08-27T03:45:50.032660Z",
+    "replay_ok": true,
+    "replayed_state_hash": "e6e5c57d8c49444831a1b765f70e01c31221b9fba9a50138a60a2b344eeb76b3",
+    "rules_version": "terrarium-rules-v9-consequence-memory",
+    "runtime_data_dir": "${XDG_STATE_HOME:-$HOME/.local/state}/terrarium/live",
+    "season": "spring",
+    "season_epoch_utc": "2026-08-28T16:33:07.468419Z",
+    "season_schema": "terrarium.seasons.v1",
+    "stage": "early",
+    "status": "deployed_verified",
+    "verified_event_count": 80715,
+    "verified_tick": 80715
+  },
+  "checks": {
+    "atmosphere_pass": true,
+    "behavior_four_seed_pass": true,
+    "bounded_hot_memory_12_pass": true,
+    "canonical_created_at_preserved": true,
+    "canonical_deployment_and_replay_pass": true,
+    "coherence_four_seed_pass": true,
+    "consequence_four_seed_pass": true,
+    "habits_four_seed_pass": true,
+    "history_sensitive_future_pass": true,
+    "individual_determinism_pass": true,
+    "javascript_syntax_pass": true,
+    "neutral_existing_world_migration": true,
+    "object_affordances_pass": true,
+    "production_browser_uat_pass": true,
+    "pytest_60_pass": true,
+    "python310_grammar_41_sources": true,
+    "renderer_has_no_private_consequence_store": true,
+    "repertoire_pass": true,
+    "season_epoch_preserved": true,
+    "seasons_pass": true,
+    "situations_pass": true,
+    "spatial_four_seed_pass": true,
+    "technical_10080_pass": true
+  },
+  "consequences": "artifacts/pixel-art-overhaul-iteration9-consequences.json",
+  "contract_refinements": [
+    "Season evaluator now requires base behavior equality before consequence eligibility while permitting later canonical seasonal context to modulate stored consequence opportunities.",
+    "Repertoire weather-reaction accounting excludes consequence-recognition reactions; tug\u2192nest is recognized as the causal follow-up for soft nesting objects.",
+    "Sunlight authority test uses the standard 10,080-step horizon because intentional history-sensitive divergence changes the exact tick at which sunlight is used."
+  ],
+  "object_affordances": "artifacts/pixel-art-overhaul-iteration9-object-affordances.json",
+  "passed": true,
+  "per_seed": {
+    "behavior": {
+      "1701": true,
+      "1702": true,
+      "42": true,
+      "999": true
+    },
+    "coherence": {
+      "1701": true,
+      "1702": true,
+      "42": true,
+      "999": true
+    },
+    "habits": {
+      "1701": true,
+      "1702": true,
+      "42": true,
+      "999": true
+    },
+    "spatial": {
+      "1701": true,
+      "1702": true,
+      "42": true,
+      "999": true
+    }
+  },
+  "predeploy_gates": "artifacts/pixel-art-overhaul-iteration9-predeploy.json",
+  "repertoire": "artifacts/pixel-art-overhaul-iteration9-repertoire.json",
+  "schema": "terrarium.pixel-art-overhaul-iteration9-regression-matrix.v1",
+  "seasons": "artifacts/pixel-art-overhaul-iteration9-seasons.json",
+  "seeds": [
+    1701,
+    1702,
+    42,
+    999
+  ],
+  "situations": "artifacts/pixel-art-overhaul-iteration9-situations.json",
+  "snapshot": {
+    "authored_art_sha256": "cd2ec842e4661aa72e7a81ba7ac2504f0e1718319f75afa9bb8666efb942359e",
+    "frame_sha256": "33cced839bb3c2067da01b786c705bf5e3a2a645086e4cfdabee3748ee93f17a",
+    "id": "20260828T182004989725Z-pixel-art-overhaul-iteration9",
+    "renderer_sha256": "df5afe734eb2b367f1cfc28201ea9338ebad86cc155cb93136f14ed4381dadc5"
+  },
+  "steps_per_long_run": 10080,
+  "technical": "artifacts/pixel-art-overhaul-iteration9-technical.json"
+}

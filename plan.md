@@ -345,6 +345,21 @@ Evidence: `history/2026-08-28-pixel-art-overhaul-iteration8e.md`, `artifacts/pix
 
 Evidence: `history/2026-08-28-pixel-art-overhaul-iteration8f.md`, `artifacts/pixel-art-overhaul-iteration8f.json`, `artifacts/pixel-art-overhaul-iteration8f-regression-matrix.json`, snapshot `20260828T160757100074Z-pixel-art-overhaul-iteration8f`.
 
-## Next product iteration after Iteration 8F
+## Completed normal product checkpoint — Pixel-Art Overhaul, Iteration 9
 
-**Iteration 9 — Emergent Situations and Consequence Memory.** Use the now-richer canonical world to let prior event outcomes, object state/displacement, arrangements, learned habits, persistent traces, and environmental/seasonal context create later opportunities and bounded multi-stage situations. Preserve deterministic replay and current authority boundaries; do not introduce scripted quest chains, a generic planner, needs/personality-stat machinery, or LLM action selection merely by cadence.
+- added bounded canonical `terrarium.consequence-memory.v1` with a 12-entry unresolved causal index;
+- records delayed opportunities from situational aftermath, persistent traces, arrangements, object displacement, and nesting without rescanning the full event ledger per decision;
+- reuses existing bounded intent/session machinery for recognize → approach → engage → recovery;
+- guarantees one unresolved consequence yields at most one revisit, while repeated equivalent causes merge/reinforce before resolution;
+- proves same-visible-present/different-causal-history future divergence while preserving individual determinism and exact replay;
+- preserves renderer authority boundaries: no renderer-private consequence state or narrative UI;
+- passed **60/60 tests**, 41-source Python-3.10 grammar, JS syntax, 10,080 technical/replay, all four 10,080-step seed matrices, legacy evaluators, dedicated consequence evaluation, browser UAT, and canonical migration/replay;
+- deployed additively to canonical Moss with original `created_at` and season epoch preserved;
+- accepted frame SHA256 `33cced839bb3c2067da01b786c705bf5e3a2a645086e4cfdabee3748ee93f17a` at seed/tick 1701/10080;
+- no SBC substrate change, Capability Forge work, frozen MCP change, or Gen18 was required.
+
+Evidence: `history/2026-08-28-pixel-art-overhaul-iteration9.md`, `artifacts/pixel-art-overhaul-iteration9.json`, `artifacts/pixel-art-overhaul-iteration9-regression-matrix.json`, snapshot `20260828T182004989725Z-pixel-art-overhaul-iteration9`.
+
+## Next product iteration after Iteration 9
+
+**Iteration 10 — Causal Composition and Situation Chaining.** Allow current canonical events/opportunities to intersect with stored consequences, object state, habits, arrangements, and spatial context so two or more existing systems can generate richer bounded situations. Prefer composition and stronger causal legibility over more memory, more verbs, or a generic planner.

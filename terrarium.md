@@ -1369,3 +1369,19 @@ event → perception / attention → reaction or defer → engagement / decision
 Temporary event-created affordances must be authoritative. A moving sunlight patch, for example, exists at a real canonical walkable coordinate while active and ceases to be usable when it moves or expires. The renderer may visualize an event but may never invent its occurrence, target, preference impact, or causal history.
 
 This law intentionally reuses the existing bounded action vocabulary when possible. A window-watch or loaf can mean something different because its **cause** is different; Terrarium should increase causal situation space before multiplying verbs or adding a generic planner.
+
+---
+
+# 44. Current world law — delayed consequences and causal memory
+
+Terrarium now keeps a compact canonical index of unresolved consequences created by prior world activity. The full event ledger remains authoritative history; the hot consequence index is bounded and exists only to make a small number of old causes capable of becoming later opportunities without scanning the entire ledger every decision.
+
+The governing pattern is:
+
+```text
+prior cause → unresolved consequence → delayed recognition → ordinary approach / re-engagement → recovery
+```
+
+Consequences may originate from event aftermath, persistent traces, arrangements, object displacement/state, or nesting. Current weather/season, learned habits, and accumulated affordance history may modulate whether an existing consequence becomes relevant, but they do not fabricate a cause. Equivalent visible states may therefore have different futures when their canonical histories differ; each future must remain deterministic and exactly replayable.
+
+A consequence is not a quest, goal object, hidden need, or planner node. The existing bounded intent/session machinery remains the expression mechanism. The renderer may visualize canonical actions and state but may not store causal memory, choose revisits, or invent narrative explanation. Existing worlds migrate with an empty neutral consequence index rather than receiving fictional backfilled memories.

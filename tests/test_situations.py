@@ -58,7 +58,9 @@ def test_active_world_event_survives_restart_and_replay(tmp_path):
 
 def test_sunlight_is_used_only_as_active_walkable_authoritative_affordance():
     state = initial_state(1701, created_at=FIXED); sim = Simulation(); uses = 0
-    for _ in range(4000):
+    # Consequence memory intentionally makes exact long-run trajectories history-sensitive.
+    # Keep the authority assertion, but use the project standard long-run horizon.
+    for _ in range(10080):
         _, _, details, state = sim.step(state)
         if details.get("supported_action") != "sunlight_affordance":
             continue

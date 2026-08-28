@@ -1,0 +1,314 @@
+{
+  "all_passed": true,
+  "consequence_memory_schema": "terrarium.consequence-memory.v1",
+  "context_composition": {
+    "season_context_is_available": true,
+    "spring_score": 0.606444,
+    "summer_score": 0.556444
+  },
+  "controlled_history_sensitivity": {
+    "controlled_history_changes_later_future": true,
+    "controlled_memory_id": "con-aa824216e974ab10",
+    "different_causal_opportunity_sets": true,
+    "divergence_tick": 627,
+    "individual_determinism": true,
+    "same_immediate_visible_frame": true,
+    "visible_equal_until_controlled_recognition": true
+  },
+  "migration": {
+    "habits_unchanged": true,
+    "neutral_existing_world": true,
+    "no_fabricated_entries": true,
+    "objects_unchanged": true
+  },
+  "replay_authority": {
+    "canonical_memory_survives": true,
+    "canonical_state_hash": "241017df3549b3519cfc4b61f5ff0f00abea7c5263b9dd4c5cefdbb3dc49bf6c",
+    "exact_replay_after_restart": true,
+    "exact_replay_before_restart": true,
+    "renderer_has_no_private_consequence_store": true,
+    "restart_state_exact": true
+  },
+  "results": {
+    "1701": {
+      "checks": {
+        "approach_stage_exercised": true,
+        "bounded_storage": true,
+        "causal_entries_created": true,
+        "chains_remain_bounded": true,
+        "later_revisits_occur": true,
+        "multi_stage_chain_exercised": true,
+        "multiple_causal_sources_compose": true,
+        "no_situation_spam": true,
+        "object_state_integrity": true,
+        "ordinary_quiet_behavior_survives": true,
+        "possession_integrity": true,
+        "recognition_is_later_not_immediate": true,
+        "schema_preserved": true
+      },
+      "metrics": {
+        "action_counts": {
+          "carry": 164,
+          "explore": 133,
+          "groom": 51,
+          "idle": 347,
+          "inspect": 179,
+          "loaf": 165,
+          "look_outside": 140,
+          "nudge": 24,
+          "place": 164,
+          "react": 74,
+          "rest": 370,
+          "sleep": 351,
+          "stretch": 78,
+          "wake": 123,
+          "walk": 294
+        },
+        "chain_duration_ticks_max": 6,
+        "consequence_kind_counts": {
+          "object_arrangement": 8,
+          "object_displacement": 15,
+          "object_nest": 10,
+          "situational_aftermath": 11
+        },
+        "consequence_role_counts": {
+          "approach": 10,
+          "engage": 17,
+          "recognize": 17
+        },
+        "created_count": 178,
+        "decisions": 2657,
+        "final_open_entries": 12,
+        "max_open_entries": 12,
+        "object_state_violations": 0,
+        "possession_violations": 0,
+        "quiet_action_share": 0.558901,
+        "recognition_share_of_decisions": 0.006398,
+        "recognized_age_minutes_max": 4262,
+        "recognized_age_minutes_min": 953,
+        "resolved_count": 17,
+        "revisit_count": 17,
+        "source_causes": {
+          "object_interaction": 15,
+          "object_nested": 10,
+          "object_placed": 8,
+          "situational_event": 11
+        },
+        "steps": 10080
+      },
+      "passed": true
+    },
+    "1702": {
+      "checks": {
+        "approach_stage_exercised": true,
+        "bounded_storage": true,
+        "causal_entries_created": true,
+        "chains_remain_bounded": true,
+        "later_revisits_occur": true,
+        "multi_stage_chain_exercised": true,
+        "multiple_causal_sources_compose": true,
+        "no_situation_spam": true,
+        "object_state_integrity": true,
+        "ordinary_quiet_behavior_survives": true,
+        "possession_integrity": true,
+        "recognition_is_later_not_immediate": true,
+        "schema_preserved": true
+      },
+      "metrics": {
+        "action_counts": {
+          "carry": 175,
+          "explore": 105,
+          "groom": 65,
+          "idle": 372,
+          "inspect": 172,
+          "loaf": 130,
+          "look_outside": 162,
+          "nudge": 22,
+          "place": 175,
+          "react": 74,
+          "rest": 386,
+          "sleep": 328,
+          "stretch": 77,
+          "wake": 122,
+          "walk": 309
+        },
+        "chain_duration_ticks_max": 6,
+        "consequence_kind_counts": {
+          "object_arrangement": 10,
+          "object_displacement": 16,
+          "object_nest": 4,
+          "situational_aftermath": 11
+        },
+        "consequence_role_counts": {
+          "approach": 9,
+          "engage": 16,
+          "recognize": 16
+        },
+        "created_count": 189,
+        "decisions": 2674,
+        "final_open_entries": 12,
+        "max_open_entries": 12,
+        "object_state_violations": 0,
+        "possession_violations": 0,
+        "quiet_action_share": 0.553478,
+        "recognition_share_of_decisions": 0.005984,
+        "recognized_age_minutes_max": 3954,
+        "recognized_age_minutes_min": 530,
+        "resolved_count": 16,
+        "revisit_count": 16,
+        "source_causes": {
+          "object_interaction": 16,
+          "object_nested": 4,
+          "object_placed": 10,
+          "situational_event": 11
+        },
+        "steps": 10080
+      },
+      "passed": true
+    },
+    "42": {
+      "checks": {
+        "approach_stage_exercised": true,
+        "bounded_storage": true,
+        "causal_entries_created": true,
+        "chains_remain_bounded": true,
+        "later_revisits_occur": true,
+        "multi_stage_chain_exercised": true,
+        "multiple_causal_sources_compose": true,
+        "no_situation_spam": true,
+        "object_state_integrity": true,
+        "ordinary_quiet_behavior_survives": true,
+        "possession_integrity": true,
+        "recognition_is_later_not_immediate": true,
+        "schema_preserved": true
+      },
+      "metrics": {
+        "action_counts": {
+          "carry": 202,
+          "explore": 103,
+          "groom": 59,
+          "idle": 355,
+          "inspect": 208,
+          "loaf": 125,
+          "look_outside": 159,
+          "nudge": 21,
+          "place": 201,
+          "react": 82,
+          "rest": 408,
+          "sleep": 289,
+          "stretch": 76,
+          "wake": 125,
+          "walk": 328
+        },
+        "chain_duration_ticks_max": 6,
+        "consequence_kind_counts": {
+          "object_arrangement": 20,
+          "object_displacement": 5,
+          "object_nest": 3,
+          "situational_aftermath": 10
+        },
+        "consequence_role_counts": {
+          "approach": 10,
+          "engage": 14,
+          "recognize": 14
+        },
+        "created_count": 208,
+        "decisions": 2741,
+        "final_open_entries": 12,
+        "max_open_entries": 12,
+        "object_state_violations": 0,
+        "possession_violations": 0,
+        "quiet_action_share": 0.524261,
+        "recognition_share_of_decisions": 0.005108,
+        "recognized_age_minutes_max": 4162,
+        "recognized_age_minutes_min": 286,
+        "resolved_count": 14,
+        "revisit_count": 14,
+        "source_causes": {
+          "object_interaction": 5,
+          "object_nested": 3,
+          "object_placed": 20,
+          "situational_event": 10
+        },
+        "steps": 10080
+      },
+      "passed": true
+    },
+    "999": {
+      "checks": {
+        "approach_stage_exercised": true,
+        "bounded_storage": true,
+        "causal_entries_created": true,
+        "chains_remain_bounded": true,
+        "later_revisits_occur": true,
+        "multi_stage_chain_exercised": true,
+        "multiple_causal_sources_compose": true,
+        "no_situation_spam": true,
+        "object_state_integrity": true,
+        "ordinary_quiet_behavior_survives": true,
+        "possession_integrity": true,
+        "recognition_is_later_not_immediate": true,
+        "schema_preserved": true
+      },
+      "metrics": {
+        "action_counts": {
+          "carry": 194,
+          "explore": 109,
+          "groom": 63,
+          "idle": 356,
+          "inspect": 216,
+          "loaf": 145,
+          "look_outside": 139,
+          "nudge": 30,
+          "place": 194,
+          "react": 71,
+          "rest": 374,
+          "sleep": 319,
+          "stretch": 61,
+          "wake": 125,
+          "walk": 323
+        },
+        "chain_duration_ticks_max": 6,
+        "consequence_kind_counts": {
+          "object_arrangement": 9,
+          "object_displacement": 18,
+          "object_nest": 9,
+          "situational_aftermath": 18
+        },
+        "consequence_role_counts": {
+          "approach": 16,
+          "engage": 19,
+          "recognize": 19
+        },
+        "created_count": 219,
+        "decisions": 2719,
+        "final_open_entries": 12,
+        "max_open_entries": 12,
+        "object_state_violations": 0,
+        "possession_violations": 0,
+        "quiet_action_share": 0.53071,
+        "recognition_share_of_decisions": 0.006988,
+        "recognized_age_minutes_max": 3674,
+        "recognized_age_minutes_min": 449,
+        "resolved_count": 19,
+        "revisit_count": 19,
+        "source_causes": {
+          "object_interaction": 18,
+          "object_nested": 9,
+          "object_placed": 9,
+          "situational_event": 18
+        },
+        "steps": 10080
+      },
+      "passed": true
+    }
+  },
+  "schema": "terrarium.consequence-evaluation.v1",
+  "seeds": [
+    1701,
+    1702,
+    42,
+    999
+  ],
+  "steps_per_seed": 10080
+}

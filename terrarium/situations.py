@@ -157,6 +157,9 @@ def _finish_active(current: dict[str, Any], active: dict[str, Any], now: int) ->
         "end_world_minute": int(now),
         "outcome": outcome,
         "response_path": response_path,
+        "source_zone": str(active.get("source_zone") or _EVENT_CONFIG[str(active["type"])]["source_zone"]),
+        "x": int(active.get("x", 0)),
+        "y": int(active.get("y", 0)),
     }
     current["recent"] = (list(current.get("recent") or []) + [record])[-RECENT_EVENT_LIMIT:]
     current["outcome_counts"][outcome] = int(current["outcome_counts"].get(outcome, 0)) + 1

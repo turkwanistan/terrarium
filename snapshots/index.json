@@ -315,6 +315,21 @@
         "steps": 10080
       },
       "tick": 10080
+    },
+    {
+      "captured_at": "2026-08-28T18:20:05.000586Z",
+      "frame_path": "/snapshots/dev/20260828T182004989725Z-pixel-art-overhaul-iteration9/frame.json",
+      "meta_path": "/snapshots/dev/20260828T182004989725Z-pixel-art-overhaul-iteration9/meta.json",
+      "note": "Accepted Pixel-Art Overhaul Iteration 9: Emergent Situations and Consequence Memory",
+      "preview_path": "/snapshots/dev/20260828T182004989725Z-pixel-art-overhaul-iteration9/preview.svg",
+      "renderer_sha256": "df5afe734eb2b367f1cfc28201ea9338ebad86cc155cb93136f14ed4381dadc5",
+      "snapshot_id": "20260828T182004989725Z-pixel-art-overhaul-iteration9",
+      "source": {
+        "mode": "deterministic",
+        "seed": 1701,
+        "steps": 10080
+      },
+      "tick": 10080
     }
   ]
 }

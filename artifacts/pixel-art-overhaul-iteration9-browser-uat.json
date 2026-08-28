@@ -1,0 +1,84 @@
+{
+  "causal_chain": {
+    "approach": {
+      "from_zone": "window",
+      "moving": true,
+      "pixel_hash": "fnv1a32:e8335ae5",
+      "pose": "walk",
+      "route_distance": 360.209619,
+      "route_points": [
+        {
+          "x": 168,
+          "y": 316
+        },
+        {
+          "x": 300,
+          "y": 324
+        },
+        {
+          "x": 405,
+          "y": 378
+        },
+        {
+          "x": 296,
+          "y": 392
+        }
+      ],
+      "source_tick": 2935,
+      "target_tick": 2936,
+      "to_zone": "sleeping_nook"
+    },
+    "engage": {
+      "moving": false,
+      "pixel_hash": "fnv1a32:39f30efd",
+      "pose": "loaf",
+      "source_tick": 2937,
+      "target_tick": 2938,
+      "zone": "sleeping_nook"
+    },
+    "memory_id": "con-8870385a3b6b6448",
+    "recognize": {
+      "pixel_hash": "fnv1a32:70f5e46d",
+      "pose": "react",
+      "source_tick": 2931,
+      "target_tick": 2932,
+      "zone": "window"
+    },
+    "source_cause": {
+      "cause": "object_interaction",
+      "object_affordance": "tug",
+      "object_state": "rumpled",
+      "season": "spring",
+      "tick": 1760,
+      "weather": "clear"
+    },
+    "source_tick": 1760
+  },
+  "checks": {
+    "approach_uses_authored_route": true,
+    "engagement_releases_to_quiet_pose": true,
+    "no_renderer_world_event_confound": true,
+    "pixel_native_exact_2x": true,
+    "recognition_is_stationary_and_readable": true,
+    "same_authoritative_memory_across_chain": true,
+    "source_is_prior_canonical_object_interaction": true
+  },
+  "evidence_files": [
+    "artifacts/iteration9-browser-evidence/consequence_recognize-current.json",
+    "artifacts/iteration9-browser-evidence/consequence_approach-current.json",
+    "artifacts/iteration9-browser-evidence/consequence_engage-current.json"
+  ],
+  "fixture_pack": "artifacts/iteration9-temporal-fixtures.json",
+  "passed": true,
+  "production_renderer": "display/web/app.js",
+  "schema": "terrarium.pixel-art-overhaul-iteration9-browser-uat.v1",
+  "vision_review": {
+    "accepted": true,
+    "finding": "The three production-renderer keyframes read as a bounded pause, purposeful cross-room return, and quiet re-engagement; no new renderer-only indicator or narrative UI was added.",
+    "screenshots_captured": [
+      "iteration9-consequence-recognize.png",
+      "iteration9-consequence-approach-mid.png",
+      "iteration9-consequence-engage.png"
+    ]
+  }
+}
