@@ -1,32 +1,50 @@
 # Terrarium
 
-Terrarium is a persistent artificial creature and habitat. The canonical creature, world, possessions, and event history live in the host-owned world process; the browser is a disposable 800×480 renderer that reconnects to authoritative state.
+Terrarium is a persistent artificial creature and habitat. The canonical creature, world, possessions, and event history live in the host-owned world process; presentation is disposable and reconnects to authoritative state. The current presentation canary uses Godot by default, with the Canvas renderer retained as an explicit same-world fallback.
 
 Gen17 implements the first product-building checkpoint from `terrarium.md`: Phase 0 contracts/state/replay, Phase 1 autonomous visible life, and Phase 2 persistent objects.
 
 ## Run
 
-For normal host use, prefer the launch scripts rather than invoking the server with a repo-local database:
+Keep world lifecycle and presentation lifecycle separate. On the persistent host, start or reuse the canonical world/API with:
 
 ```bash
-./scripts/run_local.sh
-# or, for another device on the trusted LAN:
 ./scripts/run_lan.sh
 ```
 
-Linux launchers store the living canonical world under `${XDG_STATE_HOME:-$HOME/.local/state}/terrarium/live` by default. On first launch they safely migrate any legacy repo-local `data/live` database using SQLite backup and verify that canonical state matches before starting. Closing the browser does not stop the world process. Restarting the process against the same runtime directory resumes canonical state.
+This owns the living `${XDG_STATE_HOME:-$HOME/.local/state}/terrarium/live` world. Closing or failing a presentation client does not stop Moss.
 
-## See it yourself
+On a **graphical Linux/macOS client** with this repository and Godot 4 installed, Godot is now the normal presentation choice:
 
-On Windows, from the repository root:
-
-```powershell
-.\scripts\run_windows.ps1
+```bash
+TERRARIUM_API_URL=http://<terrarium-host>:<port> \
+GODOT_BIN=/path/to/godot \
+./scripts/run_presentation.sh
 ```
 
-This starts the persistent local world and opens `http://127.0.0.1:8080/`. The development snapshot gallery is at `http://127.0.0.1:8080/snapshots/`. On Linux/macOS use `./scripts/run_local.sh`.
+Immediate Canvas rollback against the same world:
 
-To keep the canonical world on the OptiPlex but view it from your PC on the same trusted LAN, run `./scripts/run_lan.sh` on the OptiPlex. It prints the LAN URL to open from your PC. This is intentionally unauthenticated and should not be exposed to the public internet.
+```bash
+TERRARIUM_API_URL=http://<terrarium-host>:<port> ./scripts/run_presentation.sh --canvas
+```
+
+On a **graphical Windows client**:
+
+```powershell
+$env:TERRARIUM_API_URL = "http://<terrarium-host>:<port>"
+$env:GODOT_BIN = "C:\path\to\Godot_v4.7.2-stable_win64.exe"
+.\scripts\run_presentation.ps1
+```
+
+Canvas rollback on Windows:
+
+```powershell
+.\scripts\run_presentation.ps1 -Mode canvas -ApiUrl $env:TERRARIUM_API_URL
+```
+
+The selectors consume existing generated production art and require an already-running `GET /api/frame`. They do not start, step, migrate, reset, stop, or write the canonical world. Headless/Xvfb/llvmpipe is not the production presentation path; `mcp-lab` remains bounded native-validation infrastructure only.
+
+`run_local.sh` and `run_windows.ps1` remain legacy local Canvas development conveniences; they are not the staged Godot cutover path. The trusted-LAN API is intentionally unauthenticated and must not be exposed to the public internet.
 
 ## Progressive development snapshots
 

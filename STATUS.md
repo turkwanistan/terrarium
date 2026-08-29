@@ -1,6 +1,6 @@
 # Terrarium status
 
-## Godot presentation candidate — adoption-ready, not cut over
+## Godot presentation canary — selector cut over, extended live UAT pending
 
 ### Visual Convergence 1 — palette-only Moss approved and natively validated
 
@@ -32,14 +32,16 @@ The Godot path remains subordinate to the canonical Terrarium simulation. Its li
 
 A real-current-frame integration proof now also passes without weakening Lab isolation. A presentation-relevant projection of canonical live tick **113069** (`spring / early`, clear day, Moss `look_outside` at the window) was copied into the isolated Lab and served only on Lab loopback. Native Godot fetched it through the actual `TerrariumReferenceFrameAdapter` `GET /api/frame` path and correctly rendered `spring_day / window_watch` at 800×480. Evidence: `artifacts/godot-art-gate/live-snapshot-integration/native-validation.json`.
 
-A reversible cutover-candidate launcher now exists at `scripts/run_godot_live_candidate.sh`. It attaches only to an already-running canonical `GET /api/frame` endpoint, does not regenerate art or start/step/migrate world state, and refuses accidental headless/llvmpipe launch unless explicitly overridden. This is plumbing only: Canvas remains the current default/fallback and no cutover has been performed.
+Explicit cutover approval was received on 2026-08-29. Phase A is now implemented through `scripts/run_presentation.sh` and `scripts/run_presentation.ps1`: **Godot is the normal presentation choice**, while Canvas remains an explicit same-world rollback (`--canvas` / `-Mode canvas`). Both selectors require an already-running canonical `GET /api/frame`; neither starts, steps, migrates, resets, stops, or writes the living world. `scripts/run_lan.sh` remains canonical world/API lifecycle authority, and the validated `scripts/run_godot_live_candidate.sh` remains unchanged beneath the Linux/macOS selector.
 
-**Adoption status:** ready to become Terrarium's presentation path. **Cutover status:** not performed. Canvas remains intact and unchanged until an explicit cutover decision.
-Cutover-readiness record: `artifacts/godot-art-gate/cutover-readiness/readiness.json` — **READY_AWAITING_EXPLICIT_CUTOVER_APPROVAL**.
+**Canary status:** ACTIVE, awaiting extended real-display live UAT. **Migration status:** not closed. Canvas remains intact and immediately available. The headless OptiPlex remains the world host; the production Godot canary must run on a real graphical/GPU client, not through the Lab Xvfb/llvmpipe validation path.
+
+**Next execution boundary:** run the 30–60 minute same-world Godot canary on a graphical client and complete the live-UAT matrix plus targeted bounded rare-action checks. Only after that passes should the migration be closed and Iteration 10 resume.
+Historical readiness record: `artifacts/godot-art-gate/cutover-readiness/readiness.json` — **READY_AWAITING_EXPLICIT_CUTOVER_APPROVAL**. Active canary record: `artifacts/godot-art-gate/canary-cutover/cutover.json`.
 
 Review surface: `artifacts/godot-art-gate/reference-v3-review.html`. Acceptance evidence: `artifacts/godot-art-gate/reference-v3-adoption-gate.json`. Character law: `MOSS_SPEC.md`.
 
-Current presentation validation: **73/73 repository tests PASS**, **13/13 Godot presentation tests PASS**, exact authored-geometry Moss regression **PASS**, generated-art determinism **PASS**, and native Godot 4.7.2 representative palette-only captures **PASS**. The earlier Reference-v3 adoption evidence remains historical baseline evidence; the palette-only character promotion is recorded separately in `artifacts/godot-art-gate/moss-palette-only-promotion/native-validation.json`.
+Current presentation validation after Phase A: **75/75 repository tests PASS**, **15/15 Godot presentation tests PASS**, exact authored-geometry Moss regression **PASS**, generated-art determinism **PASS**, and native Godot 4.7.2 representative palette-only captures **PASS**. The earlier Reference-v3 adoption evidence remains historical baseline evidence; the palette-only character promotion is recorded separately in `artifacts/godot-art-gate/moss-palette-only-promotion/native-validation.json`.
 
 Terrarium is normal product development after the accepted Generation 17 pilot. The current product checkpoint is **Pixel-Art Overhaul — Iteration 9: Emergent Situations and Consequence Memory**. This is **not Generation 18**.
 

@@ -1,6 +1,6 @@
 # Terrarium — Godot full-room presentation candidate
 
-**Status: adoption-ready, not cut over.** This project extends the approved pre-regression Reference-v2 visual direction into a full Terrarium presentation path without moving simulation authority into Godot. Canvas remains intact until an explicit cutover decision.
+**Status: canary active; extended live UAT pending.** Explicit cutover approval was received on 2026-08-29. Godot is now the normal presentation selection through the repository-root presentation selectors, without moving simulation authority into Godot. Canvas remains intact as the immediate same-world rollback until the canary passes.
 
 ## Locked art direction
 
@@ -65,13 +65,13 @@ GODOT_BIN=/path/to/godot ./scripts/run_godot_reference_v2.sh --variant rain --mo
 GODOT_BIN=/path/to/godot ./scripts/run_godot_reference_v2.sh --live --api-url http://127.0.0.1:8765
 ```
 
-For the cutover-candidate path, prefer the presentation-only launcher after the canonical world is already running:
+For normal canary presentation after the canonical world is already running, use the repository-root selector:
 
 ```bash
-GODOT_BIN=/path/to/godot ./scripts/run_godot_live_candidate.sh
+TERRARIUM_API_URL=http://host:port GODOT_BIN=/path/to/godot ./scripts/run_presentation.sh
 ```
 
-That launcher does **not** regenerate art, start/step/migrate the world, or perform a cutover. It discovers an existing read-only `/api/frame` endpoint (or accepts `TERRARIUM_API_URL`) and refuses accidental headless/llvmpipe launch unless explicitly overridden. Canvas remains the fallback until an explicit cutover decision.
+Windows graphical clients use `scripts/run_presentation.ps1`. Both default to Godot and retain explicit Canvas rollback. The Linux/macOS selector delegates to the already-validated `run_godot_live_candidate.sh`, which does **not** regenerate art or start/step/migrate the world and refuses accidental headless/llvmpipe launch unless explicitly overridden.
 
 The live runtime port is deployment-dependent; use the currently running Terrarium endpoint rather than assuming `8765`.
 

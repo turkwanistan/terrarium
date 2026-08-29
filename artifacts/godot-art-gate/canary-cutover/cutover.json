@@ -1,0 +1,65 @@
+{
+  "schema": "terrarium.godot-canary-cutover.v1",
+  "status": "CANARY_ACTIVE_AWAITING_EXTENDED_LIVE_UAT",
+  "cutover_scope": "presentation selector only",
+  "canonical_world_changed": false,
+  "world_lifecycle_changed": false,
+  "canvas_removed": false,
+  "normal_presentation": "godot",
+  "normal_presentation_launcher_linux_macos": "./scripts/run_presentation.sh",
+  "normal_presentation_launcher_linux_macos_sha256": "52cd5f271405c3907353cf9bcb9c27ddf85b5d6a67570df976bb29709e7a219b",
+  "normal_presentation_launcher_windows": ".\\scripts\\run_presentation.ps1",
+  "normal_presentation_launcher_windows_sha256": "da088a8c08bc9b0bcc7d316b466b04f430217c106ff59b6d66b9ffcbb0697200",
+  "canvas_fallback_linux_macos": "./scripts/run_presentation.sh --canvas",
+  "canvas_fallback_windows": ".\\scripts\\run_presentation.ps1 -Mode canvas",
+  "canvas_fallback_renderer_sha256": "df5afe734eb2b367f1cfc28201ea9338ebad86cc155cb93136f14ed4381dadc5",
+  "world_launcher": "./scripts/run_lan.sh",
+  "godot_runtime_main_sha256": "c3040892236f359a42d47544ad2356efa41bec27c50dc3ecb0248873580d6436",
+  "godot_live_candidate_launcher_sha256": "bbad8d00de802dbdaa6d5033af9ff90e4f22a18f13f28ff41a1cb7f331340e77",
+  "authority": {
+    "godot_reads": "GET /api/frame only",
+    "godot_writes_world": false,
+    "godot_starts_or_stops_world": false,
+    "godot_regenerates_art_at_runtime": false,
+    "canvas_fallback_uses_same_world": true
+  },
+  "validation": {
+    "selector_shell_syntax": "PASS",
+    "selector_default_contract": "PASS: Godot",
+    "explicit_canvas_rollback_contract": "PASS",
+    "focused_godot_tests": "15/15 PASS",
+    "full_repository_tests": "75/75 PASS",
+    "canvas_hash_unchanged_from_iteration9": true,
+    "godot_runtime_hash_unchanged_from_readiness": true,
+    "godot_candidate_launcher_hash_unchanged_from_readiness": true,
+    "sandbox_fake_endpoint_probe": "NOT APPLICABLE: isolated MCP project sandbox does not provide curl; no canonical/native process was involved"
+  },
+  "live_uat": {
+    "extended_native_session": "PENDING",
+    "reason": "A production Godot canary requires a real display/GPU session. The canonical OptiPlex world host is headless, and mcp-lab uses Xvfb/llvmpipe which is prohibited as an always-on production presentation path.",
+    "migration_closed": false
+  },
+  "rollback_rule": "Switch presentation to Canvas only. Presentation rollback must not stop, reset, migrate, or recreate the canonical world.",
+  "canonical_canary_evidence": {
+    "api_url": "http://192.168.50.74:8765",
+    "health": {
+      "ok": true,
+      "tick": 113929,
+      "events": 113929
+    },
+    "frame": {
+      "tick": 113932,
+      "world_minutes": 524594,
+      "lighting": "dawn",
+      "weather": "rain",
+      "season": "spring",
+      "season_stage": "early",
+      "activity": "inspect",
+      "zone": "window",
+      "target_object_id": "red_thread"
+    },
+    "canvas_same_world_fallback_rendered": true,
+    "canvas_visual_check": "PASS: actual current-world Canvas rendered successfully through the existing LAN API",
+    "world_restart_reset_or_forced_step_performed": false
+  }
+}

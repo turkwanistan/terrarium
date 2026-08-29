@@ -161,7 +161,6 @@ def test_reference_v3_production_moss_is_exact_authored_geometry_plus_palette(tm
     assert all((REFERENCE_V3 / "art" / f"moss_idle_{i}.png").read_bytes() == idle for i in range(1, 4))
 
 
-
 def test_reference_v3_maps_full_canonical_activity_repertoire_and_preserves_motion_clock():
     main = (REFERENCE_V3 / "scripts" / "main.gd").read_text()
     for activity, motion in {
@@ -215,6 +214,7 @@ def test_reference_v3_live_bridge_is_read_only_and_simulation_free():
 
 def test_reference_v3_generator_is_deterministic(tmp_path):
     tool = REFERENCE_V3 / "tools" / "generate_reference_v2.py"
+
     def tree_hash() -> str:
         digest = hashlib.sha256()
         for path in sorted((REFERENCE_V3 / "art").glob("*.png")):
@@ -222,6 +222,7 @@ def test_reference_v3_generator_is_deterministic(tmp_path):
             digest.update(path.read_bytes())
         digest.update((REFERENCE_V3 / "art" / "hero_manifest.json").read_bytes())
         return digest.hexdigest()
+
     first = subprocess.run([sys.executable, str(tool)], cwd=ROOT, text=True, capture_output=True)
     assert first.returncode == 0, first.stderr
     h1 = tree_hash()
@@ -242,3 +243,29 @@ def test_live_candidate_launcher_is_opt_in_read_only_and_cpu_guarded():
     assert "TERRARIUM_GODOT_SOFTWARE_RENDER_OK" in launcher
     assert "llvmpipe" in launcher
     assert "Canvas remains available" in launcher
+
+
+def test_presentation_selector_defaults_to_godot_and_keeps_explicit_canvas_rollback():
+    selector = (ROOT / "scripts" / "run_presentation.sh").read_text()
+    assert 'mode="godot"' in selector
+    assert "--canvas" in selector
+    assert 'exec "$ROOT/scripts/run_godot_live_candidate.sh"' in selector
+    assert 'canvas_url="$api_url/"' in selector
+    assert '"/api/frame"' in selector or '/api/frame' in selector
+    assert "terrarium.api.server" not in selector
+    assert "/api/step" not in selector
+    assert "generate_reference_v2.py" not in selector
+    assert "TERRARIUM_CANVAS_PRINT_ONLY" in selector
+
+
+def test_windows_presentation_selector_defaults_to_godot_and_keeps_canvas_rollback():
+    selector = (ROOT / "scripts" / "run_presentation.ps1").read_text()
+    assert '[string]$Mode = "godot"' in selector
+    assert 'ValidateSet("godot", "canvas")' in selector
+    assert '"/api/frame"' in selector
+    assert "Invoke-RestMethod" in selector
+    assert "--live --api-url" in selector
+    assert "terrarium.api.server" not in selector
+    assert "/api/step" not in selector
+    assert "generate_reference_v2.py" not in selector
+    assert "Start-Process ($ApiUrl + \"/\")" in selector

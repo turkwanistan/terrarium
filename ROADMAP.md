@@ -116,6 +116,62 @@ Acceptance: **60/60 tests**, 41-source Python-3.10 grammar, JS syntax, 10,080-ev
 
 Accepted evidence: `history/2026-08-28-pixel-art-overhaul-iteration9.md`, `artifacts/pixel-art-overhaul-iteration9.json`, `artifacts/pixel-art-overhaul-iteration9-regression-matrix.json`, snapshot `20260828T182004989725Z-pixel-art-overhaul-iteration9`.
 
+## Presentation Bridge — Staged Godot Cutover and Live UAT
+
+**Status: CANARY ACTIVE — EXTENDED LIVE UAT PENDING.** Explicit cutover approval was received on 2026-08-29 and Phase A is implemented: `scripts/run_presentation.sh` / `.ps1` now select Godot by default while retaining Canvas as an explicit same-world rollback. This remains an interposed presentation checkpoint before Iteration 10, not a new simulation generation. The canonical Terrarium world/API remains authoritative and the migration is not closed until extended live UAT passes.
+
+Readiness already established:
+
+- approved cleaned Godot room direction and exact authored-geometry/palette-only Moss law;
+- all 15 canonical activity names explicitly mapped with dedicated nudge/loaf/groom/stretch and pickup→carry presentation where appropriate;
+- 73/73 repository tests and 13/13 focused Godot presentation tests pass at readiness;
+- representative native Godot 4.7.2 captures pass under the bounded `GODOT_NATIVE_VALIDATION.md` procedure;
+- real-current-frame adapter proof passed through the actual read-only `GET /api/frame` bridge without weakening Lab isolation;
+- `scripts/run_godot_live_candidate.sh` attaches to an already-running canonical API, performs no world lifecycle/write operation, refuses accidental headless launch, and blocks llvmpipe unless explicitly overridden;
+- Canvas is unchanged and remains the immediate rollback presentation.
+
+### Phase A — reversible canary cutover
+
+**Implemented 2026-08-29.** The default presentation selectors now choose Godot; Canvas remains explicit fallback; world/API lifecycle and renderer hashes remain unchanged. Phase-A regression state is 75/75 repository tests and 15/15 focused Godot presentation tests PASS. Active evidence: `artifacts/godot-art-gate/canary-cutover/cutover.json`.
+
+The implemented contract:
+
+- make Godot the normal presentation choice without changing `terrarium.api.server`, runtime data ownership, heartbeat cadence, database, canonical routes/actions, or world startup;
+- keep Canvas launchable through an explicit fallback/rollback path for at least the entire live-UAT checkpoint;
+- presentation selector/launcher changes must be independently reversible and must not stop/reset/recreate the canonical world;
+- do not regenerate production art during normal presentation startup; generated candidate assets are build/review artifacts, not runtime-mutating state;
+- do not run the always-on presentation through Xvfb/llvmpipe on the OptiPlex. Native software-rendered Lab runs remain bounded validation only.
+
+### Phase B — real-world live UAT
+
+Observe the actual persistent world through Godot long enough to cover multiple heartbeat continuations, route transitions, quiet holds, and environmental changes. Prefer one continuous 30–60 minute canary plus targeted deterministic/native probes for rare actions rather than forcing the living simulation to perform test choreography.
+
+Live-UAT acceptance should cover:
+
+- no authored action restarts on repeated continuation heartbeats;
+- locomotion/explore, route corners, facing, arrival settle, and no furniture-cut/teleport regression;
+- inspect and nudge approach/contact/hold/recover readability;
+- pickup→carry attachment, carried travel/turns, place lower/contact/release/recover continuity;
+- loaf, groom, stretch, rest, react/orient, and window-watch remain distinct and calm;
+- sleep floor-gate→supported curl and wake→exit support choreography remains coherent;
+- canonical object identity/state, target ownership, positions, carried state, and interaction aftermath remain read-only presentation inputs;
+- time/lighting/weather/season selection stays consistent with canonical frame state;
+- no renderer-private behavior/history, no API writes, no database access, and no world-lifecycle coupling;
+- no unexpected CPU escalation, runaway Godot process, or renderer process leak.
+
+Use Canvas as a same-world comparison when a suspected Godot bug is ambiguous. A presentation defect may justify a Godot fix; it must not be “fixed” by changing canonical behavior unless independent simulation evidence shows the world itself is wrong.
+
+### Phase C — close the migration
+
+When the canary passes:
+
+- record a cutover acceptance artifact and update `STATUS.md` / launch docs;
+- keep Canvas as a documented fallback for the next normal product checkpoint unless evidence supports later retirement;
+- stop treating Godot migration as the main project and resume normal Terrarium development;
+- proceed to Iteration 10 — Causal Composition and Situation Chaining.
+
+Failure/rollback rule: switch presentation back to Canvas, leave the canonical world process and state untouched, preserve evidence, and fix/revalidate Godot in isolation.
+
 ## Iteration 10 — Causal Composition and Situation Chaining
 
 Highest-value next step: compose existing systems rather than widen the action list. A current event/opportunity should sometimes intersect with a stored consequence, object state, habit, arrangement, or spatial condition and create a bounded situation that neither system would create alone.

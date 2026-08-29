@@ -360,6 +360,80 @@ Evidence: `history/2026-08-28-pixel-art-overhaul-iteration8f.md`, `artifacts/pix
 
 Evidence: `history/2026-08-28-pixel-art-overhaul-iteration9.md`, `artifacts/pixel-art-overhaul-iteration9.json`, `artifacts/pixel-art-overhaul-iteration9-regression-matrix.json`, snapshot `20260828T182004989725Z-pixel-art-overhaul-iteration9`.
 
+## Interposed execution checkpoint — staged Godot presentation cutover
+
+Before beginning Iteration 10 simulation work, complete the already-built Godot presentation migration as a reversible operational cutover. This checkpoint changes **presentation default only**; it must not change simulation authority, living-world persistence, behavior, event semantics, database ownership, heartbeat cadence, or API write surface.
+
+### Current readiness baseline
+
+Treat these as prerequisites/authority, not work to redo:
+
+- `display/godot_reference_v2/` is the adoption-ready Godot presentation candidate.
+- `MOSS_SPEC.md` locks exact authored Moss geometry translated through `MOSS_MAP` only.
+- Godot explicitly covers all 15 canonical activity names; pickup choreography belongs to canonical `carry`.
+- `GODOT_NATIVE_VALIDATION.md` governs all Lab/native capture work.
+- `artifacts/godot-art-gate/action-completeness/native-validation.json` records action-completeness evidence.
+- `artifacts/godot-art-gate/live-snapshot-integration/native-validation.json` records the real-current-frame adapter/native proof.
+- `artifacts/godot-art-gate/cutover-readiness/readiness.json` is `READY_AWAITING_EXPLICIT_CUTOVER_APPROVAL`.
+- `scripts/run_godot_live_candidate.sh` is read-only presentation plumbing and intentionally does not own the canonical world lifecycle.
+- Canvas remains intact as fallback.
+
+### Current execution state — 2026-08-29
+
+Explicit approval has been received. Phase A is implemented and mechanically green: Godot is the normal presentation selection through `scripts/run_presentation.sh` / `.ps1`; Canvas is the explicit same-world rollback; `run_lan.sh`, canonical API/database/world state, heartbeat cadence, generated production art, Canvas renderer, and Godot runtime remain unchanged. Current regression state is **75/75 repository tests** and **15/15 focused Godot presentation tests PASS**.
+
+Phase B remains open because acceptance requires a genuine extended Godot session on a real graphical/GPU client. The headless OptiPlex must remain world-only and the Lab Xvfb/llvmpipe path must remain bounded validation-only. Do not declare the migration closed from selector/tests alone.
+
+### Execution sequence after explicit approval
+
+1. **Preflight and authority check**
+   - read `START_HERE.md`, `STATUS.md`, `ART_DIRECTION.md`, `MOSS_SPEC.md`, `GODOT_NATIVE_VALIDATION.md`, this plan, and current repo diff/status;
+   - confirm the canonical world/API is already running and healthy; do not reset or replace it;
+   - confirm no stale Godot/Xvfb/llvmpipe validation process is active;
+   - confirm current tests are green before modifying cutover plumbing.
+
+2. **Implement a reversible presentation selector**
+   - make Godot the normal presentation choice only after explicit human approval;
+   - keep a clear Canvas fallback command/path;
+   - do not make world startup depend on Godot and do not make Godot responsible for API/database migration;
+   - preserve `run_lan.sh` as canonical-world/API lifecycle authority;
+   - normal Godot presentation startup must consume existing generated assets rather than regenerating art;
+   - fail closed if the canonical read-only frame endpoint is unavailable;
+   - fail closed on headless/software-rendered always-on launch unless explicitly running the bounded validation procedure.
+
+3. **Canary against the living world**
+   - run the Godot presentation against the actual persistent canonical world;
+   - observe continuously for roughly 30–60 minutes or until sufficient natural state transitions have occurred;
+   - do not advance/force the world merely to obtain visual coverage; use deterministic fixtures/native captures for rare actions.
+
+4. **Live-UAT matrix**
+   - heartbeat continuation: committed action animation does not restart every frame/tick;
+   - routes: continuous movement, correct facing/turns, no teleport/furniture cut, clean arrival settle;
+   - object interaction: inspect/nudge contact, pickup→carry attachment, travel turns, place release/settle;
+   - quiet acting: rest/loaf/groom/stretch distinct, readable, and not mechanically looping;
+   - support acting: sleep entry/curl and wake/exit remain physically supported;
+   - observation/event acting: react/orient/window-watch remains subordinate to canonical event/attention state;
+   - environment: lighting/weather/season mapping follows the frame and remains pixel-native;
+   - authority: no POST, `/api/step`, SQLite/database access, renderer-side behavior/history, or duplicate planner;
+   - operations: no CPU runaway, process leak, or Xvfb/llvmpipe always-on path.
+
+5. **Defect handling**
+   - first classify any problem as presentation vs canonical-world defect using frame/event evidence and Canvas comparison;
+   - fix presentation defects in Godot without changing world behavior;
+   - use one-process bounded Lab captures for native regression proof;
+   - if Godot is unstable, immediately roll presentation back to Canvas while leaving the world untouched.
+
+6. **Acceptance and handoff**
+   - rerun focused Godot tests and the full repository suite;
+   - record canary/UAT evidence and final cutover artifact;
+   - update `STATUS.md`, `MEMORY.md`, roadmap/README/launch docs;
+   - retain Canvas fallback through the next normal product checkpoint;
+   - then resume Iteration 10 rather than continuing migration work indefinitely.
+
+### Cutover success criteria
+
+The cutover is complete when the actual persistent world can run under Godot presentation for an extended canary with no authority violation, no material action/motion/contact regression, no CPU/process safety regression, and immediate Canvas rollback still available. The migration is **not** complete merely because deterministic screenshots or unit tests pass.
+
 ## Next product iteration after Iteration 9
 
 **Iteration 10 — Causal Composition and Situation Chaining.** Allow current canonical events/opportunities to intersect with stored consequences, object state, habits, arrangements, and spatial context so two or more existing systems can generate richer bounded situations. Prefer composition and stronger causal legibility over more memory, more verbs, or a generic planner.
