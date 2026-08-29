@@ -4,6 +4,22 @@ This file is the visual authority for Terrarium. Human/vision inspection of the 
 
 `VISUAL_STYLE_OVERHAUL.md` defines the ordered migration from the current procedural renderer to this target. This file defines the law the resulting art should obey.
 
+## Godot presentation baseline lock — 2026-08-29
+
+The approved Godot presentation baseline is the cleaned `display/godot_reference_v2` room combined with the compact side/three-quarter Moss identity from the accepted authored `display/art/moss/` sprites. Production Moss uses **authored geometry → Godot palette only**: generated Godot rasters may translate palette roles but may not add, remove, reshape, or generically finish character pixels. `MOSS_SPEC.md` is the character-specific lock.
+
+For Godot presentation work:
+
+- preserve the current pragmatic overhead/three-quarter room projection and composition;
+- preserve the warm timber / cream plaster / saturated blue / deep green material hierarchy;
+- preserve selective chromatic outlines, compact contact shadows, shallow furniture top planes, handcrafted asymmetry, and curated lived-in prop density;
+- preserve Moss's compact canine side/three-quarter silhouette and existing gameplay scale;
+- preserve exact authored Moss geometry in generated Godot production rasters; palette translation is allowed, post-generation character finishing is not;
+- if Moss needs richer art later, change and review the canonical authored sprite source deliberately rather than painting over generated output;
+- extend room quality through asset-specific redraw and consistency, not another projection, palette, or character pivot.
+
+Explicit regression: the later special frontal/chest-forward Moss experiment is rejected. It must not be used as an idle baseline or propagated into the action set.
+
 ## Rendering contract
 
 - Author art on a **400×240 internal Canvas surface**.

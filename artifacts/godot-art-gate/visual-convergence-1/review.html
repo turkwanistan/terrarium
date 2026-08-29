@@ -1,0 +1,38 @@
+<!doctype html><meta charset="utf-8"><title>Terrarium Visual Convergence 1</title>
+<style>
+body{margin:0;background:#15120f;color:#eee;font:15px system-ui;padding:22px}h1{margin:0 0 8px;font-size:25px}h2{margin:28px 0 10px;font-size:19px}.note{color:#cfc4b7;max-width:1180px}.row{display:flex;gap:16px;align-items:flex-start;flex-wrap:wrap}.card{background:#251f1a;border:1px solid #594a3e;padding:10px}.card h3{font-size:14px;margin:0 0 8px}.room{width:800px;height:480px;image-rendering:pixelated;display:block}.sprite{width:360px;height:312px;object-fit:contain;image-rendering:pixelated;background:#527044;display:block}.stage{position:relative;width:800px;height:480px;overflow:hidden;background:#111}.stage img{image-rendering:pixelated}.stage .bg{position:absolute;inset:0;width:800px;height:480px}.stage .actor{position:absolute;left:392px;top:314px;width:120px;height:104px;object-fit:contain}.stage .fg{position:absolute;inset:0;width:800px;height:480px}.small{font-size:12px;color:#cfc4b7;max-width:360px}.tag{display:inline-block;padding:3px 7px;border:1px solid #675445;background:#30261f;margin-bottom:10px}
+</style>
+<div style="margin:0 0 14px;padding:10px 12px;border:2px solid #d6a85f;background:#302619;color:#ffe0a3;font:700 14px system-ui">HISTORICAL / SUPERSEDED — Candidate B was not adopted. Production Moss is now exact authored geometry → Godot palette only. See ../moss-palette-only-promotion/native-validation.json.</div><h1>Visual Convergence 1 — room cleanup + Moss idle</h1>
+<p class="note">Review-only convergence surface. Production Moss is intentionally unchanged pending human approval. Room layout, projection, palette hierarchy, and furniture composition are locked; the room pass only removes weak procedural noise and converts selected marks into connected material clusters.</p>
+
+<h2>Room artifact cleanup — before / after</h2>
+<div class="row">
+ <div class="card"><h3>Spring/day — Reference-v3 baseline</h3><img class="room" src="baseline/hero_spring_day.png?v=baseline"></div>
+ <div class="card"><h3>Spring/day — cleaned</h3><img class="room" src="../../../display/godot_reference_v2/art/hero_spring_day.png?v=vc1-2"></div>
+ <div class="card"><h3>Rain — Reference-v3 baseline</h3><img class="room" src="baseline/hero_rain.png?v=baseline"></div>
+ <div class="card"><h3>Rain — cleaned</h3><img class="room" src="../../../display/godot_reference_v2/art/hero_rain.png?v=vc1-2"></div>
+ <div class="card"><h3>Warm night — Reference-v3 baseline</h3><img class="room" src="baseline/hero_winter_night.png?v=baseline"></div>
+ <div class="card"><h3>Warm night — cleaned</h3><img class="room" src="../../../display/godot_reference_v2/art/hero_winter_night.png?v=vc1-2"></div>
+</div>
+
+<h2>Moss idle — equivalent-scale isolated comparison</h2>
+<p class="note">The accepted authored source already has the compact puppy silhouette. Current Reference-v3 adds substantial fixed-coordinate face/chest/fur finishing. Candidates below progressively reduce that finishing while keeping the same 60×52 source canvas, anchor vocabulary, directed side/three-quarter head, short legs, and asymmetrical floppy-ear read.</p>
+<div class="row">
+ <div class="card"><h3>Old Canvas Moss — accepted identity</h3><img class="sprite" src="baseline/moss_idle_canvas.png?v=baseline"><p class="small">Actual accepted Canvas reference raster.</p></div>
+ <div class="card"><h3>Current Godot Reference-v3</h3><img class="sprite" src="baseline/moss_idle_current.png?v=baseline"><p class="small">Production identity today. Extra muzzle/blaze/chest/fur finishing is the main charm delta.</p></div>
+ <div class="card"><h3>Authored geometry → Godot palette only</h3><img class="sprite" src="../../../display/godot_reference_v2/art/review/moss_idle_source_palette.png?v=vc1-2"><p class="small">Control: exact authored JSON runs with only Godot palette mapping.</p></div>
+ <div class="card"><h3>Candidate A — material-only</h3><img class="sprite" src="../../../display/godot_reference_v2/art/review/moss_idle_candidate_a.png?v=vc1-2"><p class="small">Source silhouette plus pose-safe edge/material treatment; no new facial geometry.</p></div>
+ <div class="card"><h3>Candidate B — restrained face</h3><img class="sprite" src="../../../display/godot_reference_v2/art/review/moss_idle_candidate_b.png?v=vc1-2"><p class="small">A plus compact blaze/muzzle/chest modeling, toe accents, and two connected fur marks. No second frontal eye.</p></div>
+ <div class="card"><h3>Candidate C — puppy-balance polish</h3><img class="sprite" src="../../../display/godot_reference_v2/art/review/moss_idle_candidate_c.png?v=vc1-2"><p class="small">B plus a one-pixel crown/cheek/ear balance and tiny lower-torso overhang to reinforce short-legged compactness.</p></div>
+</div>
+
+<h2>Cleaned Godot room — same idle position</h2>
+<div class="row">
+ <div class="card"><h3>Current production Moss</h3><div class="stage"><img class="bg" src="../../../display/godot_reference_v2/art/hero_spring_day.png?v=vc1-2"><img class="actor" src="baseline/moss_idle_current.png?v=baseline"><img class="fg" src="../../../display/godot_reference_v2/art/hero_foreground.png?v=vc1-2"></div></div>
+ <div class="card"><h3>Candidate A</h3><div class="stage"><img class="bg" src="../../../display/godot_reference_v2/art/hero_spring_day.png?v=vc1-2"><img class="actor" src="../../../display/godot_reference_v2/art/review/moss_idle_candidate_a.png?v=vc1-2"><img class="fg" src="../../../display/godot_reference_v2/art/hero_foreground.png?v=vc1-2"></div></div>
+ <div class="card"><h3>Candidate B</h3><div class="stage"><img class="bg" src="../../../display/godot_reference_v2/art/hero_spring_day.png?v=vc1-2"><img class="actor" src="../../../display/godot_reference_v2/art/review/moss_idle_candidate_b.png?v=vc1-2"><img class="fg" src="../../../display/godot_reference_v2/art/hero_foreground.png?v=vc1-2"></div></div>
+ <div class="card"><h3>Candidate C</h3><div class="stage"><img class="bg" src="../../../display/godot_reference_v2/art/hero_spring_day.png?v=vc1-2"><img class="actor" src="../../../display/godot_reference_v2/art/review/moss_idle_candidate_c.png?v=vc1-2"><img class="fg" src="../../../display/godot_reference_v2/art/hero_foreground.png?v=vc1-2"></div></div>
+</div>
+
+<h2>Native Godot 4.7.2 gate</h2>
+<div class="card" style="max-width:1180px"><div class="tag">PASS — REVIEW READY, NOT ADOPTED</div><p class="note">The cleaned room and current-vs-Candidate-B idle were captured as actual 800×480 Godot 4.7.2 output for spring/day, rain, and warm night using a Lab copy whose room/current/B input hashes exactly match this repository. Human/vision review found no room-direction regression and Candidate B remained preferable under all three environment treatments. Production idle was restored after the disposable Lab substitution and remains unchanged here.</p><p class="small">Evidence and native capture hashes: <code>native-validation.json</code>. Recommended next decision: approve or reject Candidate B. Do not propagate it to the action set before that decision.</p></div>

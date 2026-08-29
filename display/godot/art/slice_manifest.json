@@ -1,0 +1,448 @@
+{
+  "schema": "terrarium.godot-slice-manifest.v1",
+  "art_surface": [
+    400,
+    240
+  ],
+  "semantic_frame": [
+    800,
+    480
+  ],
+  "authored_detail_instances": 32,
+  "static": [
+    {
+      "id": "room-back",
+      "texture": "res://art/room_back.png",
+      "position": [
+        0,
+        0
+      ],
+      "layer": "Background",
+      "z": 0
+    },
+    {
+      "id": "major-window",
+      "texture": "res://art/window_spring.png",
+      "position": [
+        8,
+        12
+      ],
+      "layer": "Structure",
+      "z": 0
+    },
+    {
+      "id": "sleeping-nook-back",
+      "texture": "res://art/sleeping_nook_back.png",
+      "position": [
+        9,
+        164
+      ],
+      "layer": "Structure",
+      "z": 1
+    },
+    {
+      "id": "living-rug",
+      "texture": "res://art/rug.png",
+      "position": [
+        132,
+        168
+      ],
+      "layer": "Surface",
+      "z": 0
+    },
+    {
+      "id": "warm-light",
+      "texture": "res://art/warm_light.png",
+      "position": [
+        0,
+        158
+      ],
+      "layer": "Atmosphere",
+      "z": 1
+    },
+    {
+      "id": "sleeping-nook-front",
+      "texture": "res://art/sleeping_nook_front.png",
+      "position": [
+        9,
+        164
+      ],
+      "layer": "Foreground",
+      "z": 2
+    },
+    {
+      "id": "wall-frame-1",
+      "texture": "res://art/prop_frame.png",
+      "position": [
+        164,
+        34
+      ],
+      "layer": "Structure",
+      "z": 2
+    },
+    {
+      "id": "wall-frame-2",
+      "texture": "res://art/prop_frame.png",
+      "position": [
+        188,
+        48
+      ],
+      "layer": "Structure",
+      "z": 2
+    },
+    {
+      "id": "wall-herb-1",
+      "texture": "res://art/prop_herb.png",
+      "position": [
+        148,
+        72
+      ],
+      "layer": "Structure",
+      "z": 2
+    },
+    {
+      "id": "wall-herb-2",
+      "texture": "res://art/prop_herb.png",
+      "position": [
+        268,
+        78
+      ],
+      "layer": "Structure",
+      "z": 2
+    },
+    {
+      "id": "right-bookcase",
+      "texture": "res://art/bookcase.png",
+      "position": [
+        316,
+        24
+      ],
+      "layer": "Structure",
+      "z": 2
+    },
+    {
+      "id": "nook-books",
+      "texture": "res://art/prop_books.png",
+      "position": [
+        16,
+        150
+      ],
+      "layer": "Structure",
+      "z": 3
+    },
+    {
+      "id": "nook-candle",
+      "texture": "res://art/prop_candle.png",
+      "position": [
+        42,
+        145
+      ],
+      "layer": "Structure",
+      "z": 3
+    },
+    {
+      "id": "nook-mug",
+      "texture": "res://art/prop_mug.png",
+      "position": [
+        55,
+        154
+      ],
+      "layer": "Structure",
+      "z": 3
+    },
+    {
+      "id": "window-pot",
+      "texture": "res://art/prop_pot.png",
+      "position": [
+        114,
+        105
+      ],
+      "layer": "Structure",
+      "z": 3
+    },
+    {
+      "id": "window-plant",
+      "texture": "res://art/prop_plant_small.png",
+      "position": [
+        109,
+        89
+      ],
+      "layer": "Structure",
+      "z": 4
+    },
+    {
+      "id": "side-table",
+      "texture": "res://art/prop_table.png",
+      "position": [
+        145,
+        129
+      ],
+      "layer": "Structure",
+      "z": 2
+    },
+    {
+      "id": "side-lamp",
+      "texture": "res://art/prop_lamp.png",
+      "position": [
+        151,
+        103
+      ],
+      "layer": "Structure",
+      "z": 3
+    },
+    {
+      "id": "side-books",
+      "texture": "res://art/prop_books.png",
+      "position": [
+        173,
+        137
+      ],
+      "layer": "Structure",
+      "z": 3
+    },
+    {
+      "id": "side-jar",
+      "texture": "res://art/prop_jar.png",
+      "position": [
+        183,
+        121
+      ],
+      "layer": "Structure",
+      "z": 3
+    },
+    {
+      "id": "paper-wall",
+      "texture": "res://art/prop_paper.png",
+      "position": [
+        225,
+        111
+      ],
+      "layer": "Structure",
+      "z": 2
+    }
+  ],
+  "y_sorted": [
+    {
+      "id": "floor-plant-a",
+      "texture": "res://art/prop_plant_large.png",
+      "base": [
+        176,
+        216
+      ],
+      "anchor": [
+        12,
+        38
+      ],
+      "z": 0
+    },
+    {
+      "id": "floor-plant-b",
+      "texture": "res://art/prop_plant_small.png",
+      "base": [
+        254,
+        205
+      ],
+      "anchor": [
+        9,
+        27
+      ],
+      "z": 0
+    },
+    {
+      "id": "basket-a",
+      "texture": "res://art/prop_basket.png",
+      "base": [
+        119,
+        228
+      ],
+      "anchor": [
+        11,
+        17
+      ],
+      "z": 0
+    },
+    {
+      "id": "basket-b",
+      "texture": "res://art/prop_basket.png",
+      "base": [
+        274,
+        224
+      ],
+      "anchor": [
+        11,
+        17
+      ],
+      "z": 0
+    },
+    {
+      "id": "stool-a",
+      "texture": "res://art/prop_stool.png",
+      "base": [
+        228,
+        220
+      ],
+      "anchor": [
+        12,
+        26
+      ],
+      "z": 0
+    },
+    {
+      "id": "cushion-a",
+      "texture": "res://art/prop_cushion.png",
+      "base": [
+        198,
+        216
+      ],
+      "anchor": [
+        10,
+        13
+      ],
+      "z": 0
+    },
+    {
+      "id": "blocks-a",
+      "texture": "res://art/prop_blocks.png",
+      "base": [
+        247,
+        226
+      ],
+      "anchor": [
+        6,
+        9
+      ],
+      "z": 0
+    },
+    {
+      "id": "blocks-b",
+      "texture": "res://art/prop_blocks.png",
+      "base": [
+        262,
+        232
+      ],
+      "anchor": [
+        6,
+        9
+      ],
+      "z": 0
+    },
+    {
+      "id": "slippers-a",
+      "texture": "res://art/prop_slippers.png",
+      "base": [
+        91,
+        231
+      ],
+      "anchor": [
+        10,
+        8
+      ],
+      "z": 0
+    },
+    {
+      "id": "bowl-a",
+      "texture": "res://art/prop_bowl.png",
+      "base": [
+        153,
+        226
+      ],
+      "anchor": [
+        8,
+        9
+      ],
+      "z": 0
+    },
+    {
+      "id": "jar-floor",
+      "texture": "res://art/prop_jar.png",
+      "base": [
+        289,
+        220
+      ],
+      "anchor": [
+        6,
+        18
+      ],
+      "z": 0
+    },
+    {
+      "id": "mug-floor",
+      "texture": "res://art/prop_mug.png",
+      "base": [
+        212,
+        229
+      ],
+      "anchor": [
+        5,
+        10
+      ],
+      "z": 0
+    },
+    {
+      "id": "paper-floor-a",
+      "texture": "res://art/prop_paper.png",
+      "base": [
+        182,
+        224
+      ],
+      "anchor": [
+        7,
+        9
+      ],
+      "z": 0
+    },
+    {
+      "id": "paper-floor-b",
+      "texture": "res://art/prop_paper.png",
+      "base": [
+        193,
+        230
+      ],
+      "anchor": [
+        7,
+        9
+      ],
+      "z": 0
+    },
+    {
+      "id": "pot-floor",
+      "texture": "res://art/prop_pot.png",
+      "base": [
+        306,
+        225
+      ],
+      "anchor": [
+        7,
+        15
+      ],
+      "z": 0
+    },
+    {
+      "id": "books-floor",
+      "texture": "res://art/prop_books.png",
+      "base": [
+        322,
+        224
+      ],
+      "anchor": [
+        10,
+        13
+      ],
+      "z": 0
+    },
+    {
+      "id": "basket-c",
+      "texture": "res://art/prop_basket.png",
+      "base": [
+        357,
+        231
+      ],
+      "anchor": [
+        11,
+        17
+      ],
+      "z": 0
+    }
+  ],
+  "notes": "POC raster art is conventional engine-neutral PNG. Godot scene resources only compose it; canonical state stays in terrarium.frame.v1."
+}

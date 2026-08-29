@@ -1,0 +1,13 @@
+<!doctype html>
+<meta charset="utf-8">
+<title>Terrarium — Canvas vs Godot</title>
+<style>
+:root{color-scheme:dark}*{box-sizing:border-box}body{margin:0;padding:20px;background:#151210;color:#eee;font:14px system-ui,sans-serif}h1{margin:0 0 6px}p{color:#c9bfb7}.grid{display:grid;grid-template-columns:repeat(2,minmax(0,800px));gap:20px;align-items:start}.card{background:#231d19;border:1px solid #55463b;padding:10px}.stage{width:800px;height:480px;position:relative;background:#0c0a0a;overflow:hidden}.stage>img{display:block;image-rendering:pixelated;image-rendering:crisp-edges}.canvas{width:800px;height:480px;object-fit:contain}.godot{position:absolute;left:0;top:0;width:800px;height:480px}.actor{position:absolute;left:392px;top:314px;width:120px;height:104px;image-rendering:pixelated}.label{font-size:18px;font-weight:700;margin:0 0 8px}.note{max-width:1200px;line-height:1.45}@media(max-width:1650px){.grid{grid-template-columns:1fr}.stage{max-width:100%;height:auto;aspect-ratio:5/3}.canvas,.godot{width:100%;height:100%}.actor{left:49%;top:65.42%;width:15%;height:21.67%}}
+</style>
+<h1>Terrarium — Canvas vs Godot</h1>
+<p class="note">Left: accepted/current Canvas spring-clear capture used in the Godot POC comparison. Right: adoption-ready Godot Reference-v3 spring/day composition with the approved pre-regression Moss.</p>
+<div class="grid">
+  <div class="card"><div class="label">Canvas</div><div class="stage"><img class="canvas" src="../godot-poc/canvas-spring-clear.png"></div></div>
+  <div class="card"><div class="label">Godot — adoption-ready candidate</div><div class="stage"><img class="godot" src="../../display/godot_reference_v2/art/hero_spring_day.png"><img class="actor" src="../../display/godot_reference_v2/art/moss_idle_0.png"><img class="godot" src="../../display/godot_reference_v2/art/hero_foreground.png"></div></div>
+</div>
+<p class="note">Godot review/actions/variants: <a href="reference-v3-review.html">open full Reference-v3 review</a>.</p>

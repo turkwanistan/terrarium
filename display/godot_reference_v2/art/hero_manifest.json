@@ -1,0 +1,138 @@
+{
+  "schema": "terrarium.reference-godot-poc-v3",
+  "art_surface": [
+    400,
+    240
+  ],
+  "presentation": [
+    800,
+    480
+  ],
+  "visual_baseline": "approved cleaned Reference-v3 room + exact authored Moss geometry with Godot palette mapping only",
+  "moss_rendering": "authored_geometry_godot_palette_only",
+  "rejected_regression": "frontal low-quadruped / chest-forward Moss experiment",
+  "reference_direction": "rich hand-authored cozy late-16-bit interior; dense material pixels; selective chromatic outlines; saturated wood/blue/green accents",
+  "scope": "full-room presentation candidate; no simulation authority",
+  "variants": [
+    "spring_day",
+    "rain",
+    "winter_warm_night"
+  ],
+  "motions": {
+    "idle": [
+      "idle"
+    ],
+    "walk": [
+      "walk-0",
+      "walk-1",
+      "walk-2",
+      "walk-3"
+    ],
+    "inspect": [
+      "inspect-anticipate",
+      "inspect-contact",
+      "inspect-hold",
+      "inspect-recover"
+    ],
+    "nudge": [
+      "nudge-anticipate",
+      "nudge-contact",
+      "nudge-press",
+      "nudge-hold",
+      "nudge-recover"
+    ],
+    "rest": [
+      "rest"
+    ],
+    "loaf": [
+      "loaf"
+    ],
+    "groom": [
+      "groom-start",
+      "groom-contact",
+      "groom-hold",
+      "groom-recover"
+    ],
+    "stretch": [
+      "stretch-ready",
+      "stretch-extend",
+      "stretch-hold",
+      "stretch-recover"
+    ],
+    "sleep": [
+      "sleep-settle0",
+      "sleep-settle1",
+      "sleep-settle2",
+      "sleep-settle3",
+      "sleep-curled"
+    ],
+    "wake": [
+      "wake-0",
+      "wake-1",
+      "wake-2",
+      "wake-3"
+    ],
+    "carry": [
+      "pickup-anticipate",
+      "pickup-contact",
+      "pickup-lift",
+      "pickup-hold",
+      "carry"
+    ],
+    "place": [
+      "place-lower",
+      "place-contact",
+      "place-hold",
+      "place-release",
+      "place-recover"
+    ],
+    "look": [
+      "react",
+      "idle"
+    ],
+    "window_watch": [
+      "window-ready",
+      "window-watch"
+    ]
+  },
+  "live_object_support": {
+    "blue_stone": [
+      "settled",
+      "rolled"
+    ],
+    "amber_leaf": [
+      "fresh",
+      "handled"
+    ],
+    "acorn": [
+      "settled",
+      "rolled"
+    ],
+    "shell": [
+      "handled",
+      "displayed"
+    ],
+    "red_thread": [
+      "loose",
+      "rumpled",
+      "nested"
+    ],
+    "glass_star": [
+      "handled",
+      "displayed"
+    ]
+  },
+  "composition": [
+    "timber room shell",
+    "textured plaster + wainscot",
+    "sunset/weather window + blue curtains",
+    "sleeping nook",
+    "desk + stool + reading props",
+    "bookcase + trailing plant",
+    "large patterned green rug",
+    "pouf + book basket",
+    "floor plant",
+    "bowls/toys",
+    "Moss hero sprite"
+  ]
+}

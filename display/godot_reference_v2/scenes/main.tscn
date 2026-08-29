@@ -1,0 +1,21 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource path="res://scripts/main.gd" type="Script" id="1_main"]
+
+[node name="TerrariumHeroGate" type="Node2D"]
+script = ExtResource("1_main")
+
+[node name="Background" type="Sprite2D" parent="."]
+centered = false
+position = Vector2(0, 0)
+z_index = 0
+
+[node name="Actor" type="Sprite2D" parent="."]
+centered = false
+position = Vector2(215, 166)
+z_index = 10
+
+[node name="Foreground" type="Sprite2D" parent="."]
+centered = false
+position = Vector2(0, 0)
+z_index = 20

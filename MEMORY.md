@@ -112,3 +112,13 @@ This is a capability specialization, not an SBC substrate deficiency. Existing F
 Checkpoint `2026-08-27-pixel-art-overhaul-iteration2` confirmed a reusable renderer rule: semantic action authority and authored sprite acting can remain cleanly separated. A canonical action/target can drive a small renderer-only key-pose state machine (anticipation → contact → attachment/release → recovery) without moving object state, target selection, behavior decisions, history, or time into presentation. For integer-grid locomotion, authored discrete contact poses can replace sinusoidal procedural deformation while preserving the continuous presentation anchor used by `grid-quantized-temporal-render-auditor-r1`.
 
 The real-browser evidence covered 17 scenarios / 187 exact-scale samples, four walk keyframes, 0 px continuity interruption, clean RAF, and 9/9 grid-aware temporal passes while the tick-698 semantic frame remained byte-identical to Iteration 1. Existing SBC capabilities were sufficient; no new capability or Gen18 substrate change was warranted.
+
+## Godot Lab native-validation safety lesson
+
+The `mcp-lab` Godot 4.7.2 validation path currently uses Xvfb plus Mesa **llvmpipe** software rendering. A large batched capture attempt became runaway/stuck and drove the host `qemu-system-x86_64` process to roughly 600% CPU, requiring a forced stop of the disposable `mcp-lab` VM. This is a reusable infrastructure constraint, not a Terrarium rendering defect.
+
+Future native Godot validation must follow `GODOT_NATIVE_VALIDATION.md`: one native capture per fresh process; default 20-second OS timeout with TERM then forced kill; orphan-process and guest-load checks after every capture; representative gates before exhaustive matrices; and no blind rerun after a tunnel timeout/502 until output/process state is inspected. Do not launch large llvmpipe capture loops in one long synchronous or durable command.
+
+The first reuse of this bounded strategy succeeded across 12 representative 800×480 captures (idle across spring/rain/night, walk, inspect contact, sleep settle/curled, wake exit, carry, place contact/release, window-watch). Every process exited cleanly, no Godot/Xvfb process remained, and final guest load was `0.00 / 0.06 / 0.04`. Evidence: `artifacts/godot-art-gate/moss-palette-only-promotion/native-validation.json`.
+
+Preserve the Lab isolation boundary. The Lab cannot reach the host Terrarium API on the LAN, and that is not a reason to weaken isolation for presentation validation. Use canonical fixtures/tests for live-adapter semantics and Lab-local native captures for engine/render verification.

@@ -1,0 +1,42 @@
+{
+  "schema": "terrarium.godot-live-snapshot-integration-gate.v1",
+  "status": "PASS",
+  "scope": "Read-only canonical frame snapshot -> real Godot FrameAdapter GET /api/frame -> live presentation mapping -> native 800x480 render. No simulation write, no cutover, no Lab network-boundary change.",
+  "canonical_source": {
+    "endpoint": "running Terrarium GET /api/frame",
+    "tick": 113069,
+    "world_minutes": 523731,
+    "lighting": "day",
+    "weather": "clear",
+    "season": "spring",
+    "season_stage": "early",
+    "creature_activity": "look_outside",
+    "creature_pose": "look_outside",
+    "creature_zone": "window",
+    "creature_facing": "left"
+  },
+  "relay": {
+    "reason": "mcp-lab is intentionally isolated from the host/LAN Terrarium API",
+    "method": "presentation-relevant projection of the genuine current canonical frame copied as JSON into the disposable Lab, then served only on Lab loopback",
+    "lab_endpoint": "http://127.0.0.1:8770/api/frame",
+    "snapshot_sha256": "160e5268fa3b162ea2ef961df8007e1dd629218ba9c71cb26425a012f4324636",
+    "security_boundary_weakened": false
+  },
+  "native_result": {
+    "engine": "Godot 4.7.2.stable.official.ed1daf0bf",
+    "adapter_path": "actual TerrariumReferenceFrameAdapter HTTP GET /api/frame",
+    "mapped_variant": "spring_day",
+    "mapped_motion": "window_watch",
+    "output": "800x480",
+    "capture_sha256": "31cf425d81ca5d20c0b522616c6469459706ff78451bf4b9b6d06bdb173be919",
+    "exit_code": 0,
+    "mapping_matches_authority": true
+  },
+  "safety": {
+    "one_shot_hard_timeout_seconds": 20,
+    "relay_bound_to_lab_loopback": true,
+    "relay_stopped_after_capture": true,
+    "lingering_godot_or_xvfb": false,
+    "post_capture_guest_load_average": "0.16 / 0.03 / 0.01"
+  }
+}

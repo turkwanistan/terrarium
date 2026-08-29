@@ -1,0 +1,52 @@
+{
+  "schema": "terrarium.godot-hero-gate.v1",
+  "art_surface": [
+    400,
+    240
+  ],
+  "presentation": [
+    800,
+    480
+  ],
+  "slice": "window + sleeping/reading nook + rug edge",
+  "variants": [
+    "spring_day",
+    "rain",
+    "winter_warm_night"
+  ],
+  "motion": [
+    "idle_4",
+    "walk_4",
+    "inspect_4"
+  ],
+  "authored_details": [
+    "deep three-pane window",
+    "layered curtains",
+    "authored exterior landscape / weather glass",
+    "built-in window-seat architecture",
+    "layered daybed",
+    "pillow + quilt textile composition",
+    "sill ceramic planter",
+    "sill plant",
+    "nook books",
+    "nook mug + candle cluster",
+    "hanging plant",
+    "pressed-herb frame",
+    "landscape frame",
+    "tiny wall shelf + herb bundle",
+    "bookcase",
+    "curated shelf books",
+    "shelf basket + folded textile",
+    "ceramic shelf vessel",
+    "side table",
+    "warm lamp",
+    "tabletop reading cluster",
+    "woven rug",
+    "floor basket + slippers",
+    "floor story cluster",
+    "foreground plant + basket occlusion"
+  ],
+  "authored_detail_count": 25,
+  "moss_character_pass": "accepted Canvas Moss silhouette + restrained Godot-specific detail overlays; planted idle; canonical walk/inspect poses",
+  "notes": "Decision-gate art proof. Hardcoded presentation only; no canonical simulation/state integration."
+}

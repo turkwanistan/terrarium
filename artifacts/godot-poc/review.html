@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Terrarium Godot POC Review</title>
+<style>
+body{margin:0;background:#171513;color:#eee;font-family:system-ui,-apple-system,Segoe UI,sans-serif}main{max-width:1180px;margin:auto;padding:28px}h1{margin:0 0 8px;font-size:30px}p{color:#c9c2b8;line-height:1.5}.pair,.grid{display:grid;gap:18px}.pair{grid-template-columns:repeat(2,minmax(0,1fr));margin:24px 0 40px}.grid{grid-template-columns:repeat(2,minmax(0,1fr))}.card{background:#24201d;border:1px solid #403832;border-radius:10px;padding:12px}.card h2,.card h3{margin:0 0 9px}.card p{margin:8px 0 0;font-size:14px}.card img{display:block;width:100%;height:auto;image-rendering:pixelated;border:1px solid #0d0c0b;background:#0d0c0b}.wide{grid-column:1/-1}.note{padding:12px 14px;background:#211e1b;border-left:4px solid #b9915b;margin:18px 0}a{color:#e7bc79}@media(max-width:800px){.pair,.grid{grid-template-columns:1fr}}
+</style>
+</head>
+<body><main>
+<h1>Terrarium — Godot Presentation POC</h1>
+<p>This page is for the visual decision gate. Click any image to open the exact 800×480 PNG at full size. The Godot images below are the final post-import deterministic renders; the first image is the accepted Canvas baseline for the same spring-clear fixture.</p>
+<div class="note"><strong>Primary question:</strong> does the Godot direction look sufficiently closer to the desired pixel-art presentation that it is worth continuing the renderer migration and doing a dedicated art-production pass?</div>
+<h2>Direct baseline comparison</h2>
+<div class="pair">
+<div class="card"><h3>Canvas — spring clear</h3><a href="canvas-spring-clear.png"><img src="canvas-spring-clear.png" alt="Canvas spring clear"></a><p>Existing accepted Canvas renderer.</p></div>
+<div class="card"><h3>Godot — spring clear</h3><a href="final/spring_clear_idle-1300.png"><img src="final/spring_clear_idle-1300.png" alt="Godot spring clear"></a><p>Final bounded art pass: layered room, Y-sorted objects, foreground occlusion, authored right-wall anchor, revised Moss.</p></div>
+</div>
+<h2>Environment states</h2>
+<div class="grid">
+<div class="card"><h3>Spring rain</h3><a href="final/spring_rain_idle-1300.png"><img src="final/spring_rain_idle-1300.png" alt="Spring rain"></a></div>
+<div class="card"><h3>Winter warm night</h3><a href="final/winter_warm_night-1300.png"><img src="final/winter_warm_night-1300.png" alt="Winter warm night"></a></div>
+</div>
+<h2>Movement & interaction</h2>
+<div class="grid">
+<div class="card"><h3>Walk to window</h3><a href="final/walk_to_window-1300.png"><img src="final/walk_to_window-1300.png" alt="Walk to window"></a></div>
+<div class="card"><h3>Inspect red thread</h3><a href="final/inspect_red_thread-700.png"><img src="final/inspect_red_thread-700.png" alt="Inspect red thread"></a></div>
+<div class="card"><h3>Pick up red thread</h3><a href="final/pickup_red_thread-1300.png"><img src="final/pickup_red_thread-1300.png" alt="Pick up red thread"></a></div>
+<div class="card"><h3>Carry walk</h3><a href="final/carry_walk-1300.png"><img src="final/carry_walk-1300.png" alt="Carry walk"></a></div>
+<div class="card"><h3>Thread rumpled</h3><a href="final/red_thread_rumpled-1300.png"><img src="final/red_thread_rumpled-1300.png" alt="Thread rumpled"></a></div>
+<div class="card"><h3>Thread nested</h3><a href="final/red_thread_nested-1300.png"><img src="final/red_thread_nested-1300.png" alt="Thread nested"></a></div>
+</div>
+<p style="margin-top:36px">Suggested review order: Canvas vs Godot spring → winter warm night → spring rain → walk/inspect/carry → thread state changes.</p>
+</main></body></html>

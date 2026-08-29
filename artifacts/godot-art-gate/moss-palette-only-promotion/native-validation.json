@@ -1,0 +1,50 @@
+{
+  "schema": "terrarium.godot-moss-palette-only-native-gate.v1",
+  "status": "PASS",
+  "decision": "palette-only-production-approved",
+  "engine": "Godot 4.7.2.stable.official.ed1daf0bf",
+  "render_path": "X11/OpenGL compatibility via Xvfb; Mesa llvmpipe",
+  "production_rule": "exact authored display/art/moss/*.json geometry translated through MOSS_MAP only; no additive finishing, no pose-safe recoloring, no anatomy edits",
+  "host_evidence": {
+    "production_idle_sha256": "b76ab00cfaa8cd22976df443ccef70b1ebe9ee13b22e521dfca52760d7fdc65b",
+    "production_moss_tree_sha256": "ebdcad6f9be515f15c440cfafc49f66fe22237303bf088d7658f1021d0469bdf",
+    "focused_godot_tests": "11/11 PASS",
+    "full_repository_tests": "71/71 PASS",
+    "exact_geometry_regression_test": "PASS"
+  },
+  "native_representative_captures": {
+    "spring_idle": "1b96417ade4b0fb7eec3f574096e245212d0aaaf6bfe090c77d669369391248e",
+    "walk_frame_2": "4c29c81dead73361fee89cc338f9119d513acb3dbce9ecd1686863aababd435c",
+    "inspect_contact": "026b94ca60b48ed469cb51ca4d2e9bdd0602d1eb321d54e3f481f6400799d3b5",
+    "sleep_settle": "377021c12fe8016335525c901f6cb9933a798fd2cd83d420e2b9d270088f9a6e",
+    "sleep_curled": "0ab5f655852cc21c97e3fa375e217cae613ef979bd2fb60ccd271da4bf80751b",
+    "wake_exit": "7a397eaa72f91aade26893094cae7f2fbc808076424a9b7d7f5c7fdbd1fdc39d",
+    "carry": "1587da9de91ecd98aeab306d725299447a5a4bc4c82f477273263aa4b0423e7d",
+    "place_contact": "98695337f25892af525f8d92e037ba38e1f82e300db4e334f509fdbda66bddcc",
+    "place_release": "f0a90a36ae31dd080bb57cac8cd699cd16c7b1801907760374a4a8e4c924d0e4",
+    "window_watch": "2082cc3e8049f4c2494efb5e9c7d762505b2ef9c7e4271956d9469799dc4b44c",
+    "rain_idle": "bfe776ca2a646b8285fe3e1f532359ca5f75fb213a6b8b7d7d9a74d7e947a1be",
+    "warm_night_idle": "7f9bc54bd3cbcf337dd477d4076932f774744f7328e5f35d43251468fbe80103"
+  },
+  "native_checks": {
+    "all_captures_800x480": true,
+    "representative_visual_review": "PASS",
+    "sleep_wake_support_and_occlusion": "PASS",
+    "carry_place_contact_readability": "PASS",
+    "window_watch_staging": "PASS",
+    "rain_and_night_readability": "PASS",
+    "old_to_palette_idle_changed_pixels_each_variant": 636,
+    "old_to_palette_idle_change_bbox": [408, 326, 488, 398],
+    "changed_pixels_outside_expected_actor_rect": 0
+  },
+  "lab_safety": {
+    "policy": "GODOT_NATIVE_VALIDATION.md",
+    "method": "one capture per process with timeout --signal=TERM --kill-after=3s 20s; orphan and CPU/load check after every capture",
+    "lingering_godot_xvfb_after_each_capture": false,
+    "final_guest_load_average": "0.00 0.06 0.04",
+    "bounded_review_server_stopped": true,
+    "note": "This policy was introduced after a prior batched llvmpipe workload became runaway and drove host QEMU CPU extremely high. No batched native capture loops are permitted."
+  },
+  "cutover": false,
+  "simulation_authority_changed": false
+}

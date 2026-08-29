@@ -1,0 +1,44 @@
+{
+  "schema": "terrarium.godot-visual-convergence-1-native-gate.v1",
+  "status": "PASS",
+  "decision": "review-ready-awaiting-human-idle-approval",
+  "engine": "Godot 4.7.2.stable.official.ed1daf0bf",
+  "render_path": "X11/OpenGL compatibility via llvmpipe",
+  "scope": {
+    "room": "artifact/noise cleanup only; approved projection/composition/layout/palette hierarchy locked",
+    "moss": "idle-only comparison; no production identity replacement and no propagation to action set",
+    "simulation_authority_changed": false,
+    "cutover_performed": false
+  },
+  "hash_matched_review_inputs": {
+    "hero_spring_day": "01a3903a44a30acc115f7ea6a87e26cc475fe74906cd50ee79358e9427c0f437",
+    "hero_rain": "bd52b0d7af08417baa659dc8b04843723aba9dd2f4499529f174a322f26e537d",
+    "hero_winter_night": "162415a6fb027020a9e4e4cb62bbe857837e45986da78b342a9360589e4c8294",
+    "production_idle": "ca559006be90595d04fdf49d63348ec401012b6fcc5c50076a6ecce46264525a",
+    "candidate_b": "20e1558f9e47e643061a927087b3ade08eb4651027e7576b6f428e0f3cd97275"
+  },
+  "native_captures_800x480": {
+    "spring_day_current": "d56bffe015eeb5cf472ac6570620cde23e38756504b7228aafe069264df26e2a",
+    "spring_day_candidate_b": "9ed95a0b0bfaed86970335b80763c79496bf85ca027081bae7d96a563a329344",
+    "rain_current": "bd65d5dd2ffa2bfb2407b384fdfa15b369f78d413ae80db7bc421eae45688c39",
+    "rain_candidate_b": "28a42931f1280858021bb374ae5032048ae4bc856dce289a128300ec745693f2",
+    "warm_night_current": "5c510983481ddb14c2186f61c7db539fc327cafa31542c609471421083ea5aa6",
+    "warm_night_candidate_b": "2320805d43beeb1d7ea1548ef61d2efe2ab124ed2d9e96643540051966a8102c"
+  },
+  "visual_judgment": {
+    "room": "PASS \u2014 materially quieter plaster/floor/rug microtexture while retaining timber, textile, foliage, prop richness and negative-space hierarchy across all three native variants",
+    "candidate_b": "PREFERRED FOR HUMAN APPROVAL \u2014 cleaner puppy-like face/chest balance and closer old-Canvas charm without frontal/chest-forward anatomy; remains legible under rain and warm-night modulation",
+    "candidate_a": "valid but under-finished",
+    "candidate_c": "valid but extra crown/torso silhouette pixels are not yet justified over B"
+  },
+  "mechanical_validation": {
+    "godot_presentation_tests": "10/10 PASS",
+    "full_repository_tests": "70/70 PASS",
+    "generated_art_determinism": "PASS",
+    "production_idle_restored_after_lab_substitution": true
+  },
+  "recommended_next_step": "Human approve or reject Candidate B as the new production idle baseline. Do not propagate character finishing to other motions until that decision.",
+  "historical_status": "SUPERSEDED",
+  "superseded_by": "artifacts/godot-art-gate/moss-palette-only-promotion/native-validation.json",
+  "supersession_note": "Candidate B was not adopted. Human approval selected exact authored geometry translated through the Godot palette only; production Moss and the action set now follow that rule."
+}

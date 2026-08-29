@@ -1,0 +1,124 @@
+{
+  "schema": "terrarium.godot-presentation-adoption-gate.v1",
+  "created_at": "2026-08-29T15:02:02Z",
+  "status": "PASS",
+  "decision": "adoption-ready-not-cut-over",
+  "candidate": "display/godot_reference_v2",
+  "authority": {
+    "canonical_simulation": "Terrarium runtime remains sole world/behavior authority",
+    "godot_role": "read-only presentation consumer of terrarium.frame.v1",
+    "cutover_performed": false,
+    "canvas_preserved": true
+  },
+  "visual_baseline": {
+    "accepted": "pre-regression Reference-v2 room + compact side/three-quarter Moss",
+    "rejected": "frontal/chest-forward Moss regression",
+    "variants": [
+      "spring_day",
+      "rain",
+      "winter_warm_night"
+    ],
+    "motions": [
+      "idle",
+      "walk",
+      "inspect",
+      "rest",
+      "sleep",
+      "wake",
+      "carry",
+      "place",
+      "look",
+      "window_watch"
+    ]
+  },
+  "live_bridge": {
+    "transport": "GET /api/frame only",
+    "writes": false,
+    "simulation_logic": false,
+    "duplicate_tick_suppression": true,
+    "canonical_route_interpolation": true,
+    "visual_zone_anchor_count": 5,
+    "transition_ms": 2600,
+    "sleep_wake_support_choreography": true,
+    "action_scoped_bed_occluder": true
+  },
+  "persistent_object_support": {
+    "blue_stone": [
+      "settled",
+      "rolled"
+    ],
+    "amber_leaf": [
+      "fresh",
+      "handled"
+    ],
+    "acorn": [
+      "settled",
+      "rolled"
+    ],
+    "shell": [
+      "handled",
+      "displayed"
+    ],
+    "red_thread": [
+      "loose",
+      "rumpled",
+      "nested"
+    ],
+    "glass_star": [
+      "handled",
+      "displayed"
+    ]
+  },
+  "validation": {
+    "full_pytest": {
+      "status": "PASS",
+      "tests": 70
+    },
+    "godot_presentation_pytest": {
+      "status": "PASS",
+      "tests": 10
+    },
+    "generated_art_determinism": {
+      "status": "PASS",
+      "tree_sha256": "1bb4c3220117be30845c2cde71f8f3b8533ea67f170c4bb8b6bcec932256f049",
+      "runs": 2
+    },
+    "native_engine": {
+      "status": "PASS",
+      "engine": "Godot 4.7.2.stable",
+      "render_path": "X11/OpenGL compatibility"
+    },
+    "native_temporal_route_proof": {
+      "status": "PASS",
+      "method": "duplicate source ticks injected before canonical walk target; native captures at 650/1300/1950 ms",
+      "result": "monotonic right-to-left progression through mapped open-space/rug route; correct facing; no desk/bed cuts; duplicate ticks did not restart transition",
+      "capture_sha256": {
+        "quarter": "173fcaf749c8e4eb3f255588177a2d9fa3e42e416642bfbea7a42e5d097e0437",
+        "midpoint": "93d79d53c9765220461a9a97901db6f3e8141dc83c1305aa6487e964a1e053d8",
+        "three_quarter": "7f0b71ddff31eda899ee7b0c7032c28a9049555225eb7fd4b79c1a437b6f5f3f"
+      }
+    },
+    "native_final_gate_captures": {
+      "spring_idle": "869b9ccf81d9bba0f062782462c6f709c501a3544f4bce501222b845b7a9cffc",
+      "rain_idle": "612ba720e7fe4d3fea7a500aed802868b8df1c87e0b26ef1b0d1022f277dbe5a",
+      "warm_night_idle": "04e4e6615e4f58bd271f8f205a21500addb2839f267ef4272d912117a07d0bdc",
+      "sleep_supported_hold": "82beeb826f59dc19ef85fef11339acc205379f83dd87497d2f3678d13b2af4e8",
+      "wake_floor_exit": "0a41747587d5b3cc995b3a7a57bae41a13e1a56919c73de514a0c211cdd03f25",
+      "place_final": "490559850ba0eb5bf9e1f8bb0ae6475aa953924b6fa32e5391877604c1d52d58",
+      "glass_star_carry": "0ff5cdfa89d1838091e571e1cda453a4e62dbdea86059f3cd6ef7df703a7f8bc"
+    }
+  },
+  "repository_hashes": {
+    "main_gd": "74f19b73e2d2265d19eac69313168b993609550a147f9d3c27bdd0ca62ff0810",
+    "frame_adapter_gd": "0a00e0e6fc6aca85307ea51ab0b1a8b4cc1fc30932f22487cfa0d34846dda529",
+    "generator": "4e1d4db6592be9f9bfa7713d1892ad9aeecd54363cff427b7e7df55d68711f76",
+    "hero_manifest": "1ab545046ac279bb13df54a4991ca55a9e8e1405bf69d519f5a3244046f418a4",
+    "review_html": "5359e9b509cd0d518c8bf1201fb89292a3c5d491f5e706767fc34690d0c82404"
+  },
+  "remaining_refinements": [
+    "secondary Moss poses can receive additional fur/material richness without changing silhouette",
+    "author season-specific night variants instead of reusing the approved warm-night fallback",
+    "optionally tune carry/place attachment offsets per object identity"
+  ],
+  "recommended_next_step": "Explicit cutover decision or a bounded side-by-side Canvas-vs-Godot acceptance review; do not add migration architecture before that decision."
+}

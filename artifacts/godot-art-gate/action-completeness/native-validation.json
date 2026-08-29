@@ -1,0 +1,99 @@
+{
+  "schema": "terrarium.godot-action-completeness-gate.v1",
+  "status": "PASS",
+  "scope": "Godot presentation action completeness and canonical activity mapping only; simulation authority unchanged; no cutover",
+  "engine": "Godot 4.7.2.stable.official.ed1daf0bf",
+  "render_path": "X11/OpenGL compatibility via Mesa llvmpipe inside isolated mcp-lab",
+  "authored_moss_source_tree_sha256": "76cd74ba00cf0db407c7c0d47ec737471b96309804b7e2bcb8545ab8fe402273",
+  "authored_moss_source_count": 46,
+  "production_moss_png_count": 50,
+  "production_moss_tree_sha256": "60ee1774e3d890fadee4783f896e36c117ae0abb3e1334ac4c20c278758a4f86",
+  "canonical_activity_mapping": {
+    "idle": "idle",
+    "rest": "rest",
+    "walk": "walk",
+    "explore": "walk",
+    "inspect": "inspect",
+    "nudge": "nudge",
+    "carry": "carry",
+    "place": "place",
+    "loaf": "loaf",
+    "groom": "groom",
+    "stretch": "stretch",
+    "react": "look",
+    "look_outside": "window_watch",
+    "sleep": "sleep",
+    "wake": "wake"
+  },
+  "presentation_aliases": {
+    "orient": "look",
+    "window_watch": "window_watch"
+  },
+  "new_dedicated_motion_support": {
+    "nudge": [
+      "nudge-anticipate",
+      "nudge-contact",
+      "nudge-press",
+      "nudge-hold",
+      "nudge-recover"
+    ],
+    "loaf": [
+      "loaf"
+    ],
+    "groom": [
+      "groom-start",
+      "groom-contact",
+      "groom-hold",
+      "groom-recover"
+    ],
+    "stretch": [
+      "stretch-ready",
+      "stretch-extend",
+      "stretch-hold",
+      "stretch-recover"
+    ],
+    "carry": [
+      "pickup-anticipate",
+      "pickup-contact",
+      "pickup-lift",
+      "pickup-hold",
+      "carry"
+    ]
+  },
+  "authority_note": "Pickup is intentionally not a canonical activity. Canonical carry owns object transfer; Godot presentation stages the authored pickup sequence once and settles into the carry pose.",
+  "motion_clock": {
+    "status": "PASS",
+    "rule": "live motion start time is separate from per-frame route transition time; unchanged canonical motion does not restart its authored sequence on each heartbeat"
+  },
+  "mechanical_validation": {
+    "godot_presentation_tests": "12/12 PASS",
+    "full_repository_tests": "72/72 PASS",
+    "exact_authored_geometry_palette_only_regression": "PASS",
+    "generated_art_determinism": "PASS"
+  },
+  "native_capture_800x480_sha256": {
+    "nudge_press": "fd209c853201126f01be722809d6d840e0ccc2afc6f3af1cb71198990500b8d5",
+    "loaf": "f5ca90f6b81ba1a9b406f0913a255e6b99df8f46d4b535f7f6070e7b73194f3c",
+    "groom_hold": "a660809ca59604914145a3409ddc512faeaa66d54631c6cb5ab2558f4e0fe13b",
+    "stretch_hold": "ec6c87e1b452ef7ef805f1b708fe2ca218b153a6269a6ea99e93badf95ce0b07",
+    "pickup_contact": "97b98246e6440a6ea9dc4ae6d67aacc92683e91fd624175297eed86aefda596d",
+    "pickup_lift": "ededb294bae151e7a8aff0af3247e084e7a675739f1f5d95adc8a4f12033a818",
+    "carry_settled": "cd299d0b64bb686561c6b26bd0a7bbfb0521481250d696683d473b426ba50cd2"
+  },
+  "safety_validation": {
+    "initial_nudge_attempt": "BOUNDED FAIL: 20s timeout caught a GDScript parse warning treated as error on Variant inference; no further captures were launched until diagnosis",
+    "fix": "motion_elapsed_ms uses explicit int + maxi(); Godot editor parse/import check then exited rc=0",
+    "post_fix_captures": "7/7 PASS; each one-shot process exited cleanly",
+    "final_guest_load_average": "0.07 / 0.02 / 0.00",
+    "lingering_godot_or_xvfb": false,
+    "review_server_stopped": true
+  },
+  "cutover_performed": false,
+  "settled_runtime": {
+    "main_gd_sha256": "c3040892236f359a42d47544ad2356efa41bec27c50dc3ecb0248873580d6436",
+    "main_gd_executable_normalized_sha256": "3ad1b690e4e4c9a6c76ee338ea5c815eb03073c15b4cc714a0e8a85a1f23aa9a",
+    "lab_executable_normalized_sha256": "3ad1b690e4e4c9a6c76ee338ea5c815eb03073c15b4cc714a0e8a85a1f23aa9a",
+    "existing_motion_timings": "restored to previously validated values for walk/inspect/sleep/wake/place/look/window_watch; new timings retained only for newly added nudge/groom/stretch and expanded pickup-to-carry sequence",
+    "lab_parse_import": "PASS (Godot 4.7.2 rc=0 after settled timing sync)"
+  }
+}

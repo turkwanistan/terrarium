@@ -1,0 +1,66 @@
+{
+  "schema": "terrarium.presentation-animation.v1",
+  "anchor": [
+    22,
+    30
+  ],
+  "animations": {
+    "idle": {
+      "frames": [
+        "moss_idle.png"
+      ],
+      "durations_ms": [
+        1000
+      ],
+      "loop": true
+    },
+    "walk": {
+      "frames": [
+        "moss_walk_0.png",
+        "moss_walk_1.png",
+        "moss_walk_2.png",
+        "moss_walk_3.png"
+      ],
+      "durations_ms": [
+        180,
+        180,
+        180,
+        180
+      ],
+      "loop": true
+    },
+    "inspect": {
+      "frames": [
+        "moss_inspect_0.png",
+        "moss_inspect_1.png",
+        "moss_inspect_2.png",
+        "moss_inspect_3.png"
+      ],
+      "durations_ms": [
+        250,
+        450,
+        500,
+        400
+      ],
+      "loop": false
+    },
+    "carry": {
+      "frames": [
+        "moss_carry.png"
+      ],
+      "durations_ms": [
+        1000
+      ],
+      "loop": true
+    },
+    "loaf": {
+      "frames": [
+        "moss_loaf.png"
+      ],
+      "durations_ms": [
+        1000
+      ],
+      "loop": true
+    }
+  }
+}

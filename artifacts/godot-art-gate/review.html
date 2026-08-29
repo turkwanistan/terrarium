@@ -1,0 +1,36 @@
+<!doctype html>
+<meta charset="utf-8">
+<title>Terrarium — Godot hero slice decision gate</title>
+<style>
+:root{color-scheme:dark}*{box-sizing:border-box}body{margin:0;background:#151210;color:#eee;font:14px/1.45 system-ui,sans-serif;padding:24px}h1{font-size:24px;margin:0 0 8px}h2{margin:30px 0 12px;font-size:18px}.note{max-width:1100px;color:#cfc5bd}.grid{display:grid;grid-template-columns:repeat(2,minmax(0,800px));gap:18px;align-items:start}.card{background:#241e1b;border:1px solid #51443b;padding:10px;overflow:auto}.card h3{margin:2px 0 8px}.stage{position:relative;width:800px;height:480px;background:#111;overflow:hidden}.stage>img{position:absolute;image-rendering:pixelated;image-rendering:crisp-edges}.stage .bg,.stage .fg{left:0;top:0;width:800px;height:480px}.stage .actor{left:434px;top:314px;width:120px;height:104px}.canvas{width:800px;height:480px;overflow:hidden;background:#111;position:relative}.canvas img{position:absolute;width:1200px;height:720px;image-rendering:pixelated;image-rendering:crisp-edges;left:-65px;top:-145px}.strip{display:flex;gap:10px;flex-wrap:wrap}.identity{display:flex;gap:18px;flex-wrap:wrap}.identity .sprite{width:360px;height:312px;object-fit:contain;background:#527044;image-rendering:pixelated;image-rendering:crisp-edges}.motion{background:#181514;border:1px solid #403832;padding:8px}.motion img{width:162px;height:126px;object-fit:contain;background:#111;image-rendering:pixelated}.pass{color:#b8dfac;font-weight:700}.weak{color:#e3c797}.small{font-size:12px;color:#aaa}
+</style>
+<h1>Terrarium art-first Godot gate</h1>
+<p class="note">Decision question: can one re-authored Godot room slice look obviously better than the current Canvas renderer? The hero slice is intentionally only the window + sleeping/reading nook + rug edge. The browser composition below uses the exact PNG layers and coordinates used by the Godot scene. Godot itself was separately rendered and captured at 800×480 in the isolated Lab; those engine captures were visually checked before this review surface was accepted.</p>
+
+<h2>Direct visual gate</h2>
+<div class="grid">
+  <div class="card"><h3>Canvas baseline — closest equivalent crop</h3><div class="canvas"><img src="../godot-poc/canvas-spring-clear.png" alt="Canvas baseline"></div><p class="small">Existing Canvas evidence; not regenerated or retouched for this gate.</p></div>
+  <div class="card"><h3>Godot hero slice — spring/day</h3><div class="stage"><img class="bg" src="../../display/godot_hero/art/hero_spring_day.png"><img class="actor" src="../../display/godot_hero/art/moss_idle_2.png"><img class="fg" src="../../display/godot_hero/art/hero_foreground.png"></div><p class="pass">Gate read: substantially stronger hierarchy, authored density, material separation, Moss readability, and foreground depth.</p></div>
+</div>
+
+<h2>Required environmental variants</h2>
+<div class="grid">
+  <div class="card"><h3>Rain</h3><div class="stage"><img class="bg" src="../../display/godot_hero/art/hero_rain.png"><img class="actor" src="../../display/godot_hero/art/moss_idle_2.png"><img class="fg" src="../../display/godot_hero/art/hero_foreground.png"></div></div>
+  <div class="card"><h3>Winter warm night</h3><div class="stage"><img class="bg" src="../../display/godot_hero/art/hero_winter_night.png"><img class="actor" src="../../display/godot_hero/art/moss_idle_2.png"><img class="fg" src="../../display/godot_hero/art/hero_foreground.png"></div></div>
+</div>
+
+<h2>Moss character pass — identity before detail</h2>
+<div class="card"><p class="note">The first Godot pilot accidentally invented a different dog: longer/lower body, oversized horizontal head/ear mass, collar, and idle bob. This pass re-bases Godot on the accepted Canvas Moss silhouette, then adds restrained Godot-specific detail: warmer multi-value fur clusters, eye catchlight/brow, brighter cream blaze/muzzle/chest, inner-ear separation, paw accents, and a warmer tail tip. Idle is planted again; walk and inspect use the accepted authored key-pose vocabulary.</p><div class="identity"><div><h3>Accepted Canvas identity</h3><img class="sprite" src="moss-reference/idle.png"></div><div><h3>Godot character pass</h3><img class="sprite" src="../../display/godot_hero/art/moss_idle_0.png"></div></div></div>
+
+<h2>Representative Moss motion frames</h2>
+<div class="card"><div class="strip">
+  <div class="motion"><div>Idle A</div><img src="../../display/godot_hero/art/moss_idle_0.png"></div>
+  <div class="motion"><div>Idle B</div><img src="../../display/godot_hero/art/moss_idle_2.png"></div>
+  <div class="motion"><div>Walk A</div><img src="../../display/godot_hero/art/moss_walk_0.png"></div>
+  <div class="motion"><div>Walk B</div><img src="../../display/godot_hero/art/moss_walk_2.png"></div>
+  <div class="motion"><div>Inspect A</div><img src="../../display/godot_hero/art/moss_inspect_0.png"></div>
+  <div class="motion"><div>Inspect B</div><img src="../../display/godot_hero/art/moss_inspect_2.png"></div>
+</div></div>
+
+<h2>Visual weaknesses still visible</h2>
+<p class="weak">Moss is now identity-correct and much less distracting, but the character can still take a dedicated charm pass later: especially subtler head/ear contour work and more action-specific facial expression. The environment was intentionally left unchanged for this iteration.</p>

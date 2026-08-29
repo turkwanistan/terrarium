@@ -1,0 +1,11 @@
+{
+  "schema": "terrarium.presentation-visual-manifest.v1",
+  "art_surface": [400, 240],
+  "semantic_frame": [800, 480],
+  "semantic_scale": 0.5,
+  "primary_renderer": "proof-of-concept Godot 4 renderer under display/godot",
+  "fallback_renderer": "display/web/app.js",
+  "source_art": "display/godot/art/*.png",
+  "animation_metadata": "presentation/animations/moss.json",
+  "canonical_authority": "Python terrarium.frame.v1; presentation resources contain no simulation authority"
+}

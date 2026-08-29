@@ -1,0 +1,10 @@
+<!doctype html><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Terrarium — Canvas vs Godot</title>
+<style>
+:root{color-scheme:dark}*{box-sizing:border-box}body{margin:0;background:#12100f;color:#eee;font:15px system-ui,sans-serif;padding:16px}h1{margin:0 0 6px;font-size:24px}.note{color:#cbbfb5;margin:0 0 16px}.grid{display:grid;grid-template-columns:repeat(2,minmax(320px,800px));gap:16px}.card{background:#211b18;border:1px solid #55463b;padding:10px}.stage{position:relative;width:100%;aspect-ratio:5/3;background:#0b0909;overflow:hidden}.stage>img{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;image-rendering:pixelated}.godot .room{z-index:0}.godot .actor{z-index:10;left:49%;top:65.4167%;right:auto;bottom:auto;width:15%;height:21.6667%;object-fit:fill}.godot .foreground{z-index:20}.label{font-size:18px;font-weight:700;margin:0 0 8px}@media(max-width:900px){.grid{grid-template-columns:1fr}}
+</style>
+<h1>Terrarium — Canvas vs Godot</h1><p class="note">Left: current accepted Canvas capture. Right: adoption-ready Godot spring/day candidate using the approved pre-regression Moss style.</p>
+<div class="grid">
+ <div class="card"><div class="label">Canvas</div><div class="stage"><img src="godot-comparison-assets/canvas.png?v=2"></div></div>
+ <div class="card"><div class="label">Godot candidate</div><div class="stage godot"><img class="room" src="godot-comparison-assets/godot-room.png?v=2"><img class="actor" src="godot-comparison-assets/godot-moss.png?v=2"><img class="foreground" src="godot-comparison-assets/godot-foreground.png?v=2"></div></div>
+</div>
+<p class="note" style="margin-top:16px">Godot Moss is positioned at the candidate's validated 400×240 logical idle coordinates (196,157), with room → Moss → foreground compositing matching the presentation scene.</p>

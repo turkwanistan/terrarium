@@ -1,0 +1,44 @@
+{
+  "schema": "terrarium.godot-cutover-readiness.v1",
+  "status": "READY_AWAITING_EXPLICIT_CUTOVER_APPROVAL",
+  "cutover_performed": false,
+  "canonical_world_changed": false,
+  "canvas_default_changed": false,
+  "canvas_fallback_sha256": "df5afe734eb2b367f1cfc28201ea9338ebad86cc155cb93136f14ed4381dadc5",
+  "godot_runtime_main_sha256": "c3040892236f359a42d47544ad2356efa41bec27c50dc3ecb0248873580d6436",
+  "godot_live_candidate_launcher_sha256": "bbad8d00de802dbdaa6d5033af9ff90e4f22a18f13f28ff41a1cb7f331340e77",
+  "readiness": {
+    "palette_only_moss_identity": "PASS",
+    "canonical_activity_mapping": "PASS: 15/15 mapped",
+    "action_completeness": "PASS",
+    "live_motion_clock_does_not_restart_on_heartbeat": "PASS",
+    "real_current_frame_adapter_integration": "PASS",
+    "native_godot_4_7_2_rendering": "PASS",
+    "read_only_adapter": "PASS",
+    "canvas_preserved": "PASS",
+    "reversible_candidate_launcher": "PASS",
+    "headless_cpu_guard": "PASS",
+    "llvmpipe_guard": "PASS",
+    "focused_godot_tests": "13/13 PASS",
+    "full_repository_tests": "73/73 PASS"
+  },
+  "launcher_contract": {
+    "path": "scripts/run_godot_live_candidate.sh",
+    "starts_or_steps_world": false,
+    "regenerates_art_at_runtime": false,
+    "writes_world_state": false,
+    "requires_existing_api_frame_endpoint": true,
+    "headless_launch_requires_explicit_override": true,
+    "software_llvmpipe_launch_requires_explicit_override": true,
+    "canvas_remains_fallback": true
+  },
+  "evidence": [
+    "artifacts/godot-art-gate/moss-palette-only-promotion/native-validation.json",
+    "artifacts/godot-art-gate/action-completeness/native-validation.json",
+    "artifacts/godot-art-gate/live-snapshot-integration/native-validation.json",
+    "GODOT_NATIVE_VALIDATION.md",
+    "MOSS_SPEC.md",
+    "STATUS.md"
+  ],
+  "next_authority_boundary": "Do not make Godot the default presentation, disable Canvas, change production services, or perform deployment cutover without explicit human approval."
+}
