@@ -1,6 +1,6 @@
 # Terrarium status
 
-## Godot presentation canary — selector cut over, extended live UAT pending
+## Godot presentation canary — browser delivery prepared, generated web build + live UAT pending
 
 ### Visual Convergence 1 — palette-only Moss approved and natively validated
 
@@ -32,16 +32,22 @@ The Godot path remains subordinate to the canonical Terrarium simulation. Its li
 
 A real-current-frame integration proof now also passes without weakening Lab isolation. A presentation-relevant projection of canonical live tick **113069** (`spring / early`, clear day, Moss `look_outside` at the window) was copied into the isolated Lab and served only on Lab loopback. Native Godot fetched it through the actual `TerrariumReferenceFrameAdapter` `GET /api/frame` path and correctly rendered `spring_day / window_watch` at 800×480. Evidence: `artifacts/godot-art-gate/live-snapshot-integration/native-validation.json`.
 
-Explicit cutover approval was received on 2026-08-29. Phase A is now implemented through `scripts/run_presentation.sh` and `scripts/run_presentation.ps1`: **Godot is the normal presentation choice**, while Canvas remains an explicit same-world rollback (`--canvas` / `-Mode canvas`). Both selectors require an already-running canonical `GET /api/frame`; neither starts, steps, migrates, resets, stops, or writes the living world. `scripts/run_lan.sh` remains canonical world/API lifecycle authority, and the validated `scripts/run_godot_live_candidate.sh` remains unchanged beneath the Linux/macOS selector.
+Explicit cutover approval was received on 2026-08-29. The first reversible selector checkpoint chose native Godot, but direct UAT clarified the intended product experience: **Terrarium should open as a webpage, without installing Godot or cloning the repository onto the viewing PC.** The canary delivery target is therefore now Godot Web while preserving the same accepted Godot art/runtime logic and world-authority boundary.
 
-**Canary status:** ACTIVE, awaiting extended real-display live UAT. **Migration status:** not closed. Canvas remains intact and immediately available. The headless OptiPlex remains the world host; the production Godot canary must run on a real graphical/GPU client, not through the Lab Xvfb/llvmpipe validation path.
+Browser-delivery source is prepared. `display/godot_reference_v2/export_presets.cfg` defines a single-threaded, no-extension Web export. In Web builds, `main.gd` automatically enters live read-only mode and derives the canonical API origin from `window.location.origin`; native `--live --api-url` behavior remains available and explicit overrides still win. `.github/workflows/build-godot-web.yml` pins Godot 4.7.2 plus official release hashes and will generate `display/web/godot/` outside the living host, so normal startup never downloads a compiler, regenerates art, or requires Godot on the viewing PC.
 
-**Next execution boundary:** run the 30–60 minute same-world Godot canary on a graphical client and complete the live-UAT matrix plus targeted bounded rare-action checks. Only after that passes should the migration be closed and Iteration 10 resume.
-Historical readiness record: `artifacts/godot-art-gate/cutover-readiness/readiness.json` — **READY_AWAITING_EXPLICIT_CUTOVER_APPROVAL**. Active canary record: `artifacts/godot-art-gate/canary-cutover/cutover.json`.
+Because Godot Web expects a secure browser context for remote delivery, `scripts/run_godot_web_canary.sh` + `tools/godot_web_gateway.py` provide a presentation-only HTTPS boundary. The gateway serves the generated Web payload and proxies only `GET /api/frame` and `GET /api/health` to the already-running canonical HTTP service. POST/PUT/PATCH/DELETE are rejected, `/api/step` is not exposed, and the entry page returns 503 if a real `terrarium.frame.v1` cannot be obtained. `terrarium.api.server`, `run_lan.sh`, the database, heartbeat cadence, canonical routes/actions, and Canvas renderer remain unchanged.
+
+`scripts/run_presentation.sh` now treats **Godot Web as the normal canary mode**, with `--native` retaining the previously validated desktop client and `--canvas` retaining immediate same-world rollback. The Windows-native selector remains optional development plumbing; it is no longer a prerequisite for normal use.
+
+**Canary status:** `SOURCE_READY_AWAITING_GENERATED_WEB_PAYLOAD`. **Migration status:** not closed. The GitHub-generated Web payload has not yet been produced/pulled into the OptiPlex checkout, so no claim of browser-render acceptance is made yet. Once the payload lands, start the HTTPS gateway on the OptiPlex and perform the same extended living-world UAT in an ordinary browser.
+
+**Next execution boundary:** push this source checkpoint, let the pinned GitHub workflow generate `display/web/godot/`, pull that generated commit, then run the browser canary. Canvas stays available throughout. Only after browser live UAT passes should the migration close and Iteration 10 resume.
+Historical readiness record: `artifacts/godot-art-gate/cutover-readiness/readiness.json`. Historical native-selector canary: `artifacts/godot-art-gate/canary-cutover/cutover.json`. Current browser-delivery readiness: `artifacts/godot-art-gate/web-cutover/readiness.json`.
 
 Review surface: `artifacts/godot-art-gate/reference-v3-review.html`. Acceptance evidence: `artifacts/godot-art-gate/reference-v3-adoption-gate.json`. Character law: `MOSS_SPEC.md`.
 
-Current presentation validation after Phase A: **75/75 repository tests PASS**, **15/15 Godot presentation tests PASS**, exact authored-geometry Moss regression **PASS**, generated-art determinism **PASS**, and native Godot 4.7.2 representative palette-only captures **PASS**. The earlier Reference-v3 adoption evidence remains historical baseline evidence; the palette-only character promotion is recorded separately in `artifacts/godot-art-gate/moss-palette-only-promotion/native-validation.json`.
+Current validation after browser-delivery preparation: **79/79 repository tests PASS**, **18/18 focused Godot presentation tests PASS**, **1/1 gateway integration test PASS** (19/19 combined), exact authored-geometry Moss regression **PASS**, and generated-art determinism **PASS**. A bounded Godot 4.7.2 headless editor parse of the new Web bootstrap passed in isolated Lab with no lingering Godot/Xvfb process; no new native capture batch was required or run. The HTTPS gateway also passed an end-to-end TLS smoke test covering root delivery, `application/wasm`, canonical frame proxying, and write rejection.
 
 Terrarium is normal product development after the accepted Generation 17 pilot. The current product checkpoint is **Pixel-Art Overhaul — Iteration 9: Emergent Situations and Consequence Memory**. This is **not Generation 18**.
 

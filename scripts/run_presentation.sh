@@ -2,13 +2,14 @@
 set -euo pipefail
 
 ROOT="$(CDPATH= cd -- "$(dirname -- "$0")/.." && pwd)"
-mode="godot"
+mode="web"
 
 usage() {
   cat <<'EOF'
-Usage: ./scripts/run_presentation.sh [--godot|--canvas]
+Usage: ./scripts/run_presentation.sh [--godot|--web|--native|--canvas]
 
-Normal presentation: Godot (read-only canonical /api/frame consumer).
+Normal presentation: Godot Web over the read-only HTTPS presentation gateway.
+Native review:        Godot desktop client against the same canonical world.
 Rollback/fallback:    Canvas browser renderer against the same canonical world.
 
 The canonical world/API must already be running. This script never starts,
@@ -19,8 +20,11 @@ EOF
 }
 
 case "${1:-}" in
-  ""|--godot)
-    mode="godot"
+  ""|--godot|--web)
+    mode="web"
+    ;;
+  --native)
+    mode="native"
     ;;
   --canvas)
     mode="canvas"
@@ -39,12 +43,16 @@ if [[ $# -gt 1 ]]; then
   exit 64
 fi
 
-# The normal presentation delegates to the already-validated read-only Godot
-# launcher. Keeping world lifecycle outside this selector ensures a renderer
-# failure cannot stop, reset, migrate, or recreate Moss's world.
-if [[ "$mode" == "godot" ]]; then
-  echo "Terrarium presentation: Godot (normal)"
+# Normal presentation is browser-delivered Godot. The gateway is presentation-only:
+# it serves generated web assets and proxies only read-only canonical frame/health GETs.
+if [[ "$mode" == "web" ]]; then
+  echo "Terrarium presentation: Godot Web (normal canary path)"
   echo "Canvas rollback: ./scripts/run_presentation.sh --canvas"
+  exec "$ROOT/scripts/run_godot_web_canary.sh"
+fi
+
+# Keep native Godot as an explicit development/UAT path, not a PC prerequisite.
+if [[ "$mode" == "native" ]]; then
   exec "$ROOT/scripts/run_godot_live_candidate.sh"
 fi
 

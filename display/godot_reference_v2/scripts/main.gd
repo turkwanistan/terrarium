@@ -128,6 +128,7 @@ var started_ms := 0
 var frame_index := -1
 var live_mode := false
 var api_url := "http://127.0.0.1:8080"
+var api_url_explicit := false
 var live_position := Vector2.ZERO
 var live_facing_left := false
 var live_action_object_id := ""
@@ -142,6 +143,7 @@ var bed_occluder: Sprite2D
 
 func _ready() -> void:
     _parse_args()
+    _configure_web_live_defaults()
     $Foreground.texture = load("res://art/hero_foreground.png")
     action_object = Sprite2D.new()
     action_object.centered = false
@@ -223,6 +225,7 @@ func _parse_args() -> void:
             "--api-url":
                 if i + 1 < args.size():
                     api_url = args[i + 1]
+                    api_url_explicit = true
                     i += 1
         i += 1
     if not VARIANT_TEXTURES.has(variant):
@@ -231,6 +234,19 @@ func _parse_args() -> void:
     if not MOTION_FRAMES.has(motion):
         printerr("TERRARIUM_REFERENCE bad motion: " + motion)
         get_tree().quit(2)
+
+func _configure_web_live_defaults() -> void:
+    # The exported browser presentation is always a read-only live client. Derive the
+    # canonical API origin from the page that served the export so no PC-local Godot
+    # install, localhost assumption, or duplicated world configuration is required.
+    if not OS.has_feature("web"):
+        return
+    live_mode = true
+    if api_url_explicit:
+        return
+    var window = JavaScriptBridge.get_interface("window")
+    if window != null:
+        api_url = str(window.location.origin)
 
 func _apply_variant() -> void:
     $Background.texture = load(VARIANT_TEXTURES[variant])

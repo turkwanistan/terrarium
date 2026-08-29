@@ -118,7 +118,7 @@ Accepted evidence: `history/2026-08-28-pixel-art-overhaul-iteration9.md`, `artif
 
 ## Presentation Bridge — Staged Godot Cutover and Live UAT
 
-**Status: CANARY ACTIVE — EXTENDED LIVE UAT PENDING.** Explicit cutover approval was received on 2026-08-29 and Phase A is implemented: `scripts/run_presentation.sh` / `.ps1` now select Godot by default while retaining Canvas as an explicit same-world rollback. This remains an interposed presentation checkpoint before Iteration 10, not a new simulation generation. The canonical Terrarium world/API remains authoritative and the migration is not closed until extended live UAT passes.
+**Status: WEB CANARY SOURCE READY — GENERATED BUILD + LIVE UAT PENDING.** Explicit cutover approval was received on 2026-08-29. The initial reversible selector targeted native Godot, then UAT clarified the intended product shape: Godot should be delivered as a webpage from the OptiPlex, not installed on each viewing PC. The canary target is now a single-threaded Godot Web export behind a presentation-only HTTPS/read-only gateway. Canvas remains explicit same-world rollback. This is still an interposed presentation checkpoint before Iteration 10, not a new simulation generation.
 
 Readiness already established:
 
@@ -132,7 +132,7 @@ Readiness already established:
 
 ### Phase A — reversible canary cutover
 
-**Implemented 2026-08-29.** The default presentation selectors now choose Godot; Canvas remains explicit fallback; world/API lifecycle and renderer hashes remain unchanged. Phase-A regression state is 75/75 repository tests and 15/15 focused Godot presentation tests PASS. Active evidence: `artifacts/godot-art-gate/canary-cutover/cutover.json`.
+**Revised 2026-08-29 after client-shape UAT.** `scripts/run_presentation.sh` now chooses Godot Web by default; `--native` retains the already-validated desktop client and `--canvas` remains immediate rollback. Web source is prepared with a single-threaded export preset, same-origin live bootstrap, pinned GitHub build workflow, and HTTPS gateway that exposes only read-only frame/health GETs. The canonical world service itself remains unchanged. Current regression state is 79/79 repository tests and 19/19 focused Godot/web tests PASS. Historical native-selector evidence remains in `artifacts/godot-art-gate/canary-cutover/cutover.json`; current Web readiness is `artifacts/godot-art-gate/web-cutover/readiness.json`.
 
 The implemented contract:
 
@@ -141,10 +141,13 @@ The implemented contract:
 - presentation selector/launcher changes must be independently reversible and must not stop/reset/recreate the canonical world;
 - do not regenerate production art during normal presentation startup; generated candidate assets are build/review artifacts, not runtime-mutating state;
 - do not run the always-on presentation through Xvfb/llvmpipe on the OptiPlex. Native software-rendered Lab runs remain bounded validation only.
+- normal viewing clients must not need a Godot install or repository clone; serve the generated Godot Web payload from the OptiPlex instead;
+- use the single-threaded Web export and local HTTPS presentation gateway rather than disabling browser secure-context checks;
+- the HTTPS gateway may proxy only read-only canonical frame/health GETs and must fail closed if the canonical frame is unavailable.
 
 ### Phase B — real-world live UAT
 
-Observe the actual persistent world through Godot long enough to cover multiple heartbeat continuations, route transitions, quiet holds, and environmental changes. Prefer one continuous 30–60 minute canary plus targeted deterministic/native probes for rare actions rather than forcing the living simulation to perform test choreography.
+Observe the actual persistent world through the **Godot Web browser presentation** long enough to cover multiple heartbeat continuations, route transitions, quiet holds, and environmental changes. Prefer one continuous 30–60 minute canary (or sufficient natural transitions) plus targeted deterministic/native probes for rare actions rather than forcing the living simulation to perform test choreography. Native Godot remains a comparison/diagnostic path, not a client prerequisite.
 
 Live-UAT acceptance should cover:
 

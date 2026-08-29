@@ -380,9 +380,11 @@ Treat these as prerequisites/authority, not work to redo:
 
 ### Current execution state — 2026-08-29
 
-Explicit approval has been received. Phase A is implemented and mechanically green: Godot is the normal presentation selection through `scripts/run_presentation.sh` / `.ps1`; Canvas is the explicit same-world rollback; `run_lan.sh`, canonical API/database/world state, heartbeat cadence, generated production art, Canvas renderer, and Godot runtime remain unchanged. Current regression state is **75/75 repository tests** and **15/15 focused Godot presentation tests PASS**.
+Explicit approval has been received. The first Phase-A selector was mechanically green but targeted native Godot on a graphical client. Product-shape UAT then clarified that normal Terrarium viewing should remain **a webpage**: the viewing PC should not need Godot, a repository checkout, or WSL setup. Phase A has therefore been revised to deliver the same accepted Godot presentation as a single-threaded Web export from the OptiPlex.
 
-Phase B remains open because acceptance requires a genuine extended Godot session on a real graphical/GPU client. The headless OptiPlex must remain world-only and the Lab Xvfb/llvmpipe path must remain bounded validation-only. Do not declare the migration closed from selector/tests alone.
+Current source state: `scripts/run_presentation.sh` defaults to the browser path; `--native` retains the previously validated desktop client; `--canvas` retains explicit same-world rollback. `display/godot_reference_v2/export_presets.cfg` disables Web threads/extensions, Web `main.gd` derives the read-only API from `window.location.origin`, `.github/workflows/build-godot-web.yml` generates `display/web/godot/` with pinned Godot 4.7.2 release hashes, and `scripts/run_godot_web_canary.sh` / `tools/godot_web_gateway.py` provide local HTTPS plus a strict `GET /api/frame` / `GET /api/health` proxy. The canonical API/database/world state, heartbeat cadence, Canvas renderer, `run_lan.sh`, and simulation source remain unchanged. Current regression state is **79/79 repository tests** and **19/19 focused Godot/web tests PASS**.
+
+The generated Web payload itself is still pending the external CI build, so Phase B remains open. Do not declare browser-render acceptance from source/tests alone. Once the generated payload is pulled onto the OptiPlex, perform the extended same-world canary in an ordinary browser. Lab Xvfb/llvmpipe remains bounded native-validation-only and must not be used as the always-on browser presentation host.
 
 ### Execution sequence after explicit approval
 
@@ -400,9 +402,12 @@ Phase B remains open because acceptance requires a genuine extended Godot sessio
    - normal Godot presentation startup must consume existing generated assets rather than regenerating art;
    - fail closed if the canonical read-only frame endpoint is unavailable;
    - fail closed on headless/software-rendered always-on launch unless explicitly running the bounded validation procedure.
+   - deliver normal viewing through Godot Web so client PCs do not require Godot or a repository checkout;
+   - export Web without threads/extensions and serve it through a secure-context HTTPS presentation gateway;
+   - gateway authority is static presentation + `GET /api/frame` / `GET /api/health` only; never proxy `/api/step` or write methods.
 
 3. **Canary against the living world**
-   - run the Godot presentation against the actual persistent canonical world;
+   - run the Godot **Web** presentation against the actual persistent canonical world in a normal browser;
    - observe continuously for roughly 30–60 minutes or until sufficient natural state transitions have occurred;
    - do not advance/force the world merely to obtain visual coverage; use deterministic fixtures/native captures for rare actions.
 

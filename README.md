@@ -6,45 +6,47 @@ Gen17 implements the first product-building checkpoint from `terrarium.md`: Phas
 
 ## Run
 
-Keep world lifecycle and presentation lifecycle separate. On the persistent host, start or reuse the canonical world/API with:
+Keep world lifecycle and presentation lifecycle separate. On the persistent OptiPlex host, start or reuse the canonical world/API with:
 
 ```bash
 ./scripts/run_lan.sh
 ```
 
-This owns the living `${XDG_STATE_HOME:-$HOME/.local/state}/terrarium/live` world. Closing or failing a presentation client does not stop Moss.
+This owns the living `${XDG_STATE_HOME:-$HOME/.local/state}/terrarium/live` world. Closing or failing presentation never stops Moss.
 
-On a **graphical Linux/macOS client** with this repository and Godot 4 installed, Godot is now the normal presentation choice:
+The normal canary target is now **Godot in a browser**, not a native Godot install on every viewing PC. After the generated web payload is present, start the read-only HTTPS presentation gateway on the OptiPlex in a second terminal/service:
+
+```bash
+./scripts/run_presentation.sh
+```
+
+It prints a URL similar to:
+
+```text
+https://<terrarium-host>:8766/
+```
+
+Open that URL from the PC/browser you want to use. The viewing PC needs **no Godot installation, repository clone, WSL setup, or simulation process**. During the canary the gateway uses a local self-signed certificate, so the browser may require a one-time Advanced/Proceed confirmation.
+
+The browser export is single-threaded and presentation-only. Its page origin is also its API origin; the HTTPS gateway serves generated Godot Web files and proxies only read-only `GET /api/frame` and `GET /api/health` to the existing canonical HTTP world service. It exposes no `/api/step`, POST/write route, database access, planner, migration, or world lifecycle operation.
+
+Immediate Canvas rollback remains the existing world URL printed by `run_lan.sh`, or:
+
+```bash
+TERRARIUM_API_URL=http://127.0.0.1:8765 ./scripts/run_presentation.sh --canvas
+```
+
+Native Godot remains an explicit development/UAT option only:
 
 ```bash
 TERRARIUM_API_URL=http://<terrarium-host>:<port> \
 GODOT_BIN=/path/to/godot \
-./scripts/run_presentation.sh
+./scripts/run_presentation.sh --native
 ```
 
-Immediate Canvas rollback against the same world:
+`run_local.sh` and `run_windows.ps1` remain legacy local Canvas development conveniences. `scripts/run_godot_live_candidate.sh` remains the bounded native-client path. `mcp-lab` remains isolated native-validation infrastructure only and must not become an always-on Xvfb/llvmpipe presentation host.
 
-```bash
-TERRARIUM_API_URL=http://<terrarium-host>:<port> ./scripts/run_presentation.sh --canvas
-```
-
-On a **graphical Windows client**:
-
-```powershell
-$env:TERRARIUM_API_URL = "http://<terrarium-host>:<port>"
-$env:GODOT_BIN = "C:\path\to\Godot_v4.7.2-stable_win64.exe"
-.\scripts\run_presentation.ps1
-```
-
-Canvas rollback on Windows:
-
-```powershell
-.\scripts\run_presentation.ps1 -Mode canvas -ApiUrl $env:TERRARIUM_API_URL
-```
-
-The selectors consume existing generated production art and require an already-running `GET /api/frame`. They do not start, step, migrate, reset, stop, or write the canonical world. Headless/Xvfb/llvmpipe is not the production presentation path; `mcp-lab` remains bounded native-validation infrastructure only.
-
-`run_local.sh` and `run_windows.ps1` remain legacy local Canvas development conveniences; they are not the staged Godot cutover path. The trusted-LAN API is intentionally unauthenticated and must not be exposed to the public internet.
+The Godot Web payload under `display/web/godot/` is generated from `display/godot_reference_v2/` by `.github/workflows/build-godot-web.yml`; normal presentation startup never regenerates art or compiles Godot.
 
 ## Progressive development snapshots
 
@@ -83,7 +85,8 @@ The technical evaluator proves fixed 800×480 framing, append-only/hash-chained 
 - `terrarium/replay.py` — exact snapshot + subsequent-event reconstruction.
 - `terrarium/frame.py` — hardware-neutral `terrarium.frame.v1` projection, exactly 800×480 logical pixels.
 - `terrarium/api/server.py` — persistent world service and read-only browser-facing API.
-- `display/web/` — reference Canvas diorama renderer; never authoritative.
+- `display/web/` — browser presentation assets: Canvas fallback plus generated Godot Web payload; never authoritative.
+- `tools/godot_web_gateway.py` — HTTPS static/read-only frame gateway for the Godot browser canary; never world authority.
 - `display/art/` — validated text-addressable authored pixel assets, palettes, and manifest; presentation source only, never world authority.
 - `tools/capture_art_direction_matrix.py` — deterministic production-renderer fixture matrix for visual comparison.
 - `evaluations/` — technical/behavior evaluators and Gen16 project capability pack.

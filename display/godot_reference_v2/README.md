@@ -1,6 +1,6 @@
 # Terrarium — Godot full-room presentation candidate
 
-**Status: canary active; extended live UAT pending.** Explicit cutover approval was received on 2026-08-29. Godot is now the normal presentation selection through the repository-root presentation selectors, without moving simulation authority into Godot. Canvas remains intact as the immediate same-world rollback until the canary passes.
+**Status: browser-canary source ready; generated Web payload + extended live UAT pending.** Explicit cutover approval was received on 2026-08-29. Normal viewing is now targeted at a single-threaded Godot Web export served from the OptiPlex, so viewing PCs do not need Godot or a repository checkout. Native Godot remains an explicit validation/development client. Canvas remains intact as immediate same-world rollback until the browser canary passes.
 
 ## Locked art direction
 
@@ -65,15 +65,25 @@ GODOT_BIN=/path/to/godot ./scripts/run_godot_reference_v2.sh --variant rain --mo
 GODOT_BIN=/path/to/godot ./scripts/run_godot_reference_v2.sh --live --api-url http://127.0.0.1:8765
 ```
 
-For normal canary presentation after the canonical world is already running, use the repository-root selector:
+For normal canary presentation, keep the canonical world running separately and start the repository-root selector on the OptiPlex:
 
 ```bash
-TERRARIUM_API_URL=http://host:port GODOT_BIN=/path/to/godot ./scripts/run_presentation.sh
+./scripts/run_presentation.sh
 ```
 
-Windows graphical clients use `scripts/run_presentation.ps1`. Both default to Godot and retain explicit Canvas rollback. The Linux/macOS selector delegates to the already-validated `run_godot_live_candidate.sh`, which does **not** regenerate art or start/step/migrate the world and refuses accidental headless/llvmpipe launch unless explicitly overridden.
+The selector starts the presentation-only HTTPS gateway and prints the browser URL. The viewing machine simply opens that URL; it does not need Godot, this repository, or WSL. The Web export automatically uses its serving origin for read-only frame polling.
 
-The live runtime port is deployment-dependent; use the currently running Terrarium endpoint rather than assuming `8765`.
+Web export is defined by `export_presets.cfg` with thread/extension support disabled. `.github/workflows/build-godot-web.yml` produces the generated `display/web/godot/` payload from pinned Godot 4.7.2 release assets. Normal startup consumes that payload and never regenerates art or compiles Godot.
+
+The gateway exposes only static Web assets plus `GET /api/frame` and `GET /api/health`; it rejects write methods and fails the entry page closed if canonical frame authority is unavailable. The canary uses local HTTPS because remote Godot Web delivery requires a secure browser context.
+
+Native comparison/UAT remains available explicitly:
+
+```bash
+TERRARIUM_API_URL=http://host:port GODOT_BIN=/path/to/godot ./scripts/run_presentation.sh --native
+```
+
+Canvas rollback remains `./scripts/run_presentation.sh --canvas` (or the canonical world URL printed by `run_lan.sh`). The live runtime port is deployment-dependent; use the currently running Terrarium endpoint rather than assuming `8765`.
 
 ## Review and acceptance
 

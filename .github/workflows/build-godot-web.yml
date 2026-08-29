@@ -1,0 +1,135 @@
+name: Build Godot Web Presentation
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - "display/godot_reference_v2/**"
+      - ".github/workflows/build-godot-web.yml"
+
+permissions:
+  contents: write
+
+concurrency:
+  group: terrarium-godot-web-main
+  cancel-in-progress: false
+
+env:
+  GODOT_VERSION: "4.7.2"
+  GODOT_STATUS: "stable"
+  GODOT_EDITOR_SHA256: "cadd3204e728a35d3f13adb7fd0d7902636b79f6b95c40c265eb73b6c35329e4"
+  GODOT_TEMPLATES_SHA256: "f298490b8d44d934be425a5a65a51bf15f422428b229a06a6e11d9ffea248011"
+
+jobs:
+  build-web:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out source
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Cache minimal Godot web toolchain
+        uses: actions/cache@v4
+        with:
+          path: |
+            .ci/godot
+            ~/.local/share/godot/export_templates/4.7.2.stable
+          key: terrarium-godot-web-4.7.2-v1
+
+      - name: Install pinned Godot editor and single-threaded web templates
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p .ci/godot
+          editor_zip=".ci/Godot_v${GODOT_VERSION}-${GODOT_STATUS}_linux.x86_64.zip"
+          editor=".ci/godot/Godot_v${GODOT_VERSION}-${GODOT_STATUS}_linux.x86_64"
+          template_dir="$HOME/.local/share/godot/export_templates/${GODOT_VERSION}.${GODOT_STATUS}"
+          mkdir -p "$template_dir"
+
+          if [[ ! -x "$editor" ]]; then
+            curl -fL --retry 4 --retry-delay 3 \
+              -o "$editor_zip" \
+              "https://github.com/godotengine/godot/releases/download/${GODOT_VERSION}-${GODOT_STATUS}/Godot_v${GODOT_VERSION}-${GODOT_STATUS}_linux.x86_64.zip"
+            echo "${GODOT_EDITOR_SHA256}  ${editor_zip}" | sha256sum -c -
+            unzip -q -o "$editor_zip" -d .ci/godot
+            chmod +x "$editor"
+            rm -f "$editor_zip"
+          fi
+
+          if [[ ! -s "$template_dir/web_nothreads_release.zip" || ! -s "$template_dir/web_nothreads_debug.zip" ]]; then
+            templates=".ci/Godot_v${GODOT_VERSION}-${GODOT_STATUS}_export_templates.tpz"
+            curl -fL --retry 4 --retry-delay 3 \
+              -o "$templates" \
+              "https://github.com/godotengine/godot/releases/download/${GODOT_VERSION}-${GODOT_STATUS}/Godot_v${GODOT_VERSION}-${GODOT_STATUS}_export_templates.tpz"
+            echo "${GODOT_TEMPLATES_SHA256}  ${templates}" | sha256sum -c -
+            unzip -q -o -j "$templates" \
+              "templates/web_nothreads_release.zip" \
+              "templates/web_nothreads_debug.zip" \
+              -d "$template_dir"
+            printf '%s\n' "${GODOT_VERSION}.${GODOT_STATUS}" > "$template_dir/version.txt"
+            rm -f "$templates"
+          fi
+
+          "$editor" --version
+          test -s "$template_dir/web_nothreads_release.zip"
+          test -s "$template_dir/web_nothreads_debug.zip"
+
+      - name: Import and export Terrarium web presentation
+        shell: bash
+        run: |
+          set -euo pipefail
+          editor=".ci/godot/Godot_v${GODOT_VERSION}-${GODOT_STATUS}_linux.x86_64"
+          project="$GITHUB_WORKSPACE/display/godot_reference_v2"
+          output="$GITHUB_WORKSPACE/display/web/godot"
+          rm -rf "$output"
+          mkdir -p "$output"
+          "$editor" --headless --editor --path "$project" --quit
+          "$editor" --headless --path "$project" --export-release "Web" "$output/index.html"
+
+      - name: Verify exported browser payload
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -s display/web/godot/index.html
+          test -n "$(find display/web/godot -maxdepth 1 -type f -name '*.wasm' -print -quit)"
+          test -n "$(find display/web/godot -maxdepth 1 -type f -name '*.pck' -print -quit)"
+          test -n "$(find display/web/godot -maxdepth 1 -type f -name '*.js' -print -quit)"
+          python - <<'PY'
+          import hashlib, json, os
+          from pathlib import Path
+
+          root = Path("display/web/godot")
+          files = {}
+          for path in sorted(p for p in root.iterdir() if p.is_file()):
+              files[path.name] = {
+                  "bytes": path.stat().st_size,
+                  "sha256": hashlib.sha256(path.read_bytes()).hexdigest(),
+              }
+          payload = {
+              "schema": "terrarium.godot-web-build.v1",
+              "source_commit": os.environ["GITHUB_SHA"],
+              "godot": "4.7.2.stable",
+              "thread_support": False,
+              "files": files,
+          }
+          (root / "build-info.json").write_text(json.dumps(payload, indent=2, sort_keys=True) + "\n")
+          PY
+          du -sh display/web/godot
+          find display/web/godot -maxdepth 1 -type f -printf '%f %s bytes\n' | sort
+
+      - name: Commit generated web payload
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add display/web/godot
+          if git diff --cached --quiet; then
+            echo "Godot web payload already matches source."
+            exit 0
+          fi
+          git commit -m "Build Godot web presentation [skip ci]"
+          git push origin "HEAD:${GITHUB_REF_NAME}"

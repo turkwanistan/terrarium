@@ -1,7 +1,9 @@
 param(
-  [ValidateSet("godot", "canvas")]
-  [string]$Mode = "godot",
+  [ValidateSet("web", "native", "canvas")]
+  [string]$Mode = "web",
   [string]$ApiUrl = $env:TERRARIUM_API_URL,
+  [string]$GatewayUrl = $env:TERRARIUM_PRESENTATION_URL,
+  [int]$GatewayPort = 8766,
   [string]$GodotBin = $env:GODOT_BIN
 )
 
@@ -26,6 +28,21 @@ if ([string]::IsNullOrWhiteSpace($ApiUrl)) {
       break
     }
   }
+}
+
+if ($Mode -eq "web") {
+  if ([string]::IsNullOrWhiteSpace($GatewayUrl)) {
+    if ([string]::IsNullOrWhiteSpace($ApiUrl)) {
+      throw "Set TERRARIUM_PRESENTATION_URL=https://host:8766 or TERRARIUM_API_URL=http://host:port so the browser gateway URL can be derived."
+    }
+    $api = [Uri]$ApiUrl
+    $GatewayUrl = "https://$($api.Host):$GatewayPort/"
+  }
+  Write-Host "Terrarium presentation: Godot Web"
+  Write-Host "Browser URL: $GatewayUrl"
+  Write-Host "The OptiPlex must already be running the presentation gateway."
+  Start-Process $GatewayUrl
+  exit 0
 }
 
 if ([string]::IsNullOrWhiteSpace($ApiUrl) -or -not (Test-TerrariumFrameEndpoint $ApiUrl)) {
@@ -54,10 +71,10 @@ if ([string]::IsNullOrWhiteSpace($GodotBin)) {
   }
 }
 if ([string]::IsNullOrWhiteSpace($GodotBin) -or -not (Test-Path $GodotBin)) {
-  throw "Godot 4 not found. Set GODOT_BIN to the Godot 4 executable path."
+  throw "Godot 4 not found. Set GODOT_BIN to the Godot 4 executable path for explicit -Mode native use."
 }
 
-Write-Host "Terrarium presentation: Godot (normal)"
+Write-Host "Terrarium presentation: native Godot development/UAT client"
 Write-Host "Canonical API (read-only): $ApiUrl"
 Write-Host "Canvas rollback: .\scripts\run_presentation.ps1 -Mode canvas -ApiUrl $ApiUrl"
 Write-Host "This process owns presentation only; closing/failing it does not stop Moss's world."

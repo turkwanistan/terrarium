@@ -245,10 +245,11 @@ def test_live_candidate_launcher_is_opt_in_read_only_and_cpu_guarded():
     assert "Canvas remains available" in launcher
 
 
-def test_presentation_selector_defaults_to_godot_and_keeps_explicit_canvas_rollback():
+def test_presentation_selector_defaults_to_godot_web_and_keeps_explicit_rollbacks():
     selector = (ROOT / "scripts" / "run_presentation.sh").read_text()
-    assert 'mode="godot"' in selector
-    assert "--canvas" in selector
+    assert 'mode="web"' in selector
+    assert "--godot|--web|--native|--canvas" in selector
+    assert 'exec "$ROOT/scripts/run_godot_web_canary.sh"' in selector
     assert 'exec "$ROOT/scripts/run_godot_live_candidate.sh"' in selector
     assert 'canvas_url="$api_url/"' in selector
     assert '"/api/frame"' in selector or '/api/frame' in selector
@@ -258,14 +259,62 @@ def test_presentation_selector_defaults_to_godot_and_keeps_explicit_canvas_rollb
     assert "TERRARIUM_CANVAS_PRINT_ONLY" in selector
 
 
-def test_windows_presentation_selector_defaults_to_godot_and_keeps_canvas_rollback():
+def test_windows_presentation_selector_defaults_to_web_and_keeps_native_canvas_options():
     selector = (ROOT / "scripts" / "run_presentation.ps1").read_text()
-    assert '[string]$Mode = "godot"' in selector
-    assert 'ValidateSet("godot", "canvas")' in selector
+    assert '[string]$Mode = "web"' in selector
+    assert 'ValidateSet("web", "native", "canvas")' in selector
+    assert "TERRARIUM_PRESENTATION_URL" in selector
+    assert '"https://$($api.Host):$GatewayPort/"' in selector
     assert '"/api/frame"' in selector
     assert "Invoke-RestMethod" in selector
     assert "--live --api-url" in selector
     assert "terrarium.api.server" not in selector
     assert "/api/step" not in selector
     assert "generate_reference_v2.py" not in selector
+    assert "Start-Process $GatewayUrl" in selector
     assert "Start-Process ($ApiUrl + \"/\")" in selector
+
+
+def test_reference_v3_web_export_is_single_threaded_and_same_origin_live():
+    preset = (REFERENCE_V3 / "export_presets.cfg").read_text()
+    main = (REFERENCE_V3 / "scripts" / "main.gd").read_text()
+    assert 'platform="Web"' in preset
+    assert 'variant/thread_support=false' in preset
+    assert 'variant/extensions_support=false' in preset
+    assert 'progressive_web_app/enabled=false' in preset
+    assert 'OS.has_feature("web")' in main
+    assert 'live_mode = true' in main
+    assert 'JavaScriptBridge.get_interface("window")' in main
+    assert 'window.location.origin' in main
+    assert 'api_url_explicit = true' in main
+
+
+def test_godot_web_canary_launcher_is_presentation_only_and_https_guarded():
+    launcher = (ROOT / "scripts" / "run_godot_web_canary.sh").read_text()
+    gateway = (ROOT / "tools" / "godot_web_gateway.py").read_text()
+    assert "display/web/godot" in launcher
+    assert "openssl req -x509" in launcher
+    assert "tools/godot_web_gateway.py" in launcher
+    assert "terrarium.api.server" not in launcher
+    assert "/api/step" not in launcher
+    assert "--upstream" in launcher
+    assert 'ALLOWED_API_PATHS = {"/api/frame", "/api/health"}' in gateway
+    assert "ssl.PROTOCOL_TLS_SERVER" in gateway
+    assert "do_POST" in gateway
+    assert "HTTPStatus.METHOD_NOT_ALLOWED" in gateway
+    assert "canonical Terrarium frame endpoint unavailable" in gateway
+    assert "/api/step" not in gateway
+    assert "WorldEngine" not in gateway
+    assert "WorldStore" not in gateway
+
+
+def test_godot_web_build_workflow_is_pinned_and_commits_only_generated_payload():
+    workflow = (ROOT / ".github" / "workflows" / "build-godot-web.yml").read_text()
+    assert 'GODOT_VERSION: "4.7.2"' in workflow
+    assert 'GODOT_EDITOR_SHA256: "cadd3204e728a35d3f13adb7fd0d7902636b79f6b95c40c265eb73b6c35329e4"' in workflow
+    assert 'GODOT_TEMPLATES_SHA256: "f298490b8d44d934be425a5a65a51bf15f422428b229a06a6e11d9ffea248011"' in workflow
+    assert 'web_nothreads_release.zip' in workflow
+    assert '--export-release "Web"' in workflow
+    assert 'display/web/godot' in workflow
+    assert 'git add display/web/godot' in workflow
+    assert 'Build Godot web presentation [skip ci]' in workflow

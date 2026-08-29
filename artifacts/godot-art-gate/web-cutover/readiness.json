@@ -1,0 +1,86 @@
+{
+  "schema": "terrarium.godot-web-cutover-readiness.v1",
+  "status": "SOURCE_READY_AWAITING_GENERATED_WEB_PAYLOAD",
+  "migration_closed": false,
+  "user_experience_target": "Open Terrarium as a browser URL; no Godot installation or Terrarium checkout is required on the viewing PC.",
+  "canonical_world_changed": false,
+  "world_lifecycle_changed": false,
+  "canvas_removed": false,
+  "delivery": {
+    "normal_selector": "./scripts/run_presentation.sh",
+    "normal_mode": "Godot Web",
+    "native_mode": "./scripts/run_presentation.sh --native",
+    "canvas_rollback": "./scripts/run_presentation.sh --canvas",
+    "generated_payload": "display/web/godot/",
+    "generated_payload_status": "PENDING CI BUILD",
+    "build_workflow": ".github/workflows/build-godot-web.yml",
+    "godot_version": "4.7.2.stable",
+    "web_threads": false,
+    "web_extensions": false,
+    "browser_api_origin": "window.location.origin",
+    "gateway_launcher": "scripts/run_godot_web_canary.sh",
+    "gateway": "tools/godot_web_gateway.py",
+    "gateway_tls": "local self-signed HTTPS certificate for canary secure-context delivery",
+    "gateway_api_allowlist": [
+      "GET /api/frame",
+      "GET /api/health"
+    ]
+  },
+  "authority": {
+    "canonical_api_remains_http_world_service": true,
+    "gateway_is_presentation_only": true,
+    "gateway_starts_or_stops_world": false,
+    "gateway_steps_or_migrates_world": false,
+    "gateway_writes_world": false,
+    "gateway_exposes_api_step": false,
+    "godot_writes_world": false,
+    "canvas_fallback_uses_same_world": true
+  },
+  "web_platform_reasoning": {
+    "single_threaded_export": "Godot 4.3+ single-threaded Web export avoids SharedArrayBuffer/thread cross-origin-isolation requirements.",
+    "https_gateway": "Godot Web still expects a secure browser context for remote delivery, so the canary uses local HTTPS rather than weakening browser security checks or exposing the canonical world service publicly.",
+    "client_install_required": false
+  },
+  "validation": {
+    "full_repository_tests": "79/79 PASS",
+    "focused_godot_presentation_tests": "18/18 PASS",
+    "focused_gateway_tests": "1/1 PASS",
+    "focused_combined_godot_web_tests": "19/19 PASS",
+    "python_3_10_grammar": "PASS through repository suite",
+    "native_godot_4_7_2_web_bootstrap_parse": "PASS",
+    "native_parse_timeout_seconds": 20,
+    "native_parse_lingering_godot_or_xvfb": false,
+    "native_parse_post_load_average": "0.00 / 0.00 / 0.00",
+    "https_gateway_end_to_end": "PASS: TLS root + application/wasm + frame proxy + POST rejection",
+    "gateway_fail_closed_without_frame": "PASS",
+    "canvas_renderer_hash_unchanged": true,
+    "native_candidate_launcher_hash_unchanged": true,
+    "large_llvmpipe_capture_batch_run": false,
+    "javascript_bridge_api": "PASS: documented JavaScriptBridge.get_interface(\"window\") API; bounded Godot 4.7.2 parse PASS"
+  },
+  "hashes": {
+    "canvas_app_js_sha256": "df5afe734eb2b367f1cfc28201ea9338ebad86cc155cb93136f14ed4381dadc5",
+    "godot_main_gd_sha256": "7500891e56df528c6e1d0291daf1cb0d84e86256760c3603944b38a5ce8e4b60",
+    "godot_export_presets_sha256": "920a00bf641c59cfc3e09cca6f49ef7d3d3e7c7bfe025035b25d2dd8378710b8",
+    "web_build_workflow_sha256": "6c460bad8363188edb2a675a5028a1833d4856614b006fc2e7ae363ed4a43f55",
+    "presentation_selector_sha256": "43c423551c8bb07c8c59b1de88f7e84dddd0ce738745c4213b92e3a440ed82c7",
+    "web_gateway_launcher_sha256": "79dd2b4157c70fb80d46d60a5a69aa89b34566624ba6641b63ba4941061310a1",
+    "web_gateway_sha256": "2161118a526aa88a8c08bc43f1089e5a697348de840bab39bd4a921713dcb84f",
+    "native_candidate_launcher_sha256": "bbad8d00de802dbdaa6d5033af9ff90e4f22a18f13f28ff41a1cb7f331340e77",
+    "windows_presentation_selector_sha256": "b7a058e9f4ac953405bec2273e93f57719d63dcdc24406fb2c2cece1a9946b4f"
+  },
+  "pending_acceptance": [
+    "Push this source checkpoint so GitHub Actions generates display/web/godot/.",
+    "Pull the generated web-payload commit onto the OptiPlex.",
+    "Start the HTTPS presentation gateway against the existing canonical world.",
+    "Open the printed HTTPS URL in a normal browser and complete same-world extended live UAT.",
+    "Keep Canvas as immediate rollback and do not begin Iteration 10 until the browser canary passes or is deliberately deferred."
+  ],
+  "canonical_world_health_at_source_checkpoint": {
+    "api_url": "http://192.168.50.74:8765",
+    "ok": true,
+    "tick": 114498,
+    "events": 114498,
+    "restart_reset_migration_or_forced_step_performed": false
+  }
+}

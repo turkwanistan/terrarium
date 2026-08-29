@@ -57,6 +57,10 @@ The accepted 8B room, 8C Moss vocabulary, 8D object-state variants, 8E atmospher
 
 **Iteration 10 — Causal Composition and Situation Chaining.** Let current canonical events/opportunities intersect with stored consequences, object state, habits, and spatial context so multiple existing systems can produce richer unscripted situations. Prefer composition over more memory, more verbs, or a generic planner.
 
+## Interposed presentation boundary
+
+Before Iteration 10 begins, finish the staged Godot cutover. Explicit cutover approval has already been given, but normal delivery is now **Godot Web in a browser**, not a required native Godot installation on each client. Source is prepared for a single-threaded Web export plus a presentation-only HTTPS gateway; generated `display/web/godot/` and extended browser live UAT are still pending. Current evidence: `artifacts/godot-art-gate/web-cutover/readiness.json`. Canvas remains immediate same-world rollback. Do not move simulation authority into the browser/gateway and do not begin Iteration 10 until the browser canary passes or is deliberately deferred.
+
 ## Regression procedure
 
 Run `python -m pytest -q`, `node --check display/web/app.js`, Python-3.10 grammar parsing, technical/behavior/spatial/coherence/habit/repertoire/situational/object-affordance/atmosphere/season/**consequence** evaluators, exact replay, deterministic temporal capture, and real 800×480 browser inspection. Major behavior changes retain seeds **1701 / 1702 / 42 / 999** at **10,080** steps. Explicitly test history-sensitive divergence and individual determinism.
