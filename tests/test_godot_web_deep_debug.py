@@ -59,13 +59,16 @@ def test_web_debug_fixture_state_advances_then_holds_last_frame(tmp_path: Path) 
     assert state.status()["complete"] is True
 
 
-def test_live_route_rebases_from_current_rendered_anchor_and_uses_explore_routes() -> None:
+def test_live_route_rebases_only_for_new_targets_and_uses_authoritative_route_evidence() -> None:
     main = (REFERENCE / "scripts" / "main.gd").read_text()
     assert "var rendered_before := _current_rendered_anchor() if had_live_frame else _map_live_position(creature)" in main
-    assert "live_route_points = _build_live_route(frame, rendered_before, had_live_frame)" in main
-    assert "if use_rendered_start:" in main
+    assert "var position_changed := not had_live_frame or next_position.distance_to(live_position) > 0.01" in main
+    assert "elif position_changed:" in main
+    assert "live_route_points = _build_live_route(frame, rendered_before, true, next_motion)" in main
+    assert "Same-position continuation heartbeats intentionally leave route and transition clock" in main
     assert "result.append(rendered_start)" in main
-    assert 'str(event.get("action", "")) in ["walk", "explore"]' in main
+    assert 'typeof(event.get("route", [])) == TYPE_ARRAY' in main
+    assert 'if motion_name == "sleep" and route_limit >= 2:' in main
     assert "LIVE_ACTOR_ANCHOR_OFFSET" in main
     assert "live_transition_duration_ms = _transition_duration_for_interval" in main
     assert "LIVE_TRANSITION_INTERVAL_FRACTION := 0.90" in main
@@ -73,6 +76,19 @@ def test_live_route_rebases_from_current_rendered_anchor_and_uses_explore_routes
     assert "LIVE_TRANSITION_MAX_MS := 2800.0" in main
     assert "t * t * t * (t * (t * 6.0 - 15.0) + 10.0)" in main
 
+
+def test_support_and_carried_travel_phases_preserve_continuity() -> None:
+    main = (REFERENCE / "scripts" / "main.gd").read_text()
+    assert 'if travel_active and motion != "walk":' in main
+    assert 'rendered_motion = "walk"' in main
+    assert 'var attached_travel := rendered_motion == "walk"' in main
+    assert 'action_object.visible = rendered_motion in ["carry", "place"] or attached_travel' in main
+    assert 'if rendered_motion == "carry" or attached_travel:' in main
+    assert "LIVE_SUPPORT_TRANSITION_MS := 450.0" in main
+    assert 'live_previous_motion != "window_watch"' in main
+    assert 'live_previous_motion == "window_watch" and motion != "window_watch"' in main
+    assert "live_motion_entry_actor_position" in main
+    assert "sleep action itself presents the final supported move inward" in main
 
 def test_animation_lifetime_has_continuation_safe_sustain_and_recovery_phases() -> None:
     main = (REFERENCE / "scripts" / "main.gd").read_text()
@@ -127,20 +143,6 @@ def test_web_debug_surface_exposes_required_presentation_observability_without_w
     assert "terrarium_poll_ms" in main
     assert "/api/step" not in main
     assert "METHOD_POST" not in main
-
-
-def test_web_delivery_hardening_disables_stale_asset_cache_and_preflights_port() -> None:
-    gateway = (ROOT / "tools" / "godot_web_gateway.py").read_text()
-    launcher = (ROOT / "scripts" / "run_godot_web_canary.sh").read_text()
-    preset = (REFERENCE / "export_presets.cfg").read_text()
-    main = (REFERENCE / "scripts" / "main.gd").read_text()
-    assert 'cache_control="no-store"' in gateway
-    assert 'sock.bind(("0.0.0.0", port))' in launcher
-    assert "Terrarium Godot web presentation port {port} is already in use" in launcher
-    assert "TERRARIUM_GODOT_WEB_PORT=<port>" in launcher
-    assert "window.__terrariumBrowserErrors=[]" in preset
-    assert "unhandledrejection" in preset
-    assert "browser_errors:window.__terrariumBrowserErrors||[]" in main
 
 
 def test_web_delivery_hardening_disables_stale_asset_cache_and_preflights_port() -> None:

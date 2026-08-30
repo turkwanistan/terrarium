@@ -113,6 +113,7 @@ const LIVE_TRANSITION_DEFAULT_MS := 2600.0
 const LIVE_TRANSITION_MIN_MS := 450.0
 const LIVE_TRANSITION_MAX_MS := 2800.0
 const LIVE_TRANSITION_INTERVAL_FRACTION := 0.90
+const LIVE_SUPPORT_TRANSITION_MS := 450.0
 const LIVE_DEBUG_EMIT_MS := 100
 const LIVE_ACTOR_ANCHOR_OFFSET := Vector2(22, 36)
 const MOTION_SUSTAIN_LOOPS := {
@@ -167,6 +168,8 @@ var live_last_arrival_interval_ms := 0
 var live_recovery_motion := ""
 var live_recovery_until_ms := 0
 var rendered_motion := "idle"
+var live_previous_motion := "idle"
+var live_motion_entry_actor_position := Vector2.ZERO
 var live_debug_enabled := false
 var live_poll_seconds := 3.0
 var live_debug_last_emit_ms := 0
@@ -176,6 +179,12 @@ var live_debug_stats := {
     "motion_changes": 0,
     "motion_continuations": 0,
     "max_accept_jump_px": 0.0,
+    "max_accept_jump_tick": -1,
+    "max_accept_jump_from_motion": "",
+    "max_accept_jump_to_motion": "",
+    "max_accept_jump_before": null,
+    "max_accept_jump_after": null,
+    "max_accept_jump_position_changed": false,
     "max_arrival_target_error_px": 0.0,
     "duplicate_ticks_ignored": 0,
     "older_ticks_ignored": 0,
@@ -373,7 +382,13 @@ func _update_support_occlusion() -> void:
 func _present_action_object() -> void:
     if action_object == null:
         return
-    action_object.visible = rendered_motion in ["carry", "place"]
+    var carrying_now = null
+    if live_mode and not live_frame.is_empty():
+        var creature = live_frame.get("creature", {})
+        if typeof(creature) == TYPE_DICTIONARY:
+            carrying_now = creature.get("carrying")
+    var attached_travel := rendered_motion == "walk" and (carrying_now != null or motion in ["carry", "place"])
+    action_object.visible = rendered_motion in ["carry", "place"] or attached_travel
     if live_mode:
         if not LIVE_OBJECT_TEXTURES.has(live_action_object_id):
             action_object.visible = false
@@ -384,7 +399,7 @@ func _present_action_object() -> void:
             action_object.texture = load(state_textures[supported_state])
     if not action_object.visible:
         return
-    if rendered_motion == "carry":
+    if rendered_motion == "carry" or attached_travel:
         action_object.position = $Actor.position + (Vector2(5, 27) if $Actor.flip_h else Vector2(45, 27))
     else:
         # Presentation-only choreography: canonical state decides that a place action exists;
@@ -403,19 +418,29 @@ func _on_live_frame(_previous_frame, frame: Dictionary) -> void:
     var previous_motion := motion
     var next_motion := _motion_from_creature(creature)
     var motion_changed := live_motion_started_ms <= 0 or next_motion != previous_motion
+    var next_position := _map_live_position(creature)
+    var position_changed := not had_live_frame or next_position.distance_to(live_position) > 0.01
 
     if live_last_frame_arrival_ms > 0:
         live_last_arrival_interval_ms = maxi(1, now_ms - live_last_frame_arrival_ms)
-        live_transition_duration_ms = _transition_duration_for_interval(live_last_arrival_interval_ms)
     else:
         live_last_arrival_interval_ms = 0
+    if not had_live_frame:
         live_transition_duration_ms = LIVE_TRANSITION_DEFAULT_MS
+    elif position_changed:
+        live_transition_duration_ms = _transition_duration_for_interval(live_last_arrival_interval_ms)
     live_last_frame_arrival_ms = now_ms
 
     live_recovery_motion = ""
     live_recovery_until_ms = 0
     if motion_changed:
-        if had_live_frame and MOTION_RECOVERY_FRAMES.has(previous_motion):
+        live_previous_motion = previous_motion
+        live_motion_entry_actor_position = actor_before
+        if had_live_frame and position_changed and next_motion not in ["walk", "carry"]:
+            # The canonical action already happened, but authored anticipation begins only after
+            # presentation catches up to the authoritative interaction/support point.
+            live_motion_started_ms = now_ms + int(live_transition_duration_ms)
+        elif had_live_frame and MOTION_RECOVERY_FRAMES.has(previous_motion):
             live_recovery_motion = previous_motion
             live_recovery_until_ms = now_ms + MOTION_RECOVERY_MS
             live_motion_started_ms = live_recovery_until_ms
@@ -429,21 +454,35 @@ func _on_live_frame(_previous_frame, frame: Dictionary) -> void:
     motion = next_motion
     variant = _variant_from_frame(frame)
     _read_live_action_object(frame, creature)
-    live_position = _map_live_position(creature)
+    live_position = next_position
     live_facing_left = str(creature.get("facing", "right")) == "left"
-    live_route_points = _build_live_route(frame, rendered_before, had_live_frame)
+    if not had_live_frame:
+        live_route_points = _build_live_route(frame, rendered_before, false, next_motion)
+        live_transition_started_ms = now_ms
+    elif position_changed:
+        live_route_points = _build_live_route(frame, rendered_before, true, next_motion)
+        live_transition_started_ms = now_ms
+    # Same-position continuation heartbeats intentionally leave route and transition clock
+    # untouched. Reconstructing the canonical route on every heartbeat made Moss repeatedly
+    # retrace route segments that were already being presented.
     live_frame = frame
-    live_transition_started_ms = now_ms
     live_debug_stats["accepted_frames"] = int(live_debug_stats["accepted_frames"]) + 1
     _apply_variant()
 
     # First live frame snaps only from the non-authoritative startup placeholder. Every later
-    # accepted frame starts from the actor's actual rendered anchor, preserving visual continuity.
-    var present_elapsed := int(live_transition_duration_ms) if (not had_live_frame or not capture_path.is_empty()) else 0
+    # accepted frame must preserve the actor's actual rendered position exactly.
+    var present_elapsed := int(live_transition_duration_ms) if (not had_live_frame or not capture_path.is_empty()) else maxi(0, now_ms - live_transition_started_ms)
     _present_live(frame, present_elapsed)
     if had_live_frame:
         var accept_jump: float = actor_before.distance_to($Actor.position)
-        live_debug_stats["max_accept_jump_px"] = maxf(float(live_debug_stats["max_accept_jump_px"]), accept_jump)
+        if accept_jump > float(live_debug_stats["max_accept_jump_px"]):
+            live_debug_stats["max_accept_jump_px"] = accept_jump
+            live_debug_stats["max_accept_jump_tick"] = int(frame.get("tick", -1))
+            live_debug_stats["max_accept_jump_from_motion"] = previous_motion
+            live_debug_stats["max_accept_jump_to_motion"] = next_motion
+            live_debug_stats["max_accept_jump_before"] = _vector_payload(actor_before)
+            live_debug_stats["max_accept_jump_after"] = _vector_payload($Actor.position)
+            live_debug_stats["max_accept_jump_position_changed"] = position_changed
     _emit_live_debug(true)
     if not capture_path.is_empty():
         call_deferred("_capture_and_quit")
@@ -467,11 +506,15 @@ func _read_live_action_object(frame: Dictionary, creature: Dictionary) -> void:
     if carrying != null:
         live_action_object_id = str(carrying)
     else:
-        live_action_object_id = str(creature.get("target_object_id", ""))
+        var target_object = creature.get("target_object_id")
+        if target_object != null:
+            live_action_object_id = str(target_object)
         if live_action_object_id.is_empty():
             var event = frame.get("last_event", {})
             if typeof(event) == TYPE_DICTIONARY:
-                live_action_object_id = str(event.get("object_id", ""))
+                var event_object = event.get("object_id")
+                if event_object != null:
+                    live_action_object_id = str(event_object)
     if LIVE_OBJECT_TEXTURES.has(live_action_object_id):
         live_action_object_state = str(LIVE_OBJECT_DEFAULT_STATES[live_action_object_id])
         for obj in frame.get("objects", []):
@@ -479,12 +522,22 @@ func _read_live_action_object(frame: Dictionary, creature: Dictionary) -> void:
                 live_action_object_state = str(obj.get("interaction_state", live_action_object_state))
                 break
 
-func _present_live(_frame: Dictionary, elapsed_ms: int) -> void:
+func _present_live(_frame: Dictionary, _elapsed_ms: int) -> void:
     var now_ms := Time.get_ticks_msec()
+    var previous_rendered_motion := rendered_motion
+    var transition_elapsed_ms := maxi(0, now_ms - live_transition_started_ms)
+    if _elapsed_ms >= int(live_transition_duration_ms):
+        transition_elapsed_ms = maxi(transition_elapsed_ms, int(live_transition_duration_ms))
+    var travel_active := live_route_points.size() >= 2 and transition_elapsed_ms < live_transition_duration_ms
     rendered_motion = motion
     var rendered_elapsed_ms := maxi(0, now_ms - live_motion_started_ms)
     var forced_recovery_index := -1
-    if not live_recovery_motion.is_empty() and now_ms < live_recovery_until_ms:
+    if travel_active and motion != "walk":
+        # Travel is a renderer-owned phase of the canonical action. It does not invent a new
+        # commitment: it presents the authoritative route before action anticipation.
+        rendered_motion = "walk"
+        rendered_elapsed_ms = transition_elapsed_ms
+    elif not live_recovery_motion.is_empty() and now_ms < live_recovery_until_ms:
         rendered_motion = live_recovery_motion
         forced_recovery_index = int(MOTION_RECOVERY_FRAMES.get(rendered_motion, 0))
 
@@ -492,35 +545,52 @@ func _present_live(_frame: Dictionary, elapsed_ms: int) -> void:
     var idx := forced_recovery_index if forced_recovery_index >= 0 else _frame_for_motion(rendered_motion, rendered_elapsed_ms, frames.size())
     idx = clampi(idx, 0, frames.size() - 1)
     $Actor.texture = load(frames[idx])
-    if idx != frame_index or rendered_motion != motion:
+    if idx != frame_index or rendered_motion != previous_rendered_motion:
         _record_animation_frame(rendered_motion, idx)
     frame_index = idx
 
     var creature: Dictionary = _frame.get("creature", {})
     var zone := str(creature.get("zone", ""))
-    # Action-specific support/perch staging is presentation-only and already visually validated.
-    if rendered_motion == "sleep" and zone == "sleeping_nook":
+    if travel_active:
+        var t: float = clampf(float(transition_elapsed_ms) / maxf(live_transition_duration_ms, 1.0), 0.0, 1.0)
+        var eased := t * t * t * (t * (t * 6.0 - 15.0) + 10.0)
+        var actor_base := _route_position(live_route_points, eased)
+        var earlier := _route_position(live_route_points, maxf(0.0, eased - 0.02))
+        var facing_left := live_facing_left
+        if absf(actor_base.x - earlier.x) >= 0.5:
+            facing_left = actor_base.x < earlier.x
+        $Actor.position = Vector2(round(actor_base.x - LIVE_ACTOR_ANCHOR_OFFSET.x), round(actor_base.y - LIVE_ACTOR_ANCHOR_OFFSET.y))
+        $Actor.flip_h = facing_left
+    # Action-specific support/perch staging remains presentation-only. Sleep travel stops at the
+    # canonical bed gate, so authored sleep frame 0 begins at the exact same rendered position.
+    elif rendered_motion == "sleep" and zone == "sleeping_nook":
         $Actor.position = SLEEP_STAGE_POSITIONS[clampi(idx, 0, SLEEP_STAGE_POSITIONS.size() - 1)]
         $Actor.flip_h = live_facing_left
     elif rendered_motion == "wake" and zone == "sleeping_nook":
         $Actor.position = WAKE_STAGE_POSITIONS[clampi(idx, 0, WAKE_STAGE_POSITIONS.size() - 1)]
         $Actor.flip_h = live_facing_left
     elif rendered_motion == "window_watch" and zone == "window":
-        $Actor.position = Vector2(118, 65)
+        var perch := Vector2(118, 65)
+        if live_previous_motion != "window_watch" and rendered_elapsed_ms < LIVE_SUPPORT_TRANSITION_MS:
+            var support_t := clampf(float(rendered_elapsed_ms) / LIVE_SUPPORT_TRANSITION_MS, 0.0, 1.0)
+            var support_eased := support_t * support_t * (3.0 - 2.0 * support_t)
+            var support_position := live_motion_entry_actor_position.lerp(perch, support_eased)
+            $Actor.position = Vector2(round(support_position.x), round(support_position.y))
+        else:
+            $Actor.position = perch
         $Actor.flip_h = true
+    elif live_previous_motion == "window_watch" and motion != "window_watch" and rendered_elapsed_ms < LIVE_SUPPORT_TRANSITION_MS:
+        var floor_actor := Vector2(round(live_position.x - LIVE_ACTOR_ANCHOR_OFFSET.x), round(live_position.y - LIVE_ACTOR_ANCHOR_OFFSET.y))
+        var exit_t := clampf(float(rendered_elapsed_ms) / LIVE_SUPPORT_TRANSITION_MS, 0.0, 1.0)
+        var exit_eased := exit_t * exit_t * (3.0 - 2.0 * exit_t)
+        var exit_position := live_motion_entry_actor_position.lerp(floor_actor, exit_eased)
+        $Actor.position = Vector2(round(exit_position.x), round(exit_position.y))
+        $Actor.flip_h = live_facing_left
     else:
         var actor_base := live_position
-        var facing_left := live_facing_left
-        if live_route_points.size() >= 2 and elapsed_ms < live_transition_duration_ms:
-            var t: float = clampf(float(elapsed_ms) / maxf(live_transition_duration_ms, 1.0), 0.0, 1.0)
-            var eased := t * t * t * (t * (t * 6.0 - 15.0) + 10.0)
-            actor_base = _route_position(live_route_points, eased)
-            var earlier := _route_position(live_route_points, maxf(0.0, eased - 0.02))
-            if absf(actor_base.x - earlier.x) >= 0.5:
-                facing_left = actor_base.x < earlier.x
         $Actor.position = Vector2(round(actor_base.x - LIVE_ACTOR_ANCHOR_OFFSET.x), round(actor_base.y - LIVE_ACTOR_ANCHOR_OFFSET.y))
-        $Actor.flip_h = facing_left
-        if elapsed_ms >= live_transition_duration_ms:
+        $Actor.flip_h = live_facing_left
+        if transition_elapsed_ms >= live_transition_duration_ms:
             var target_error := _current_rendered_anchor().distance_to(live_position)
             live_debug_stats["max_arrival_target_error_px"] = maxf(float(live_debug_stats["max_arrival_target_error_px"]), target_error)
 
@@ -534,16 +604,28 @@ func _record_animation_frame(motion_name: String, idx: int) -> void:
     changes[key] = int(changes.get(key, 0)) + 1
     live_debug_stats["animation_frame_changes"] = changes
 
-func _build_live_route(frame: Dictionary, rendered_start: Vector2, use_rendered_start: bool) -> Array:
+func _build_live_route(frame: Dictionary, rendered_start: Vector2, use_rendered_start: bool, motion_name: String) -> Array:
     var result: Array = []
     if use_rendered_start:
         result.append(rendered_start)
     var event = frame.get("last_event", {})
-    if typeof(event) == TYPE_DICTIONARY and str(event.get("action", "")) in ["walk", "explore"]:
-        for route_item in event.get("route", []):
+    var route_items: Array = []
+    if typeof(event) == TYPE_DICTIONARY and typeof(event.get("route", [])) == TYPE_ARRAY:
+        route_items = event.get("route", [])
+        var route_limit := route_items.size()
+        # Canonical sleep routes end inside the bed. The penultimate route point is the authored
+        # open-side bed gate; the sleep action itself presents the final supported move inward.
+        if motion_name == "sleep" and route_limit >= 2:
+            route_limit -= 1
+        for i in range(route_limit):
+            var route_item = route_items[i]
             if typeof(route_item) == TYPE_DICTIONARY:
                 result.append(_map_live_route_point(route_item))
     var target := _map_live_position(frame.get("creature", {}))
+    if motion_name == "sleep" and route_items.size() >= 2:
+        var support_gate = route_items[route_items.size() - 2]
+        if typeof(support_gate) == TYPE_DICTIONARY:
+            target = _map_live_route_point(support_gate)
     if result.is_empty() or result[-1].distance_to(target) > 0.01:
         result.append(target)
     var deduped: Array = []

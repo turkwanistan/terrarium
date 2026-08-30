@@ -376,13 +376,17 @@ Prove or reject each hypothesis with telemetry and deterministic fixtures before
 - `artifacts/godot-art-gate/web-deep-debug/baseline.json` records the failed canary and pre-fix lineage.
 - `tools/build_godot_web_debug_fixtures.py` produces a deterministic fixture sequence currently containing 99 valid frame deliveries across movement/corners/interruption, continuation heartbeats, all major Moss actions, carry/place, sleep/wake, atmosphere changes, duplicate ticks, an older tick, and timing jitter cases.
 - Focused Godot/Web regression tests pass.
-- Full repository tests pass under their normal writable test contract.
+- Full repository tests pass **87/87** under their normal writable test contract; the read-only probe fails only in the two pre-existing tests that intentionally write generated/snapshot output.
 - A bounded Godot 4.7.2 Lab parser/import run initially caught two new GDScript typing errors; both were fixed and the rerun completed `RC=0` with no lingering Godot/Xvfb/llvmpipe process.
 
-### Still required before closure
+### Exported-Web gate result and remaining closure work
 
-1. Generate the replacement ordinary single-threaded Godot Web export from this source.
-2. Run that actual exported `.wasm`/`.pck`/JS payload against the deterministic fixture server in a normal browser.
-3. Prove at minimum: acceptance-time continuity, exact canonical arrival endpoints, animated locomotion, route-corner continuity, continuation-heartbeat clock preservation, intended sustain/recovery progression, duplicate/older-tick rejection, carry attachment/place release, sleep/wake support, and absence of recurring browser/Godot/WASM/request errors.
-4. Run the same replacement Web build against the living persistent world and complete human ordinary-browser UAT.
-5. Only then update migration status to complete; otherwise retain Canvas rollback and keep Iteration 10 blocked.
+The replacement ordinary single-threaded Web export has now been generated from the exact current source in isolated Godot 4.7.2 Lab with all 50 tracked Moss sprites. A first export attempt exposed an independent packaging defect in the temporary Lab workspace: only 32 Moss sprites had been copied, causing genuine missing-resource errors in carry and other motions. The corrected export completed with zero export errors. Its `index.pck` is 127,756 bytes with SHA256 `4c301401536435f352110dc5d1086f53a51d9e683487a162c928ab636e1f3607`; engine JS/WASM are unchanged from the accepted Godot 4.7.2 Web engine payload.
+
+The actual corrected PCK/WASM/JS completed the 99-delivery deterministic browser sequence. Because the MCP browser mediation surface is plain HTTP, the *fixture copy only* used local secure-context/audio bootstrap shims so the engine could execute; production JS was not changed. Runtime evidence showed zero captured browser/game errors, exact target arrival (`max_arrival_target_error_px = 0`), rejection of the deliberate older/duplicate inputs, live walk/action frame progression, carry/place, window-watch, sleep/wake, rain/night switching, and removal of the previous ~143 px frame-arrival teleport. The remaining 15.26 px maximum recorded acceptance-time movement was an authored wake support-stage change (`82,100 -> 95,108`) on an unchanged canonical position, not a route/frame-arrival teleport.
+
+Still required before migration closure:
+
+1. Install the validated production-safe PCK plus matching generated HTML file-size/error-capture metadata into `display/web/godot/`. The files are staged at `artifacts/godot-art-gate/web-deep-debug/validated-production/`; local automated promotion is blocked only by stale `nobody:nogroup` ownership on the existing generated Web directory.
+2. Run that production-safe build through the real HTTPS read-only gateway against the living persistent world and complete the ordinary-browser 30–60 minute/natural-transition UAT required by the Definition of Done.
+3. If living-world UAT passes, record final acceptance, update migration/launch documentation, commit/push the tested checkpoint, and only then resume Iteration 10. If it fails, retain Canvas and continue this bounded presentation-debug loop.
