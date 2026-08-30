@@ -387,6 +387,8 @@ The actual corrected PCK/WASM/JS completed the 99-delivery deterministic browser
 
 Still required before migration closure:
 
-1. Install the validated production-safe PCK plus matching generated HTML file-size/error-capture metadata into `display/web/godot/`. The files are staged at `artifacts/godot-art-gate/web-deep-debug/validated-production/`; local automated promotion is blocked only by stale `nobody:nogroup` ownership on the existing generated Web directory.
-2. Run that production-safe build through the real HTTPS read-only gateway against the living persistent world and complete the ordinary-browser 30–60 minute/natural-transition UAT required by the Definition of Done.
+1. **DONE:** install the validated production-safe PCK plus matching generated HTML metadata into `display/web/godot/`. Promotion used a reversible directory replacement; no stale ownership was weakened and no fixture-only browser shim was promoted. `build-info.json` points to source checkpoint `825c21bbbb76e253e84ca6a4ecede17d1c87d90e`.
+2. Run that production-safe build through the real HTTPS read-only gateway against the living persistent world and complete the ordinary-browser 30–60 minute/natural-transition UAT required by the Definition of Done. The persistent LAN world was verified healthy at tick 118930. MCP service containers cannot route to that host LAN endpoint, so do not create a duplicate world merely to automate this gate.
 3. If living-world UAT passes, record final acceptance, update migration/launch documentation, commit/push the tested checkpoint, and only then resume Iteration 10. If it fails, retain Canvas and continue this bounded presentation-debug loop.
+
+Post-promotion repository validation: **87 tests pass in bounded batches**, including **9 focused Godot/Web tests**.
