@@ -10,8 +10,8 @@ ROOT = Path(__file__).resolve().parents[1]
 if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
-from tools.build_godot_vertical_slice_fixtures import build as build_godot_pack
-from tools.build_temporal_fixture_pack import build as build_temporal_pack
+from tools.build_godot_vertical_slice_fixtures import _environment_clone
+from tools.build_temporal_fixture_pack import _rain_window_scenario, _seasonal_static_scenario, _walk_scenarios
 
 SCHEMA = "terrarium.godot-web-debug-fixtures.v1"
 
@@ -38,9 +38,32 @@ def _hold(sequence: list[dict], frame: dict, next_tick: int, count: int) -> int:
     return next_tick
 
 
+def _focused_source_scenarios() -> tuple[dict, dict]:
+    # The Web presentation gate needs movement/actions plus three environment controls. Building
+    # the full temporal fixture pack here used to run the unrelated 10,080-step situational and
+    # consequence searches (and then do it twice in the determinism test), needlessly saturating
+    # the development host. Keep this gate deterministic but scoped to the scenarios it consumes.
+    temporal = _walk_scenarios()
+    temporal["rain_window"] = _rain_window_scenario()
+    temporal["season_winter_warm_night"] = _seasonal_static_scenario(
+        "season_winter_warm_night", season="winter", minute=1290, weather="clear",
+        zone="sleeping_nook", activity="rest"
+    )
+
+    spring = _seasonal_static_scenario("web_spring_day", season="spring", minute=720, weather="clear")["target"]
+    idle = deepcopy(temporal["inspect_object"]["source"] )
+    clear_idle = _environment_clone(idle, season_frame=spring, weather="clear", lighting="day")
+    rain_idle = _environment_clone(idle, season_frame=spring, weather="rain", lighting="day")
+    godot = {
+        "spring_clear_idle": {"target": clear_idle},
+        "spring_rain_idle": {"target": rain_idle},
+        "winter_warm_night": temporal["season_winter_warm_night"],
+    }
+    return temporal, godot
+
+
 def build() -> dict:
-    temporal = build_temporal_pack()["scenarios"]
-    godot = build_godot_pack()["scenarios"]
+    temporal, godot = _focused_source_scenarios()
     sequence: list[dict] = []
     tick = 1000
 
@@ -74,7 +97,7 @@ def build() -> dict:
         ("stretch", temporal["stretch"]["target"], 8),
         ("loaf", temporal["loaf"]["target"], 4),
         ("rest", temporal["season_winter_warm_night"]["target"], 4),
-        ("react", temporal["event_thunder_react"]["target"], 5),
+        ("react", temporal["weather_reaction"]["target"], 5),
         ("look_outside", temporal["rain_window"]["target"], 6),
     ]
     for _name, template, count in action_holds:

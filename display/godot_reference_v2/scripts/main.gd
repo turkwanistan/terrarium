@@ -1,6 +1,7 @@
 extends Node2D
 
 const FrameAdapter = preload("res://scripts/frame_adapter.gd")
+const AmbientOverlay = preload("res://scripts/ambient_overlay.gd")
 
 const VARIANT_TEXTURES := {
     "spring_day": "res://art/hero_spring_day.png",
@@ -114,7 +115,10 @@ const LIVE_TRANSITION_MIN_MS := 450.0
 const LIVE_TRANSITION_MAX_MS := 2800.0
 const LIVE_TRANSITION_INTERVAL_FRACTION := 0.90
 const LIVE_SUPPORT_TRANSITION_MS := 450.0
-const LIVE_DEBUG_EMIT_MS := 100
+const LIVE_DEBUG_EMIT_MS := 250
+const LIVE_MAX_FRAME_STEP_PX := 6.0
+const LIVE_VARIANT_CROSSFADE_MS := 4200.0
+const LIVE_OBJECT_HALF_SIZE := Vector2(8, 7)
 const LIVE_ACTOR_ANCHOR_OFFSET := Vector2(22, 36)
 const MOTION_SUSTAIN_LOOPS := {
     "inspect": [1, 2],
@@ -174,6 +178,11 @@ var live_debug_enabled := false
 var live_poll_seconds := 3.0
 var live_debug_last_emit_ms := 0
 var live_debug_last_adapter_state: Dictionary = {}
+var live_variant_current := ""
+var live_variant_from := ""
+var live_variant_to := ""
+var live_variant_transition_started_ms := 0
+var background_blend: Sprite2D
 var live_debug_stats := {
     "accepted_frames": 0,
     "motion_changes": 0,
@@ -194,6 +203,8 @@ var live_debug_stats := {
 var adapter
 var action_object: Sprite2D
 var bed_occluder: Sprite2D
+var ambient_overlay: Node2D
+var live_object_sprites: Dictionary = {}
 
 func _ready() -> void:
     _parse_args()
@@ -205,6 +216,14 @@ func _ready() -> void:
     action_object.texture = load("res://art/object_red_thread_loose.png")
     action_object.z_index = 11
     add_child(action_object)
+    for object_id in LIVE_OBJECT_TEXTURES:
+        var object_sprite := Sprite2D.new()
+        object_sprite.centered = false
+        object_sprite.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
+        object_sprite.z_index = 6
+        object_sprite.visible = false
+        live_object_sprites[object_id] = object_sprite
+        add_child(object_sprite)
     bed_occluder = Sprite2D.new()
     bed_occluder.centered = false
     bed_occluder.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
@@ -212,7 +231,20 @@ func _ready() -> void:
     bed_occluder.z_index = 19
     bed_occluder.visible = false
     add_child(bed_occluder)
-    _apply_variant()
+    background_blend = Sprite2D.new()
+    background_blend.centered = false
+    background_blend.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
+    background_blend.z_index = 1
+    background_blend.visible = false
+    add_child(background_blend)
+    ambient_overlay = AmbientOverlay.new()
+    ambient_overlay.z_index = 5
+    add_child(ambient_overlay)
+    live_variant_current = variant
+    live_variant_from = variant
+    live_variant_to = variant
+    $Background.texture = load(VARIANT_TEXTURES[variant])
+    $Actor.modulate = _actor_modulate_for_variant(variant)
     started_ms = Time.get_ticks_msec()
     _present(0 if manual_ms < 0 else manual_ms)
     if live_mode:
@@ -226,13 +258,15 @@ func _ready() -> void:
         call_deferred("_capture_and_quit")
 
 func _process(_delta: float) -> void:
+    var now_ms := Time.get_ticks_msec()
+    _update_variant_transition(now_ms)
     if manual_ms >= 0:
         return
     if live_mode:
         if not live_frame.is_empty():
-            _present_live(live_frame, Time.get_ticks_msec() - live_transition_started_ms)
+            _present_live(live_frame, now_ms - live_transition_started_ms)
         return
-    _present(Time.get_ticks_msec() - started_ms)
+    _present(now_ms - started_ms)
 
 func _input(event: InputEvent) -> void:
     if live_mode:
@@ -307,13 +341,46 @@ func _configure_web_live_defaults() -> void:
             api_url = str(window.location.origin)
 
 func _apply_variant() -> void:
-    $Background.texture = load(VARIANT_TEXTURES[variant])
-    if variant == "winter_warm_night":
-        $Actor.modulate = Color(0.95, 0.91, 0.88, 1.0)
-    elif variant == "rain":
-        $Actor.modulate = Color(0.90, 0.96, 0.96, 1.0)
-    else:
-        $Actor.modulate = Color.WHITE
+    if live_variant_current.is_empty():
+        live_variant_current = variant
+        live_variant_from = variant
+        live_variant_to = variant
+        $Background.texture = load(VARIANT_TEXTURES[variant])
+        $Actor.modulate = _actor_modulate_for_variant(variant)
+        return
+    if variant == live_variant_to:
+        return
+    # Start from whichever visual is currently dominant rather than snapping through an
+    # intermediate weather/lighting state. The incoming raster crossfades above the existing one.
+    live_variant_from = live_variant_current
+    live_variant_to = variant
+    live_variant_transition_started_ms = Time.get_ticks_msec()
+    background_blend.texture = load(VARIANT_TEXTURES[live_variant_to])
+    background_blend.modulate = Color(1, 1, 1, 0)
+    background_blend.visible = true
+
+func _actor_modulate_for_variant(name: String) -> Color:
+    if name == "winter_warm_night":
+        return Color(0.95, 0.91, 0.88, 1.0)
+    if name == "rain":
+        return Color(0.90, 0.96, 0.96, 1.0)
+    return Color.WHITE
+
+func _update_variant_transition(now_ms: int) -> void:
+    if background_blend == null or not background_blend.visible:
+        return
+    var elapsed := maxi(0, now_ms - live_variant_transition_started_ms)
+    var t := clampf(float(elapsed) / LIVE_VARIANT_CROSSFADE_MS, 0.0, 1.0)
+    var eased := t * t * (3.0 - 2.0 * t)
+    background_blend.modulate = Color(1, 1, 1, eased)
+    $Actor.modulate = _actor_modulate_for_variant(live_variant_from).lerp(_actor_modulate_for_variant(live_variant_to), eased)
+    if t >= 1.0:
+        $Background.texture = background_blend.texture
+        live_variant_current = live_variant_to
+        live_variant_from = live_variant_to
+        background_blend.visible = false
+        background_blend.modulate = Color.WHITE
+        $Actor.modulate = _actor_modulate_for_variant(live_variant_current)
 
 func _present(elapsed_ms: int) -> void:
     rendered_motion = motion
@@ -379,16 +446,50 @@ func _update_support_occlusion() -> void:
     if bed_occluder != null:
         bed_occluder.visible = rendered_motion in ["sleep", "wake"]
 
+func _sync_live_object_sprites(frame: Dictionary) -> void:
+    # Every authoritative persistent object gets its own low-cost sprite. This closes the largest
+    # readability gap from first living-world UAT: Moss should approach an object that visibly
+    # exists, affect it, and leave it behind in its canonical resulting state.
+    for object_id in live_object_sprites:
+        live_object_sprites[object_id].visible = false
+    for obj in frame.get("objects", []):
+        if typeof(obj) != TYPE_DICTIONARY:
+            continue
+        var object_id := str(obj.get("id", ""))
+        if not live_object_sprites.has(object_id) or not LIVE_OBJECT_TEXTURES.has(object_id):
+            continue
+        var sprite: Sprite2D = live_object_sprites[object_id]
+        var state_textures: Dictionary = LIVE_OBJECT_TEXTURES[object_id]
+        var fallback_state := str(LIVE_OBJECT_DEFAULT_STATES[object_id])
+        var state := str(obj.get("interaction_state", fallback_state))
+        var supported_state := state if state_textures.has(state) else fallback_state
+        sprite.texture = load(state_textures[supported_state])
+        var anchor := _map_semantic_position(float(obj.get("x", 0)), float(obj.get("y", 0)), str(obj.get("zone", "")))
+        sprite.position = anchor - LIVE_OBJECT_HALF_SIZE
+        sprite.visible = obj.get("carried_by") == null and str(obj.get("state", "placed")) != "carried"
+
+func _refresh_live_object_visibility() -> void:
+    if live_frame.is_empty():
+        return
+    for obj in live_frame.get("objects", []):
+        if typeof(obj) != TYPE_DICTIONARY:
+            continue
+        var object_id := str(obj.get("id", ""))
+        if live_object_sprites.has(object_id):
+            live_object_sprites[object_id].visible = obj.get("carried_by") == null and str(obj.get("state", "placed")) != "carried"
+
 func _present_action_object() -> void:
     if action_object == null:
         return
+    _refresh_live_object_visibility()
     var carrying_now = null
     if live_mode and not live_frame.is_empty():
         var creature = live_frame.get("creature", {})
         if typeof(creature) == TYPE_DICTIONARY:
             carrying_now = creature.get("carrying")
+    var interaction_motion := rendered_motion in ["inspect", "nudge", "carry", "place"]
     var attached_travel := rendered_motion == "walk" and (carrying_now != null or motion in ["carry", "place"])
-    action_object.visible = rendered_motion in ["carry", "place"] or attached_travel
+    action_object.visible = interaction_motion or attached_travel
     if live_mode:
         if not LIVE_OBJECT_TEXTURES.has(live_action_object_id):
             action_object.visible = false
@@ -399,15 +500,56 @@ func _present_action_object() -> void:
             action_object.texture = load(state_textures[supported_state])
     if not action_object.visible:
         return
-    if rendered_motion == "carry" or attached_travel:
-        action_object.position = $Actor.position + (Vector2(5, 27) if $Actor.flip_h else Vector2(45, 27))
-    else:
-        # Presentation-only choreography: canonical state decides that a place action exists;
-        # these offsets only make the authored lower -> contact -> release sequence legible.
-        var right_offsets := [Vector2(45, 27), Vector2(45, 33), Vector2(43, 38), Vector2(43, 40), Vector2(43, 40)]
-        var left_offsets := [Vector2(0, 27), Vector2(0, 33), Vector2(1, 38), Vector2(1, 40), Vector2(1, 40)]
-        var place_idx: int = clampi(frame_index, 0, right_offsets.size() - 1)
-        action_object.position = $Actor.position + (left_offsets[place_idx] if $Actor.flip_h else right_offsets[place_idx])
+    if live_object_sprites.has(live_action_object_id):
+        live_object_sprites[live_action_object_id].visible = false
+
+    var object_anchor := _live_object_anchor(live_action_object_id)
+    var attached_position: Vector2 = $Actor.position + (Vector2(5, 27) if $Actor.flip_h else Vector2(45, 27))
+    if rendered_motion == "inspect":
+        # Inspection never changes authoritative object position; show the actual target beside Moss.
+        action_object.position = object_anchor - LIVE_OBJECT_HALF_SIZE
+    elif rendered_motion == "nudge":
+        # Nudge frames visibly carry the canonical object from event target/contact toward its
+        # authoritative post-action result instead of leaving the object implied in the background.
+        var event = live_frame.get("last_event", {})
+        var start_anchor := object_anchor
+        var end_anchor := object_anchor
+        if typeof(event) == TYPE_DICTIONARY:
+            var zone := str(event.get("to_zone", event.get("from_zone", "")))
+            if event.get("target_x") != null and event.get("target_y") != null:
+                start_anchor = _map_semantic_position(float(event.get("target_x")), float(event.get("target_y")), zone)
+            if event.get("result_x") != null and event.get("result_y") != null:
+                end_anchor = _map_semantic_position(float(event.get("result_x")), float(event.get("result_y")), zone)
+        var nudge_t := clampf(float(maxi(0, Time.get_ticks_msec() - live_motion_started_ms)) / 1450.0, 0.0, 1.0)
+        var nudge_eased := nudge_t * nudge_t * (3.0 - 2.0 * nudge_t)
+        action_object.position = start_anchor.lerp(end_anchor, nudge_eased) - LIVE_OBJECT_HALF_SIZE
+    elif rendered_motion == "carry":
+        # Canonical carry frames already mark the object as attached, so use the event's original
+        # target position as the pickup origin; otherwise the first authored reach would start with
+        # the object mysteriously already under Moss.
+        var pickup_origin := object_anchor
+        var event = live_frame.get("last_event", {})
+        if typeof(event) == TYPE_DICTIONARY and event.get("target_x") != null and event.get("target_y") != null:
+            pickup_origin = _map_semantic_position(float(event.get("target_x")), float(event.get("target_y")), str(event.get("from_zone", "")))
+        var pickup_t := clampf(float(frame_index) / 3.0, 0.0, 1.0)
+        action_object.position = (pickup_origin - LIVE_OBJECT_HALF_SIZE).lerp(attached_position, pickup_t)
+    elif rendered_motion == "place":
+        # Placement is the inverse: begin attached, then lower/release into canonical world position.
+        var place_t := clampf(float(frame_index) / 3.0, 0.0, 1.0)
+        action_object.position = attached_position.lerp(object_anchor - LIVE_OBJECT_HALF_SIZE, place_t)
+    elif attached_travel:
+        action_object.position = attached_position
+
+func _live_object_anchor(object_id: String) -> Vector2:
+    if object_id.is_empty() or live_frame.is_empty():
+        return _current_rendered_anchor()
+    for obj in live_frame.get("objects", []):
+        if typeof(obj) == TYPE_DICTIONARY and str(obj.get("id", "")) == object_id:
+            return _map_semantic_position(float(obj.get("x", 0)), float(obj.get("y", 0)), str(obj.get("zone", "")))
+    var event = live_frame.get("last_event", {})
+    if typeof(event) == TYPE_DICTIONARY and event.get("target_x") != null and event.get("target_y") != null:
+        return _map_semantic_position(float(event.get("target_x")), float(event.get("target_y")), str(event.get("from_zone", "")))
+    return _current_rendered_anchor()
 
 func _on_live_frame(_previous_frame, frame: Dictionary) -> void:
     var creature: Dictionary = frame.get("creature", {})
@@ -454,6 +596,7 @@ func _on_live_frame(_previous_frame, frame: Dictionary) -> void:
     motion = next_motion
     variant = _variant_from_frame(frame)
     _read_live_action_object(frame, creature)
+    _sync_live_object_sprites(frame)
     live_position = next_position
     live_facing_left = str(creature.get("facing", "right")) == "left"
     if not had_live_frame:
@@ -468,6 +611,8 @@ func _on_live_frame(_previous_frame, frame: Dictionary) -> void:
     live_frame = frame
     live_debug_stats["accepted_frames"] = int(live_debug_stats["accepted_frames"]) + 1
     _apply_variant()
+    if ambient_overlay != null:
+        ambient_overlay.present(frame)
 
     # First live frame snaps only from the non-authoritative startup placeholder. Every later
     # accepted frame must preserve the actor's actual rendered position exactly.
@@ -524,6 +669,7 @@ func _read_live_action_object(frame: Dictionary, creature: Dictionary) -> void:
 
 func _present_live(_frame: Dictionary, _elapsed_ms: int) -> void:
     var now_ms := Time.get_ticks_msec()
+    var actor_before: Vector2 = $Actor.position
     var previous_rendered_motion := rendered_motion
     var transition_elapsed_ms := maxi(0, now_ms - live_transition_started_ms)
     if _elapsed_ms >= int(live_transition_duration_ms):
@@ -594,9 +740,23 @@ func _present_live(_frame: Dictionary, _elapsed_ms: int) -> void:
             var target_error := _current_rendered_anchor().distance_to(live_position)
             live_debug_stats["max_arrival_target_error_px"] = maxf(float(live_debug_stats["max_arrival_target_error_px"]), target_error)
 
+    _limit_live_render_step(actor_before)
     _update_support_occlusion()
     _present_action_object()
     _emit_live_debug(false)
+
+
+func _limit_live_render_step(actor_before: Vector2) -> void:
+    # Time-based interpolation is normally sub-pixel-to-a-few-pixels per rendered frame. If a
+    # browser frame stalls, never let the next draw consume the entire elapsed interval as one
+    # visible jump; subsequent frames catch up smoothly and future canonical heartbeats rebase
+    # from the actual rendered anchor. First-frame startup and deterministic captures may snap.
+    if not live_mode or int(live_debug_stats.get("accepted_frames", 0)) <= 1 or not capture_path.is_empty():
+        return
+    var delta: Vector2 = $Actor.position - actor_before
+    var distance: float = delta.length()
+    if distance > LIVE_MAX_FRAME_STEP_PX:
+        $Actor.position = actor_before + delta / distance * LIVE_MAX_FRAME_STEP_PX
 
 func _record_animation_frame(motion_name: String, idx: int) -> void:
     var changes: Dictionary = live_debug_stats["animation_frame_changes"]
@@ -674,17 +834,21 @@ func _route_position(points: Array, t: float) -> Vector2:
         traversed += segment_length
     return points[-1]
 
-func _map_live_position(creature: Dictionary) -> Vector2:
-    var semantic := Vector2(float(creature.get("x", 400)), float(creature.get("y", 320)))
-    var zone := str(creature.get("zone", ""))
+func _map_semantic_position(x: float, y: float, zone: String) -> Vector2:
+    var semantic := Vector2(x, y)
     if LIVE_ZONE_CANONICAL_ANCHORS.has(zone) and LIVE_ZONE_VISUAL_ANCHORS.has(zone):
         var canonical_anchor: Vector2 = LIVE_ZONE_CANONICAL_ANCHORS[zone]
         var visual_anchor: Vector2 = LIVE_ZONE_VISUAL_ANCHORS[zone]
         var local_offset := (semantic - canonical_anchor) * LIVE_LOCAL_SCALE
         return Vector2(round(visual_anchor.x + local_offset.x), round(visual_anchor.y + local_offset.y))
-    # Fail-safe for unknown future zones: preserve the hardware-neutral semantic projection rather
-    # than inventing a new destination.
     return Vector2(round(semantic.x * 0.5), round(semantic.y * 0.5))
+
+func _map_live_position(creature: Dictionary) -> Vector2:
+    return _map_semantic_position(
+        float(creature.get("x", 400)),
+        float(creature.get("y", 320)),
+        str(creature.get("zone", ""))
+    )
 
 func _variant_from_frame(frame: Dictionary) -> String:
     var weather := str(frame.get("weather", "clear"))

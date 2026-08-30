@@ -82,8 +82,10 @@ def test_support_and_carried_travel_phases_preserve_continuity() -> None:
     assert 'if travel_active and motion != "walk":' in main
     assert 'rendered_motion = "walk"' in main
     assert 'var attached_travel := rendered_motion == "walk"' in main
-    assert 'action_object.visible = rendered_motion in ["carry", "place"] or attached_travel' in main
-    assert 'if rendered_motion == "carry" or attached_travel:' in main
+    assert 'var interaction_motion := rendered_motion in ["inspect", "nudge", "carry", "place"]' in main
+    assert 'action_object.visible = interaction_motion or attached_travel' in main
+    assert 'elif rendered_motion == "carry":' in main
+    assert 'elif attached_travel:' in main
     assert "LIVE_SUPPORT_TRANSITION_MS := 450.0" in main
     assert 'live_previous_motion != "window_watch"' in main
     assert 'live_previous_motion == "window_watch" and motion != "window_watch"' in main
@@ -155,5 +157,34 @@ def test_web_delivery_hardening_disables_stale_asset_cache_and_preflights_port()
     assert "Terrarium Godot web presentation port {port} is already in use" in launcher
     assert "TERRARIUM_GODOT_WEB_PORT=<port>" in launcher
     assert "window.__terrariumBrowserErrors=[]" in preset
+    assert "html/canvas_resize_policy=1" in preset
+    assert "image-rendering:pixelated" in preset
+    assert "width:min(100vw" in preset
     assert "unhandledrejection" in preset
     assert "browser_errors:window.__terrariumBrowserErrors||[]" in main
+
+
+def test_visual_uat_polish_caps_frame_jumps_stages_objects_and_crossfades_environment() -> None:
+    main = (REFERENCE / "scripts" / "main.gd").read_text()
+    ambience = (REFERENCE / "scripts" / "ambient_overlay.gd").read_text()
+    assert "LIVE_MAX_FRAME_STEP_PX := 6.0" in main
+    assert "_limit_live_render_step(actor_before)" in main
+    assert "LIVE_VARIANT_CROSSFADE_MS := 4200.0" in main
+    assert "background_blend.modulate" in main
+    assert "_update_variant_transition" in main
+    assert 'rendered_motion == "inspect"' in main
+    assert 'rendered_motion == "nudge"' in main
+    assert 'rendered_motion == "carry"' in main
+    assert 'rendered_motion == "place"' in main
+    assert "_live_object_anchor" in main
+    assert "_sync_live_object_sprites" in main
+    assert "live_object_sprites" in main
+    assert "pickup_origin" in main
+    assert "_map_semantic_position" in main
+    assert "LIVE_DEBUG_EMIT_MS := 250" in main
+    assert "AmbientOverlay" in main
+    assert 'weather == "rain"' in ambience
+    assert "range(14)" in ambience
+    assert "range(5)" in ambience
+    assert "GPUParticles" not in ambience
+    assert "CPUParticles" not in ambience
