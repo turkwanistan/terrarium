@@ -90,8 +90,7 @@ body {
 	z-index: 1;
 }
 		</style>
-		
-		<script>window.__terrariumBrowserErrors=[];addEventListener("error",function(e){window.__terrariumBrowserErrors.push(String(e.message||e.error||(e.target&&e.target.src)||"error"));});addEventListener("unhandledrejection",function(e){window.__terrariumBrowserErrors.push(String(e.reason||"unhandledrejection"));});</script>
+		<style>html,body{width:100%;height:100%}body{display:flex;align-items:center;justify-content:center}#canvas{width:min(100vw,calc(100vh * 5 / 3))!important;height:min(100vh,calc(100vw * 3 / 5))!important;image-rendering:pixelated}</style><script>window.__terrariumBrowserErrors=[];addEventListener("error",function(e){window.__terrariumBrowserErrors.push(String(e.message||e.error||(e.target&&e.target.src)||"error"));});addEventListener("unhandledrejection",function(e){window.__terrariumBrowserErrors.push(String(e.reason||"unhandledrejection"));});</script>
 	</head>
 	<body>
 		<canvas id="canvas">
@@ -110,7 +109,7 @@ body {
 
 		<script src="index.js"></script>
 		<script>
-const GODOT_CONFIG = {"args":[],"canvasResizePolicy":2,"emscriptenPoolSize":8,"ensureCrossOriginIsolationHeaders":false,"executable":"index","experimentalVK":false,"fileSizes":{"index.pck":127756,"index.wasm":39514754},"focusCanvas":true,"gdextensionLibs":[],"godotPoolSize":4};
+const GODOT_CONFIG = {"args":[],"canvasResizePolicy":1,"emscriptenPoolSize":8,"ensureCrossOriginIsolationHeaders":false,"executable":"index","experimentalVK":false,"fileSizes":{"index.pck":114916,"index.wasm":39514754},"focusCanvas":true,"gdextensionLibs":[],"godotPoolSize":4};
 const GODOT_THREADS_ENABLED = false;
 const engine = new Engine(GODOT_CONFIG);
 

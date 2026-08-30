@@ -9,16 +9,16 @@
       "sha256": "5b476a9c9ce642c0ee4256436d1bc31d9c38f868aca0f9a8e2a57c18d2dec2a3"
     },
     "index.html": {
-      "bytes": 5649,
-      "sha256": "03af615e6abf0e9b5e0bd1861cd0ad7d7a0c742aee35bde6d79a9b3a4c037359"
+      "bytes": 5883,
+      "sha256": "f4ae1d1378ff10303c5e477c3a7ce9a78332c185278c0b9f87ea574364a6f854"
     },
     "index.js": {
       "bytes": 279815,
       "sha256": "33c94cb3175f3333b82e2a3be5e8e86f77986f0aa2042b1631f6367a4e5bb6ba"
     },
     "index.pck": {
-      "bytes": 127756,
-      "sha256": "4c301401536435f352110dc5d1086f53a51d9e683487a162c928ab636e1f3607"
+      "bytes": 114916,
+      "sha256": "5c9d3f76a015cfebc17fb8137379b065b9a4d87cc2b5cc2ab308711032a3350b"
     },
     "index.png": {
       "bytes": 21443,
@@ -31,6 +31,6 @@
   },
   "godot": "4.7.2.stable",
   "schema": "terrarium.godot-web-build.v1",
-  "source_commit": "825c21bbbb76e253e84ca6a4ecede17d1c87d90e",
+  "source_commit": "52e2d7a3d9e3403821966450dcc49c7a75f0714b",
   "thread_support": false
 }
