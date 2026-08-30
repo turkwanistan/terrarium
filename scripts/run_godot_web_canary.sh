@@ -20,6 +20,25 @@ if [[ ! -f "$WEB_ROOT/index.html" ]]; then
   exit 66
 fi
 
+if ! "$python_bin" - "$PORT" <<'PY'
+import socket
+import sys
+port = int(sys.argv[1])
+sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+try:
+    sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+    sock.bind(("0.0.0.0", port))
+except OSError as exc:
+    print(f"Terrarium Godot web presentation port {port} is already in use: {exc}", file=sys.stderr)
+    raise SystemExit(1)
+finally:
+    sock.close()
+PY
+then
+  echo "Choose another port with TERRARIUM_GODOT_WEB_PORT=<port>, or stop the stale presentation gateway." >&2
+  exit 98
+fi
+
 is_frame_endpoint() {
   "$python_bin" - "$1" <<'PY'
 import sys

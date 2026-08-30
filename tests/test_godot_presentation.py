@@ -119,7 +119,7 @@ def test_reference_v3_locks_palette_only_authored_moss_and_full_motion_set():
     assert all(_png_size(REFERENCE_V3 / "art" / name) == (60, 52) for name in required)
     assert _png_size(REFERENCE_V3 / "art" / "bed_front_lip.png") == (400, 240)
     main = (REFERENCE_V3 / "scripts" / "main.gd").read_text()
-    assert "bed_occluder.visible = motion in [\"sleep\", \"wake\"]" in main
+    assert "bed_occluder.visible = rendered_motion in [\"sleep\", \"wake\"]" in main
 
 
 def test_reference_v3_production_moss_is_exact_authored_geometry_plus_palette(tmp_path):
@@ -172,8 +172,10 @@ def test_reference_v3_maps_full_canonical_activity_repertoire_and_preserves_moti
         assert f'"{activity}": "{motion}"' in main
     assert '"pickup"' not in main.split("const CANONICAL_ACTIVITY_TO_MOTION :=", 1)[1].split("}", 1)[0]
     assert "live_motion_started_ms" in main
-    assert "if live_motion_started_ms <= 0 or next_motion != motion:" in main
-    assert "motion_elapsed_ms" in main
+    assert "var motion_changed := live_motion_started_ms <= 0 or next_motion != previous_motion" in main
+    assert "live_debug_stats[\"motion_continuations\"]" in main
+    assert "live_motion_started_ms = live_recovery_until_ms" in main
+    assert "rendered_elapsed_ms" in main
 
 
 def test_reference_v3_covers_all_canonical_persistent_object_states():

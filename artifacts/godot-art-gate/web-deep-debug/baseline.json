@@ -1,0 +1,64 @@
+{
+  "schema": "terrarium.godot-web-deep-debug-baseline.v1",
+  "recorded_at": "2026-08-29T23:44:34Z",
+  "status": "FAILED_FIRST_REAL_WEB_UAT",
+  "migration_closed": false,
+  "observed_failures": [
+    "Moss visibly teleports between locations instead of moving continuously.",
+    "Most authored Moss animations appear absent, too brief, or frozen/static."
+  ],
+  "authority_assessment": {
+    "canonical_world_assumed_healthy": true,
+    "independent_live_health_observed": true,
+    "canvas_same_world_observed_rendering": true,
+    "world_reset_recreate_migrate_force_step_performed": false,
+    "canvas_changed": false
+  },
+  "live_sample": {
+    "api_url": "http://192.168.50.74:8765",
+    "health_tick": 115856,
+    "health_events": 115856,
+    "frame_tick": 115860,
+    "frame_activity": "walk",
+    "frame_pose": "walk",
+    "frame_zone": "sleeping_nook",
+    "frame_position": [296, 392],
+    "frame_facing": "left",
+    "frame_last_event_action": "explore",
+    "frame_route": [
+      {"x": 300, "y": 324},
+      {"x": 405, "y": 378},
+      {"x": 296, "y": 392}
+    ],
+    "season": "spring",
+    "season_stage": "early",
+    "lighting": "day",
+    "weather": "clear"
+  },
+  "lineage": {
+    "godot_source_commit": "d6a308af9f73bd1404efd179a929af45b2d285c8",
+    "generated_web_build_commit": "8c591089c7181621e125fc824c4a04509718ad86",
+    "godot_version": "4.7.2.stable",
+    "thread_support": false,
+    "build_info_source_commit": "d6a308af9f73bd1404efd179a929af45b2d285c8"
+  },
+  "baseline_hashes": {
+    "main_gd": "7500891e56df528c6e1d0291daf1cb0d84e86256760c3603944b38a5ce8e4b60",
+    "frame_adapter_gd": "0a00e0e6fc6aca85307ea51ab0b1a8b4cc1fc30932f22487cfa0d34846dda529",
+    "gateway_py": "2161118a526aa88a8c08bc43f1089e5a697348de840bab39bd4a921713dcb84f",
+    "web_build_info_json": "78604d457f050a2e23bd9ca9bf57cc131c583357d5fdf5e24d3c5c1c7b4d0b56",
+    "web_index_pck": "3b4d943b92fb60adf0bdad7e123f0b2a850598aeeae81d3595fd3b586e83097d",
+    "web_index_wasm": "fc74679e3b97f76878947fcd4fbe1268cbfa6188182a2e33bbc3f5dc9bfa57d0",
+    "web_canary_launcher": "79dd2b4157c70fb80d46d60a5a69aa89b34566624ba6641b63ba4941061310a1"
+  },
+  "proven_pre_fix_risks_from_source": {
+    "route_start_uses_previous_canonical_frame": true,
+    "route_start_explicitly_uses_current_rendered_position": false,
+    "fixed_route_transition_ms": 2600,
+    "adapter_poll_seconds": 3.0,
+    "adapter_rejects_duplicate_tick": true,
+    "adapter_rejects_older_tick": false,
+    "adapter_explicit_in_flight_guard": false,
+    "non_looping_action_sequences_clamp_to_terminal_frame": true
+  }
+}

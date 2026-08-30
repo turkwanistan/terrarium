@@ -111,3 +111,28 @@ Use the systems already present rather than adding another planner layer: allow 
 ## Runtime / Git safety
 
 Canonical Moss remains user-owned outside Git. Runtime databases/event ledgers remain ignored. Host deployment must preserve `${XDG_STATE_HOME:-$HOME/.local/state}/terrarium/live` (or explicit `TERRARIUM_DATA_DIR`).
+
+## Godot Web deep-debug status — 2026-08-29
+
+The first ordinary-browser Godot Web canary remains **failed / migration open** because human UAT observed visible Moss teleports and apparently missing/frozen authored animation. Canvas remains the same-world fallback and the persistent canonical world has continued uninterrupted.
+
+Proven findings from the deep-debug pass so far:
+
+- the canonical world was independently healthy while debugging (`/api/health` tick/events advancing; canonical `terrarium.frame.v1` readable);
+- live Godot route construction was starting from prior canonical-frame state rather than the actor's currently rendered presentation position, which can create an acceptance-time pop when a new frame arrives mid-transition;
+- canonical `explore` events carry valid route evidence, but the old Godot route builder consumed route points only for `walk`, discarding real explore routes;
+- non-walk authored actions generally clamped to their terminal frame, which made sustained commitments appear frozen after continuation-heartbeat replay was correctly suppressed;
+- the live frame adapter suppressed exact duplicate ticks but did not explicitly reject older/out-of-order ticks and did not expose request-overlap/cadence telemetry.
+
+The candidate fix is presentation-only: rebase each accepted transition from the current rendered Moss anchor while retaining the canonical mapped endpoint and route; consume both `walk` and `explore` routes; derive a bounded transition duration from actual frame-arrival cadence; reject duplicate/older ticks; guard overlapping HTTP requests; and give inspect/nudge/groom/stretch explicit authored sustain loops plus bounded recovery without restarting anticipation on continuation heartbeats. Carry, sleep, and other intended stable holds remain deliberate holds.
+
+Instrumentation now exposes canonical frame arrival, request cadence/state, selected and rendered motion, motion and transition clocks, mapped route, rendered anchor, target anchor, animation frame, facing, and carried-object attachment. A deterministic 99-delivery valid-frame fixture pack covers route corners, interrupted transitions, short/long timing, continuation heartbeats, major activities, carry/place, sleep/wake, atmosphere changes, duplicate ticks, and an older tick.
+
+Validation completed so far:
+
+- focused Godot/Web tests: PASS;
+- full repository suite: PASS (second run with the normal writable test contract; the first read-only run failed only because two existing tests intentionally write generated/snapshot output);
+- bounded Godot 4.7.2 parser/import gate in `mcp-lab`: PASS after fixing two GDScript Variant-inference errors caught by the first parse;
+- post-validation Lab process check: no Godot/Xvfb/xvfb-run/llvmpipe process remained.
+
+Remaining release gates: generate the replacement ordinary exported-Web payload, run the actual `.wasm`/`.pck`/JS build against the deterministic fixture server in a browser and prove continuity/animation/request invariants, then run ordinary-browser UAT against the living world. Iteration 10 remains blocked until this migration gate is closed or deliberately deferred.

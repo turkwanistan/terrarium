@@ -72,6 +72,7 @@ def test_godot_web_gateway_is_same_origin_read_only_and_fail_closed(tmp_path: Pa
         with urlopen(gateway_url + "/index.wasm", timeout=2) as response:
             assert response.status == 200
             assert response.headers["Content-Type"] == "application/wasm"
+            assert response.headers["Cache-Control"] == "no-store"
             assert response.read() == b"wasm"
 
         with urlopen(gateway_url + "/api/frame", timeout=2) as response:

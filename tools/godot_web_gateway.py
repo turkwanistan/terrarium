@@ -124,7 +124,7 @@ class GatewayHandler(BaseHTTPRequestHandler):
         self._send_bytes(
             path.read_bytes(),
             content_type=content_type,
-            cache_control="no-cache",
+            cache_control="no-store",
             head_only=head_only,
         )
 
